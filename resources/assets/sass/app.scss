@@ -1,0 +1,106 @@
+// Top margin helpers
+.margin-10-top{
+    margin-top: 10px;
+}
+
+.margin-15-top{
+    margin-top: 15px;
+}
+
+.margin-25-top{
+    margin-top: 25px;
+}
+
+.margin-35-top{
+    margin-top: 35px;
+}
+
+.margin-45-top{
+    margin-top: 45px;
+}
+
+.margin-55-top{
+    margin-top: 55px;
+}
+
+.margin-65-top{
+    margin-top: 65px;
+}
+
+.margin-75-top{
+    margin-top: 75px;
+}
+
+// Bottom margin helpers
+.margin-5-bottom{
+    margin-bottom: 5px;
+}
+
+.margin-10-bottom{
+    margin-bottom: 10px;
+}
+
+.margin-15-bottom{
+    margin-bottom: 15px;
+}
+
+.margin-25-bottom{
+    margin-bottom: 25px;
+}
+
+.margin-35-bottom{
+    margin-bottom: 35px;
+}
+
+.margin-45-bottom{
+    margin-bottom: 45px;
+}
+
+.margin-55-bottom{
+    margin-bottom: 55px;
+}
+
+// Right margin helpers
+.margin-10-right{
+    margin-right: 10px;
+}
+
+.margin-15-right{
+    margin-right: 15px;
+}
+
+.margin-20-right{
+    margin-right: 20px;
+}
+
+.margin-25-right{
+    margin-right: 25px;
+}
+
+.margin-10-left{
+    margin-left: 10px;
+}
+
+a:hover{
+	cursor: pointer;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+.loader {
+    border: 5px solid #f3f3f3; /* Light grey */
+    border-top: 5px solid #2c3e50; /* Blue */
+    border-radius: 50%;
+    width: 22px;
+    height: 24px;
+    margin: 0 auto;
+    animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
