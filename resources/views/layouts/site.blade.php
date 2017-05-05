@@ -3,19 +3,36 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Arrow Archaeology | @yield('page-title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
+    <meta name="description" content="Arrow provides a full range of archaeological, palaeontological, and cultural resource management services." />
+    <meta name="author" content="Codename Digital" />
 
     <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="css/site/bootstrap.min.css" /><!-- Bootstrap -->
-    <link rel="stylesheet" type="text/css" href="css/site/icons.css" /><!-- Font Awesome -->
-    <link rel="stylesheet" type="text/css" href="css/site/flaticon.css" /><!-- Flat Icons -->
-    <link rel="stylesheet" type="text/css" href="css/site/style.css" /><!-- Style -->
-    <link rel="stylesheet" type="text/css" href="css/site/responsive.css" /><!-- Responsive -->
+    <link rel="stylesheet" type="text/css" href="{{ url('css/site/bootstrap.min.css') }}" /><!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="{{ url('css/site/icons.css') }}" /><!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="{{ url('css/site/flaticon.css') }}" /><!-- Flat Icons -->
+    <link rel="stylesheet" type="text/css" href="{{ url('css/site/style.css') }}" /><!-- Style -->
+    <link rel="stylesheet" type="text/css" href="{{ url('css/site/responsive.css') }}" /><!-- Responsive -->
     
     <!-- Color Scheme -->
     <link rel="stylesheet" type="text/css" href="css/site/colors/color.css" title="color" /><!-- Color -->
 
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ url('images/favicons/apple-icon-57x57.png') }}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ url('images/favicons/apple-icon-60x60.png') }}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ url('images/favicons/apple-icon-72x72.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ url('images/favicons/apple-icon-76x76.png') }}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ url('images/favicons/apple-icon-114x114.png') }}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ url('images/favicons/apple-icon-120x120.png') }}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ url('images/favicons/apple-icon-144x144.png') }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ url('images/favicons/apple-icon-152x152.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url('images/favicons/apple-icon-180x180.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192"  href="{{ url('images/favicons/android-icon-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url('images/favicons/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ url('images/favicons/favicon-96x96.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url('images/favicons/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url('images/favicons/manifest.json') }}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{{ url('images/favicons/ms-icon-144x144.png') }}">
+    <meta name="theme-color" content="#ffffff">
 
     @yield('styles')
 
@@ -67,7 +84,7 @@
                     <li><a href="/services" title="">Services</a></li>
                     <li><a href="/projects" title="">Projects</a></li>
                     <li><a href="/team" title="">Team</a></li>
-                    <li><a href="#contact" title="">Contact</a></li>
+                    <li><a id="contact-link" href="#contact" title="">Contact</a></li>
                 </ul>
             </div><!-- Responsive Menu -->
         </div><!-- Responsive Header -->
@@ -124,7 +141,7 @@
         </footer><!-- Footer -->
         <div class="btmbar">
             <div class="container">
-                <p>Copyright &copy; 2017 - <a href="#" title="">Arrow Archaeology</a> All Rights Reserved</p>
+                <p>Copyright &copy; 2017 - <a href="#" title=""> Arrow Archaeology</a> All Rights Reserved</p>
                 <ul class="btm-lnks">
                     <li><a href="/" title="">Home</a></li>
                     <li><a href="/profile" title="">Profile</a></li>

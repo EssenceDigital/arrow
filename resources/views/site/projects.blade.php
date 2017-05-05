@@ -1,6 +1,6 @@
 @extends('layouts.site')
 
-@section('page-title', 'Home')
+@section('page-title', 'Project Scope')
 
 @section('content')
 

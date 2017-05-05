@@ -26,7 +26,6 @@ header {display: none;}
 .prv-pst {padding-left: 0;padding-right: 10%;}
 .nxt-pst {padding-left: 10%;padding-right: 0;}
 .sub-cmt {padding-left: 50px;}
-.arct-dtls > .row > div {float: left;width: 50%;}
 .arct-intr {max-width: 95%;}
 .arct-inf {bottom: 0;float: left;margin-top: 30px;max-width: 100%;padding: 60px 5% 10px;position: static;}
 .rmv-ext30 > .row > div {float: left;width: 50%;}
@@ -48,6 +47,7 @@ header {display: none;}
 .capt-in {text-align: center;width: 100%;}
 .testemonials-area {background: rgba(0, 0, 0, 0.6);}
 .pg-tl-inn {margin-top: 0;}
+.tbg{padding-top: 50px;}
 }
 
 

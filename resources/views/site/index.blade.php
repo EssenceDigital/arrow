@@ -1,6 +1,6 @@
 @extends('layouts.site')
 
-@section('page-title', 'Home')
+@section('page-title', 'Heritage Resource Consultants | Historical Impact Assessments | Alberta - Saskatchewan - BC')
 
 @section('styles')
 
@@ -137,5 +137,11 @@
     <script type="text/javascript" src="js/site/revolution/revolution.extension.slideanims.min.js"></script>
     <script type="text/javascript" src="js/site/revolution/revolution.extension.video.min.js"></script>
     <script type="text/javascript" src="js/site/revolution/revolution.initialize.js"></script>
+
+    <script>
+        $('#contact-link').click(function(){
+            $('.rsnp-mnu').removeClass('active');
+        });
+    </script>
 
 @endsection
