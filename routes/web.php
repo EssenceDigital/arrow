@@ -20,7 +20,7 @@ Route::get('/team', 'SiteController@team');
 
 // App Routes
 
-/*Route::get('/app', 'DashboardController@index');
+Route::get('/app', 'DashboardController@index');
 
 // Projects
 Route::get('/app/projects', 'ProjectsController@hub');
@@ -29,6 +29,10 @@ Route::post('/app/projects/create', 'ProjectsController@store');
 // Users
 Route::get('/app/users', 'UsersController@hub');
 Route::get('/app/users/all', 'UsersController@all');
+Route::get('/app/users/{id}', 'UsersController@single');
 Route::post('/app/users/create', 'UsersController@store');
-Auth::routes();*/
+Route::post('/app/users/update', 'UsersController@update');
+Route::post('/app/users/change-password', 'UsersController@changePassword');
+Route::post('/app/users/delete', 'UsersController@delete');
+Auth::routes();
 

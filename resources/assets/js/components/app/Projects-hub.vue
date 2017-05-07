@@ -58,7 +58,7 @@
 
 <script>
 	let project_form = require('./Project-form.vue');
-	let modal = require('./Modal.vue');
+	let modal = require('./../ui/Modal.vue');
 
 	export default{
 		components: {

@@ -3,7 +3,7 @@
 <div class="well bs-component">
 	<form class="form-horizontal">
 		<fieldset class="margin-25-top">
-			<legend>Create a user</legend>
+			<legend>{{ title }}</legend>
 			<div class="row">			
 				<div class="col-md-6">
 					<div class="form-group" v-bind:class="{'has-error': form.first.err}">
@@ -121,7 +121,7 @@
 		<div class="row">
 			<div class="col-md-3 col-centered">
 				<div class="form-group">
-					<button v-if="!isCreating" v-on:click="createUser" class="btn btn-primary btn-block margin-45-top">Save</button>
+					<button v-if="!isCreating" v-on:click="createUser" class="btn btn-primary btn-block margin-45-top">{{ button }}</button>
 					<div v-if="isCreating" class="loader"></div>
 				</div>					
 			</div>
@@ -134,6 +134,8 @@
 <script>
 	
 	export default {
+		props: ['state', 'selectedUser'],
+
 		data(){
 			return {
 				form: {
@@ -150,69 +152,86 @@
 					gst_number: {val: '', err: '', msg: ''}
 				},
 
+				title: '',
+
+				button: '',
+
 				confirmPassword: '',
 
 				passwordsMatch: false,
 
 				isCreating: false
 
-
-			}
-		},
-
-		watch: {
-			confirmPassword(val){
-				console.log(val);
-				if(val == this.form.password.val) this.passwordsMatch = true;
 			}
 		},
 
 		methods: {
 
+			// Clears the form to a blank slate ready for input
 			clearForm(){
 				for(var key in this.form){
-					if(key == 'hourly_rate_one' || key == 'hourly_rate_two') this.form[key] = 0.00;
-						else this.form[key] = '';
+					if(key == 'hourly_rate_one' || key == 'hourly_rate_two') this.form[key].val = '0.00';
+						else this.form[key].val = '';
 				}
 			},
 
+			// Sends a POST request to create a user
 			createUser(){
-			// Show loader
-			this.isCreating = true;
+				// Show loader
+				this.isCreating = true;
 
-			// Populate data to send to server
-			var data = {};
-			for(var key in this.form){
-				data[key] = this.form[key].val;
+				// Populate data to send to server
+				var data = {};
+				for(var key in this.form){
+					data[key] = this.form[key].val;
+				}
+				// Add token
+				data._token = window.Laravel.csrfToken;
+
+				// Cache context
+				var context = this;
+
+				// Send POST to server
+				axios.post('/app/users/create', data)
+					.then(function(response){
+						console.log(response);
+						// Clear form, notify, and reset loader
+		                 noty({
+		                     text: 'User has been created',
+		                     theme: 'defaultTheme',
+		                     layout: 'center',
+		                     timeout: 650,
+		                     closeWith: ['click', 'hover'],
+		                     type: 'success'
+		                });						
+						context.clearForm();
+						context.isCreating = false;
+						// Alert the parent to what just happened
+						this.$emit('user-created', response.data.project);
+					})
+					.catch(function(response){
+
+					});
 			}
-			// Add token
-			data._token = window.Laravel.csrfToken;
 
-			// Cache context
-			var context = this;
+		},
 
-			// Send POST to server
-			axios.post('/app/users/create', data)
-				.then(function(response){
-					console.log(response);
-					// Clear form, notify, and reset loader
-	                 noty({
-	                     text: 'User has been created',
-	                     theme: 'defaultTheme',
-	                     layout: 'center',
-	                     timeout: 650,
-	                     closeWith: ['click', 'hover'],
-	                     type: 'success'
-	                });						
-					context.clearForm();
-					context.isCreating = false;
-					// Alert the parent to what just happened
-					this.$emit('user-created', response.data.project);
-				})
-				.catch(function(response){
+		mounted(){
+			console.log('mounted');
+			// If a user has been passed to the component then add it to the form 'model'
+			if(this.state == 'edit'){
+				if(this.selectedUser != ''){
+					for(var key in this.form){
+						this.form[key].val = this.selectedUser[key];
+					}
 
-				});
-		}
+				}
+				this.title = 'Edit User';
+				this.button = 'Update';				
+			} else {
+				this.title = 'Create User';
+				this.button = 'Save';
+			}
 
 		}
 		
