@@ -31,7 +31,7 @@ class CreateProjectsTable extends Migration
             $table->string('land_access_phone', 14)->nullable();
             $table->date('invoiced_date')->nullable();
             $table->date('invoice_paid_date')->nullable();
-            $table->boolean('is_deleted')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -23,7 +23,8 @@ class CreateProposalsTable extends Migration
             $table->date('response_by')->nullable();
             $table->decimal('estimate', 13, 2)->default(0);
             $table->boolean('has_approval')->default(false);
-            $table->date('approval_date')->nullable();            
+            $table->date('approval_date')->nullable();  
+            $table->softDeletes();          
             $table->timestamps();
         });
     }

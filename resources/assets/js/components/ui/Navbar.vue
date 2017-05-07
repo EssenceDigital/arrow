@@ -21,9 +21,19 @@
                     <slot></slot>
 
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right margin-10-top">
                     <li>
-                        <button type="button" class="log-out btn btn-default btn-sm navbar-btn">Log Out</button>
+                        <dropdown v-bind:title="user_name">
+                            <li><a>Your Settings</a></li>
+                            <li class="divider"></li>
+                            <li>
+                                <form method="post" action="/logout">
+                                    <input type="hidden" name="_token" v-bind:value="csrfToken">
+                                    <button type="submit" class="log-out btn btn-default btn-sm">Log Out</button>
+                                </form>                                 
+                            </li>                                
+                        </dropdown>
+                       
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -33,10 +43,18 @@
 </template>
 
 <script>
+    let dropdown = require('./../ui/Dropdown.vue');
+
     export default {
+        components: {
+            'Dropdown': dropdown
+        },
+
         data() {
             return {
-                collapsed: true
+                collapsed: true,
+                csrfToken: window.Laravel.csrfToken,
+                user_name: dashboard_users_name
             }
         }
     }

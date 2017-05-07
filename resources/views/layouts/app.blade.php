@@ -25,7 +25,9 @@
         <script>
                 window.Laravel = <?php echo json_encode([
                     'csrfToken' => csrf_token(),
-                ]); ?>
+                ]); ?>;
+                const dashboard_users_name = '{{ Auth::user()->first . ' ' . Auth::user()->last }}';
+                const dasboard_users_permissions = '{{ Auth::user()->permissions }}';
         </script>
     </head>
 

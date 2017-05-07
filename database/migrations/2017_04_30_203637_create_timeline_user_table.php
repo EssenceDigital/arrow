@@ -19,6 +19,7 @@ class CreateTimelineUserTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('timeline_id')->unsigned();
             $table->foreign('timeline_id')->references('id')->on('timelines');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

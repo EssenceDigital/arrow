@@ -2,7 +2,7 @@
 	
 <div class="dropdown clearfix" v-bind:class="{'open': isOpen == true}">
 	<button v-on:click="isOpen = !isOpen" class="btn btn-sm" type="button">
-		Actions
+		{{ title }}
 		<span class="caret"></span>
 	</button>
 	<ul class="dropdown-menu">
@@ -15,6 +15,7 @@
 <script>
 	
 	export default {
+		props: ['title'],
 
 		data(){
 			return {

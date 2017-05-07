@@ -10,11 +10,19 @@
 				<ul class="nav nav-pills">
 					<li v-bind:class="{ 'active': currentTab == 'view-all' }"><a v-on:click="showAllUsersTab">View All</a></li>
 					<li v-bind:class="{ 'active': currentTab == 'user-form' }"><a v-on:click="showUserFormTab">{{ form.title }}</a></li>
+					<li v-if="currentTab == 'user-table'" v-bind:class="{ 'active': currentTab == 'user-table' }"><a>User as Table</a></li>
 				</ul>		    	
 
 				<div v-if="currentTab == 'view-all'" class="row margin-45-top">
-					<div class="col-md-12">
-						<table class="table table-striped table-hover">
+					<div v-if="users.length > 0" class="col-md-12">
+						<button v-on:click="getAndSetUsers" class="btn btn-default">
+							<span class="glyphicon glyphicon-refresh"></span>
+							<span v-if="!fetchingUsers"> Refresh list</span>
+							<span v-if="fetchingUsers">
+								<div class="left-loader"></div>
+							</span>
+						</button>
+						<table class="table table-striped table-hover margin-25-top">
 							<thead>
 								<tr class="info">
 									<th>Name</th>
@@ -29,22 +37,29 @@
 								    <td>{{ user.email }}</td>
 								    <td>{{ user.permissions }}</td>
 								    <td>
-								    	<dropdown v-bind:dropdownActive="dropdownActive">
-								    		<li><a v-on:click="editUser(user.id)">Edit</a></li>
-											<li class="divider"></li>
-											<li><a href="#">Delete</a></li>
+								    	<dropdown v-bind:title="'Actions'">
+							    			<li><a v-on:click="editUser(user.id)">Edit</a></li>
+											<li><a v-on:click="viewUserTable(user.id)">View as table</a></li>
 								    	</dropdown>
 								    </td>
 							    </tr>
 						  </tbody>
-						</table> 						
-					</div>					
+						</table>
+					</div>
+
+					<div v-if="users.length == 0" class="col-md-8 col-centered">
+						<div class="alert alert-warning text-center">
+							<strong>Heads up!</strong><br> No users are currently saved in storage.
+						</div>							
+					</div>																
 				</div>
 
 				<div v-if="currentTab == 'user-form'" class="row margin-45-top">
 					<div class="col-md-12">
-
-						<div class="well bs-component">
+						<button v-if="form.state == 'edit'" v-on:click="viewUserTable(form.fields.id.val)" class="btn btn-default">
+							<span class="glyphicon glyphicon-list-alt"></span> View as Table
+						</button>
+						<div class="well bs-component margin-25-top">
 							<form v-on:submit.prevent="onSubmit" class="form-horizontal">
 								<fieldset class="margin-25-top">
 									<legend>{{ form.title }}</legend>
@@ -54,7 +69,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">First Name</label>
 							                    	<input v-model="form.fields.first.val" type="text" class="form-control margin-10-top" placeholder="First">
-							                    	<span v-if="form.fields.first.err">{{ form.fields.first.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.first.err">{{ form.fields.first.msg }}</span>
 							                    </div>
 						                  	</div>					
 										</div>
@@ -63,7 +78,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">Last Name</label>
 							                    	<input v-model="form.fields.last.val" type="text" class="form-control margin-10-top" placeholder="Last">
-							                    	<span v-if="form.fields.last.err">{{ form.fields.last.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.last.err">{{ form.fields.last.msg }}</span>
 							                    </div>
 						                  	</div>					
 										</div>				
@@ -76,7 +91,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">Email (used as username)</label>
 							                    	<input v-model="form.fields.email.val" type="email" class="form-control margin-10-top" placeholder="Email address">
-							                    	<span v-if="form.fields.email.err">{{ form.fields.email.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.email.err">{{ form.fields.email.msg }}</span>
 							                    </div>
 						                  	</div>					
 										</div>			
@@ -99,7 +114,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">Initial Password</label>
 							                    	<input v-model="form.fields.password.val" type="password" class="form-control margin-10-top" placeholder="Password">
-							                    	<span v-if="form.fields.password.err">{{ form.fields.password.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.password.err">{{ form.fields.password.msg }}</span>
 							                    </div>
 						                  	</div>					
 										</div>
@@ -108,7 +123,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">Confirm Password</label>
 							                    	<input v-model="form.fields.password_confirmation.val" type="password" class="form-control margin-10-top" placeholder="Confirm password">
-							                    	<span v-if="form.fields.password_confirmation.err">{{ form.fields.password_confirmation.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.password_confirmation.err">{{ form.fields.password_confirmation.msg }}</span>
 							                    </div>
 						                  	</div>					
 										</div>												
@@ -119,7 +134,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">Company Name</label>
 							                    	<input v-model="form.fields.company_name.val" type="text" class="form-control margin-10-top" placeholder="Company name">
-							                    	<span v-if="form.fields.company_name.err">{{ form.fields.company_name.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.company_name.err">{{ form.fields.company_name.msg }}</span>
 							                    </div>
 						                  	</div>					
 										</div>
@@ -128,7 +143,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">GST Number</label>
 							                    	<input v-model="form.fields.gst_number.val" type="text" class="form-control margin-10-top" placeholder="GST No.">
-							                    	<span v-if="form.fields.gst_number.err">{{ form.fields.gst_number.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.gst_number.err">{{ form.fields.gst_number.msg }}</span>
 							                    </div>
 						                  	</div>					
 										</div>												
@@ -142,7 +157,7 @@
 							                    		<span class="input-group-addon">$</span>
 							                    		<input v-model="form.fields.hourly_rate_one.val" type="text" class="form-control" placeholder="Hourly rate one">
 							                    	</div>	                    	
-							                    	<span v-if="form.fields.hourly_rate_one.err">{{ form.fields.hourly_rate_one.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.hourly_rate_one.err">{{ form.fields.hourly_rate_one.msg }}</span>
 							                    </div>
 						                  	</div>					
 										</div>
@@ -154,7 +169,7 @@
 							                    		<span class="input-group-addon">$</span>
 							                    		<input v-model="form.fields.hourly_rate_two.val" type="text" class="form-control" placeholder="Hourly rate two">
 							                    	</div>
-							                    	<span v-if="form.fields.hourly_rate_two.err">{{ form.fields.hourly_rate_two.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.hourly_rate_two.err">{{ form.fields.hourly_rate_two.msg }}</span>
 							                    </div>
 						                  	</div>						
 										</div>												
@@ -164,8 +179,12 @@
 									<div class="row">
 										<div class="col-md-3 col-centered">
 											<div class="form-group">
-												<button v-if="!form.isLoading" v-on:click="sendForm" class="btn btn-primary btn-block margin-45-top">{{ form.button }}</button>
-												<div v-if="form.isLoading" class="loader"></div>
+												<button v-on:click="sendForm" class="btn btn-primary btn-block margin-45-top">
+													<span v-if="!form.isLoading">{{ form.button }}</span>
+													<span v-if="form.isLoading">
+														<div class="center-loader"></div>
+													</span>
+												</button>
 											</div>					
 										</div>
 									</div>			
@@ -183,7 +202,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">New Password</label>
 							                    	<input v-model="form.fields.password.val" type="password" class="form-control margin-10-top" placeholder="Password">
-							                    	<span v-if="form.fields.password.err">{{ form.fields.password.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.password.err">{{ form.fields.password.msg }}</span>
 							                    </div>
 						                  	</div>					
 										</div>
@@ -192,7 +211,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">Confirm Password</label>
 							                    	<input v-model="form.fields.password_confirmation.val" type="password" class="form-control margin-10-top" placeholder="Confirm password">
-							                    	<span v-if="form.fields.password_confirmation.err">{{ form.fields.password_confirmation.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.password_confirmation.err">{{ form.fields.password_confirmation.msg }}</span>
 							                    </div>
 						                  	</div>					
 										</div>												
@@ -202,8 +221,13 @@
 									<div class="row">
 										<div class="col-md-3 col-centered">
 											<div class="form-group">
-												<button v-if="!passwordIsChanging" v-on:click="changePassword" class="btn btn-primary btn-block margin-45-top">Change</button>
-												<div v-if="passwordIsChanging" class="loader"></div>
+												<button v-on:click="changePassword" class="btn btn-primary btn-block margin-45-top">
+													<span v-if="!passwordIsChanging">Change</span>
+													<span v-if="passwordIsChanging">
+														<div class="center-loader"></div>
+													</span>
+												</button>
+												
 											</div>					
 										</div>
 									</div>			
@@ -233,12 +257,62 @@
 							</p>
 							<div slot="footer">
 								<button v-on:click="modalActive = false" class="btn btn-primary margin-45-top">Cancel</button>
-								<button v-if="!userIsDeleting" v-on:click="deleteUser" class="btn btn-danger margin-45-top">Delete</button>
-								<div v-if="userIsDeleting" class="loader pull-right"></div>
+								<button v-on:click="deleteUser" class="btn btn-danger margin-45-top">
+									<span v-if="!userIsDeleting">Delete</span>
+									<span v-if="userIsDeleting">
+										<div class="loader-center"></div>
+									</span>
+								</button>
 							</div>
 						</modal>												
 
 					</div>					
+				</div>
+
+				<div v-if="currentTab == 'user-table'" class="row margin-45-top">
+					<div class="col-md-12">
+						<button v-on:click="editUser(form.fields.id.val)" class="btn btn-default">
+							<span class="glyphicon glyphicon-cog"></span> Edit User
+						</button>					
+						<table class="table table-striped table-hover margin-25-top">
+							<thead>
+								<tr class="info">
+									<th>Name</th>
+									<th>Email</th>
+									<th>Permissions</th>
+								</tr>
+							</thead>
+							<tbody>
+							    <tr>
+								    <td>{{ form.fields.first.val + ' ' + form.fields.last.val }}</td>
+								    <td>{{ form.fields.email.val }}</td>
+								    <td>{{ form.fields.permissions.val }}</td>
+							    </tr>
+							</tbody>
+						</table>						
+					</div>
+
+					<div class="col-md-12">
+						<table class="table table-striped table-hover margin-25-top">
+							<thead>
+								<tr class="info">
+									<th>Company Name</th>
+									<th>GST No.</th>
+									<th>Hourly No. 1</th>
+									<th>Hourly No. 2</th>
+								</tr>
+							</thead>
+							<tbody>
+							    <tr>
+								    <td>{{ form.fields.company_name.val }}</td>
+								    <td>{{ form.fields.gst_number.val }}</td>
+								    <td>${{ form.fields.hourly_rate_one.val }}</td>
+								    <td>${{ form.fields.hourly_rate_two.val }}</td>
+							    </tr>
+							</tbody>
+						</table>						
+					</div>					
+					
 				</div>
 
 		    </div>
@@ -284,6 +358,7 @@
 						gst_number: {val: '', err: '', msg: ''}						
 					}
 				},
+				fetchingUsers: false,
 				passwordIsChanging: false,
 				userIsDeleting: false
 			}
@@ -297,11 +372,22 @@
 					if(key == 'hourly_rate_one' || key == 'hourly_rate_two') this.form.fields[key].val = '0.00';
 						else this.form.fields[key].val = '';
 				}
+				// Clear errors
+				this.clearFormErrrors();
 				// Reset titles
 				this.formNewState();
 			},
 
-			// Sets the form titles for a create
+			// Clears out any potential error state the inputs are in
+			clearFormErrrors(){
+				for(var key in this.form.fields){
+					// Clear possible errors
+					this.form.fields[key].err = '';
+					this.form.fields[key].msg = '';
+				}
+			},
+
+			// Sets the form state and titles for a create
 			formNewState(){
 				this.form.state = 'create';
 				this.form.title = 'Create User';
@@ -309,7 +395,7 @@
 				this.form.action = '/app/users/create';
 			},
 
-			// Sets the form titles for an edit
+			// Sets the form state titles for an edit
 			formEditState(){
 				this.form.state = 'edit';
 				this.form.title = 'Edit User';
@@ -317,95 +403,122 @@
 				this.form.action = '/app/users/update';
 			},
 
+			// Shows the view all users tab and clears the form
 			showAllUsersTab(){
 				this.currentTab = 'view-all';
 				this.clearForm();
 				this.getAndSetUsers();
 			},
 
+			// Shows the user form tab and clears out the form
 			showUserFormTab(){
 				this.clearForm();
 				this.currentTab = 'user-form';
 			},
 
-			closeEditUserModal(){
-				this.modalActive = false;
-				this.dropdownActive = false;
-			},
-
 			// Sends a GET request to retrieve all users from the server then sets the users data prop
 			getAndSetUsers(){
 				var context = this;
+				// Show loader
+				this.fetchingUsers = true;
 				// Send request
 				axios.get('/app/users/all')
 					.then(function(response){
 						// Set data prop
 						context.users = response.data.users;
-						console.log(context.users);
+						// Hide loader
+						context.fetchingUsers = false;
 					})
 					.catch(function(response){
 						console.log(response);
 					});					
 			},
 
-			// Sends a POST request to create a user
+			// Sends a POST request to create or edit a user depending on the current form.state
 			sendForm(){
+				// Cache context
+				var context = this;
 				// Show loader
 				this.form.isLoading = true;
-
 				// Populate data to send to server
 				var data = {};
 				for(var key in this.form.fields){
 					data[key] = this.form.fields[key].val;
 				}
-				// Add token
+				// Add token to data
 				data._token = window.Laravel.csrfToken;
-
-				// Cache context
-				var context = this;
-				console.log(data);
 				// Send POST to server
 				axios.post(context.form.action, data)
 					.then(function(response){
-						console.log(response);
 						// Clear form, notify, and reset loader
 		                 noty({
 		                     text: 'User has been saved',
 		                     theme: 'defaultTheme',
 		                     layout: 'center',
-		                     timeout: 650,
+		                     timeout: 850,
 		                     closeWith: ['click', 'hover'],
 		                     type: 'success'
-		                });						
+		                });		
+		                // Hide loader				
 						context.form.isLoading = false;
+						// Show next content dependingo on form state
+						if(context.form.state == 'create'){
+							context.users.push(response.data.user);
+							context.currentTab = 'view-all';	
+						} 
 					})
-					.catch(function(response){
+					.catch(function(error){
+                        if (error.response) {
+                            // If the server responded with error data
+                            for(var key in error.response.data){
+                                context.form.fields[key].msg = error.response.data[key][0];
+                                context.form.fields[key].err = true;                                    
+                            }
+                            // Hide loader
+                            context.form.isLoading = false;
 
+                        }
 					});
 			},
 
+			// Sends a POST request to retrieve the selected user from storage and then sets up
+			// the form to edit that user
 			editUser(id){
 				var context = this;
-
 				// Send request
 				axios.get('/app/users/' + id)
 					.then(function(response){
-						// Set data prop
+						// Set values in the form.fields data property
 						for(var key in context.form.fields){
 							context.form.fields[key].val = response.data.user[key];
 						}
+						// Clear any old form errors
+						context.clearFormErrrors();
 						// Adjust some text
 						context.formEditState();
 						// Change tab
 						context.currentTab = 'user-form';
-
-						console.log(context.form.fields.id.val);
 					})
 					.catch(function(response){
 						console.log(response);
 					});	
 			},
 
+			viewUserTable(id){
+				// Grab user from local cache
+				var user;
+				this.users.forEach(function(elem){
+					if(elem.id == id) user = elem;
+				});
+				// Set values in the form.fields data property
+				for(var key in this.form.fields){
+					this.form.fields[key].val = user[key];
+				}
+				// Change tab
+				this.currentTab = 'user-table';
+			},
+
+			// Sends a POST request to change a specific users password in storage
 			changePassword(){
 				// Show loader
 				this.passwordIsChanging = true;
@@ -454,8 +567,27 @@
 				// Send GET request to delete
 				axios.post('/app/users/delete', data)
 					.then(function(response){
-						context.userIsDeleting = false;
+						// Notify
+		                 noty({
+		                     text: 'User has been deleted',
+		                     theme: 'defaultTheme',
+		                     layout: 'center',
+		                     timeout: 850,
+		                     closeWith: ['click', 'hover'],
+		                     type: 'success'
+		                });
+		                // Close modal and show all users						
+						context.modalActive = false;
 						context.showAllUsersTab();
+						// Remove user from local cache
+						context.users.forEach(function(user){
+							if(user.id == data.id) {
+								const index = context.users.indexOf(user);
+								context.users.splice(index, 1);
+							}
+						});	
+						// Hide loader
+						context.userIsDeleting = false;					
 					})
 					.catch(function(response){
 						console.log(response);
@@ -463,8 +595,7 @@
 			}			
 		},
 
-
-
+		// Retrieves all users from storage upon compenent mounting
 		mounted(){
 			this.getAndSetUsers();
 		}

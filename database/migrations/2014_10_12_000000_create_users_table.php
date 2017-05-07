@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->decimal('hourly_rate_two', 13, 2)->nullable();
             $table->string('gst_number', 25);
             $table->boolean('change_password')->default(true);
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });

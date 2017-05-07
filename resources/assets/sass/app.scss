@@ -90,15 +90,33 @@ a:hover{
     margin: 0 auto;
 }
 
-.loader {
+button{
+    span{
+        display: inline-block;
+        vertical-align: center;
+    }
+}
+
+.left-loader {
     border: 5px solid #f3f3f3; /* Light grey */
     border-top: 5px solid #2c3e50; /* Blue */
     border-radius: 50%;
-    width: 22px;
-    height: 24px;
+    width: 15px;
+    height: 15px;
+    margin-left: 25px;
+    animation: spin 0.75s linear infinite;
+}
+
+.center-loader {
+    border: 5px solid #f3f3f3; /* Light grey */
+    border-top: 5px solid #2c3e50; /* Blue */
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
     margin: 0 auto;
     animation: spin 0.75s linear infinite;
 }
+
 
 @keyframes spin {
     0% { transform: rotate(0deg); }

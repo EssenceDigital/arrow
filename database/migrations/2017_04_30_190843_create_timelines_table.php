@@ -33,6 +33,7 @@ class CreateTimelinesTable extends Migration
             $table->boolean('draft_submitted')->default(false);
             $table->boolean('draft_accepted')->default(false);
             $table->boolean('final_approval')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

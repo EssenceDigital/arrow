@@ -20,5 +20,5 @@ Vue.component('projects-hub', require('./components/app/Projects-hub.vue'));
 Vue.component('users-hub', require('./components/app/Users-hub.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
 });

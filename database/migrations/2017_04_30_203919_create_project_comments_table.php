@@ -22,6 +22,7 @@ class CreateProjectCommentsTable extends Migration
             $table->date('date');
             $table->string('comment');
             $table->boolean('is_issue')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
