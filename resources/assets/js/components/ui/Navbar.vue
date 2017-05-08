@@ -24,7 +24,7 @@
                 <ul class="nav navbar-nav navbar-right margin-10-top">
                     <li>
                         <dropdown v-bind:title="user_name">
-                            <li><a>Your Settings</a></li>
+                            <li><a href="/app/user-profile">Settings/Profile</a></li>
                             <li class="divider"></li>
                             <li>
                                 <form method="post" action="/logout">

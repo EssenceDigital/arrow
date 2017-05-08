@@ -34,7 +34,7 @@
                                         <img src="images/profile.jpg" alt="" />
                                     </div>
                                     <div class="prj-dtl-cnt">
-                                        <p>Arrow is an Alberta company that provides archaeological and historical services for government and private industry in Western Canada. With operational bases in southern Alberta and southern British Columbia, and close working relationships with First Nations personnel, Arrow offers heritage-consulting services for a wide range of projects.</p>
+                                        <p>Arrow is an Alberta company that provides archaeological and historical services for government and private industry in Western Canada. With operational bases in southern Alberta and Saskatchewan, and close working relationships with First Nations personnel, Arrow offers heritage-consulting services for a wide range of projects.</p>
 
                                         <p>Arrow’s services include archaeological and historical assessments for forestry developments (including forest fire mitigation), water projects, energy developments, subdivisions, recreational developments, highway and road projects, communications projects, and cultural and heritage developments. Recent projects include forest fire mitigation in British Columbia and survey work at Writing-on-Stone Provincial Park in Alberta.</p>
 
