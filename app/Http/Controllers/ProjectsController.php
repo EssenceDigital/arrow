@@ -61,6 +61,23 @@ class ProjectsController extends Controller
     }
 
     /**
+     * Find all projects
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function all()
+    {
+        // Find projects
+        $projects = Project::all();
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'projects' => $projects->toArray()
+        ], 200);        
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

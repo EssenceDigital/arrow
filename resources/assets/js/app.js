@@ -18,7 +18,7 @@ window.Vue = require('vue');
 Vue.component('navbar', require('./components/ui/Navbar.vue'));
 Vue.component('projects-hub', require('./components/app/Projects-hub.vue'));
 Vue.component('users-hub', require('./components/app/Users-hub.vue'));
-Vue.component('user-profile', require('./components/app/User-profile.vue'));
+Vue.component('user-settings', require('./components/app/User-settings.vue'));
 
 const app = new Vue({
     el: '#app',

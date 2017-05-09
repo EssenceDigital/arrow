@@ -26,8 +26,13 @@
                 window.Laravel = <?php echo json_encode([
                     'csrfToken' => csrf_token(),
                 ]); ?>;
-                const dashboard_users_name = '{{ Auth::user()->first . ' ' . Auth::user()->last }}';
-                const dasboard_users_permissions = '{{ Auth::user()->permissions }}';
+                const DASHBOARD_USER_ID = '{{ Auth::user()->id }}';
+                const DASHBOARD_USERS_NAME = '{{ Auth::user()->first . ' ' . Auth::user()->last }}';
+                const DASHBOARD_USER_PERMISSIONS = '{{ Auth::user()->permissions }}';
+                const DASHBOARD_USER_EMAIL = '{{ Auth::user()->email }}';
+                const DASHBOARD_USER_COMPANY = '{{ Auth::user()->company_name }}';
+                const DASHBOARD_USER_GST = '{{ Auth::user()->gst_number }}';
+
         </script>
     </head>
 
@@ -38,8 +43,12 @@
         <div class="container">
             <navbar>
                 <li class="{{ ((Request::is('app')) ? 'active' : '' ) }}"><a href="/app">Dashboard</a></li>
-                <li class="{{ ((Request::is('app/users')) ? 'active' : '' ) }}"><a href="/app/users">Users</a></li>
-                <li class="{{ ((Request::is('app/projects')) ? 'active' : '' ) }}"><a href="/app/projects">Projects</a></li>
+                @if (Auth::user()->permissions == 'admin')
+                    <li class="{{ ((Request::is('app/users')) ? 'active' : '' ) }}"><a href="/app/users">Users</a></li>
+                @endif
+                @if (Auth::user()->permissions == 'admin')
+                    <li class="{{ ((Request::is('app/projects')) ? 'active' : '' ) }}"><a href="/app/projects">Projects</a></li>
+                @endif
             </navbar>
 
             @yield('content')

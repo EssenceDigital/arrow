@@ -20,11 +20,14 @@ Route::get('/team', 'SiteController@team');
 
 // App Routes
 
-/*Route::get('/app', 'DashboardController@index');
-Route::get('/app/user-profile', 'DashboardController@profile');
+Route::get('/app', 'DashboardController@index');
+Route::get('/app/user-settings', 'DashboardController@userSettings');
+Route::post('/app/update-user', 'DashboardController@updateUserInfo');
+Route::post('/app/change-personal-password', 'DashboardController@changePersonalPassword');
 
 // Projects
 Route::get('/app/projects', 'ProjectsController@hub');
+Route::get('/app/projects/all', 'ProjectsController@all');
 Route::post('/app/projects/create', 'ProjectsController@store');
 
 // Users
@@ -35,5 +38,5 @@ Route::post('/app/users/create', 'UsersController@store');
 Route::post('/app/users/update', 'UsersController@update');
 Route::post('/app/users/change-password', 'UsersController@changePassword');
 Route::post('/app/users/delete', 'UsersController@delete');
-Auth::routes();*/
+Auth::routes();
 

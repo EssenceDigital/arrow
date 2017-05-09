@@ -24,7 +24,7 @@
                 <ul class="nav navbar-nav navbar-right margin-10-top">
                     <li>
                         <dropdown v-bind:title="user_name">
-                            <li><a href="/app/user-profile">Settings/Profile</a></li>
+                            <li><a href="/app/user-settings">Settings</a></li>
                             <li class="divider"></li>
                             <li>
                                 <form method="post" action="/logout">
@@ -54,7 +54,7 @@
             return {
                 collapsed: true,
                 csrfToken: window.Laravel.csrfToken,
-                user_name: dashboard_users_name
+                user_name: DASHBOARD_USERS_NAME
             }
         }
     }
