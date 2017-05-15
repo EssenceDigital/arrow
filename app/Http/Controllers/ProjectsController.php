@@ -67,14 +67,7 @@ class ProjectsController extends Controller
      */
     public function all()
     {
-        // Find projects
-        $projects = Project::all();
-
-        // Return response for ajax call
-        return response()->json([
-            'result' => 'success',
-            'models' => $projects->toArray()
-        ], 200);        
+        return Project::paginate(10);      
     }
 
     /**

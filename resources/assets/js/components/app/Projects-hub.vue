@@ -32,7 +32,7 @@
 									<th>Actions</th>
 								</tr>
 							</thead>
-						  <tbody>
+							<tbody>
 							    <tr v-for="project in models" v-bind:project="project">
 								    <td>{{ project.client_company_name }}</td>
 								    <td>{{ project.client_contact_name }}</td>
@@ -45,8 +45,19 @@
 								    	</dropdown>
 								    </td>
 							    </tr>
-						  </tbody>
-						</table> 						
+							</tbody>
+						</table>
+
+						<div class="row text-center margin-45-top">
+							<ul class="pagination">
+								<li v-bind:class="{ 'disabled': modelsCurrentPage == 1 }"><a v-on:click="getSpecificProjectsPage(modelsPrevPageUrl)">«</a></li>
+								<li v-for="(page, key) in modelsPageLinks" v-bind:class="{ 'active': modelsCurrentPage == key }">
+									<a v-on:click="getSpecificProjectsPage(page)">{{ key }}</a>
+								</li>
+								<li v-bind:class="{ 'disabled': modelsCurrentPage == modelsPageTotal }"><a v-on:click="getSpecificProjectsPage(modelsNextPageUrl)">»</a></li>
+							</ul>							
+						</div>
+
 					</div>
 
 					<div v-if="models.length == 0" class="col-md-8 col-centered">
@@ -415,7 +426,7 @@
 <script>
 	let modal = require('./../ui/Modal.vue');
 	let dropdown = require('./../ui/Dropdown.vue');
-	let controller = require('./mixins/hub-controller.js');
+	let hub_controller = require('./mixins/hub-controller.js');
 
 	export default{
 		components: {
@@ -423,7 +434,7 @@
 			'dropdown': dropdown
 		},
 
-		mixins: [controller],
+		mixins: [hub_controller],
 
 		data(){
 			return {
@@ -433,7 +444,12 @@
 				isDeleting: false,
 				urlToFetch: '/app/projects/all',				
 				fetchingModels: false,	
-				models: [],		
+				models: [],	
+				modelsPageTotal: 0,
+				modelsCurrentPage: 0,
+				modelsPageLinks: {},
+				modelsNextPageUrl: '',
+				modelsPrevPageUrl: '',					
 				form: {
 					model: 'Project',
 					state: 'create',
@@ -443,7 +459,7 @@
 					createAction: '/app/projects/create',
 					updateAction: '/app/projects/update',
 					isLoading: false,					
-					successMsg: 'Project has been saved',										
+					successMsg: 'Project has been saved',
 					fields: {
 						id: {val: '', err: false, dflt: ''},
 						province: {val: '', err: false, dflt: ''},
@@ -479,6 +495,11 @@
 
 			getAndSetProjects(){
 				this.getAndSetModels();
+			},
+
+
+			getSpecificProjectsPage(link){
+				this.getAndSetModels(link);
 			},
 
 			viewProjectTable(id){

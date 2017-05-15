@@ -12914,10 +12914,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var modal = __webpack_require__(12);
 var dropdown = __webpack_require__(4);
-var controller = __webpack_require__(42);
+var hub_controller = __webpack_require__(42);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -12925,7 +12936,7 @@ var controller = __webpack_require__(42);
 		'dropdown': dropdown
 	},
 
-	mixins: [controller],
+	mixins: [hub_controller],
 
 	data: function data() {
 		return {
@@ -12936,6 +12947,11 @@ var controller = __webpack_require__(42);
 			urlToFetch: '/app/projects/all',
 			fetchingModels: false,
 			models: [],
+			modelsPageTotal: 0,
+			modelsCurrentPage: 0,
+			modelsPageLinks: {},
+			modelsNextPageUrl: '',
+			modelsPrevPageUrl: '',
 			form: {
 				model: 'Project',
 				state: 'create',
@@ -12979,6 +12995,9 @@ var controller = __webpack_require__(42);
 		},
 		getAndSetProjects: function getAndSetProjects() {
 			this.getAndSetModels();
+		},
+		getSpecificProjectsPage: function getSpecificProjectsPage(link) {
+			this.getAndSetModels(link);
 		},
 		viewProjectTable: function viewProjectTable(id) {
 			this.viewModelAsTable(id);
@@ -13590,6 +13609,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var modal = __webpack_require__(12);
 var dropdown = __webpack_require__(4);
+var hub_controller = __webpack_require__(42);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -13597,190 +13617,68 @@ var dropdown = __webpack_require__(4);
 		'dropdown': dropdown
 	},
 
+	mixins: [hub_controller],
+
 	data: function data() {
 		return {
 			currentTab: 'view-all',
 			modalActive: false,
-			dropdownActive: false,
-			users: [],
+			urlToDelete: '/app/users/delete',
+			isDeleting: false,
+			passwordIsChanging: false,
+			urlToFetch: '/app/users/all',
+			fetchingModels: false,
+			models: [],
 			form: {
+				model: 'User',
 				state: 'create',
 				title: 'Create User',
 				button: 'Save',
 				action: '/app/users/create',
+				createAction: '/app/users/create',
+				updateAction: '/app/users/update',
 				isLoading: false,
+				successMsg: 'User has been saved',
 				fields: {
-					id: { val: '', err: '', msg: '' },
-					first: { val: '', err: '', msg: '' },
-					last: { val: '', err: '', msg: '' },
-					permissions: { val: '', err: '', msg: '' },
-					email: { val: '', err: '', msg: '' },
-					password: { val: '', err: '', msg: '' },
-					password_confirmation: { val: '', err: '', msg: '' },
-					company_name: { val: '', err: '', msg: '' },
-					hourly_rate_one: { val: '0.00', err: '', msg: '' },
-					hourly_rate_two: { val: '0.00', err: '', msg: '' },
-					gst_number: { val: '', err: '', msg: '' }
+					id: { val: '', err: false, dflt: '' },
+					first: { val: '', err: false, dflt: '' },
+					last: { val: '', err: false, dflt: '' },
+					permissions: { val: '', err: false, dflt: '' },
+					email: { val: '', err: false, dflt: '' },
+					password: { val: '', err: false, dflt: '' },
+					password_confirmation: { val: '', err: false, dflt: '' },
+					company_name: { val: '', err: false, dflt: '' },
+					hourly_rate_one: { val: '0.00', err: false, dflt: '0.00' },
+					hourly_rate_two: { val: '0.00', err: false, dflt: '0.00' },
+					gst_number: { val: '', err: false, dflt: '' }
 				}
-			},
-			fetchingUsers: false,
-			passwordIsChanging: false,
-			userIsDeleting: false
+			}
+
 		};
 	},
 
 
 	methods: {
-
-		// Clears the user form to a blank slate ready for input
-		clearForm: function clearForm() {
-			for (var key in this.form.fields) {
-				if (key == 'hourly_rate_one' || key == 'hourly_rate_two') this.form.fields[key].val = '0.00';else this.form.fields[key].val = '';
-			}
-			// Clear errors
-			this.clearFormErrrors();
-			// Reset titles
-			this.formNewState();
+		viewAllUsersTab: function viewAllUsersTab() {
+			this.viewAllModelsTab();
 		},
-
-
-		// Clears out any potential error state the inputs are in
-		clearFormErrrors: function clearFormErrrors() {
-			for (var key in this.form.fields) {
-				// Clear possible errors
-				this.form.fields[key].err = '';
-				this.form.fields[key].msg = '';
-			}
+		viewUserFormTab: function viewUserFormTab() {
+			this.viewFormTab();
 		},
-
-
-		// Sets the form state and titles for a create
-		formNewState: function formNewState() {
-			this.form.state = 'create';
-			this.form.title = 'Create User';
-			this.form.button = 'Save';
-			this.form.action = '/app/users/create';
-		},
-
-
-		// Sets the form state titles for an edit
-		formEditState: function formEditState() {
-			this.form.state = 'edit';
-			this.form.title = 'Edit User';
-			this.form.button = 'Update';
-			this.form.action = '/app/users/update';
-		},
-
-
-		// Shows the view all users tab and clears the form
-		showAllUsersTab: function showAllUsersTab() {
-			this.currentTab = 'view-all';
-			this.clearForm();
-			this.getAndSetUsers();
-		},
-
-
-		// Shows the user form tab and clears out the form
-		showUserFormTab: function showUserFormTab() {
-			this.clearForm();
-			this.currentTab = 'user-form';
-		},
-
-
-		// Sends a GET request to retrieve all users from the server then sets the users data prop
 		getAndSetUsers: function getAndSetUsers() {
-			var context = this;
-			// Show loader
-			this.fetchingUsers = true;
-			// Send request
-			axios.get('/app/users/all').then(function (response) {
-				// Set data prop
-				context.users = response.data.users;
-				// Hide loader
-				context.fetchingUsers = false;
-			}).catch(function (response) {
-				console.log(response);
-			});
-		},
-
-
-		// Sends a POST request to create or edit a user depending on the current form.state
-		sendForm: function sendForm() {
-			// Cache context
-			var context = this;
-			// Show loader
-			this.form.isLoading = true;
-			// Populate data to send to server
-			var data = {};
-			for (var key in this.form.fields) {
-				data[key] = this.form.fields[key].val;
-			}
-			// Add token to data
-			data._token = window.Laravel.csrfToken;
-			// Send POST to server
-			axios.post(context.form.action, data).then(function (response) {
-				// Clear form, notify, and reset loader
-				noty({
-					text: 'User has been saved',
-					theme: 'defaultTheme',
-					layout: 'center',
-					timeout: 850,
-					closeWith: ['click', 'hover'],
-					type: 'success'
-				});
-				// Hide loader				
-				context.form.isLoading = false;
-				// Show next content dependingo on form state
-				if (context.form.state == 'create') {
-					context.users.push(response.data.user);
-					context.currentTab = 'view-all';
-				}
-			}).catch(function (error) {
-				if (error.response) {
-					// If the server responded with error data
-					for (var key in error.response.data) {
-						context.form.fields[key].msg = error.response.data[key][0];
-						context.form.fields[key].err = true;
-					}
-					// Hide loader
-					context.form.isLoading = false;
-				}
-			});
-		},
-
-
-		// Sends a POST request to retrieve the selected user from storage and then sets up
-		// the form to edit that user
-		editUser: function editUser(id) {
-			var context = this;
-			// Send request
-			axios.get('/app/users/' + id).then(function (response) {
-				// Set values in the form.fields data property
-				for (var key in context.form.fields) {
-					context.form.fields[key].val = response.data.user[key];
-				}
-				// Clear any old form errors
-				context.clearFormErrrors();
-				// Adjust some text
-				context.formEditState();
-				// Change tab
-				context.currentTab = 'user-form';
-			}).catch(function (response) {
-				console.log(response);
-			});
+			this.getAndSetModels();
 		},
 		viewUserTable: function viewUserTable(id) {
-			// Grab user from local cache
-			var user;
-			this.users.forEach(function (elem) {
-				if (elem.id == id) user = elem;
-			});
-			// Set values in the form.fields data property
-			for (var key in this.form.fields) {
-				this.form.fields[key].val = user[key];
-			}
-			// Change tab
-			this.currentTab = 'user-table';
+			this.viewModelAsTable(id);
+		},
+		editUser: function editUser(id) {
+			this.prepareFormForEdit('/app/users/' + id);
+		},
+		sendForm: function sendForm() {
+			this.createOrUpdate();
+		},
+		deleteUser: function deleteUser() {
+			this.deleteModel();
 		},
 
 
@@ -13812,44 +13710,6 @@ var dropdown = __webpack_require__(4);
 				context.form.fields.password = '';
 				context.form.fields.password_confirmation = '';
 				context.passwordIsChanging = false;
-			}).catch(function (response) {});
-		},
-
-
-		// Sends a POST request to delete the specified and confirmed user
-		deleteUser: function deleteUser() {
-			// Show loader
-			this.userIsDeleting = true;
-			// Assemble object for POST
-			var data = {
-				id: this.form.fields.id.val,
-				_token: window.Laravel.csrfToken
-			};
-			// Store context
-			var context = this;
-			// Send GET request to delete
-			axios.post('/app/users/delete', data).then(function (response) {
-				// Notify
-				noty({
-					text: 'User has been deleted',
-					theme: 'defaultTheme',
-					layout: 'center',
-					timeout: 850,
-					closeWith: ['click', 'hover'],
-					type: 'success'
-				});
-				// Close modal and show all users						
-				context.modalActive = false;
-				context.showAllUsersTab();
-				// Remove user from local cache
-				context.users.forEach(function (user) {
-					if (user.id == data.id) {
-						var index = context.users.indexOf(user);
-						context.users.splice(index, 1);
-					}
-				});
-				// Hide loader
-				context.userIsDeleting = false;
 			}).catch(function (response) {
 				console.log(response);
 			});
@@ -13858,7 +13718,7 @@ var dropdown = __webpack_require__(4);
 
 	// Retrieves all users from storage upon compenent mounting
 	mounted: function mounted() {
-		this.getAndSetUsers();
+		this.getAndSetModels();
 	}
 });
 
@@ -14145,14 +14005,49 @@ module.exports = {
 
 
 		// Sends a GET request to retrieve all projects from the server then sets the projects data prop
-		getAndSetModels: function getAndSetModels() {
+		getAndSetModels: function getAndSetModels(link) {
 			var context = this;
 			// Show loader
 			this.fetchingModels = true;
+
+			if (link) {
+				var urlToFetch = link;
+			} else {
+				var urlToFetch = this.urlToFetch;
+			}
 			// Send request
-			axios.get(this.urlToFetch).then(function (response) {
-				// Set data prop
-				context.models = response.data.models;
+			axios.get(urlToFetch).then(function (response) {
+				console.log(response);
+
+				if (response.data.data) {
+					var totalPages = response.data.last_page;
+
+					if (totalPages > 1) {
+						var nextPageUrl = response.data.next_page_url,
+						    prevPageUrl = response.data.prev_page_url;
+
+						if (nextPageUrl != null) {
+							baseUrl = nextPageUrl.substring(0, nextPageUrl.length - 1);
+						} else if (prevPageUrl != null) {
+							baseUrl = prevPageUrl.substring(0, prevPageUrl.length - 1);
+						}
+
+						for (var i = 1; i <= totalPages; i++) {
+							context.modelsPageLinks[i] = baseUrl + i;
+						}
+					}
+
+					context.modelsNextPageUrl = nextPageUrl;
+					context.modelsPrevPageUrl = prevPageUrl;
+					context.modelsCurrentPage = response.data.current_page;
+					context.modelsPageTotal = totalPages;
+					// Set data prop
+					context.models = response.data.data;
+					console.log(context.modelsCurrentPage);
+				} else {
+					context.models = response.data.models;
+				}
+
 				// Hide loader
 				context.fetchingModels = false;
 			}).catch(function (response) {
@@ -14199,15 +14094,6 @@ module.exports = {
 			// Send POST to server
 			axios.post(this.form.action, data).then(function (response) {
 				console.log(response);
-				// Clear form, notify, and reset loader
-				noty({
-					text: context.form.successMsg,
-					theme: 'defaultTheme',
-					layout: 'center',
-					timeout: 650,
-					closeWith: ['click', 'hover'],
-					type: 'success'
-				});
 				context.form.isLoading = false;
 				// Show next content dependingo on form state
 				if (context.form.state == 'create') {
@@ -14219,6 +14105,15 @@ module.exports = {
 						model[key] = response.data.model[key];
 					}
 				}
+				// Clear form, notify, and reset loader
+				noty({
+					text: context.form.successMsg,
+					theme: 'defaultTheme',
+					layout: 'center',
+					timeout: 650,
+					closeWith: ['click', 'hover'],
+					type: 'success'
+				});
 			}).catch(function (error) {
 				console.log(error.response.data);
 				if (error.response) {
@@ -33787,23 +33682,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('a', {
     on: {
-      "click": _vm.showAllUsersTab
+      "click": _vm.viewAllUsersTab
     }
   }, [_vm._v("View All")])]), _vm._v(" "), _c('li', {
     class: {
-      'active': _vm.currentTab == 'user-form'
+      'active': _vm.currentTab == 'view-form'
     }
   }, [_c('a', {
     on: {
-      "click": _vm.showUserFormTab
+      "click": _vm.viewUserFormTab
     }
-  }, [_vm._v(_vm._s(_vm.form.title))])]), _vm._v(" "), (_vm.currentTab == 'user-table') ? _c('li', {
+  }, [_vm._v(_vm._s(_vm.form.title))])]), _vm._v(" "), (_vm.currentTab == 'view-table') ? _c('li', {
     class: {
-      'active': _vm.currentTab == 'user-table'
+      'active': _vm.currentTab == 'view-table'
     }
   }, [_c('a', [_vm._v("User as Table")])]) : _vm._e()]), _vm._v(" "), (_vm.currentTab == 'view-all') ? _c('div', {
     staticClass: "row margin-45-top"
-  }, [(_vm.users.length > 0) ? _c('div', {
+  }, [(_vm.models.length > 0) ? _c('div', {
     staticClass: "col-md-12"
   }, [_c('button', {
     staticClass: "btn btn-default",
@@ -33812,11 +33707,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-refresh"
-  }), _vm._v(" "), (!_vm.fetchingUsers) ? _c('span', [_vm._v(" Refresh list")]) : _vm._e(), _vm._v(" "), (_vm.fetchingUsers) ? _c('span', [_c('div', {
+  }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" Refresh list")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
     staticClass: "left-loader"
   })]) : _vm._e()]), _vm._v(" "), _c('table', {
     staticClass: "table table-striped table-hover margin-25-top"
-  }, [_vm._m(1), _vm._v(" "), _c('tbody', _vm._l((_vm.users), function(user) {
+  }, [_vm._m(1), _vm._v(" "), _c('tbody', _vm._l((_vm.models), function(user) {
     return _c('tr', {
       attrs: {
         "user": user
@@ -33838,9 +33733,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_vm._v("View as table")])])])], 1)])
-  }))])]) : _vm._e(), _vm._v(" "), (_vm.users.length == 0) ? _c('div', {
+  }))])]) : _vm._e(), _vm._v(" "), (_vm.models.length == 0) ? _c('div', {
     staticClass: "col-md-8 col-centered"
-  }, [_vm._m(2)]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.currentTab == 'user-form') ? _c('div', {
+  }, [_vm._m(2)]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.currentTab == 'view-form') ? _c('div', {
     staticClass: "row margin-45-top"
   }, [_c('div', {
     staticClass: "col-md-12"
@@ -33856,13 +33751,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" View as Table\r\n\t\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "well bs-component margin-25-top"
   }, [_c('form', {
-    staticClass: "form-horizontal",
-    on: {
-      "submit": function($event) {
-        $event.preventDefault();
-        _vm.onSubmit($event)
-      }
-    }
+    staticClass: "form-horizontal"
   }, [_c('fieldset', {
     staticClass: "margin-25-top"
   }, [_c('legend', [_vm._v(_vm._s(_vm.form.title))]), _vm._v(" "), _c('div', {
@@ -33901,7 +33790,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.first.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.first.msg))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.first.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
@@ -33935,7 +33824,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.last.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.last.msg))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.last.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-6"
@@ -33971,7 +33860,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.email.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.email.msg))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.email.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
@@ -34051,7 +33940,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.password.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.password.msg))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.password.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
@@ -34085,7 +33974,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.password_confirmation.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.password_confirmation.msg))]) : _vm._e()])])])]) : _vm._e(), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.password_confirmation.err))]) : _vm._e()])])])]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-6"
@@ -34121,7 +34010,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.company_name.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.company_name.msg))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.company_name.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
@@ -34155,7 +34044,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.gst_number.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.gst_number.msg))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.gst_number.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-6"
@@ -34195,7 +34084,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]), _vm._v(" "), (_vm.form.fields.hourly_rate_one.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.hourly_rate_one.msg))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.hourly_rate_one.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
@@ -34233,7 +34122,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]), _vm._v(" "), (_vm.form.fields.hourly_rate_two.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.hourly_rate_two.msg))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.hourly_rate_two.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-3 col-centered"
@@ -34294,7 +34183,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.password.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.password.msg))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.password.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
@@ -34328,7 +34217,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.password_confirmation.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.password_confirmation.msg))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.password_confirmation.err))]) : _vm._e()])])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-3 col-centered"
@@ -34341,7 +34230,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(!_vm.passwordIsChanging) ? _c('span', [_vm._v("Change")]) : _vm._e(), _vm._v(" "), (_vm.passwordIsChanging) ? _c('span', [_c('div', {
     staticClass: "center-loader"
-  })]) : _vm._e()])])])])])])]) : _vm._e(), _vm._v(" "), (_vm.form.state == 'edit') ? _c('div', {
+  })]) : _vm._e()])])])])])]) : _vm._e(), _vm._v(" "), (_vm.form.state == 'edit') ? _c('div', {
     staticClass: "well bs-component"
   }, [_c('legend', {
     staticClass: "danger"
@@ -34386,9 +34275,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.deleteUser
     }
-  }, [(!_vm.userIsDeleting) ? _c('span', [_vm._v("Delete")]) : _vm._e(), _vm._v(" "), (_vm.userIsDeleting) ? _c('span', [_c('div', {
+  }, [(!_vm.isDeleting) ? _c('span', [_vm._v("Delete")]) : _vm._e(), _vm._v(" "), (_vm.isDeleting) ? _c('span', [_c('div', {
     staticClass: "loader-center"
-  })]) : _vm._e()])])])], 1)]) : _vm._e(), _vm._v(" "), (_vm.currentTab == 'user-table') ? _c('div', {
+  })]) : _vm._e()])])])], 1)]) : _vm._e(), _vm._v(" "), (_vm.currentTab == 'view-table') ? _c('div', {
     staticClass: "row margin-45-top"
   }, [_c('div', {
     staticClass: "col-md-12"
@@ -34598,7 +34487,43 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_vm._v("View as table")])])])], 1)])
-  }))])]) : _vm._e(), _vm._v(" "), (_vm.models.length == 0) ? _c('div', {
+  }))]), _vm._v(" "), _c('div', {
+    staticClass: "row text-center margin-45-top"
+  }, [_c('ul', {
+    staticClass: "pagination"
+  }, [_c('li', {
+    class: {
+      'disabled': _vm.modelsCurrentPage == 1
+    }
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        _vm.getSpecificProjectsPage(_vm.modelsPrevPageUrl)
+      }
+    }
+  }, [_vm._v("«")])]), _vm._v(" "), _vm._l((_vm.modelsPageLinks), function(page, key) {
+    return _c('li', {
+      class: {
+        'active': _vm.modelsCurrentPage == key
+      }
+    }, [_c('a', {
+      on: {
+        "click": function($event) {
+          _vm.getSpecificProjectsPage(page)
+        }
+      }
+    }, [_vm._v(_vm._s(key))])])
+  }), _vm._v(" "), _c('li', {
+    class: {
+      'disabled': _vm.modelsCurrentPage == _vm.modelsPageTotal
+    }
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        _vm.getSpecificProjectsPage(_vm.modelsNextPageUrl)
+      }
+    }
+  }, [_vm._v("»")])])], 2)])]) : _vm._e(), _vm._v(" "), (_vm.models.length == 0) ? _c('div', {
     staticClass: "col-md-8 col-centered"
   }, [_vm._m(2)]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.currentTab == 'view-form') ? _c('div', {
     staticClass: "row margin-45-top"

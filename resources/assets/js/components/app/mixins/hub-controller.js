@@ -90,15 +90,51 @@ module.exports =  {
 		},
 
 		// Sends a GET request to retrieve all projects from the server then sets the projects data prop
-		getAndSetModels(){
+		getAndSetModels(link){
 			var context = this;
 			// Show loader
 			this.fetchingModels = true;
+
+			if(link){
+				var urlToFetch = link;
+			} else {
+				var urlToFetch = this.urlToFetch;
+			}
 			// Send request
-			axios.get(this.urlToFetch)
+			axios.get(urlToFetch)
 				.then(function(response){
-					// Set data prop
-					context.models = response.data.models;
+					console.log(response);
+					
+					if(response.data.data){
+						var totalPages = response.data.last_page;
+
+						if(totalPages > 1){
+							var nextPageUrl = response.data.next_page_url,
+								prevPageUrl = response.data.prev_page_url;
+
+							if(nextPageUrl != null){
+								baseUrl = nextPageUrl.substring(0, nextPageUrl.length - 1);
+							} else if(prevPageUrl != null){
+								baseUrl = prevPageUrl.substring(0, prevPageUrl.length - 1);
+							}
+
+							for(var i = 1; i <= totalPages; i++){
+								context.modelsPageLinks[i] = baseUrl + i;
+							}								
+						}
+
+						context.modelsNextPageUrl = nextPageUrl;
+						context.modelsPrevPageUrl = prevPageUrl;
+						context.modelsCurrentPage = response.data.current_page;
+						context.modelsPageTotal = totalPages;
+						// Set data prop
+						context.models = response.data.data;						
+						console.log(context.modelsCurrentPage);
+					} else{
+						context.models = response.data.models;
+					}
+
+					
 					// Hide loader
 					context.fetchingModels = false;
 				})
@@ -147,16 +183,7 @@ module.exports =  {
 			// Send POST to server
 			axios.post(this.form.action, data)
 				.then(function(response){
-					console.log(response);
-					// Clear form, notify, and reset loader
-	                 noty({
-	                     text: context.form.successMsg,
-	                     theme: 'defaultTheme',
-	                     layout: 'center',
-	                     timeout: 650,
-	                     closeWith: ['click', 'hover'],
-	                     type: 'success'
-	                });						
+					console.log(response);						
 					context.form.isLoading = false;
 					// Show next content dependingo on form state
 					if(context.form.state == 'create'){
@@ -167,7 +194,16 @@ module.exports =  {
 						for(var key in context.form.fields){
 							model[key] = response.data.model[key];
 						}
-					}					
+					}
+					// Clear form, notify, and reset loader
+	                 noty({
+	                     text: context.form.successMsg,
+	                     theme: 'defaultTheme',
+	                     layout: 'center',
+	                     timeout: 650,
+	                     closeWith: ['click', 'hover'],
+	                     type: 'success'
+	                });										
 				})
 				.catch(function(error){
 					console.log(error.response.data);
