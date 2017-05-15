@@ -28,7 +28,10 @@ Route::post('/app/change-personal-password', 'DashboardController@changePersonal
 // Projects
 Route::get('/app/projects', 'ProjectsController@hub');
 Route::get('/app/projects/all', 'ProjectsController@all');
+Route::get('/app/projects/{id}', 'ProjectsController@single');
 Route::post('/app/projects/create', 'ProjectsController@store');
+Route::post('/app/projects/update', 'ProjectsController@update');
+Route::post('/app/projects/delete', 'ProjectsController@delete');
 
 // Users
 Route::get('/app/users', 'UsersController@hub');

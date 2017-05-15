@@ -8,41 +8,48 @@
 		    </div>
 		    <div class="panel-body">
 				<ul class="nav nav-pills">
-					<li v-bind:class="{ 'active': currentTab == 'view-all' }"><a v-on:click="currentTab = 'view-all'">View All</a></li>
-					<li v-bind:class="{ 'active': currentTab == 'create-project' }"><a v-on:click="currentTab = 'create-project'">New Project</a></li>
+					<li v-bind:class="{ 'active': currentTab == 'view-all' }"><a v-on:click="viewAllProjectsTab">View All</a></li>
+					<li v-bind:class="{ 'active': currentTab == 'view-form' }"><a v-on:click="viewProjectFormTab">New Project</a></li>
+					<li v-if="currentTab == 'view-table'" v-bind:class="{ 'active': currentTab == 'view-table' }"><a>User as Table</a></li>
 				</ul>		    	
 
 				<div v-if="currentTab == 'view-all'" class="row margin-45-top">
-					<div v-if="projects.length > 0" class="col-md-12">
-						<div class="col-md-12">
-							<table class="table table-striped table-hover margin-25-top">
-								<thead>
-									<tr class="info">
-										<th>Client Company</th>
-										<th>Contact Name</th>
-										<th>Contact Phone</th>
-										<th>Invoice Paid</th>
-									</tr>
-								</thead>
-							  <tbody>
-								    <tr v-for="project in projects" v-bind:project="project">
-									    <td>{{ project.client_company }}</td>
-									    <td>{{ project.client_contact_name }}</td>
-									    <td>{{ project.client_contact_phone }}</td>
-									    <td>{{ project.invoice_paid_date }}</td>
-									    <td>
-									    	<dropdown v-bind:title="'Actions'">
-								    			<li><a v-on:click="editProject(project.id)">Edit</a></li>
-												<li><a v-on:click="viewProjectTable(project.id)">View as table</a></li>
-									    	</dropdown>
-									    </td>
-								    </tr>
-							  </tbody>
-							</table> 						
-						</div>
+					<div v-if="models.length > 0" class="col-md-12">
+						<button v-on:click="getAndSetProjects" class="btn btn-default">
+							<span class="glyphicon glyphicon-refresh"></span>
+							<span v-if="!fetchingModels"> Refresh list</span>
+							<span v-if="fetchingModels">
+								<div class="left-loader"></div>
+							</span>
+						</button>					
+						<table class="table table-striped table-hover margin-25-top">
+							<thead>
+								<tr class="info">
+									<th>Client Company</th>
+									<th>Contact Name</th>
+									<th>Contact Phone</th>
+									<th>Invoice Paid</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+						  <tbody>
+							    <tr v-for="project in models" v-bind:project="project">
+								    <td>{{ project.client_company_name }}</td>
+								    <td>{{ project.client_contact_name }}</td>
+								    <td><a v-bind:href="'tel: +1' + project.client_contact_phone.replace(/-/g, '')">{{ project.client_contact_phone }}</a></td>
+								    <td><div v-if="project.invoiced_date == null" class="text-warning">Not Invoiced</div></td>
+								    <td>
+								    	<dropdown v-bind:title="'Actions'">
+							    			<li><a v-on:click="editProject(project.id)">Edit</a></li>
+											<li><a v-on:click="viewProjectTable(project.id)">View as table</a></li>
+								    	</dropdown>
+								    </td>
+							    </tr>
+						  </tbody>
+						</table> 						
 					</div>
 
-					<div v-if="projects.length == 0" class="col-md-8 col-centered">
+					<div v-if="models.length == 0" class="col-md-8 col-centered">
 						<div class="alert alert-warning text-center">
 							<strong>Heads up!</strong><br> No Projects are currently saved in storage.
 						</div>							
@@ -50,12 +57,15 @@
 
 				</div>
 
-				<div v-if="currentTab == 'create-project'" class="row margin-45-top">
+				<div v-if="currentTab == 'view-form'" class="row margin-45-top">
 					<div class="col-md-12">
-						<div class="well bs-component">
+						<button v-if="form.state == 'edit'" v-on:click="viewProjectTable(form.fields.id.val)" class="btn btn-default">
+							<span class="glyphicon glyphicon-list-alt"></span> View as Table
+						</button>					
+						<div class="well bs-component margin-25-top">
 							<form class="form-horizontal">
 								<fieldset>
-									<legend>Start a project</legend>
+									<legend>{{ form.title }}</legend>
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group" v-bind:class="{'has-error': form.fields.province.err}">
@@ -67,6 +77,7 @@
 								                        <option value="British Columbia">British Columbia</option>
 								                        <option value="Saskatchewan">Saskatchewan</option>
 								                    </select>
+								                    <span class="text-danger" v-if="form.fields.province.err">{{ form.fields.province.err }}</span>
 												</div>
 											</div>					
 										</div>
@@ -75,7 +86,7 @@
 								                <div class="col-lg-10">
 								                	<label class="control-label">Location</label>
 								                    <textarea v-model="form.fields.location.val" class="form-control margin-10-top" rows="3" placeholder="Specific location"></textarea>
-								                    <span v-if="form.fields.location.err">{{ form.fields.location.msg }}</span>
+								                    <span class="text-danger" v-if="form.fields.location.err">{{ form.fields.location.err }}</span>
 								                </div>
 								            </div>						
 										</div>
@@ -86,7 +97,7 @@
 								                <div class="col-lg-10">
 								                	<label class="control-label">Details</label>
 								                    <textarea v-model="form.fields.details.val" class="form-control margin-10-top" rows="3" placeholder="Project details"></textarea>
-								                    <span v-if="form.fields.details.err">{{ form.fields.details.msg }}</span>
+								                    <span class="text-danger" v-if="form.fields.details.err">{{ form.fields.details.err }}</span>
 								                </div>
 								            </div>						
 										</div>				
@@ -100,7 +111,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">Client company</label>
 							                    	<input v-model="form.fields.client_company_name.val" type="text" class="form-control margin-10-top" placeholder="Name of company">
-							                    	<span v-if="form.fields.client_company_name.err">{{ form.fields.client_company_name.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.client_company_name.err">{{ form.fields.client_company_name.err }}</span>
 							                    </div>
 						                  	</div>					
 										</div>
@@ -109,7 +120,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">Client contact</label>
 							                    	<input v-model="form.fields.client_contact_name.val" type="text" class="form-control margin-10-top" placeholder="Name of contact">
-							                    	<span v-if="form.fields.client_contact_name.err">{{ form.fields.client_contact_name.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.client_contact_name.err">{{ form.fields.client_contact_name.err }}</span>
 							                    </div>
 						                  	</div>					
 										</div>				
@@ -120,7 +131,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">Client contact phone</label>
 							                    	<input v-model="form.fields.client_contact_phone.val" type="text" class="form-control margin-10-top" placeholder="Contact phone number">
-							                    	<span v-if="form.fields.client_contact_phone.err">{{ form.fields.client_contact_phone.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.client_contact_phone.err">{{ form.fields.client_contact_phone.err }}</span>
 							                    </div>
 						                  	</div>					
 										</div>
@@ -129,7 +140,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">Client contact email</label>
 							                    	<input v-model="form.fields.client_contact_email.val" type="text" class="form-control margin-10-top" placeholder="Contact email">
-							                    	<span v-if="form.fields.client_contact_email.err">{{ form.fields.client_contact_email.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.client_contact_email.err">{{ form.fields.client_contact_email.err }}</span>
 							                    </div>
 						                  	</div>					
 										</div>				
@@ -140,7 +151,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">First contact by</label>
 							                    	<input v-model="form.fields.first_contact_by.val" type="text" class="form-control margin-10-top" placeholder="First contact by">
-							                    	<span v-if="form.fields.first_contact_by.err">{{ form.fields.first_contact_by.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.first_contact_by.err">{{ form.fields.first_contact_by.err }}</span>
 							                    </div>
 						                  	</div>					
 										</div>
@@ -149,7 +160,7 @@
 							                    <div class="col-lg-10">
 							                    	<label class="control-label">First contact date</label>
 							                    	<input v-model="form.fields.first_contact_date.val" type="date" class="form-control margin-10-top">
-							                    	<span v-if="form.fields.first_contact_date.err">{{ form.fields.first_contact_date.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.first_contact_date.err">{{ form.fields.first_contact_date.err }}</span>
 							                    </div>
 						                  	</div>					
 										</div>				
@@ -188,7 +199,7 @@
 												<div class="col-lg-10">
 													<label class="control-label">Land access granted by</label>
 							                    	<input v-model="form.fields.land_access_granted_by.val" type="text" class="form-control margin-10-top" placeholder="Access granted by">
-							                    	<span v-if="form.fields.land_access_granted_by.err">{{ form.fields.land_access_granted_by.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.land_access_granted_by.err">{{ form.fields.land_access_granted_by.err }}</span>
 												</div>
 											</div>					
 										</div>						
@@ -197,7 +208,7 @@
 												<div class="col-lg-10">
 													<label class="control-label">Land access contact</label>
 							                    	<input v-model="form.fields.land_access_contact.val" type="text" class="form-control margin-10-top" placeholder="Access contact name">
-							                    	<span v-if="form.fields.land_access_contact.err">{{ form.fields.land_access_contact.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.land_access_contact.err">{{ form.fields.land_access_contact.err }}</span>
 												</div>
 											</div>					
 										</div>
@@ -208,7 +219,7 @@
 												<div class="col-lg-10">
 													<label class="control-label">Land access phone</label>
 							                    	<input v-model="form.fields.land_access_phone.val" type="text" class="form-control margin-10-top" placeholder="Access contact phone number">
-							                    	<span v-if="form.fields.land_access_phone.err">{{ form.fields.land_access_phone.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.land_access_phone.err">{{ form.fields.land_access_phone.err }}</span>
 												</div>
 											</div>						
 										</div>
@@ -222,7 +233,7 @@
 												<div class="col-lg-10">
 													<label class="control-label">Invoiced date</label>
 							                    	<input v-model="form.fields.invoiced_date.val" type="date" class="form-control margin-10-top">
-							                    	<span v-if="form.fields.invoiced_date.err">{{ form.fields.invoiced_date.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.invoiced_date.err">{{ form.fields.invoiced_date.err }}</span>
 												</div>
 											</div>					
 										</div>						
@@ -231,33 +242,168 @@
 												<div class="col-lg-10">
 													<label class="control-label">Invoice paid date</label>
 							                    	<input v-model="form.fields.invoice_paid_date.val" type="date" class="form-control margin-10-top">
-							                    	<span v-if="form.fields.invoice_paid_date.err">{{ form.fields.invoice_paid_date.msg }}</span>
+							                    	<span class="text-danger" v-if="form.fields.invoice_paid_date.err">{{ form.fields.invoice_paid_date.err }}</span>
 												</div>
 											</div>					
 										</div>
 									</div>
 								</fieldset>
 							</form>	
-								<fieldset>
-									<div class="row">
-										<div class="col-md-3 col-centered">
-											<div class="form-group">
-												<button v-on:click="sendForm" class="btn btn-primary btn-block margin-45-top">
-													<span v-if="!form.isLoading">Change</span>
-													<span v-if="form.isLoading">
-														<div class="center-loader"></div>
-													</span>
-												</button>
-												
-											</div>					
-										</div>
-									</div>			
-								</fieldset>	
+							<fieldset>
+								<div class="row">
+									<div class="col-md-3 col-centered">
+										<div class="form-group">
+											<button v-on:click="sendForm" class="btn btn-primary btn-block margin-45-top">
+												<span v-if="!form.isLoading">{{ form.button }}</span>
+												<span v-if="form.isLoading">
+													<div class="center-loader"></div>
+												</span>
+											</button>												
+										</div>					
+									</div>
+								</div>			
+							</fieldset>	
 						</div>
+
+						<div v-if="form.state == 'edit'" class="well bs-component">
+							<legend class="danger">Delete Project</legend>
+							<fieldset>
+								<div class="row">
+									<div class="col-md-3 col-centered">
+										<div class="form-group">
+											<button v-on:click="modalActive = true" class="btn btn-danger btn-block margin-45-top">Delete</button>
+										</div>					
+									</div>
+								</div>			
+							</fieldset>								
+						</div>
+
+						<modal v-bind:modalActive="modalActive" v-on:modal-close="modalActive = false">
+							<h4 slot="title" class="danger">
+								Delete this project?
+							</h4>
+							<p slot="body">
+								Delete this project until the age that gave it birth comes again?
+							</p>
+							<div slot="footer">
+								<button v-on:click="modalActive = false" class="btn btn-primary margin-45-top">Cancel</button>
+								<button v-on:click="deleteProject" class="btn btn-danger margin-45-top">
+									<span v-if="!isDeleting">Delete</span>
+									<span v-if="isDeleting">
+										<div class="loader-center"></div>
+									</span>
+								</button>
+							</div>
+						</modal>
+
 					</div>					
 				</div>
 
-				<modal></modal>
+				<div v-if="currentTab == 'view-table'" class="row margin-45-top">
+					<div class="col-md-12">
+						<button v-on:click="editProject(form.fields.id.val)" class="btn btn-default">
+							<span class="glyphicon glyphicon-cog"></span> Edit Project
+						</button>					
+						<table class="table table-striped table-hover margin-25-top">
+							<thead>
+								<tr class="info">
+									<th>Province</th>
+									<th>Location</th>
+								</tr>
+							</thead>
+							<tbody>
+							    <tr>
+								    <td>{{ form.fields.province.val }}</td>
+								    <td>{{ form.fields.location.val }}</td>
+							    </tr>
+							</tbody>
+						</table>						
+					</div>
+
+					<div class="col-md-12">
+						<table class="table table-striped table-hover margin-25-top">
+							<thead>
+								<tr class="info">
+									<th>Details</th>
+								</tr>
+							</thead>
+							<tbody>
+							    <tr>
+								    <td>{{ form.fields.details.val }}</td>
+								</tr>
+							</tbody>
+						</table>						
+					</div>
+
+					<div class="col-md-12">
+						<table class="table table-striped table-hover margin-25-top">
+							<thead>
+								<tr class="info">
+									<th>Client</th>
+									<th>Client Contact</th>
+									<th>Contact Phone</th>
+									<th>Contact Email</th>
+								</tr>
+							</thead>
+							<tbody>
+							    <tr>
+								    <td>{{ form.fields.client_company_name.val }}</td>
+								    <td>{{ form.fields.client_contact_name.val }}</td>
+								    <td>{{ form.fields.client_contact_phone.val }}</td>
+								    <td>{{ form.fields.client_contact_email.val }}</td>
+								</tr>
+							</tbody>
+						</table>						
+					</div>										
+					
+					<div class="col-md-12">
+						<table class="table table-striped table-hover margin-25-top">
+							<thead>
+								<tr class="info">
+									<th>Land Ownership</th>
+									<th>Access Granted</th>
+									<th>Access Granted By</th>
+									<th>Access Contact</th>
+									<th>Contact Phone</th>
+								</tr>
+							</thead>
+							<tbody>
+							    <tr>
+								    <td>{{ form.fields.land_ownership.val }}</td>
+								    <td>
+								    	<div v-if="form.fields.land_access_granted.val == 0">No</div>
+								    	<div v-if="form.fields.land_access_granted.val == 1">Yes</div>
+								    </td>
+								    <td>{{ form.fields.land_access_granted_by.val }}</td>
+								    <td>{{ form.fields.land_access_contact.val }}</td>
+								    <td>{{ form.fields.land_access_phone.val }}</td>
+								</tr>
+							</tbody>
+						</table>						
+					</div>
+
+					<div class="col-md-12">
+						<table class="table table-striped table-hover margin-25-top">
+							<thead>
+								<tr class="info">
+									<th>Invoiced Date</th>
+									<th>Date Paid</th></th>
+								</tr>
+							</thead>
+							<tbody>
+							    <tr>
+								    <td>
+								    	<div v-if="form.fields.invoiced_date.val == null" class="text-warning">Not Invoiced</div>
+								    </td>
+								    <td>
+								    	<div v-if="form.fields.invoice_paid_date.val == null" class="text-warning">Not Invoiced</div>
+								    </td>
+								</tr>
+							</tbody>
+						</table>						
+					</div>					
+
+				</div>				
 
 		    </div>
 		</div>		
@@ -268,128 +414,96 @@
 
 <script>
 	let modal = require('./../ui/Modal.vue');
+	let dropdown = require('./../ui/Dropdown.vue');
+	let controller = require('./mixins/hub-controller.js');
 
 	export default{
 		components: {
-			'modal': modal
+			'modal': modal,
+			'dropdown': dropdown
 		},
+
+		mixins: [controller],
 
 		data(){
 			return {
 				currentTab: 'view-all',
 				modalActive: false,
-
+				urlToDelete: '/app/projects/delete',
+				isDeleting: false,
+				urlToFetch: '/app/projects/all',				
+				fetchingModels: false,	
+				models: [],		
 				form: {
-					isLoading: false,
+					model: 'Project',
+					state: 'create',
+					title: 'Create Project',
+					button: 'Save',
+					action: '/app/projects/create',
+					createAction: '/app/projects/create',
+					updateAction: '/app/projects/update',
+					isLoading: false,					
+					successMsg: 'Project has been saved',										
 					fields: {
-						id: {val: '', err: '', msg: ''},
-						province: {val: '', err: '', msg: ''},
-						location: {val: '', err: '', msg: ''},
-						details: {val: '', err: '', msg: ''},
-						client_company_name: {val: '', err: '', msg: ''},
-						client_contact_name: {val: '', err: '', msg: ''},
-						client_contact_phone: {val: '', err: '', msg: ''},
-						client_contact_email: {val: '', err: '', msg: ''},
-						first_contact_by: {val: '', err: '', msg: ''},
-						first_contact_date: {val: '', err: '', msg: ''},
-						land_ownership: {val: '', err: '', msg: ''},
-						land_access_granted: {val: 0, err: '', msg: ''},
-						land_access_granted_by: {val: '', err: '', msg: ''},
-						land_access_contact: {val: '', err: '', msg: ''},
-						land_access_phone: {val: '', err: '', msg: ''},
-						invoiced_date: {val: '', err: '', msg: ''},
-						invoice_paid_date: {val: '', err: '', msg: ''}						
+						id: {val: '', err: false, dflt: ''},
+						province: {val: '', err: false, dflt: ''},
+						location: {val: '', err: false, dflt: ''},
+						details: {val: '', err: false, dflt: ''},
+						client_company_name: {val: '', err: false, dflt: ''},
+						client_contact_name: {val: '', err: false, dflt: ''},
+						client_contact_phone: {val: '', err: false, dflt: ''},
+						client_contact_email: {val: '', err: false, dflt: ''},
+						first_contact_by: {val: '', err: false, dflt: ''},
+						first_contact_date: {val: '', err: false, dflt: ''},
+						land_ownership: {val: '', err: false, dflt: ''},
+						land_access_granted: {val: 0, err: false, dflt: 0},
+						land_access_granted_by: {val: '', err: false, dflt: ''},
+						land_access_contact: {val: '', err: false, dflt: ''},
+						land_access_phone: {val: '', err: false, dflt: ''},
+						invoiced_date: {val: '', err: false, dflt: ''},
+						invoice_paid_date: {val: '', err: false, dflt: ''}						
 					}
-
-				},
-
-				projects: [],
-
-				fetchingProjects: false
-
+				}
 			}
 		},
 
 		methods: {
-			clearForm(){
-				for(var key in this.form.fields.fields){
-					if(key == 'land_access_granted') this.form.fields.fields[key] = 0;
-						else this.form.fields.fields[key] = '';
-				}
+
+			viewAllProjectsTab(){
+				this.viewAllModelsTab();
 			},
 
-			// Sends a GET request to retrieve all projects from the server then sets the projects data prop
+			viewProjectFormTab(){
+				this.viewFormTab();
+			},
+
 			getAndSetProjects(){
-				var context = this;
-				// Show loader
-				this.fetchingProjects = true;
-				// Send request
-				axios.get('/app/projects/all')
-					.then(function(response){
-						// Set data prop
-						context.projects = response.data.projects;
-						// Hide loader
-						context.fetchingProjects = false;
-					})
-					.catch(function(response){
-						console.log(response);
-					});					
+				this.getAndSetModels();
+			},
+
+			viewProjectTable(id){
+				this.viewModelAsTable(id);
+			},
+
+			editProject(id){
+				this.prepareFormForEdit('/app/projects/' + id);
 			},
 
 			sendForm(){
-				// Show loader
-				this.form.isLoading = true;
-
-				// Populate data to send to server
-				var data = {};
-				for(var key in this.form.fields){
-					data[key] = this.form.fields[key].val;
-				}
-				// Add token
-				data._token = window.Laravel.csrfToken;
-
-				// Cache context
-				var context = this;
-				console.log(this.form.fields);
-
-				// Send POST to server
-				axios.post('/app/projects/create', data)
-					.then(function(response){
-						console.log(response);
-						// Clear form, notify, and reset loader
-		                 noty({
-		                     text: 'Project has been created',
-		                     theme: 'defaultTheme',
-		                     layout: 'center',
-		                     timeout: 650,
-		                     closeWith: ['click', 'hover'],
-		                     type: 'success'
-		                });						
-						context.clearForm();
-						context.form.isLoading = false;
-
-					})
-					.catch(function(error){
-						console.log(error.response);
-                        if (error.response) {
-                            // If the server responded with error data
-                            for(var key in error.response.data){
-                                context.form.fields[key].msg = error.response.data[key][0];
-                                context.form.fields[key].err = true;                                    
-                            }
-                            // Hide loader
-                            context.form.isLoading = false;
-
-                        }
-					});
+				this.createOrUpdate();
 			},
 
-			// Retrieves all projects from storage upon compenent mounting
-			mounted(){
-				this.getAndSetProjects();
+			deleteProject(){
+				this.deleteModel();
 			}
 
+		},
+
+		// Retrieves all projects from storage upon compenent mounting
+		mounted(){
+			this.getAndSetModels();
 		}
+
 	}
 
 </script>
