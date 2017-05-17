@@ -76,14 +76,7 @@ class UsersController extends Controller
      */
     public function all()
     {
-        // Find users
-        $users = User::all();
-
-        // Return response for ajax call
-        return response()->json([
-            'result' => 'success',
-            'models' => $users->toArray()
-        ], 200);        
+        return User::paginate(15);        
     }
 
     /**

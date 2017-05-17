@@ -45,6 +45,17 @@
 							    </tr>
 						  </tbody>
 						</table>
+
+						<div class="row text-center margin-45-top">
+							<ul class="pagination">
+								<li v-bind:class="{ 'disabled': modelsCurrentPage == 1 }"><a v-on:click="getSpecificUsersPage(modelsPrevPageUrl)">«</a></li>
+								<li v-for="(page, key) in modelsPageLinks" v-bind:class="{ 'active': modelsCurrentPage == key }">
+									<a v-on:click="getSpecificProjectsPage(page)">{{ key }}</a>
+								</li>
+								<li v-bind:class="{ 'disabled': modelsCurrentPage == modelsPageTotal }"><a v-on:click="getSpecificProjectsPage(modelsNextPageUrl)">»</a></li>
+							</ul>							
+						</div>
+
 					</div>
 
 					<div v-if="models.length == 0" class="col-md-8 col-centered">
@@ -385,6 +396,10 @@
 
 			getAndSetUsers(){
 				this.getAndSetModels();
+			},
+
+			getSpecificUsersPage(link){
+				this.getAndSetModels(link);
 			},
 
 			viewUserTable(id){

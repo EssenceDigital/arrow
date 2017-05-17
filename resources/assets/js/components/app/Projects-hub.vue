@@ -9,8 +9,8 @@
 		    <div class="panel-body">
 				<ul class="nav nav-pills">
 					<li v-bind:class="{ 'active': currentTab == 'view-all' }"><a v-on:click="viewAllProjectsTab">View All</a></li>
-					<li v-bind:class="{ 'active': currentTab == 'view-form' }"><a v-on:click="viewProjectFormTab">New Project</a></li>
-					<li v-if="currentTab == 'view-table'" v-bind:class="{ 'active': currentTab == 'view-table' }"><a>User as Table</a></li>
+					<li v-bind:class="{ 'active': currentTab == 'view-form' }"><a v-on:click="viewProjectFormTab">{{ form.title }}</a></li>
+					<li v-if="currentTab == 'view-table'" v-bind:class="{ 'active': currentTab == 'view-table' }"><a>Project as Table</a></li>
 				</ul>		    	
 
 				<div v-if="currentTab == 'view-all'" class="row margin-45-top">
@@ -311,110 +311,323 @@
 				</div>
 
 				<div v-if="currentTab == 'view-table'" class="row margin-45-top">
+
 					<div class="col-md-12">
 						<button v-on:click="editProject(form.fields.id.val)" class="btn btn-default">
 							<span class="glyphicon glyphicon-cog"></span> Edit Project
-						</button>					
-						<table class="table table-striped table-hover margin-25-top">
-							<thead>
-								<tr class="info">
-									<th>Province</th>
-									<th>Location</th>
-								</tr>
-							</thead>
-							<tbody>
-							    <tr>
-								    <td>{{ form.fields.province.val }}</td>
-								    <td>{{ form.fields.location.val }}</td>
-							    </tr>
-							</tbody>
-						</table>						
+						</button>
+						<button v-if="form.fields.proposal.val" v-on:click="projectSubTab = 'proposal-form'" class="btn btn-default margin-10-left">
+							<span class="glyphicon glyphicon-briefcase"></span> Edit Proposal
+						</button>						
+						<button v-else v-on:click="projectSubTab = 'proposal-form'" class="btn btn-default margin-10-left">
+							<span class="glyphicon glyphicon-briefcase"></span> Add Proposal
+						</button>
 					</div>
 
-					<div class="col-md-12">
-						<table class="table table-striped table-hover margin-25-top">
-							<thead>
-								<tr class="info">
-									<th>Details</th>
-								</tr>
-							</thead>
-							<tbody>
-							    <tr>
-								    <td>{{ form.fields.details.val }}</td>
-								</tr>
-							</tbody>
-						</table>						
-					</div>
+					<div v-if="projectSubTab == 'view-project'" class="col-md-12 margin-25-top">
+						<h3>Project Details</h3>
 
-					<div class="col-md-12">
-						<table class="table table-striped table-hover margin-25-top">
-							<thead>
-								<tr class="info">
-									<th>Client</th>
-									<th>Client Contact</th>
-									<th>Contact Phone</th>
-									<th>Contact Email</th>
-								</tr>
-							</thead>
-							<tbody>
-							    <tr>
-								    <td>{{ form.fields.client_company_name.val }}</td>
-								    <td>{{ form.fields.client_contact_name.val }}</td>
-								    <td>{{ form.fields.client_contact_phone.val }}</td>
-								    <td>{{ form.fields.client_contact_email.val }}</td>
-								</tr>
-							</tbody>
-						</table>						
-					</div>										
-					
-					<div class="col-md-12">
-						<table class="table table-striped table-hover margin-25-top">
-							<thead>
-								<tr class="info">
-									<th>Land Ownership</th>
-									<th>Access Granted</th>
-									<th>Access Granted By</th>
-									<th>Access Contact</th>
-									<th>Contact Phone</th>
-								</tr>
-							</thead>
-							<tbody>
-							    <tr>
-								    <td>{{ form.fields.land_ownership.val }}</td>
-								    <td>
+						<div class="col-md-12 margin-25-top">
+							<h4>Location</h4>
+							<div class="col-md-4">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5><strong>Province</strong></h5>
+								    	<div v-if="form.fields.province.val == null">
+								    		<span class="label label-warning">N/A</span>
+								    	</div>
+								    	<div v-else>
+								    		{{ form.fields.province.val }}
+								    	</div>									
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="panel panel-default">									
+									<div class="panel-body">
+										<h5><strong>Location</strong></h5>
+								    	<div v-if="form.fields.location.val == null">
+								    		<span class="label label-warning">N/A</span>
+								    	</div>
+								    	<div v-else>
+								    		{{ form.fields.location.val }}
+								    	</div>										
+									</div>
+								</div>
+							</div>								
+
+							<div class="col-md-4">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5><strong>Details</strong></h5>
+								    	<div v-if="form.fields.details.val == null">
+								    		<span class="label label-warning">N/A</span>
+								    	</div>
+								    	<div v-else>
+								    		{{ form.fields.details.val }}
+								    	</div>									
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="col-md-12 margin-25-top">
+							<h4>Client</h4>
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5><strong>Client</strong></h5>
+								    	<div v-if="form.fields.client_company_name.val == null">
+								    		<span class="label label-warning">N/A</span>
+								    	</div>
+								    	<div v-else>
+								    		{{ form.fields.client_company_name.val }}
+								    	</div>									
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5><strong>Client Contact</strong></h5>
+								    	<div v-if="form.fields.client_contact_name.val == null">
+								    		<span class="label label-warning">N/A</span>
+								    	</div>
+								    	<div v-else>
+								    		{{ form.fields.client_contact_name.val }}
+								    	</div>										
+									</div>
+								</div>
+							</div>								
+
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5><strong>Contact Phone</strong></h5>
+								    	<div v-if="form.fields.client_contact_phone.val == null">
+								    		<span class="label label-warning">N/A</span>
+								    	</div>
+								    	<div v-else>
+								    		<a v-bind:href="'tel: +1' + form.fields.client_contact_phone.val.replace(/-/g, '')">{{ form.fields.client_contact_phone.val }}</a>
+								    	</div>										
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5><strong>Contact Email</strong></h5>
+								    	<div v-if="form.fields.client_contact_email.val == null">
+								    		<span class="label label-warning">N/A</span>
+								    	</div>
+								    	<div v-else>
+								    		{{ form.fields.client_contact_email.val }}
+								    	</div>									
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="col-md-12 margin-25-top">
+							<h4>Land</h4>
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5><strong>Land Ownership</strong></h5>
+								    	<div v-if="form.fields.land_ownership.val == null">
+								    		<span class="label label-warning">N/A</span>
+								    	</div>
+								    	<div v-else>
+								    		{{ form.fields.land_ownership.val }}
+								    	</div>									
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5><strong>Access Granted</strong></h5>
 								    	<div v-if="form.fields.land_access_granted.val == 0">No</div>
 								    	<div v-if="form.fields.land_access_granted.val == 1">Yes</div>
-								    </td>
-								    <td>{{ form.fields.land_access_granted_by.val }}</td>
-								    <td>{{ form.fields.land_access_contact.val }}</td>
-								    <td>{{ form.fields.land_access_phone.val }}</td>
-								</tr>
-							</tbody>
-						</table>						
-					</div>
+									</div>
+								</div>
+							</div>								
 
-					<div class="col-md-12">
-						<table class="table table-striped table-hover margin-25-top">
-							<thead>
-								<tr class="info">
-									<th>Invoiced Date</th>
-									<th>Date Paid</th></th>
-								</tr>
-							</thead>
-							<tbody>
-							    <tr>
-								    <td>
-								    	<div v-if="form.fields.invoiced_date.val == null" class="text-warning">Not Invoiced</div>
-								    </td>
-								    <td>
-								    	<div v-if="form.fields.invoice_paid_date.val == null" class="text-warning">Not Invoiced</div>
-								    </td>
-								</tr>
-							</tbody>
-						</table>						
-					</div>					
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5><strong>Access Granted By</strong></h5>
+								    	<div v-if="form.fields.land_access_granted_by.val == null">
+								    		<span class="label label-warning">N/A</span>
+								    	</div>
+								    	<div v-else>
+								    		{{ form.fields.land_access_granted_by.val }}
+								    	</div>									
+									</div>
+								</div>
+							</div>
 
-				</div>				
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5><strong>Access Contact</strong></h5>
+								    	<div v-if="form.fields.land_access_contact.val == null">
+								    		<span class="label label-warning">N/A</span>
+								    	</div>
+								    	<div v-else>
+								    		{{ form.fields.land_access_contact.val }}
+								    	</div>									
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="col-md-12 margin-25-top">
+							<h4 class="text-success">Invoicing</h4>
+							<div class="col-md-6">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5><strong>Invoiced Date</strong></h5>
+								    	<div v-if="form.fields.invoiced_date.val == null">
+								    		<span class="label label-warning">Not Invoiced</span>
+								    	</div>
+								    	<div v-else>
+								    		{{ form.fields.invoiced_date.val }}
+								    	</div>									
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="panel panel-default">									
+									<div class="panel-body">
+										<h5><strong>Date Paid</strong></h5>
+								    	<div v-if="form.fields.invoice_paid_date.val == null">
+								    		<span class="label label-warning">Not Invoiced</span>
+								    	</div>
+								    	<div v-else>
+								    		{{ form.fields.invoice_paid_date.val }}
+								    	</div>										
+									</div>
+								</div>
+							</div>								
+
+						</div>
+
+						<div v-if="form.fields.proposal.val" class="row margin-65-top">
+							<div class="col-md-12">
+								<h3>Project Proposal</h3>
+
+								<div class="col-md-12 margin-25-top">
+									<h4>Work Details</h4>
+									<div class="col-md-4">
+										<div class="panel panel-default">
+											<div class="panel-body">
+												<h5><strong>Work Type</strong></h5>
+										    	<div v-if="form.fields.proposal.val.work_type == null">
+										    		<span class="label label-warning">N/A</span>
+										    	</div>
+										    	<div v-else>
+										    		{{ form.fields.proposal.val.work_type }}
+										    	</div>									
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="panel panel-default">
+											<div class="panel-body">
+												<h5><strong>Work Overview</strong></h5>
+										    	<div v-if="form.fields.proposal.val.work_overview == null">
+										    		<span class="label label-warning">N/A</span>
+										    	</div>
+										    	<div v-else>
+										    		{{ form.fields.proposal.val.work_overview }}
+										    	</div>									
+											</div>
+										</div>
+									</div>	
+									<div class="col-md-4">
+										<div class="panel panel-default">
+											<div class="panel-body">
+												<h5><strong>Work Plans</strong></h5>
+										    	<div v-if="form.fields.proposal.val.plans == null">
+										    		<span class="label label-warning">N/A</span>
+										    	</div>
+										    	<div v-else>
+										    		{{ form.fields.proposal.val.plans }}
+										    	</div>									
+											</div>
+										</div>
+									</div>																	
+								</div>	
+
+								<div class="col-md-12 margin-25-top">
+									<div class="col-md-4">
+										<div class="panel panel-default">
+											<div class="panel-body">
+												<h5><strong>Estimate</strong></h5>
+										    	<div v-if="form.fields.proposal.val.estimate == null">
+										    		<span class="label label-warning">N/A</span>
+										    	</div>
+										    	<div v-else>
+										    		${{ form.fields.proposal.val.estimate }}
+										    	</div>									
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="panel panel-default">
+											<div class="panel-body">
+												<h5><strong>Response By</strong></h5>
+										    	<div v-if="form.fields.proposal.val.response_by == null">
+										    		<span class="label label-warning">N/A</span>
+										    	</div>
+										    	<div v-else>
+										    		{{ form.fields.proposal.val.response_by }}
+										    	</div>									
+											</div>
+										</div>
+									</div>																		
+								</div>	
+
+								<div class="col-md-12 margin-25-top">
+									<h4>Project Approval</h4>
+									<div class="col-md-4">
+										<div class="panel panel-default">
+											<div class="panel-body">
+												<h5><strong>Approval Date</strong></h5>
+										    	<div v-if="form.fields.proposal.val.approval_date == null">
+										    		<span class="label label-danger">Not yet approved</span>
+										    	</div>
+										    	<div v-else>
+										    		{{ form.fields.proposal.val.approval_date }}
+										    	</div>									
+											</div>
+										</div>
+									</div>																	
+								</div>																							
+
+							</div>	
+						</div>											
+					
+					</div><!-- / view-project sub tab -->	
+
+					<div v-if="projectSubTab == 'proposal-form'" class="col-md-12 margin-25-top">
+						<proposal-form v-bind:proposal="form.fields.proposal.val" v-bind:project_id="form.fields.id.val">
+							<button slot="close" v-on:click="projectSubTab = 'view-project'" type="button" class="pull-right btn btn-danger">
+								&times;
+							</button>
+						</proposal-form>
+					</div><!-- / add-proposal sub tab -->	
+
+				</div><!-- / view-table tab -->
 
 		    </div>
 		</div>		
@@ -424,12 +637,14 @@
 </template>
 
 <script>
+	let proposal_form = require('./Proposal-form.vue');
 	let modal = require('./../ui/Modal.vue');
 	let dropdown = require('./../ui/Dropdown.vue');
 	let hub_controller = require('./mixins/hub-controller.js');
 
 	export default{
 		components: {
+			'proposal-form': proposal_form,
 			'modal': modal,
 			'dropdown': dropdown
 		},
@@ -439,6 +654,7 @@
 		data(){
 			return {
 				currentTab: 'view-all',
+				projectSubTab: 'view-project',
 				modalActive: false,
 				urlToDelete: '/app/projects/delete',
 				isDeleting: false,
@@ -477,7 +693,8 @@
 						land_access_contact: {val: '', err: false, dflt: ''},
 						land_access_phone: {val: '', err: false, dflt: ''},
 						invoiced_date: {val: '', err: false, dflt: ''},
-						invoice_paid_date: {val: '', err: false, dflt: ''}						
+						invoice_paid_date: {val: '', err: false, dflt: ''},
+						proposal: {val: '', err: false, dflt: ''}				
 					}
 				}
 			}
@@ -497,7 +714,6 @@
 				this.getAndSetModels();
 			},
 
-
 			getSpecificProjectsPage(link){
 				this.getAndSetModels(link);
 			},
@@ -508,6 +724,10 @@
 
 			editProject(id){
 				this.prepareFormForEdit('/app/projects/' + id);
+			},
+
+			editProposal(id){
+				
 			},
 
 			sendForm(){

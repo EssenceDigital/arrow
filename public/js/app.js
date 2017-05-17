@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 62);
+/******/ 	return __webpack_require__(__webpack_require__.s = 65);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -433,7 +433,7 @@ module.exports = function normalizeComponent (
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(32);
+var normalizeHeaderName = __webpack_require__(33);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 var DEFAULT_CONTENT_TYPE = {
@@ -722,9 +722,9 @@ process.umask = function() { return 0; };
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(38),
+  __webpack_require__(40),
   /* template */
-  __webpack_require__(52),
+  __webpack_require__(54),
   /* scopeId */
   null,
   /* cssModules */
@@ -758,12 +758,12 @@ module.exports = Component.exports
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var settle = __webpack_require__(24);
-var buildURL = __webpack_require__(27);
-var parseHeaders = __webpack_require__(33);
-var isURLSameOrigin = __webpack_require__(31);
+var settle = __webpack_require__(25);
+var buildURL = __webpack_require__(28);
+var parseHeaders = __webpack_require__(34);
+var isURLSameOrigin = __webpack_require__(32);
 var createError = __webpack_require__(8);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(26);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(27);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -859,7 +859,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(29);
+      var cookies = __webpack_require__(30);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -980,7 +980,7 @@ module.exports = function isCancel(value) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(23);
+var enhanceError = __webpack_require__(24);
 
 /**
  * Create an Error with the specified message, config, error code, and response.
@@ -1017,6 +1017,262 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 /* 10 */
+/***/ (function(module, exports) {
+
+module.exports = {
+
+	methods: {
+		/* Clears a properly set up 'hub' form. Data value should look like:
+   * form: { field: { val: '', err: false, dftl: '' } } 
+   * dftl should be default initial value 
+  */
+		clearForm: function clearForm() {
+			for (var key in this.form.fields) {
+				this.form.fields[key].val = this.form.fields[key].dflt;
+			}
+		},
+
+
+		// Clears the errors on a properly set up 'hub' form. See above comments
+		clearFormErrors: function clearFormErrors() {
+			for (var key in this.form.fields) {
+				this.form.fields[key].err = false;
+			}
+		},
+
+
+		// Sets the form state and titles for a create
+		formNewState: function formNewState() {
+			this.form.state = 'create';
+			this.form.title = 'Create ' + this.form.model;
+			this.form.button = 'Save';
+			this.form.action = this.form.createAction;
+			this.form.successMsg = this.form.model + ' has been saved';
+		},
+
+
+		// Sets the form state titles for an edit
+		formEditState: function formEditState() {
+			this.form.state = 'edit';
+			this.form.title = 'Edit ' + this.form.model;
+			this.form.button = 'Update';
+			this.form.action = this.form.updateAction;
+			this.form.successMsg = this.form.model + ' has been updated';
+		},
+
+
+		// Shows the view all models tab and clears the form
+		viewAllModelsTab: function viewAllModelsTab() {
+			this.currentTab = 'view-all';
+			this.clearFormErrors();
+			this.formNewState();
+			this.getAndSetModels(this.urlToFetch);
+		},
+
+
+		// Shows the user form tab and clears out the form
+		viewFormTab: function viewFormTab() {
+			this.clearForm();
+			this.currentTab = 'view-form';
+		},
+		viewModelAsTable: function viewModelAsTable(id) {
+			// Grab user from local cache
+			var model = this.grabLocalModel(id);
+			// Set values in the form.fields data property
+			for (var key in this.form.fields) {
+				this.form.fields[key].val = model[key];
+			}
+			// Change tab
+			this.currentTab = 'view-table';
+		},
+		grabLocalModel: function grabLocalModel(id) {
+			var gabbedModel = [];
+
+			this.models.forEach(function (model) {
+				if (model.id == id) {
+					grabbedModel = model;
+				}
+			});
+
+			return grabbedModel;
+		},
+
+
+		// Populate data to send to server via POST. Uses a properly set up 'hub' form. See above comments
+		populatePostData: function populatePostData() {
+			var data = {};
+			for (var key in this.form.fields) {
+				data[key] = this.form.fields[key].val;
+			}
+			// Add CSRF token. Requires Laravel layout to set the token
+			data._token = window.Laravel.csrfToken;
+
+			return data;
+		},
+
+
+		// Sends a GET request to retrieve all projects from the server then sets the projects data prop
+		getAndSetModels: function getAndSetModels(link) {
+			var context = this;
+			// Show loader
+			this.fetchingModels = true;
+
+			if (link) {
+				var urlToFetch = link;
+			} else {
+				var urlToFetch = this.urlToFetch;
+			}
+			// Send request
+			axios.get(urlToFetch).then(function (response) {
+				console.log(response);
+
+				if (response.data.data) {
+					var totalPages = response.data.last_page;
+
+					if (totalPages > 1) {
+						var nextPageUrl = response.data.next_page_url,
+						    prevPageUrl = response.data.prev_page_url;
+
+						if (nextPageUrl != null) {
+							baseUrl = nextPageUrl.substring(0, nextPageUrl.length - 1);
+						} else if (prevPageUrl != null) {
+							baseUrl = prevPageUrl.substring(0, prevPageUrl.length - 1);
+						}
+
+						for (var i = 1; i <= totalPages; i++) {
+							context.modelsPageLinks[i] = baseUrl + i;
+						}
+					}
+
+					context.modelsNextPageUrl = nextPageUrl;
+					context.modelsPrevPageUrl = prevPageUrl;
+					context.modelsCurrentPage = response.data.current_page;
+					context.modelsPageTotal = totalPages;
+					// Set data prop
+					context.models = response.data.data;
+					console.log(context.modelsCurrentPage);
+				} else {
+					context.models = response.data.models;
+				}
+
+				// Hide loader
+				context.fetchingModels = false;
+			}).catch(function (response) {
+				console.log(response);
+			});
+		},
+
+
+		/* Sends a GET request to retrieve a model from storage and sets up the form to edit that model
+   * Uses a properly set up 'hub' form. See above comments
+  */
+		prepareFormForEdit: function prepareFormForEdit(action) {
+			var context = this;
+			// Send request
+			axios.get(action).then(function (response) {
+				// Set values in the form.fields data property
+				for (var key in context.form.fields) {
+					context.form.fields[key].val = response.data.model[key];
+				}
+				// Clear any old form errors
+				context.clearFormErrors();
+				// Change form state
+				context.formEditState();
+				// Change tab
+				context.currentTab = 'view-form';
+			}).catch(function (response) {
+				console.log(response);
+			});
+		},
+
+
+		/* Sends a POST request to create or update a resource in storage. Uses a properly
+   * set up 'hub' form. See above comments
+  */
+		createOrUpdate: function createOrUpdate() {
+			// Show loader
+			this.form.isLoading = true;
+
+			var data = this.populatePostData();
+
+			// Cache context
+			var context = this;
+
+			// Send POST to server
+			axios.post(this.form.action, data).then(function (response) {
+				console.log(response);
+				context.form.isLoading = false;
+				// Show next content dependingo on form state
+				if (context.form.state == 'create') {
+					context.models.push(response.data.model);
+					context.currentTab = 'view-all';
+				} else if (context.form.state == 'edit') {
+					var model = context.grabLocalModel(response.data.model.id);
+					for (var key in context.form.fields) {
+						model[key] = response.data.model[key];
+					}
+				} else if (context.form.state == 'create-child') {}
+				// Clear form, notify, and reset loader
+				noty({
+					text: context.form.successMsg,
+					theme: 'defaultTheme',
+					layout: 'center',
+					timeout: 650,
+					closeWith: ['click', 'hover'],
+					type: 'success'
+				});
+				context.clearForm();
+			}).catch(function (error) {
+				console.log(error.response);
+				if (error.response) {
+					// If the server responded with error data
+					for (var key in error.response.data) {
+						context.form.fields[key].err = error.response.data[key][0];
+					}
+					// Hide loader
+					context.form.isLoading = false;
+				}
+			});
+		},
+
+
+		// Sends a POST request to delete the specified and confirmed model
+		deleteModel: function deleteModel() {
+			// Show loader
+			this.isDeleting = true;
+			// Assemble object for POST
+			var data = {
+				id: this.form.fields.id.val,
+				_token: window.Laravel.csrfToken
+			};
+			// Store context
+			var context = this;
+			// Send GET request to delete
+			axios.post(this.urlToDelete, data).then(function (response) {
+				// Notify
+				noty({
+					text: context.form.model + ' has been deleted',
+					theme: 'defaultTheme',
+					layout: 'center',
+					timeout: 850,
+					closeWith: ['click', 'hover'],
+					type: 'success'
+				});
+				// Close modal and show all users						
+				context.modalActive = false;
+				context.viewAllModelsTab();
+				// Hide loader
+				context.userIsDeleting = false;
+			}).catch(function (response) {
+				console.log(response);
+			});
+		}
+	}
+
+};
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports) {
 
 /*
@@ -1072,7 +1328,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -11332,18 +11588,18 @@ return jQuery;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(57)
+__webpack_require__(60)
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(39),
+  __webpack_require__(41),
   /* template */
-  __webpack_require__(51),
+  __webpack_require__(53),
   /* scopeId */
   null,
   /* cssModules */
@@ -11370,7 +11626,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -11389,7 +11645,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(59)
+var listToStyles = __webpack_require__(62)
 
 /*
 type StyleObject = {
@@ -11591,7 +11847,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11618,7 +11874,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -11628,9 +11884,9 @@ module.exports = g;
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(41);
+__webpack_require__(43);
 
-window.Vue = __webpack_require__(60);
+window.Vue = __webpack_require__(63);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -11638,29 +11894,29 @@ window.Vue = __webpack_require__(60);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('navbar', __webpack_require__(50));
-Vue.component('projects-hub', __webpack_require__(47));
-Vue.component('users-hub', __webpack_require__(49));
-Vue.component('user-settings', __webpack_require__(48));
+Vue.component('navbar', __webpack_require__(52));
+Vue.component('projects-hub', __webpack_require__(48));
+Vue.component('users-hub', __webpack_require__(51));
+Vue.component('user-settings', __webpack_require__(50));
 
 var app = new Vue({
   el: '#app'
 });
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(18);
+module.exports = __webpack_require__(19);
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11668,7 +11924,7 @@ module.exports = __webpack_require__(18);
 
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(9);
-var Axios = __webpack_require__(20);
+var Axios = __webpack_require__(21);
 var defaults = __webpack_require__(2);
 
 /**
@@ -11703,14 +11959,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(6);
-axios.CancelToken = __webpack_require__(19);
+axios.CancelToken = __webpack_require__(20);
 axios.isCancel = __webpack_require__(7);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(34);
+axios.spread = __webpack_require__(35);
 
 module.exports = axios;
 
@@ -11719,7 +11975,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11783,7 +12039,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11791,10 +12047,10 @@ module.exports = CancelToken;
 
 var defaults = __webpack_require__(2);
 var utils = __webpack_require__(0);
-var InterceptorManager = __webpack_require__(21);
-var dispatchRequest = __webpack_require__(22);
-var isAbsoluteURL = __webpack_require__(30);
-var combineURLs = __webpack_require__(28);
+var InterceptorManager = __webpack_require__(22);
+var dispatchRequest = __webpack_require__(23);
+var isAbsoluteURL = __webpack_require__(31);
+var combineURLs = __webpack_require__(29);
 
 /**
  * Create a new instance of Axios
@@ -11875,7 +12131,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11934,14 +12190,14 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var transformData = __webpack_require__(25);
+var transformData = __webpack_require__(26);
 var isCancel = __webpack_require__(7);
 var defaults = __webpack_require__(2);
 
@@ -12020,7 +12276,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12046,7 +12302,7 @@ module.exports = function enhanceError(error, config, code, response) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12078,7 +12334,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12105,7 +12361,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12148,7 +12404,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12223,7 +12479,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12242,7 +12498,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12302,7 +12558,7 @@ module.exports = (
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12323,7 +12579,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12398,7 +12654,7 @@ module.exports = (
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12417,7 +12673,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12461,7 +12717,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12495,7 +12751,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12925,13 +13181,228 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-var modal = __webpack_require__(12);
+var proposal_form = __webpack_require__(49);
+var modal = __webpack_require__(13);
 var dropdown = __webpack_require__(4);
-var hub_controller = __webpack_require__(42);
+var hub_controller = __webpack_require__(10);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
+		'proposal-form': proposal_form,
 		'modal': modal,
 		'dropdown': dropdown
 	},
@@ -12941,6 +13412,7 @@ var hub_controller = __webpack_require__(42);
 	data: function data() {
 		return {
 			currentTab: 'view-all',
+			projectSubTab: 'view-project',
 			modalActive: false,
 			urlToDelete: '/app/projects/delete',
 			isDeleting: false,
@@ -12979,7 +13451,8 @@ var hub_controller = __webpack_require__(42);
 					land_access_contact: { val: '', err: false, dflt: '' },
 					land_access_phone: { val: '', err: false, dflt: '' },
 					invoiced_date: { val: '', err: false, dflt: '' },
-					invoice_paid_date: { val: '', err: false, dflt: '' }
+					invoice_paid_date: { val: '', err: false, dflt: '' },
+					proposal: { val: '', err: false, dflt: '' }
 				}
 			}
 		};
@@ -13005,6 +13478,7 @@ var hub_controller = __webpack_require__(42);
 		editProject: function editProject(id) {
 			this.prepareFormForEdit('/app/projects/' + id);
 		},
+		editProposal: function editProposal(id) {},
 		sendForm: function sendForm() {
 			this.createOrUpdate();
 		},
@@ -13020,7 +13494,167 @@ var hub_controller = __webpack_require__(42);
 });
 
 /***/ }),
-/* 36 */
+/* 37 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var hub_controller = __webpack_require__(10);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	props: ['proposal', 'project_id'],
+
+	mixins: [hub_controller],
+
+	data: function data() {
+		return {
+			form: {
+				model: 'Proposal',
+				state: 'create-child',
+				title: 'Create Prposal',
+				button: 'Save',
+				action: '/app/proposals/create',
+				createAction: '/app/proposals/create',
+				updateAction: '/app/proposals/update',
+				isLoading: false,
+				successMsg: 'Proposal has been saved to project',
+				fields: {
+					id: { val: '', err: false, dflt: '' },
+					project_id: { val: this.project_id, err: false, dflt: '' },
+					plans: { val: '', err: false, dflt: '' },
+					work_type: { val: '', err: false, dflt: '' },
+					work_overview: { val: '', err: false, dflt: '' },
+					response_by: { val: '', err: false, dflt: '' },
+					estimate: { val: '0.00', err: false, dflt: '0.00' },
+					approval_date: { val: '', err: false, dflt: '' }
+				}
+			}
+		};
+	},
+
+
+	methods: {
+		sendForm: function sendForm() {
+			this.createOrUpdate();
+		}
+	},
+
+	mounted: function mounted() {
+		if (this.proposal != undefined) {
+			// Set form up in edit state
+			this.formEditState();
+			// Populate form
+			for (var key in this.form.fields) {
+				this.form.fields[key].val = this.proposal[key];
+			}
+		}
+	}
+});
+
+/***/ }),
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13277,7 +13911,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13606,10 +14240,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-var modal = __webpack_require__(12);
+var modal = __webpack_require__(13);
 var dropdown = __webpack_require__(4);
-var hub_controller = __webpack_require__(42);
+var hub_controller = __webpack_require__(10);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -13668,6 +14313,9 @@ var hub_controller = __webpack_require__(42);
 		getAndSetUsers: function getAndSetUsers() {
 			this.getAndSetModels();
 		},
+		getSpecificUsersPage: function getSpecificUsersPage(link) {
+			this.getAndSetModels(link);
+		},
 		viewUserTable: function viewUserTable(id) {
 			this.viewModelAsTable(id);
 		},
@@ -13723,7 +14371,7 @@ var hub_controller = __webpack_require__(42);
 });
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13755,7 +14403,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13794,7 +14442,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13861,13 +14509,13 @@ var dropdown = __webpack_require__(4);
 });
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(45);
+window._ = __webpack_require__(46);
 
-window.noty = __webpack_require__(46);
+window.noty = __webpack_require__(47);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -13876,7 +14524,7 @@ window.noty = __webpack_require__(46);
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(11);
+  window.$ = window.jQuery = __webpack_require__(12);
 } catch (e) {}
 
 /**
@@ -13885,7 +14533,7 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(17);
+window.axios = __webpack_require__(18);
 
 window.axios.defaults.headers.common['X-CSRF-TOKEN'] = window.Laravel.csrfToken;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -13906,279 +14554,21 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // });
 
 /***/ }),
-/* 42 */
-/***/ (function(module, exports) {
-
-module.exports = {
-
-	methods: {
-		/* Clears a properly set up 'hub' form. Data value should look like:
-   * form: { field: { val: '', err: false, dftl: '' } } 
-   * dftl should be default initial value 
-  */
-		clearForm: function clearForm() {
-			for (var key in this.form.fields) {
-				this.form.fields[key].val = this.form.fields[key].dflt;
-			}
-		},
-
-
-		// Clears the errors on a properly set up 'hub' form. See above comments
-		clearFormErrors: function clearFormErrors() {
-			for (var key in this.form.fields) {
-				this.form.fields[key].err = false;
-			}
-		},
-
-
-		// Sets the form state and titles for a create
-		formNewState: function formNewState() {
-			this.form.state = 'create';
-			this.form.title = 'Create ' + this.form.model;
-			this.form.button = 'Save';
-			this.form.action = this.form.createAction;
-			this.form.successMsg = this.form.model + ' has been saved';
-		},
-
-
-		// Sets the form state titles for an edit
-		formEditState: function formEditState() {
-			this.form.state = 'edit';
-			this.form.title = 'Edit ' + this.form.model;
-			this.form.button = 'Update';
-			this.form.action = this.form.updateAction;
-			this.form.successMsg = this.form.model + ' has been updated';
-		},
-
-
-		// Shows the view all models tab and clears the form
-		viewAllModelsTab: function viewAllModelsTab() {
-			this.currentTab = 'view-all';
-			this.clearFormErrors();
-			this.getAndSetModels(this.urlToFetch);
-		},
-
-
-		// Shows the user form tab and clears out the form
-		viewFormTab: function viewFormTab() {
-			this.clearForm();
-			this.formNewState();
-			this.currentTab = 'view-form';
-		},
-		viewModelAsTable: function viewModelAsTable(id) {
-			// Grab user from local cache
-			var model;
-			this.models.forEach(function (elem) {
-				if (elem.id == id) model = elem;
-			});
-			// Set values in the form.fields data property
-			for (var key in this.form.fields) {
-				this.form.fields[key].val = model[key];
-			}
-			// Change tab
-			this.currentTab = 'view-table';
-		},
-		grabLocalModel: function grabLocalModel(id) {
-			var gabbedModel = [];
-
-			this.models.forEach(function (model) {
-				if (model.id == id) {
-					grabbedModel = model;
-				}
-			});
-
-			return grabbedModel;
-		},
-
-
-		// Populate data to send to server via POST. Uses a properly set up 'hub' form. See above comments
-		populatePostData: function populatePostData() {
-			var data = {};
-			for (var key in this.form.fields) {
-				data[key] = this.form.fields[key].val;
-			}
-			// Add CSRF token. Requires Laravel layout to set the token
-			data._token = window.Laravel.csrfToken;
-
-			return data;
-		},
-
-
-		// Sends a GET request to retrieve all projects from the server then sets the projects data prop
-		getAndSetModels: function getAndSetModels(link) {
-			var context = this;
-			// Show loader
-			this.fetchingModels = true;
-
-			if (link) {
-				var urlToFetch = link;
-			} else {
-				var urlToFetch = this.urlToFetch;
-			}
-			// Send request
-			axios.get(urlToFetch).then(function (response) {
-				console.log(response);
-
-				if (response.data.data) {
-					var totalPages = response.data.last_page;
-
-					if (totalPages > 1) {
-						var nextPageUrl = response.data.next_page_url,
-						    prevPageUrl = response.data.prev_page_url;
-
-						if (nextPageUrl != null) {
-							baseUrl = nextPageUrl.substring(0, nextPageUrl.length - 1);
-						} else if (prevPageUrl != null) {
-							baseUrl = prevPageUrl.substring(0, prevPageUrl.length - 1);
-						}
-
-						for (var i = 1; i <= totalPages; i++) {
-							context.modelsPageLinks[i] = baseUrl + i;
-						}
-					}
-
-					context.modelsNextPageUrl = nextPageUrl;
-					context.modelsPrevPageUrl = prevPageUrl;
-					context.modelsCurrentPage = response.data.current_page;
-					context.modelsPageTotal = totalPages;
-					// Set data prop
-					context.models = response.data.data;
-					console.log(context.modelsCurrentPage);
-				} else {
-					context.models = response.data.models;
-				}
-
-				// Hide loader
-				context.fetchingModels = false;
-			}).catch(function (response) {
-				console.log(response);
-			});
-		},
-
-
-		/* Sends a GET request to retrieve a model from storage and sets up the form to edit that model
-   * Uses a properly set up 'hub' form. See above comments
-  */
-		prepareFormForEdit: function prepareFormForEdit(action) {
-			var context = this;
-			// Send request
-			axios.get(action).then(function (response) {
-				// Set values in the form.fields data property
-				for (var key in context.form.fields) {
-					context.form.fields[key].val = response.data.model[key];
-				}
-				// Clear any old form errors
-				context.clearFormErrors();
-				// Change form state
-				context.formEditState();
-				// Change tab
-				context.currentTab = 'view-form';
-			}).catch(function (response) {
-				console.log(response);
-			});
-		},
-
-
-		/* Sends a POST request to create or update a resource in storage. Uses a properly
-   * set up 'hub' form. See above comments
-  */
-		createOrUpdate: function createOrUpdate() {
-			// Show loader
-			this.form.isLoading = true;
-
-			var data = this.populatePostData();
-
-			// Cache context
-			var context = this;
-
-			// Send POST to server
-			axios.post(this.form.action, data).then(function (response) {
-				console.log(response);
-				context.form.isLoading = false;
-				// Show next content dependingo on form state
-				if (context.form.state == 'create') {
-					context.models.push(response.data.model);
-					context.currentTab = 'view-all';
-				} else if (context.form.state == 'edit') {
-					var model = context.grabLocalModel(response.data.model.id);
-					for (var key in context.form.fields) {
-						model[key] = response.data.model[key];
-					}
-				}
-				// Clear form, notify, and reset loader
-				noty({
-					text: context.form.successMsg,
-					theme: 'defaultTheme',
-					layout: 'center',
-					timeout: 650,
-					closeWith: ['click', 'hover'],
-					type: 'success'
-				});
-			}).catch(function (error) {
-				console.log(error.response.data);
-				if (error.response) {
-					// If the server responded with error data
-					for (var key in error.response.data) {
-						context.form.fields[key].err = error.response.data[key][0];
-					}
-					// Hide loader
-					context.form.isLoading = false;
-				}
-			});
-		},
-
-
-		// Sends a POST request to delete the specified and confirmed model
-		deleteModel: function deleteModel() {
-			// Show loader
-			this.isDeleting = true;
-			// Assemble object for POST
-			var data = {
-				id: this.form.fields.id.val,
-				_token: window.Laravel.csrfToken
-			};
-			// Store context
-			var context = this;
-			// Send GET request to delete
-			axios.post(this.urlToDelete, data).then(function (response) {
-				// Notify
-				noty({
-					text: context.form.model + ' has been deleted',
-					theme: 'defaultTheme',
-					layout: 'center',
-					timeout: 850,
-					closeWith: ['click', 'hover'],
-					type: 'success'
-				});
-				// Close modal and show all users						
-				context.modalActive = false;
-				context.viewAllModelsTab();
-				// Hide loader
-				context.userIsDeleting = false;
-			}).catch(function (response) {
-				console.log(response);
-			});
-		}
-	}
-
-};
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(10)();
-exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n\n", ""]);
-
-/***/ }),
 /* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)();
-exports.push([module.i, "\n.log-out{\n    margin-left: 10px;\n}\n\n", ""]);
+exports = module.exports = __webpack_require__(11)();
+exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n\n", ""]);
 
 /***/ }),
 /* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(11)();
+exports.push([module.i, "\n.log-out{\n    margin-left: 10px;\n}\n\n", ""]);
+
+/***/ }),
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -31267,15 +31657,15 @@ exports.push([module.i, "\n.log-out{\n    margin-left: 10px;\n}\n\n", ""]);
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(61)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15), __webpack_require__(64)(module)))
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!function(root, factory) {
 	 if (true) {
-		 !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(11)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		 !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(12)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -33154,14 +33544,14 @@ return window.noty;
 });
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(35),
+  __webpack_require__(36),
   /* template */
-  __webpack_require__(56),
+  __webpack_require__(59),
   /* scopeId */
   null,
   /* cssModules */
@@ -33188,14 +33578,48 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(36),
+  __webpack_require__(37),
   /* template */
-  __webpack_require__(53),
+  __webpack_require__(58),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\Proposal-form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Proposal-form.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-f3e18b4c", Component.options)
+  } else {
+    hotAPI.reload("data-v-f3e18b4c", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(38),
+  /* template */
+  __webpack_require__(55),
   /* scopeId */
   null,
   /* cssModules */
@@ -33222,14 +33646,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(37),
+  __webpack_require__(39),
   /* template */
-  __webpack_require__(54),
+  __webpack_require__(56),
   /* scopeId */
   null,
   /* cssModules */
@@ -33256,18 +33680,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(58)
+__webpack_require__(61)
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(40),
+  __webpack_require__(42),
   /* template */
-  __webpack_require__(55),
+  __webpack_require__(57),
   /* scopeId */
   null,
   /* cssModules */
@@ -33294,7 +33718,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -33331,7 +33755,7 @@ if (false) {
 }
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -33365,7 +33789,7 @@ if (false) {
 }
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -33662,7 +34086,7 @@ if (false) {
 }
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -33733,7 +34157,43 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_vm._v("View as table")])])])], 1)])
-  }))])]) : _vm._e(), _vm._v(" "), (_vm.models.length == 0) ? _c('div', {
+  }))]), _vm._v(" "), _c('div', {
+    staticClass: "row text-center margin-45-top"
+  }, [_c('ul', {
+    staticClass: "pagination"
+  }, [_c('li', {
+    class: {
+      'disabled': _vm.modelsCurrentPage == 1
+    }
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        _vm.getSpecificUsersPage(_vm.modelsPrevPageUrl)
+      }
+    }
+  }, [_vm._v("«")])]), _vm._v(" "), _vm._l((_vm.modelsPageLinks), function(page, key) {
+    return _c('li', {
+      class: {
+        'active': _vm.modelsCurrentPage == key
+      }
+    }, [_c('a', {
+      on: {
+        "click": function($event) {
+          _vm.getSpecificProjectsPage(page)
+        }
+      }
+    }, [_vm._v(_vm._s(key))])])
+  }), _vm._v(" "), _c('li', {
+    class: {
+      'disabled': _vm.modelsCurrentPage == _vm.modelsPageTotal
+    }
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        _vm.getSpecificProjectsPage(_vm.modelsNextPageUrl)
+      }
+    }
+  }, [_vm._v("»")])])], 2)])]) : _vm._e(), _vm._v(" "), (_vm.models.length == 0) ? _c('div', {
     staticClass: "col-md-8 col-centered"
   }, [_vm._m(2)]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.currentTab == 'view-form') ? _c('div', {
     staticClass: "row margin-45-top"
@@ -34329,7 +34789,7 @@ if (false) {
 }
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -34410,7 +34870,268 @@ if (false) {
 }
 
 /***/ }),
-/* 56 */
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "well bs-component margin-25-top"
+  }, [_c('form', {
+    staticClass: "form-horizontal"
+  }, [_c('fieldset', [_c('legend', [_vm._v("\n\t\t\t\t" + _vm._s(_vm.form.title) + "\n\t\t\t\t"), _vm._t("close")], 2), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.work_type.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Work Type")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.work_type.val),
+      expression: "form.fields.work_type.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.form.fields.work_type.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": "",
+      "disabled": ""
+    }
+  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "HRIA"
+    }
+  }, [_vm._v("HRIA")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Archaeology"
+    }
+  }, [_vm._v("Archaeology")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Palaeontology"
+    }
+  }, [_vm._v("Palaeontology")])]), _vm._v(" "), (_vm.form.fields.work_type.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.work_type.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.plans.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Project Plans")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.plans.val),
+      expression: "form.fields.plans.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Project plans"
+    },
+    domProps: {
+      "value": (_vm.form.fields.plans.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.plans.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.plans.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.plans.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.work_overview.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Work Overview")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.work_overview.val),
+      expression: "form.fields.work_overview.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Overview of work"
+    },
+    domProps: {
+      "value": (_vm.form.fields.work_overview.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.work_overview.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.work_overview.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.work_overview.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.estimate.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Estimate")]), _vm._v(" "), _c('div', {
+    staticClass: "input-group margin-10-top"
+  }, [_c('span', {
+    staticClass: "input-group-addon"
+  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.estimate.val),
+      expression: "form.fields.estimate.val"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.form.fields.estimate.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.estimate.val = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), (_vm.form.fields.estimate.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.estimate.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.response_by.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Response By")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.response_by.val),
+      expression: "form.fields.response_by.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.form.fields.response_by.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.response_by.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.response_by.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.response_by.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.approval_date.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Approval Date")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.approval_date.val),
+      expression: "form.fields.approval_date.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.form.fields.approval_date.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.approval_date.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.approval_date.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.approval_date.err))]) : _vm._e()])])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3 col-centered"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-45-top",
+    on: {
+      "click": _vm.sendForm
+    }
+  }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-f3e18b4c", module.exports)
+  }
+}
+
+/***/ }),
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -34440,11 +35161,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.viewProjectFormTab
     }
-  }, [_vm._v("New Project")])]), _vm._v(" "), (_vm.currentTab == 'view-table') ? _c('li', {
+  }, [_vm._v(_vm._s(_vm.form.title))])]), _vm._v(" "), (_vm.currentTab == 'view-table') ? _c('li', {
     class: {
       'active': _vm.currentTab == 'view-table'
     }
-  }, [_c('a', [_vm._v("User as Table")])]) : _vm._e()]), _vm._v(" "), (_vm.currentTab == 'view-all') ? _c('div', {
+  }, [_c('a', [_vm._v("Project as Table")])]) : _vm._e()]), _vm._v(" "), (_vm.currentTab == 'view-all') ? _c('div', {
     staticClass: "row margin-45-top"
   }, [(_vm.models.length > 0) ? _c('div', {
     staticClass: "col-md-12"
@@ -35202,29 +35923,219 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog"
-  }), _vm._v(" Edit Project\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('table', {
-    staticClass: "table table-striped table-hover margin-25-top"
-  }, [_vm._m(3), _vm._v(" "), _c('tbody', [_c('tr', [_c('td', [_vm._v(_vm._s(_vm.form.fields.province.val))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.form.fields.location.val))])])])])]), _vm._v(" "), _c('div', {
+  }), _vm._v(" Edit Project\r\n\t\t\t\t\t\t")]), _vm._v(" "), (_vm.form.fields.proposal.val) ? _c('button', {
+    staticClass: "btn btn-default margin-10-left",
+    on: {
+      "click": function($event) {
+        _vm.projectSubTab = 'proposal-form'
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-briefcase"
+  }), _vm._v(" Edit Proposal\r\n\t\t\t\t\t\t")]) : _c('button', {
+    staticClass: "btn btn-default margin-10-left",
+    on: {
+      "click": function($event) {
+        _vm.projectSubTab = 'proposal-form'
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-briefcase"
+  }), _vm._v(" Add Proposal\r\n\t\t\t\t\t\t")])]), _vm._v(" "), (_vm.projectSubTab == 'view-project') ? _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h3', [_vm._v("Project Details")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', [_vm._v("Location")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(3), _vm._v(" "), (_vm.form.fields.province.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.province.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(4), _vm._v(" "), (_vm.form.fields.location.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.location.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(5), _vm._v(" "), (_vm.form.fields.details.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.details.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', [_vm._v("Client")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(6), _vm._v(" "), (_vm.form.fields.client_company_name.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.client_company_name.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(7), _vm._v(" "), (_vm.form.fields.client_contact_name.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.client_contact_name.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(8), _vm._v(" "), (_vm.form.fields.client_contact_phone.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_c('a', {
+    attrs: {
+      "href": 'tel: +1' + _vm.form.fields.client_contact_phone.val.replace(/-/g, '')
+    }
+  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_phone.val))])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(9), _vm._v(" "), (_vm.form.fields.client_contact_email.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.client_contact_email.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', [_vm._v("Land")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(10), _vm._v(" "), (_vm.form.fields.land_ownership.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.land_ownership.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(11), _vm._v(" "), (_vm.form.fields.land_access_granted.val == 0) ? _c('div', [_vm._v("No")]) : _vm._e(), _vm._v(" "), (_vm.form.fields.land_access_granted.val == 1) ? _c('div', [_vm._v("Yes")]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(12), _vm._v(" "), (_vm.form.fields.land_access_granted_by.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.land_access_granted_by.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(13), _vm._v(" "), (_vm.form.fields.land_access_contact.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.land_access_contact.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', {
+    staticClass: "text-success"
+  }, [_vm._v("Invoicing")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(14), _vm._v(" "), (_vm.form.fields.invoiced_date.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("Not Invoiced")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.invoiced_date.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(15), _vm._v(" "), (_vm.form.fields.invoice_paid_date.val == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("Not Invoiced")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.invoice_paid_date.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), (_vm.form.fields.proposal.val) ? _c('div', {
+    staticClass: "row margin-65-top"
+  }, [_c('div', {
     staticClass: "col-md-12"
-  }, [_c('table', {
-    staticClass: "table table-striped table-hover margin-25-top"
-  }, [_vm._m(4), _vm._v(" "), _c('tbody', [_c('tr', [_c('td', [_vm._v(_vm._s(_vm.form.fields.details.val))])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12"
-  }, [_c('table', {
-    staticClass: "table table-striped table-hover margin-25-top"
-  }, [_vm._m(5), _vm._v(" "), _c('tbody', [_c('tr', [_c('td', [_vm._v(_vm._s(_vm.form.fields.client_company_name.val))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.form.fields.client_contact_name.val))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.form.fields.client_contact_phone.val))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.form.fields.client_contact_email.val))])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12"
-  }, [_c('table', {
-    staticClass: "table table-striped table-hover margin-25-top"
-  }, [_vm._m(6), _vm._v(" "), _c('tbody', [_c('tr', [_c('td', [_vm._v(_vm._s(_vm.form.fields.land_ownership.val))]), _vm._v(" "), _c('td', [(_vm.form.fields.land_access_granted.val == 0) ? _c('div', [_vm._v("No")]) : _vm._e(), _vm._v(" "), (_vm.form.fields.land_access_granted.val == 1) ? _c('div', [_vm._v("Yes")]) : _vm._e()]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.form.fields.land_access_granted_by.val))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.form.fields.land_access_contact.val))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.form.fields.land_access_phone.val))])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12"
-  }, [_c('table', {
-    staticClass: "table table-striped table-hover margin-25-top"
-  }, [_vm._m(7), _vm._v(" "), _c('tbody', [_c('tr', [_c('td', [(_vm.form.fields.invoiced_date.val == null) ? _c('div', {
-    staticClass: "text-warning"
-  }, [_vm._v("Not Invoiced")]) : _vm._e()]), _vm._v(" "), _c('td', [(_vm.form.fields.invoice_paid_date.val == null) ? _c('div', {
-    staticClass: "text-warning"
-  }, [_vm._v("Not Invoiced")]) : _vm._e()])])])])])]) : _vm._e()])])])])
+  }, [_c('h3', [_vm._v("Project Proposal")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', [_vm._v("Work Details")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(16), _vm._v(" "), (_vm.form.fields.proposal.val.work_type == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.proposal.val.work_type) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(17), _vm._v(" "), (_vm.form.fields.proposal.val.work_overview == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.proposal.val.work_overview) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(18), _vm._v(" "), (_vm.form.fields.proposal.val.plans == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.proposal.val.plans) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(19), _vm._v(" "), (_vm.form.fields.proposal.val.estimate == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t$" + _vm._s(_vm.form.fields.proposal.val.estimate) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(20), _vm._v(" "), (_vm.form.fields.proposal.val.response_by == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.proposal.val.response_by) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', [_vm._v("Project Approval")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(21), _vm._v(" "), (_vm.form.fields.proposal.val.approval_date == null) ? _c('div', [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("Not yet approved")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.proposal.val.approval_date) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])])])])]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.projectSubTab == 'proposal-form') ? _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('proposal-form', {
+    attrs: {
+      "proposal": _vm.form.fields.proposal.val,
+      "project_id": _vm.form.fields.id.val
+    }
+  }, [_c('button', {
+    staticClass: "pull-right btn btn-danger",
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        _vm.projectSubTab = 'view-project'
+      }
+    },
+    slot: "close"
+  }, [_vm._v("\r\n\t\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t\t")])])], 1) : _vm._e()]) : _vm._e()])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "panel-heading"
@@ -35240,25 +36151,43 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "alert alert-warning text-center"
   }, [_c('strong', [_vm._v("Heads up!")]), _c('br'), _vm._v(" No Projects are currently saved in storage.\r\n\t\t\t\t\t\t")])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', {
-    staticClass: "info"
-  }, [_c('th', [_vm._v("Province")]), _vm._v(" "), _c('th', [_vm._v("Location")])])])
+  return _c('h5', [_c('strong', [_vm._v("Province")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', {
-    staticClass: "info"
-  }, [_c('th', [_vm._v("Details")])])])
+  return _c('h5', [_c('strong', [_vm._v("Location")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', {
-    staticClass: "info"
-  }, [_c('th', [_vm._v("Client")]), _vm._v(" "), _c('th', [_vm._v("Client Contact")]), _vm._v(" "), _c('th', [_vm._v("Contact Phone")]), _vm._v(" "), _c('th', [_vm._v("Contact Email")])])])
+  return _c('h5', [_c('strong', [_vm._v("Details")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', {
-    staticClass: "info"
-  }, [_c('th', [_vm._v("Land Ownership")]), _vm._v(" "), _c('th', [_vm._v("Access Granted")]), _vm._v(" "), _c('th', [_vm._v("Access Granted By")]), _vm._v(" "), _c('th', [_vm._v("Access Contact")]), _vm._v(" "), _c('th', [_vm._v("Contact Phone")])])])
+  return _c('h5', [_c('strong', [_vm._v("Client")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', {
-    staticClass: "info"
-  }, [_c('th', [_vm._v("Invoiced Date")]), _vm._v(" "), _c('th', [_vm._v("Date Paid")])])])
+  return _c('h5', [_c('strong', [_vm._v("Client Contact")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Contact Phone")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Contact Email")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Land Ownership")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Access Granted")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Access Granted By")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Access Contact")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Invoiced Date")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Date Paid")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Work Type")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Work Overview")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Work Plans")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Estimate")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Response By")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Approval Date")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -35269,17 +36198,17 @@ if (false) {
 }
 
 /***/ }),
-/* 57 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(43);
+var content = __webpack_require__(44);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(13)("3b870ba9", content, false);
+var update = __webpack_require__(14)("3b870ba9", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -35295,17 +36224,17 @@ if(false) {
 }
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(44);
+var content = __webpack_require__(45);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(13)("fe320d5e", content, false);
+var update = __webpack_require__(14)("fe320d5e", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -35321,7 +36250,7 @@ if(false) {
 }
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (function(module, exports) {
 
 /**
@@ -35354,7 +36283,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44978,10 +45907,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(15)))
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -45009,11 +45938,11 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(15);
-module.exports = __webpack_require__(16);
+__webpack_require__(16);
+module.exports = __webpack_require__(17);
 
 
 /***/ })

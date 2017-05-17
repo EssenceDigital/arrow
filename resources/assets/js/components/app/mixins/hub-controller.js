@@ -40,23 +40,19 @@ module.exports =  {
 		viewAllModelsTab(){
 			this.currentTab = 'view-all';
 			this.clearFormErrors();
+			this.formNewState();
 			this.getAndSetModels(this.urlToFetch);
 		},
 
 		// Shows the user form tab and clears out the form
 		viewFormTab(){
 			this.clearForm();
-			this.formNewState();
 			this.currentTab = 'view-form';
 		},
 
-
 		viewModelAsTable(id){
 			// Grab user from local cache
-			var model;
-			this.models.forEach(function(elem){
-				if(elem.id == id) model = elem;
-			});
+			var model = this.grabLocalModel(id);
 			// Set values in the form.fields data property
 			for(var key in this.form.fields){
 				this.form.fields[key].val = model[key];
@@ -133,7 +129,6 @@ module.exports =  {
 					} else{
 						context.models = response.data.models;
 					}
-
 					
 					// Hide loader
 					context.fetchingModels = false;
@@ -194,6 +189,8 @@ module.exports =  {
 						for(var key in context.form.fields){
 							model[key] = response.data.model[key];
 						}
+					} else if(context.form.state == 'create-child'){
+
 					}
 					// Clear form, notify, and reset loader
 	                 noty({
@@ -203,10 +200,11 @@ module.exports =  {
 	                     timeout: 650,
 	                     closeWith: ['click', 'hover'],
 	                     type: 'success'
-	                });										
+	                });
+	                context.clearForm();										
 				})
 				.catch(function(error){
-					console.log(error.response.data);
+					console.log(error.response);
                     if (error.response) {
                         // If the server responded with error data
                         for(var key in error.response.data){

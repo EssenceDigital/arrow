@@ -41,7 +41,6 @@ class ProjectsController extends Controller
         foreach($this->validationFields as $key => $val){
         	if($request->invoiced_date == '' && $key == 'invoiced_date') continue;
         	if($request->invoice_paid_date == '' && $key == 'invoice_paid_date') continue;
-            if($request->first_contact_date == '' && $key == 'first_contact_date') continue;
         	$rules[$key] = $val;
         }
         // Validate or stop proccessing :)
@@ -67,7 +66,7 @@ class ProjectsController extends Controller
      */
     public function all()
     {
-        return Project::paginate(10);      
+        return Project::with('proposal')->paginate(15);      
     }
 
     /**
@@ -77,12 +76,12 @@ class ProjectsController extends Controller
      */
     public function single($id)
     {
-        $project = Project::find($id);
+        $project = Project::with('proposal')->find($id);
 
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $project->toArray()
+            'model' => $project
         ], 200);        
     }
 
@@ -111,7 +110,7 @@ class ProjectsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'project' => $project->toArray()
+            'model' => $project->toArray()
         ], 200);
 
     }
