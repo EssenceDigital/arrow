@@ -35,6 +35,7 @@ Route::post('/app/projects/delete', 'ProjectsController@delete');
 
 // Proposals
 Route::post('/app/proposals/create', 'ProposalsController@store');
+Route::post('/app/proposals/update', 'ProposalsController@update');
 
 // Users
 Route::get('/app/users', 'UsersController@hub');

@@ -100,12 +100,12 @@
 </template>
 
 <script>
-	let hub_controller = require('./mixins/hub-controller.js');
+	let form_controller = require('./mixins/form-controller.js');
 
 	export default{
 		props: ['proposal', 'project_id'],
 
-		mixins: [hub_controller],
+		mixins: [form_controller],
 
 		data(){
 			return{
@@ -140,13 +140,10 @@
 		},
 
 		mounted(){
-			if(this.proposal != undefined){
-				// Set form up in edit state
+			console.log('Form-mounted');
+			if(this.proposal){
+				this.populateFormFromModel(this.proposal);
 				this.formEditState();
-				// Populate form
-				for(var key in this.form.fields){
-					this.form.fields[key].val = this.proposal[key];
-				}
 			}
 		}
 	}

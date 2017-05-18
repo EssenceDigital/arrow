@@ -70,9 +70,49 @@ class ProposalsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $project
+            'model' => $proposal
         ], 200);
 
     }
+
+    /**
+     * Update a resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {   
+        $proposal = Proposal::find($request->id);
+
+        // Return failed response if collection empty
+        if(! $proposal){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        // Validate and populate the request
+        $proposal = $this->validateAndPopulate($request, $proposal);
+
+        // Attempt to store model
+        $result = $proposal->save();
+
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'model' => $proposal
+        ], 200);
+
+    }    
 
 }

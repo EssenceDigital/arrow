@@ -73,7 +73,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(9);
+var bind = __webpack_require__(10);
 
 /*global toString:true*/
 
@@ -450,10 +450,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(6);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(6);
   }
   return adapter;
 }
@@ -524,10 +524,110 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+module.exports = {
+
+	methods: {
+		// Shows the view all models tab and clears the form
+		viewAllModelsTab: function viewAllModelsTab() {
+			this.currentTab = 'view-all';
+			this.getAndSetModels(this.urlToFetch);
+		},
+
+
+		// Shows the user form tab and clears out the form
+		viewFormTab: function viewFormTab() {
+			// Set tab
+			this.currentTab = 'view-form';
+		},
+		viewModelAsTable: function viewModelAsTable() {
+			// Set tab
+			this.currentTab = 'view-table';
+		},
+		grabLocalModel: function grabLocalModel(id) {
+			var gabbedModel = [];
+			// Find model
+			this.models.forEach(function (model) {
+				if (model.id == id) {
+					grabbedModel = model;
+				}
+			});
+			return grabbedModel;
+		},
+		grabModelFromServer: function grabModelFromServer(url, cb) {
+			var context = this;
+			// Send request
+			axios.get(url).then(function (response) {
+				console.log(response.data.model);
+				context.selectedModel = response.data.model;
+				cb.call(context);
+			}).catch(function (response) {
+				console.log(response);
+			});
+		},
+
+
+		// Sends a GET request to retrieve all projects from the server then sets the projects data prop
+		getAndSetModels: function getAndSetModels(link) {
+			var context = this;
+			// Show loader
+			this.fetchingModels = true;
+
+			if (link) {
+				var urlToFetch = link;
+			} else {
+				var urlToFetch = this.urlToFetch;
+			}
+			// Send request
+			axios.get(urlToFetch).then(function (response) {
+				console.log(response);
+
+				if (response.data.data) {
+					var totalPages = response.data.last_page;
+
+					if (totalPages > 1) {
+						var nextPageUrl = response.data.next_page_url,
+						    prevPageUrl = response.data.prev_page_url;
+
+						if (nextPageUrl != null) {
+							baseUrl = nextPageUrl.substring(0, nextPageUrl.length - 1);
+						} else if (prevPageUrl != null) {
+							baseUrl = prevPageUrl.substring(0, prevPageUrl.length - 1);
+						}
+
+						for (var i = 1; i <= totalPages; i++) {
+							context.modelsPageLinks[i] = baseUrl + i;
+						}
+					}
+
+					context.modelsNextPageUrl = nextPageUrl;
+					context.modelsPrevPageUrl = prevPageUrl;
+					context.modelsCurrentPage = response.data.current_page;
+					context.modelsPageTotal = totalPages;
+					// Set data prop
+					context.models = response.data.data;
+					console.log(context.modelsCurrentPage);
+				} else {
+					context.models = response.data.models;
+				}
+
+				// Hide loader
+				context.fetchingModels = false;
+			}).catch(function (response) {
+				console.log(response);
+			});
+		}
+	}
+
+};
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -717,7 +817,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(1)(
@@ -751,7 +851,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -762,7 +862,7 @@ var settle = __webpack_require__(25);
 var buildURL = __webpack_require__(28);
 var parseHeaders = __webpack_require__(34);
 var isURLSameOrigin = __webpack_require__(32);
-var createError = __webpack_require__(8);
+var createError = __webpack_require__(9);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(27);
 
 module.exports = function xhrAdapter(config) {
@@ -933,10 +1033,10 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -962,7 +1062,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -974,7 +1074,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -998,7 +1098,7 @@ module.exports = function createError(message, config, code, response) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1014,262 +1114,6 @@ module.exports = function bind(fn, thisArg) {
   };
 };
 
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-module.exports = {
-
-	methods: {
-		/* Clears a properly set up 'hub' form. Data value should look like:
-   * form: { field: { val: '', err: false, dftl: '' } } 
-   * dftl should be default initial value 
-  */
-		clearForm: function clearForm() {
-			for (var key in this.form.fields) {
-				this.form.fields[key].val = this.form.fields[key].dflt;
-			}
-		},
-
-
-		// Clears the errors on a properly set up 'hub' form. See above comments
-		clearFormErrors: function clearFormErrors() {
-			for (var key in this.form.fields) {
-				this.form.fields[key].err = false;
-			}
-		},
-
-
-		// Sets the form state and titles for a create
-		formNewState: function formNewState() {
-			this.form.state = 'create';
-			this.form.title = 'Create ' + this.form.model;
-			this.form.button = 'Save';
-			this.form.action = this.form.createAction;
-			this.form.successMsg = this.form.model + ' has been saved';
-		},
-
-
-		// Sets the form state titles for an edit
-		formEditState: function formEditState() {
-			this.form.state = 'edit';
-			this.form.title = 'Edit ' + this.form.model;
-			this.form.button = 'Update';
-			this.form.action = this.form.updateAction;
-			this.form.successMsg = this.form.model + ' has been updated';
-		},
-
-
-		// Shows the view all models tab and clears the form
-		viewAllModelsTab: function viewAllModelsTab() {
-			this.currentTab = 'view-all';
-			this.clearFormErrors();
-			this.formNewState();
-			this.getAndSetModels(this.urlToFetch);
-		},
-
-
-		// Shows the user form tab and clears out the form
-		viewFormTab: function viewFormTab() {
-			this.clearForm();
-			this.currentTab = 'view-form';
-		},
-		viewModelAsTable: function viewModelAsTable(id) {
-			// Grab user from local cache
-			var model = this.grabLocalModel(id);
-			// Set values in the form.fields data property
-			for (var key in this.form.fields) {
-				this.form.fields[key].val = model[key];
-			}
-			// Change tab
-			this.currentTab = 'view-table';
-		},
-		grabLocalModel: function grabLocalModel(id) {
-			var gabbedModel = [];
-
-			this.models.forEach(function (model) {
-				if (model.id == id) {
-					grabbedModel = model;
-				}
-			});
-
-			return grabbedModel;
-		},
-
-
-		// Populate data to send to server via POST. Uses a properly set up 'hub' form. See above comments
-		populatePostData: function populatePostData() {
-			var data = {};
-			for (var key in this.form.fields) {
-				data[key] = this.form.fields[key].val;
-			}
-			// Add CSRF token. Requires Laravel layout to set the token
-			data._token = window.Laravel.csrfToken;
-
-			return data;
-		},
-
-
-		// Sends a GET request to retrieve all projects from the server then sets the projects data prop
-		getAndSetModels: function getAndSetModels(link) {
-			var context = this;
-			// Show loader
-			this.fetchingModels = true;
-
-			if (link) {
-				var urlToFetch = link;
-			} else {
-				var urlToFetch = this.urlToFetch;
-			}
-			// Send request
-			axios.get(urlToFetch).then(function (response) {
-				console.log(response);
-
-				if (response.data.data) {
-					var totalPages = response.data.last_page;
-
-					if (totalPages > 1) {
-						var nextPageUrl = response.data.next_page_url,
-						    prevPageUrl = response.data.prev_page_url;
-
-						if (nextPageUrl != null) {
-							baseUrl = nextPageUrl.substring(0, nextPageUrl.length - 1);
-						} else if (prevPageUrl != null) {
-							baseUrl = prevPageUrl.substring(0, prevPageUrl.length - 1);
-						}
-
-						for (var i = 1; i <= totalPages; i++) {
-							context.modelsPageLinks[i] = baseUrl + i;
-						}
-					}
-
-					context.modelsNextPageUrl = nextPageUrl;
-					context.modelsPrevPageUrl = prevPageUrl;
-					context.modelsCurrentPage = response.data.current_page;
-					context.modelsPageTotal = totalPages;
-					// Set data prop
-					context.models = response.data.data;
-					console.log(context.modelsCurrentPage);
-				} else {
-					context.models = response.data.models;
-				}
-
-				// Hide loader
-				context.fetchingModels = false;
-			}).catch(function (response) {
-				console.log(response);
-			});
-		},
-
-
-		/* Sends a GET request to retrieve a model from storage and sets up the form to edit that model
-   * Uses a properly set up 'hub' form. See above comments
-  */
-		prepareFormForEdit: function prepareFormForEdit(action) {
-			var context = this;
-			// Send request
-			axios.get(action).then(function (response) {
-				// Set values in the form.fields data property
-				for (var key in context.form.fields) {
-					context.form.fields[key].val = response.data.model[key];
-				}
-				// Clear any old form errors
-				context.clearFormErrors();
-				// Change form state
-				context.formEditState();
-				// Change tab
-				context.currentTab = 'view-form';
-			}).catch(function (response) {
-				console.log(response);
-			});
-		},
-
-
-		/* Sends a POST request to create or update a resource in storage. Uses a properly
-   * set up 'hub' form. See above comments
-  */
-		createOrUpdate: function createOrUpdate() {
-			// Show loader
-			this.form.isLoading = true;
-
-			var data = this.populatePostData();
-
-			// Cache context
-			var context = this;
-
-			// Send POST to server
-			axios.post(this.form.action, data).then(function (response) {
-				console.log(response);
-				context.form.isLoading = false;
-				// Show next content dependingo on form state
-				if (context.form.state == 'create') {
-					context.models.push(response.data.model);
-					context.currentTab = 'view-all';
-				} else if (context.form.state == 'edit') {
-					var model = context.grabLocalModel(response.data.model.id);
-					for (var key in context.form.fields) {
-						model[key] = response.data.model[key];
-					}
-				} else if (context.form.state == 'create-child') {}
-				// Clear form, notify, and reset loader
-				noty({
-					text: context.form.successMsg,
-					theme: 'defaultTheme',
-					layout: 'center',
-					timeout: 650,
-					closeWith: ['click', 'hover'],
-					type: 'success'
-				});
-				context.clearForm();
-			}).catch(function (error) {
-				console.log(error.response);
-				if (error.response) {
-					// If the server responded with error data
-					for (var key in error.response.data) {
-						context.form.fields[key].err = error.response.data[key][0];
-					}
-					// Hide loader
-					context.form.isLoading = false;
-				}
-			});
-		},
-
-
-		// Sends a POST request to delete the specified and confirmed model
-		deleteModel: function deleteModel() {
-			// Show loader
-			this.isDeleting = true;
-			// Assemble object for POST
-			var data = {
-				id: this.form.fields.id.val,
-				_token: window.Laravel.csrfToken
-			};
-			// Store context
-			var context = this;
-			// Send GET request to delete
-			axios.post(this.urlToDelete, data).then(function (response) {
-				// Notify
-				noty({
-					text: context.form.model + ' has been deleted',
-					theme: 'defaultTheme',
-					layout: 'center',
-					timeout: 850,
-					closeWith: ['click', 'hover'],
-					type: 'success'
-				});
-				// Close modal and show all users						
-				context.modalActive = false;
-				context.viewAllModelsTab();
-				// Hide loader
-				context.userIsDeleting = false;
-			}).catch(function (response) {
-				console.log(response);
-			});
-		}
-	}
-
-};
 
 /***/ }),
 /* 11 */
@@ -11923,7 +11767,7 @@ module.exports = __webpack_require__(19);
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(9);
+var bind = __webpack_require__(10);
 var Axios = __webpack_require__(21);
 var defaults = __webpack_require__(2);
 
@@ -11958,9 +11802,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(6);
+axios.Cancel = __webpack_require__(7);
 axios.CancelToken = __webpack_require__(20);
-axios.isCancel = __webpack_require__(7);
+axios.isCancel = __webpack_require__(8);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -11981,7 +11825,7 @@ module.exports.default = axios;
 "use strict";
 
 
-var Cancel = __webpack_require__(6);
+var Cancel = __webpack_require__(7);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -12198,7 +12042,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(26);
-var isCancel = __webpack_require__(7);
+var isCancel = __webpack_require__(8);
 var defaults = __webpack_require__(2);
 
 /**
@@ -12308,7 +12152,7 @@ module.exports = function enhanceError(error, config, code, response) {
 "use strict";
 
 
-var createError = __webpack_require__(8);
+var createError = __webpack_require__(9);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -12875,535 +12719,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
+var project_form = __webpack_require__(69);
+var project_table = __webpack_require__(73);
 var proposal_form = __webpack_require__(49);
-var modal = __webpack_require__(13);
-var dropdown = __webpack_require__(4);
-var hub_controller = __webpack_require__(10);
+var dropdown = __webpack_require__(5);
+var hub_controller = __webpack_require__(3);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
+		'project-form': project_form,
+		'project-table': project_table,
 		'proposal-form': proposal_form,
-		'modal': modal,
 		'dropdown': dropdown
 	},
 
@@ -13413,9 +12740,6 @@ var hub_controller = __webpack_require__(10);
 		return {
 			currentTab: 'view-all',
 			projectSubTab: 'view-project',
-			modalActive: false,
-			urlToDelete: '/app/projects/delete',
-			isDeleting: false,
 			urlToFetch: '/app/projects/all',
 			fetchingModels: false,
 			models: [],
@@ -13424,37 +12748,7 @@ var hub_controller = __webpack_require__(10);
 			modelsPageLinks: {},
 			modelsNextPageUrl: '',
 			modelsPrevPageUrl: '',
-			form: {
-				model: 'Project',
-				state: 'create',
-				title: 'Create Project',
-				button: 'Save',
-				action: '/app/projects/create',
-				createAction: '/app/projects/create',
-				updateAction: '/app/projects/update',
-				isLoading: false,
-				successMsg: 'Project has been saved',
-				fields: {
-					id: { val: '', err: false, dflt: '' },
-					province: { val: '', err: false, dflt: '' },
-					location: { val: '', err: false, dflt: '' },
-					details: { val: '', err: false, dflt: '' },
-					client_company_name: { val: '', err: false, dflt: '' },
-					client_contact_name: { val: '', err: false, dflt: '' },
-					client_contact_phone: { val: '', err: false, dflt: '' },
-					client_contact_email: { val: '', err: false, dflt: '' },
-					first_contact_by: { val: '', err: false, dflt: '' },
-					first_contact_date: { val: '', err: false, dflt: '' },
-					land_ownership: { val: '', err: false, dflt: '' },
-					land_access_granted: { val: 0, err: false, dflt: 0 },
-					land_access_granted_by: { val: '', err: false, dflt: '' },
-					land_access_contact: { val: '', err: false, dflt: '' },
-					land_access_phone: { val: '', err: false, dflt: '' },
-					invoiced_date: { val: '', err: false, dflt: '' },
-					invoice_paid_date: { val: '', err: false, dflt: '' },
-					proposal: { val: '', err: false, dflt: '' }
-				}
-			}
+			selectedModel: false
 		};
 	},
 
@@ -13464,7 +12758,14 @@ var hub_controller = __webpack_require__(10);
 			this.viewAllModelsTab();
 		},
 		viewProjectFormTab: function viewProjectFormTab() {
+			// Reset selected model
+			this.selectedModel = false;
 			this.viewFormTab();
+		},
+		handleProjectCreation: function handleProjectCreation(model) {
+			// Set the active model to the one just created
+			this.selectedModel = model;
+			this.viewModelAsTable();
 		},
 		getAndSetProjects: function getAndSetProjects() {
 			this.getAndSetModels();
@@ -13473,18 +12774,25 @@ var hub_controller = __webpack_require__(10);
 			this.getAndSetModels(link);
 		},
 		viewProjectTable: function viewProjectTable(id) {
-			this.viewModelAsTable(id);
+			// Get a fresh version of the requested model
+			this.grabModelFromServer('/app/projects/' + id, function () {
+				// Show table style view
+				this.viewModelAsTable();
+			});
 		},
 		editProject: function editProject(id) {
-			this.prepareFormForEdit('/app/projects/' + id);
+			// Get a fresh version of the requested model
+			this.grabModelFromServer('/app/projects/' + id, function () {
+				// Show form
+				this.viewFormTab();
+			});
 		},
-		editProposal: function editProposal(id) {},
-		sendForm: function sendForm() {
-			this.createOrUpdate();
+		handleProposalCreation: function handleProposalCreation(proposal) {
+			// Add proposal to project
+			this.selectedModel.proposal = proposal;
+			this.projectSubTab = 'view-project';
 		},
-		deleteProject: function deleteProject() {
-			this.deleteModel();
-		}
+		editProposal: function editProposal(id) {}
 	},
 
 	// Retrieves all projects from storage upon compenent mounting
@@ -13601,12 +12909,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var hub_controller = __webpack_require__(10);
+var form_controller = __webpack_require__(71);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: ['proposal', 'project_id'],
 
-	mixins: [hub_controller],
+	mixins: [form_controller],
 
 	data: function data() {
 		return {
@@ -13642,13 +12950,10 @@ var hub_controller = __webpack_require__(10);
 	},
 
 	mounted: function mounted() {
-		if (this.proposal != undefined) {
-			// Set form up in edit state
+		console.log('Form-mounted');
+		if (this.proposal) {
+			this.populateFormFromModel(this.proposal);
 			this.formEditState();
-			// Populate form
-			for (var key in this.form.fields) {
-				this.form.fields[key].val = this.proposal[key];
-			}
 		}
 	}
 });
@@ -14253,8 +13558,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 var modal = __webpack_require__(13);
-var dropdown = __webpack_require__(4);
-var hub_controller = __webpack_require__(10);
+var dropdown = __webpack_require__(5);
+var hub_controller = __webpack_require__(3);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -14492,7 +13797,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var dropdown = __webpack_require__(4);
+var dropdown = __webpack_require__(5);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
@@ -35161,7 +34466,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.viewProjectFormTab
     }
-  }, [_vm._v(_vm._s(_vm.form.title))])]), _vm._v(" "), (_vm.currentTab == 'view-table') ? _c('li', {
+  }, [_vm._v("View Form")])]), _vm._v(" "), (_vm.currentTab == 'view-table') ? _c('li', {
     class: {
       'active': _vm.currentTab == 'view-table'
     }
@@ -35250,667 +34555,26 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row margin-45-top"
   }, [_c('div', {
     staticClass: "col-md-12"
-  }, [(_vm.form.state == 'edit') ? _c('button', {
+  }, [_c('project-form', {
+    attrs: {
+      "project": _vm.selectedModel
+    },
+    on: {
+      "created": _vm.handleProjectCreation,
+      "deleted": _vm.viewAllProjectsTab
+    }
+  }, [_c('div', {
+    slot: "nav-buttons"
+  }, [(_vm.selectedModel) ? _c('button', {
     staticClass: "btn btn-default",
     on: {
       "click": function($event) {
-        _vm.viewProjectTable(_vm.form.fields.id.val)
+        _vm.viewProjectTable(_vm.selectedModel.id)
       }
     }
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-list-alt"
-  }), _vm._v(" View as Table\r\n\t\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), _c('div', {
-    staticClass: "well bs-component margin-25-top"
-  }, [_c('form', {
-    staticClass: "form-horizontal"
-  }, [_c('fieldset', [_c('legend', [_vm._v(_vm._s(_vm.form.title))]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.province.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Province")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.province.val),
-      expression: "form.fields.province.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.province.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "",
-      "selected": "",
-      "disabled": ""
-    }
-  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Alberta"
-    }
-  }, [_vm._v("Alberta")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "British Columbia"
-    }
-  }, [_vm._v("British Columbia")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Saskatchewan"
-    }
-  }, [_vm._v("Saskatchewan")])]), _vm._v(" "), (_vm.form.fields.province.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.province.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.location.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Location")]), _vm._v(" "), _c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.location.val),
-      expression: "form.fields.location.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "rows": "3",
-      "placeholder": "Specific location"
-    },
-    domProps: {
-      "value": (_vm.form.fields.location.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.location.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.location.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.location.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.details.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Details")]), _vm._v(" "), _c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.details.val),
-      expression: "form.fields.details.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "rows": "3",
-      "placeholder": "Project details"
-    },
-    domProps: {
-      "value": (_vm.form.fields.details.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.details.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.details.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.details.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
-    staticClass: "margin-25-top"
-  }, [_c('legend', [_vm._v("Client and contact")]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.client_company_name.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Client company")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.client_company_name.val),
-      expression: "form.fields.client_company_name.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Name of company"
-    },
-    domProps: {
-      "value": (_vm.form.fields.client_company_name.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.client_company_name.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.client_company_name.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_company_name.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.client_contact_name.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Client contact")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.client_contact_name.val),
-      expression: "form.fields.client_contact_name.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Name of contact"
-    },
-    domProps: {
-      "value": (_vm.form.fields.client_contact_name.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.client_contact_name.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.client_contact_name.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_name.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.client_contact_phone.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Client contact phone")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.client_contact_phone.val),
-      expression: "form.fields.client_contact_phone.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Contact phone number"
-    },
-    domProps: {
-      "value": (_vm.form.fields.client_contact_phone.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.client_contact_phone.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.client_contact_phone.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_phone.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.client_contact_email.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Client contact email")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.client_contact_email.val),
-      expression: "form.fields.client_contact_email.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Contact email"
-    },
-    domProps: {
-      "value": (_vm.form.fields.client_contact_email.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.client_contact_email.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.client_contact_email.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_email.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.first_contact_by.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("First contact by")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.first_contact_by.val),
-      expression: "form.fields.first_contact_by.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "First contact by"
-    },
-    domProps: {
-      "value": (_vm.form.fields.first_contact_by.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.first_contact_by.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.first_contact_by.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.first_contact_by.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.first_contact_date.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("First contact date")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.first_contact_date.val),
-      expression: "form.fields.first_contact_date.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.first_contact_date.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.first_contact_date.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.first_contact_date.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.first_contact_date.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
-    staticClass: "margin-25-top"
-  }, [_c('legend', [_vm._v("Land ownership")]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.land_ownership.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Land ownership")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.land_ownership.val),
-      expression: "form.fields.land_ownership.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.land_ownership.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "",
-      "selected": "",
-      "disabled": ""
-    }
-  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', [_vm._v("Crown")]), _vm._v(" "), _c('option', [_vm._v("Freehold")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.land_access_granted.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Land access granted")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.land_access_granted.val),
-      expression: "form.fields.land_access_granted.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.land_access_granted.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "0"
-    }
-  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "1"
-    }
-  }, [_vm._v("Yes")])])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.land_access_granted_by.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Land access granted by")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.land_access_granted_by.val),
-      expression: "form.fields.land_access_granted_by.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Access granted by"
-    },
-    domProps: {
-      "value": (_vm.form.fields.land_access_granted_by.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.land_access_granted_by.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.land_access_granted_by.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.land_access_granted_by.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.land_access_contact.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Land access contact")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.land_access_contact.val),
-      expression: "form.fields.land_access_contact.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Access contact name"
-    },
-    domProps: {
-      "value": (_vm.form.fields.land_access_contact.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.land_access_contact.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.land_access_contact.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.land_access_contact.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.land_access_phone.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Land access phone")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.land_access_phone.val),
-      expression: "form.fields.land_access_phone.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Access contact phone number"
-    },
-    domProps: {
-      "value": (_vm.form.fields.land_access_phone.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.land_access_phone.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.land_access_phone.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.land_access_phone.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
-    staticClass: "margin-25-top"
-  }, [_c('legend', [_vm._v("Invoicing")]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.invoiced_date.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Invoiced date")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.invoiced_date.val),
-      expression: "form.fields.invoiced_date.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.invoiced_date.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.invoiced_date.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.invoiced_date.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.invoiced_date.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.invoice_paid_date.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Invoice paid date")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.invoice_paid_date.val),
-      expression: "form.fields.invoice_paid_date.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.invoice_paid_date.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.invoice_paid_date.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.invoice_paid_date.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.invoice_paid_date.err))]) : _vm._e()])])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-3 col-centered"
-  }, [_c('div', {
-    staticClass: "form-group"
-  }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-45-top",
-    on: {
-      "click": _vm.sendForm
-    }
-  }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
-    staticClass: "center-loader"
-  })]) : _vm._e()])])])])])]), _vm._v(" "), (_vm.form.state == 'edit') ? _c('div', {
-    staticClass: "well bs-component"
-  }, [_c('legend', {
-    staticClass: "danger"
-  }, [_vm._v("Delete Project")]), _vm._v(" "), _c('fieldset', [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-3 col-centered"
-  }, [_c('div', {
-    staticClass: "form-group"
-  }, [_c('button', {
-    staticClass: "btn btn-danger btn-block margin-45-top",
-    on: {
-      "click": function($event) {
-        _vm.modalActive = true
-      }
-    }
-  }, [_vm._v("Delete")])])])])])]) : _vm._e(), _vm._v(" "), _c('modal', {
-    attrs: {
-      "modalActive": _vm.modalActive
-    },
-    on: {
-      "modal-close": function($event) {
-        _vm.modalActive = false
-      }
-    }
-  }, [_c('h4', {
-    staticClass: "danger",
-    slot: "title"
-  }, [_vm._v("\r\n\t\t\t\t\t\t\t\tDelete this project?\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('p', {
-    slot: "body"
-  }, [_vm._v("\r\n\t\t\t\t\t\t\t\tDelete this project until the age that gave it birth comes again?\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
-    slot: "footer"
-  }, [_c('button', {
-    staticClass: "btn btn-primary margin-45-top",
-    on: {
-      "click": function($event) {
-        _vm.modalActive = false
-      }
-    }
-  }, [_vm._v("Cancel")]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-danger margin-45-top",
-    on: {
-      "click": _vm.deleteProject
-    }
-  }, [(!_vm.isDeleting) ? _c('span', [_vm._v("Delete")]) : _vm._e(), _vm._v(" "), (_vm.isDeleting) ? _c('span', [_c('div', {
-    staticClass: "loader-center"
-  })]) : _vm._e()])])])], 1)]) : _vm._e(), _vm._v(" "), (_vm.currentTab == 'view-table') ? _c('div', {
+  }), _vm._v(" View as Table\r\n\t\t\t\t\t\t\t\t")]) : _vm._e()])])], 1)]) : _vm._e(), _vm._v(" "), (_vm.currentTab == 'view-table') ? _c('div', {
     staticClass: "row margin-45-top"
   }, [_c('div', {
     staticClass: "col-md-12"
@@ -35918,12 +34582,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "btn btn-default",
     on: {
       "click": function($event) {
-        _vm.editProject(_vm.form.fields.id.val)
+        _vm.editProject(_vm.selectedModel.id)
       }
     }
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog"
-  }), _vm._v(" Edit Project\r\n\t\t\t\t\t\t")]), _vm._v(" "), (_vm.form.fields.proposal.val) ? _c('button', {
+  }), _vm._v(" Edit Project\r\n\t\t\t\t\t\t")]), _vm._v(" "), (_vm.selectedModel.proposal) ? _c('button', {
     staticClass: "btn btn-default margin-10-left",
     on: {
       "click": function($event) {
@@ -35943,192 +34607,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "glyphicon glyphicon-briefcase"
   }), _vm._v(" Add Proposal\r\n\t\t\t\t\t\t")])]), _vm._v(" "), (_vm.projectSubTab == 'view-project') ? _c('div', {
     staticClass: "col-md-12 margin-25-top"
-  }, [_c('h3', [_vm._v("Project Details")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12 margin-25-top"
-  }, [_c('h4', [_vm._v("Location")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(3), _vm._v(" "), (_vm.form.fields.province.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.province.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(4), _vm._v(" "), (_vm.form.fields.location.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.location.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(5), _vm._v(" "), (_vm.form.fields.details.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.details.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12 margin-25-top"
-  }, [_c('h4', [_vm._v("Client")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(6), _vm._v(" "), (_vm.form.fields.client_company_name.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.client_company_name.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(7), _vm._v(" "), (_vm.form.fields.client_contact_name.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.client_contact_name.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(8), _vm._v(" "), (_vm.form.fields.client_contact_phone.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_c('a', {
+  }, [_c('project-table', {
     attrs: {
-      "href": 'tel: +1' + _vm.form.fields.client_contact_phone.val.replace(/-/g, '')
+      "project": _vm.selectedModel
     }
-  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_phone.val))])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(9), _vm._v(" "), (_vm.form.fields.client_contact_email.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.client_contact_email.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12 margin-25-top"
-  }, [_c('h4', [_vm._v("Land")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(10), _vm._v(" "), (_vm.form.fields.land_ownership.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.land_ownership.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(11), _vm._v(" "), (_vm.form.fields.land_access_granted.val == 0) ? _c('div', [_vm._v("No")]) : _vm._e(), _vm._v(" "), (_vm.form.fields.land_access_granted.val == 1) ? _c('div', [_vm._v("Yes")]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(12), _vm._v(" "), (_vm.form.fields.land_access_granted_by.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.land_access_granted_by.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(13), _vm._v(" "), (_vm.form.fields.land_access_contact.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.land_access_contact.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12 margin-25-top"
-  }, [_c('h4', {
-    staticClass: "text-success"
-  }, [_vm._v("Invoicing")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(14), _vm._v(" "), (_vm.form.fields.invoiced_date.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("Not Invoiced")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.invoiced_date.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(15), _vm._v(" "), (_vm.form.fields.invoice_paid_date.val == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("Not Invoiced")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.invoice_paid_date.val) + "\r\n\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), (_vm.form.fields.proposal.val) ? _c('div', {
-    staticClass: "row margin-65-top"
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('h3', [_vm._v("Project Proposal")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12 margin-25-top"
-  }, [_c('h4', [_vm._v("Work Details")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(16), _vm._v(" "), (_vm.form.fields.proposal.val.work_type == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.proposal.val.work_type) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(17), _vm._v(" "), (_vm.form.fields.proposal.val.work_overview == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.proposal.val.work_overview) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(18), _vm._v(" "), (_vm.form.fields.proposal.val.plans == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.proposal.val.plans) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12 margin-25-top"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(19), _vm._v(" "), (_vm.form.fields.proposal.val.estimate == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t$" + _vm._s(_vm.form.fields.proposal.val.estimate) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(20), _vm._v(" "), (_vm.form.fields.proposal.val.response_by == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.proposal.val.response_by) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12 margin-25-top"
-  }, [_c('h4', [_vm._v("Project Approval")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(21), _vm._v(" "), (_vm.form.fields.proposal.val.approval_date == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("Not yet approved")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t    \t\t" + _vm._s(_vm.form.fields.proposal.val.approval_date) + "\r\n\t\t\t\t\t\t\t\t\t\t    \t")])])])])])])]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.projectSubTab == 'proposal-form') ? _c('div', {
+  })], 1) : _vm._e(), _vm._v(" "), (_vm.projectSubTab == 'proposal-form') ? _c('div', {
     staticClass: "col-md-12 margin-25-top"
   }, [_c('proposal-form', {
     attrs: {
-      "proposal": _vm.form.fields.proposal.val,
-      "project_id": _vm.form.fields.id.val
+      "proposal": _vm.selectedModel.proposal,
+      "project_id": _vm.selectedModel.id
+    },
+    on: {
+      "created": _vm.handleProposalCreation
     }
   }, [_c('button', {
     staticClass: "pull-right btn btn-danger",
-    attrs: {
-      "type": "button"
-    },
     on: {
       "click": function($event) {
         _vm.projectSubTab = 'view-project'
@@ -36141,7 +34635,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel-heading"
   }, [_c('h3', {
     staticClass: "panel-title"
-  }, [_vm._v("Project Hub")])])
+  }, [_vm._v("Projects Hub")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', {
     staticClass: "info"
@@ -36150,44 +34644,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     staticClass: "alert alert-warning text-center"
   }, [_c('strong', [_vm._v("Heads up!")]), _c('br'), _vm._v(" No Projects are currently saved in storage.\r\n\t\t\t\t\t\t")])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Province")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Location")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Details")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Client")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Client Contact")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Contact Phone")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Contact Email")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Land Ownership")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Access Granted")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Access Granted By")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Access Contact")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Invoiced Date")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Date Paid")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Work Type")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Work Overview")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Work Plans")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Estimate")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Response By")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Approval Date")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -45907,7 +44363,7 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(15)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(15)))
 
 /***/ }),
 /* 64 */
@@ -45944,6 +44400,1759 @@ module.exports = function(module) {
 __webpack_require__(16);
 module.exports = __webpack_require__(17);
 
+
+/***/ }),
+/* 66 */,
+/* 67 */,
+/* 68 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var form_controller = __webpack_require__(71);
+var modal = __webpack_require__(13);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'modal': modal
+	},
+
+	props: ['project'],
+
+	mixins: [form_controller],
+
+	data: function data() {
+		return {
+			modalActive: false,
+			urlToDelete: '/app/projects/delete',
+			isDeleting: false,
+			form: {
+				model: 'Project',
+				state: 'create',
+				title: 'Create Project',
+				button: 'Save',
+				action: '/app/projects/create',
+				createAction: '/app/projects/create',
+				updateAction: '/app/projects/update',
+				isLoading: false,
+				successMsg: 'Project has been saved',
+				fields: {
+					id: { val: '', err: false, dflt: '' },
+					province: { val: '', err: false, dflt: '' },
+					location: { val: '', err: false, dflt: '' },
+					details: { val: '', err: false, dflt: '' },
+					client_company_name: { val: '', err: false, dflt: '' },
+					client_contact_name: { val: '', err: false, dflt: '' },
+					client_contact_phone: { val: '', err: false, dflt: '' },
+					client_contact_email: { val: '', err: false, dflt: '' },
+					first_contact_by: { val: '', err: false, dflt: '' },
+					first_contact_date: { val: '', err: false, dflt: '' },
+					land_ownership: { val: '', err: false, dflt: '' },
+					land_access_granted: { val: 0, err: false, dflt: 0 },
+					land_access_granted_by: { val: '', err: false, dflt: '' },
+					land_access_contact: { val: '', err: false, dflt: '' },
+					land_access_phone: { val: '', err: false, dflt: '' },
+					invoiced_date: { val: '', err: false, dflt: '' },
+					invoice_paid_date: { val: '', err: false, dflt: '' },
+					proposal: { val: '', err: false, dflt: '' }
+				}
+			}
+		};
+	},
+
+
+	methods: {
+		sendForm: function sendForm() {
+			this.createOrUpdate();
+		},
+		deleteProject: function deleteProject() {
+			this.deleteModel();
+		}
+	},
+
+	mounted: function mounted() {
+		console.log('Form-mounted');
+		if (this.project) {
+			this.populateFormFromModel(this.project);
+			this.formEditState();
+		}
+	}
+});
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(68),
+  /* template */
+  __webpack_require__(70),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\Project-form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-form.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-edc5dea6", Component.options)
+  } else {
+    hotAPI.reload("data-v-edc5dea6", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_vm._t("nav-buttons"), _vm._v(" "), _c('div', {
+    staticClass: "well bs-component margin-25-top"
+  }, [_c('form', {
+    staticClass: "form-horizontal"
+  }, [_c('fieldset', [_c('legend', [_vm._v(_vm._s(_vm.form.title))]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.province.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Province")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.province.val),
+      expression: "form.fields.province.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.form.fields.province.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": "",
+      "disabled": ""
+    }
+  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Alberta"
+    }
+  }, [_vm._v("Alberta")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "British Columbia"
+    }
+  }, [_vm._v("British Columbia")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Saskatchewan"
+    }
+  }, [_vm._v("Saskatchewan")])]), _vm._v(" "), (_vm.form.fields.province.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.province.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.location.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Location")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.location.val),
+      expression: "form.fields.location.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Specific location"
+    },
+    domProps: {
+      "value": (_vm.form.fields.location.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.location.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.location.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.location.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.details.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Details")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.details.val),
+      expression: "form.fields.details.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Project details"
+    },
+    domProps: {
+      "value": (_vm.form.fields.details.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.details.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.details.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.details.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
+    staticClass: "margin-25-top"
+  }, [_c('legend', [_vm._v("Client and contact")]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.client_company_name.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Client company")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.client_company_name.val),
+      expression: "form.fields.client_company_name.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Name of company"
+    },
+    domProps: {
+      "value": (_vm.form.fields.client_company_name.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.client_company_name.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.client_company_name.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.client_company_name.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.client_contact_name.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Client contact")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.client_contact_name.val),
+      expression: "form.fields.client_contact_name.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Name of contact"
+    },
+    domProps: {
+      "value": (_vm.form.fields.client_contact_name.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.client_contact_name.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.client_contact_name.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_name.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.client_contact_phone.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Client contact phone")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.client_contact_phone.val),
+      expression: "form.fields.client_contact_phone.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Contact phone number"
+    },
+    domProps: {
+      "value": (_vm.form.fields.client_contact_phone.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.client_contact_phone.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.client_contact_phone.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_phone.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.client_contact_email.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Client contact email")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.client_contact_email.val),
+      expression: "form.fields.client_contact_email.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Contact email"
+    },
+    domProps: {
+      "value": (_vm.form.fields.client_contact_email.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.client_contact_email.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.client_contact_email.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_email.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.first_contact_by.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("First contact by")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.first_contact_by.val),
+      expression: "form.fields.first_contact_by.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "First contact by"
+    },
+    domProps: {
+      "value": (_vm.form.fields.first_contact_by.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.first_contact_by.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.first_contact_by.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.first_contact_by.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.first_contact_date.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("First contact date")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.first_contact_date.val),
+      expression: "form.fields.first_contact_date.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.form.fields.first_contact_date.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.first_contact_date.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.first_contact_date.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.first_contact_date.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
+    staticClass: "margin-25-top"
+  }, [_c('legend', [_vm._v("Land ownership")]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.land_ownership.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Land ownership")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.land_ownership.val),
+      expression: "form.fields.land_ownership.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.form.fields.land_ownership.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": "",
+      "disabled": ""
+    }
+  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', [_vm._v("Crown")]), _vm._v(" "), _c('option', [_vm._v("Freehold")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.land_access_granted.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Land access granted")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.land_access_granted.val),
+      expression: "form.fields.land_access_granted.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.form.fields.land_access_granted.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Yes")])])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.land_access_granted_by.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Land access granted by")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.land_access_granted_by.val),
+      expression: "form.fields.land_access_granted_by.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Access granted by"
+    },
+    domProps: {
+      "value": (_vm.form.fields.land_access_granted_by.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.land_access_granted_by.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.land_access_granted_by.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.land_access_granted_by.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.land_access_contact.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Land access contact")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.land_access_contact.val),
+      expression: "form.fields.land_access_contact.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Access contact name"
+    },
+    domProps: {
+      "value": (_vm.form.fields.land_access_contact.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.land_access_contact.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.land_access_contact.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.land_access_contact.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.land_access_phone.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Land access phone")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.land_access_phone.val),
+      expression: "form.fields.land_access_phone.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Access contact phone number"
+    },
+    domProps: {
+      "value": (_vm.form.fields.land_access_phone.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.land_access_phone.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.land_access_phone.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.land_access_phone.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
+    staticClass: "margin-25-top"
+  }, [_c('legend', [_vm._v("Invoicing")]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.invoiced_date.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Invoiced date")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.invoiced_date.val),
+      expression: "form.fields.invoiced_date.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.form.fields.invoiced_date.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.invoiced_date.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.invoiced_date.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.invoiced_date.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.invoice_paid_date.err
+    }
+  }, [_c('div', {
+    staticClass: "col-lg-10"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Invoice paid date")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.invoice_paid_date.val),
+      expression: "form.fields.invoice_paid_date.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.form.fields.invoice_paid_date.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.invoice_paid_date.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.invoice_paid_date.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.invoice_paid_date.err))]) : _vm._e()])])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3 col-centered"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-45-top",
+    on: {
+      "click": _vm.sendForm
+    }
+  }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), (_vm.form.state == 'edit') ? _c('div', {
+    staticClass: "well bs-component"
+  }, [_c('legend', {
+    staticClass: "danger"
+  }, [_vm._v("Delete Project")]), _vm._v(" "), _c('fieldset', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3 col-centered"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-danger btn-block margin-45-top",
+    on: {
+      "click": function($event) {
+        _vm.modalActive = true
+      }
+    }
+  }, [_vm._v("Delete")])])])])])]) : _vm._e(), _vm._v(" "), _c('modal', {
+    attrs: {
+      "modalActive": _vm.modalActive
+    },
+    on: {
+      "modal-close": function($event) {
+        _vm.modalActive = false
+      }
+    }
+  }, [_c('h4', {
+    staticClass: "danger",
+    slot: "title"
+  }, [_vm._v("\r\n\t\t\tDelete this project?\r\n\t\t")]), _vm._v(" "), _c('p', {
+    slot: "body"
+  }, [_vm._v("\r\n\t\t\tDelete this project until the age that gave it birth comes again?\r\n\t\t")]), _vm._v(" "), _c('div', {
+    slot: "footer"
+  }, [_c('button', {
+    staticClass: "btn btn-primary margin-45-top",
+    on: {
+      "click": function($event) {
+        _vm.modalActive = false
+      }
+    }
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-danger margin-45-top",
+    on: {
+      "click": _vm.deleteProject
+    }
+  }, [(!_vm.isDeleting) ? _c('span', [_vm._v("Delete")]) : _vm._e(), _vm._v(" "), (_vm.isDeleting) ? _c('span', [_c('div', {
+    staticClass: "loader-center"
+  })]) : _vm._e()])])])], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-edc5dea6", module.exports)
+  }
+}
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports) {
+
+module.exports = {
+
+	methods: {
+		/* Clears a properly set up 'hub' form. Data value should look like:
+   * form: { field: { val: '', err: false, dftl: '' } } 
+   * dftl should be default initial value 
+  */
+		clearForm: function clearForm() {
+			for (var key in this.form.fields) {
+				this.form.fields[key].val = this.form.fields[key].dflt;
+			}
+		},
+
+
+		// Clears the errors on a properly set up 'hub' form. See above comments
+		clearFormErrors: function clearFormErrors() {
+			for (var key in this.form.fields) {
+				this.form.fields[key].err = false;
+			}
+		},
+
+
+		// Sets the form state and titles for a create
+		formNewState: function formNewState() {
+			this.form.state = 'create';
+			this.form.title = 'Create ' + this.form.model;
+			this.form.button = 'Save';
+			this.form.action = this.form.createAction;
+			this.form.successMsg = this.form.model + ' has been saved';
+		},
+
+
+		// Sets the form state titles for an edit
+		formEditState: function formEditState() {
+			this.form.state = 'edit';
+			this.form.title = 'Edit ' + this.form.model;
+			this.form.button = 'Update';
+			this.form.action = this.form.updateAction;
+			this.form.successMsg = this.form.model + ' has been updated';
+		},
+
+
+		// Populate data to send to server via POST. Uses a properly set up 'hub' form. See above comments
+		populatePostData: function populatePostData() {
+			var data = {};
+			for (var key in this.form.fields) {
+				data[key] = this.form.fields[key].val;
+			}
+			// Add CSRF token. Requires Laravel layout to set the token
+			data._token = window.Laravel.csrfToken;
+
+			return data;
+		},
+		populateFormFromModel: function populateFormFromModel(model) {
+			// Set values in the form.fields data property
+			for (var key in this.form.fields) {
+				this.form.fields[key].val = model[key];
+			}
+		},
+		grabModelFromServer: function grabModelFromServer(url, cb) {
+			var context = this;
+			// Send request
+			axios.get(url).then(function (response) {
+				context.selectedModel = response.data.model;
+				cb.call(context);
+			}).catch(function (response) {
+				console.log(response);
+			});
+		},
+
+
+		/* Sends a POST request to create or update a resource in storage. Uses a properly
+   * set up 'hub' form. See above comments
+  */
+		createOrUpdate: function createOrUpdate() {
+			// Show loader
+			this.form.isLoading = true;
+
+			var data = this.populatePostData();
+
+			// Cache context
+			var context = this;
+
+			// Send POST to server
+			axios.post(this.form.action, data).then(function (response) {
+				console.log(response);
+				context.form.isLoading = false;
+				// Clear form, notify, and reset loader
+				noty({
+					text: context.form.successMsg,
+					theme: 'defaultTheme',
+					layout: 'center',
+					timeout: 650,
+					closeWith: ['click', 'hover'],
+					type: 'success'
+				});
+				// Show next content dependingo on form state
+				if (context.form.state == 'create') {
+					context.clearForm();
+					context.$emit('created', response.data.model);
+				} else if (context.form.state == 'create-child') {
+					context.$emit('created', response.data.model);
+				}
+
+				// Clear any form errors
+				context.clearFormErrors();
+			}).catch(function (error) {
+				console.log(error.response);
+				if (error.response) {
+					// If the server responded with error data
+					for (var key in error.response.data) {
+						context.form.fields[key].err = error.response.data[key][0];
+					}
+					// Hide loader
+					context.form.isLoading = false;
+				}
+			});
+		},
+
+
+		// Sends a POST request to delete the specified and confirmed model
+		deleteModel: function deleteModel() {
+			// Show loader
+			this.isDeleting = true;
+			// Assemble object for POST
+			var data = {
+				id: this.form.fields.id.val,
+				_token: window.Laravel.csrfToken
+			};
+			// Store context
+			var context = this;
+			// Send GET request to delete
+			axios.post(this.urlToDelete, data).then(function (response) {
+				// Notify
+				noty({
+					text: context.form.model + ' has been deleted',
+					theme: 'defaultTheme',
+					layout: 'center',
+					timeout: 850,
+					closeWith: ['click', 'hover'],
+					type: 'success'
+				});
+				// Close modal and show all users						
+				context.modalActive = false;
+				// Hide loader
+				context.isDeleting = false;
+				// Emit even
+				context.$emit('deleted', true);
+			}).catch(function (response) {
+				console.log(response);
+			});
+		}
+	}
+
+};
+
+/***/ }),
+/* 72 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	props: ['project']
+});
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(72),
+  /* template */
+  __webpack_require__(74),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\Project-table.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-table.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-8a7f2396", Component.options)
+  } else {
+    hotAPI.reload("data-v-8a7f2396", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_c('h3', [_vm._v("Project Details")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', [_vm._v("Location")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(0), _vm._v(" "), (_vm.project.province == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.project.province) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(1), _vm._v(" "), (_vm.project.location == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.project.location) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(2), _vm._v(" "), (_vm.project.details == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.project.details) + "\r\n\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', [_vm._v("Client")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(3), _vm._v(" "), (_vm.project.client_company_name == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.project.client_company_name) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(4), _vm._v(" "), (_vm.project.client_contact_name == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.project.client_contact_name) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(5), _vm._v(" "), (_vm.project.client_contact_phone == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_c('a', {
+    attrs: {
+      "href": 'tel: +1' + _vm.project.client_contact_phone.replace(/-/g, '')
+    }
+  }, [_vm._v(_vm._s(_vm.project.client_contact_phone))])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(6), _vm._v(" "), (_vm.project.client_contact_email == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.project.client_contact_email) + "\r\n\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', [_vm._v("Land")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(7), _vm._v(" "), (_vm.project.land_ownership == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.project.land_ownership) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(8), _vm._v(" "), (_vm.project.land_access_granted == 0) ? _c('div', [_vm._v("No")]) : _vm._e(), _vm._v(" "), (_vm.project.land_access_granted == 1) ? _c('div', [_vm._v("Yes")]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(9), _vm._v(" "), (_vm.project.land_access_granted_by == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.project.land_access_granted_by) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(10), _vm._v(" "), (_vm.project.land_access_contact == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.project.land_access_contact) + "\r\n\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', {
+    staticClass: "text-success"
+  }, [_vm._v("Invoicing")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(11), _vm._v(" "), (_vm.project.invoiced_date == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("Not Invoiced")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.project.invoiced_date) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(12), _vm._v(" "), (_vm.project.invoice_paid_date == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("Not Invoiced")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.project.invoice_paid_date) + "\r\n\t\t\t    \t")])])])])]), _vm._v(" "), (_vm.project.proposal) ? _c('div', {
+    staticClass: "row margin-65-top"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('h3', [_vm._v("Project Proposal")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', [_vm._v("Work Details")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(13), _vm._v(" "), (_vm.project.proposal.work_type == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\t" + _vm._s(_vm.project.proposal.work_type) + "\r\n\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(14), _vm._v(" "), (_vm.project.proposal.work_overview == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\t" + _vm._s(_vm.project.proposal.work_overview) + "\r\n\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(15), _vm._v(" "), (_vm.project.proposal.plans == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\t" + _vm._s(_vm.project.proposal.plans) + "\r\n\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(16), _vm._v(" "), (_vm.project.proposal.estimate == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\t$" + _vm._s(_vm.project.proposal.estimate) + "\r\n\t\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(17), _vm._v(" "), (_vm.project.proposal.response_by == null) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\t" + _vm._s(_vm.project.proposal.response_by) + "\r\n\t\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', [_vm._v("Project Approval")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(18), _vm._v(" "), (_vm.project.proposal.approval_date == null) ? _c('div', [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("Not yet approved")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\t" + _vm._s(_vm.project.proposal.approval_date) + "\r\n\t\t\t\t\t    \t")])])])])])])]) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Province")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Location")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Details")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Client")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Client Contact")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Contact Phone")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Contact Email")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Land Ownership")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Access Granted")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Access Granted By")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Access Contact")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Invoiced Date")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Date Paid")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Work Type")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Work Overview")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Work Plans")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Estimate")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Response By")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Approval Date")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-8a7f2396", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
