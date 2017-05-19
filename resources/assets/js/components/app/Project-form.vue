@@ -303,7 +303,7 @@
 		},
 
 		mounted(){
-			console.log('Form-mounted');
+			console.log('Form mounted');
 			if(this.project){
 				this.populateFormFromModel(this.project);
 				this.formEditState();

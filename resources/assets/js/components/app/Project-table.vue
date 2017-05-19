@@ -300,7 +300,11 @@
 <script>
 
 	export default{
-		props: ['project']
+		props: ['project'],
+
+		mounted(){
+			console.log('Table mounted');
+		}
 	}
 	
 </script>
