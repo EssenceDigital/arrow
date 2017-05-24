@@ -110,7 +110,7 @@ class ProjectsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $project->toArray()
+            'model' => $project
         ], 200);
 
     }
@@ -123,7 +123,7 @@ class ProjectsController extends Controller
      */
     public function update(Request $request)
     {   
-        $project = Project::find($request->id);
+        $project = Project::with('proposal')->find($request->id);
 
         // Return failed response if collection empty
         if(! $project){

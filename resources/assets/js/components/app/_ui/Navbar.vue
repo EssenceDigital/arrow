@@ -1,10 +1,11 @@
 <template>
 
+    <!-- Container -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <button v-on:click="collapsed = !collapsed" type="button" class="navbar-toggle">
+                <button @click="collapsed = !collapsed" type="button" class="navbar-toggle">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -14,7 +15,7 @@
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div v-bind:class="{ 'in': !collapsed }" class="collapse navbar-collapse">
+            <div :class="{ 'in': !collapsed }" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                 
                     <!-- Links go here -->
@@ -23,27 +24,29 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right margin-10-top">
                     <li>
-                        <dropdown v-bind:title="user_name">
-                            <li><a href="/app/user-settings">Settings</a></li>
+                        <dropdown :title="user_name">
+                            <li>
+                            <router-link to="/my-settings">
+                                Settings
+                            </router-link>
                             <li class="divider"></li>
                             <li>
                                 <form method="post" action="/logout">
-                                    <input type="hidden" name="_token" v-bind:value="csrfToken">
+                                    <input type="hidden" name="_token" :value="csrfToken">
                                     <button type="submit" class="log-out btn btn-default btn-sm">Log Out</button>
                                 </form>                                 
                             </li>                                
-                        </dropdown>
-                       
+                        </dropdown>                       
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
-    </nav>
+    </nav><!-- / Container -->
 
 </template>
 
 <script>
-    let dropdown = require('./../ui/Dropdown.vue');
+    let dropdown = require('./../_ui/Dropdown.vue');
 
     export default {
         components: {

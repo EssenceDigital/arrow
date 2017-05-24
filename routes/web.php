@@ -19,31 +19,35 @@ Route::get('/projects', 'SiteController@projects');
 Route::get('/team', 'SiteController@team');
 
 // App Routes
-
 Route::get('/app', 'DashboardController@index');
 Route::get('/app/user-settings', 'DashboardController@userSettings');
-Route::post('/app/update-user', 'DashboardController@updateUserInfo');
-Route::post('/app/change-personal-password', 'DashboardController@changePersonalPassword');
+
+/*
+ * API Routes
+*/
+Route::post('/api/update-user', 'DashboardController@updateUserInfo');
+Route::post('/api/change-personal-password', 'DashboardController@changePersonalPassword');
+Route::post('/api/get-logged-in-user', 'DashboardController@getLoggedInUser');
 
 // Projects
-Route::get('/app/projects', 'ProjectsController@hub');
-Route::get('/app/projects/all', 'ProjectsController@all');
-Route::get('/app/projects/{id}', 'ProjectsController@single');
-Route::post('/app/projects/create', 'ProjectsController@store');
-Route::post('/app/projects/update', 'ProjectsController@update');
-Route::post('/app/projects/delete', 'ProjectsController@delete');
+//Route::get('/app/projects', 'ProjectsController@hub');
+Route::get('/api/projects/all', 'ProjectsController@all');
+Route::get('/api/projects/{id}', 'ProjectsController@single');
+Route::post('/api/projects/create', 'ProjectsController@store');
+Route::post('/api/projects/update', 'ProjectsController@update');
+Route::post('/api/projects/delete', 'ProjectsController@delete');
 
 // Proposals
-Route::post('/app/proposals/create', 'ProposalsController@store');
-Route::post('/app/proposals/update', 'ProposalsController@update');
+Route::post('/api/proposals/create', 'ProposalsController@store');
+Route::post('/api/proposals/update', 'ProposalsController@update');
 
 // Users
-Route::get('/app/users', 'UsersController@hub');
-Route::get('/app/users/all', 'UsersController@all');
-Route::get('/app/users/{id}', 'UsersController@single');
-Route::post('/app/users/create', 'UsersController@store');
-Route::post('/app/users/update', 'UsersController@update');
-Route::post('/app/users/change-password', 'UsersController@changePassword');
-Route::post('/app/users/delete', 'UsersController@delete');
+Route::get('/api/users', 'UsersController@hub');
+Route::get('/api/users/all', 'UsersController@all');
+Route::get('/api/users/{id}', 'UsersController@single');
+Route::post('/api/users/create', 'UsersController@store');
+Route::post('/api/users/update', 'UsersController@update');
+Route::post('/api/users/change-password', 'UsersController@changePassword');
+Route::post('/api/users/delete', 'UsersController@delete');
 Auth::routes();
 

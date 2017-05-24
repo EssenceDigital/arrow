@@ -28,8 +28,8 @@ module.exports =  {
 		},
 
 		// Sets the form state titles for an edit
-		formEditState(){
-			this.form.state = 'edit';
+		formEditState(stateName){
+			this.form.state = stateName;
 			this.form.title = 'Edit ' + this.form.model;
 			this.form.button = 'Update';
 			this.form.action = this.form.updateAction;
@@ -55,13 +55,12 @@ module.exports =  {
 			}			
 		},
 
-		grabModelFromServer(url, cb){
+		grabModel(url, cb){
 			var context = this;
 			// Send request
 			axios.get(url)
 				.then(function(response){
-					context.selectedModel = response.data.model;
-					cb.call(context);
+					cb.call(context, response.data.model);
 				})
 				.catch(function(response){
 					console.log(response);
@@ -94,13 +93,19 @@ module.exports =  {
 	                     timeout: 650,
 	                     closeWith: ['click', 'hover'],
 	                     type: 'success'
-	                });					
+	                });
+
+	                			
 					// Show next content dependingo on form state
 					if(context.form.state == 'create'){
 						context.clearForm();
-						context.$emit('created', response.data.model);
+						context.$router.app.$emit('model-created', response.data.model);
+					} else if(context.form.state == 'edit'){
+						context.$router.app.$emit('model-updated', response.data.model);
 					} else if(context.form.state == 'create-child'){
-						context.$emit('created', response.data.model);
+						context.$router.app.$emit('child-created', response.data.model);
+					} else if(context.form.state == 'edit-child'){
+						context.$router.app.$emit('child-created', response.data.model);
 					}
 
 					// Clear any form errors
@@ -147,7 +152,7 @@ module.exports =  {
 					// Hide loader
 					context.isDeleting = false;	
 					// Emit even
-					context.$emit('deleted', true);				
+					context.$router.app.$emit('model-deleted');				
 				})
 				.catch(function(response){
 					console.log(response);

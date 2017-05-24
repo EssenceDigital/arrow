@@ -3,6 +3,7 @@ module.exports =  {
 	methods: {
 		// Shows the view all models tab and clears the form
 		viewAllModelsTab(){
+			this.selectedModel = false;
 			this.currentTab = 'view-all';
 		},
 
@@ -34,7 +35,7 @@ module.exports =  {
 			axios.get(url)
 				.then(function(response){
 					console.log(response.data.model);
-					context.selectedModel = response.data.model;
+					context.model = response.data.model;
 					cb.call(context);
 				})
 				.catch(function(response){

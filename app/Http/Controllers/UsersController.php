@@ -91,7 +91,7 @@ class UsersController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $user->toArray()
+            'model' => $user
         ], 200);        
     }
 
@@ -119,7 +119,7 @@ class UsersController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $user->toArray()
+            'model' => $user
         ], 200);
 
     }
@@ -159,7 +159,7 @@ class UsersController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $user->toArray()
+            'model' => $user
         ], 200);
 
     }

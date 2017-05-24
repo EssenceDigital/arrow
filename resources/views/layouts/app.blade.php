@@ -40,20 +40,7 @@
 
     <div id="app">     
 
-        <div class="container">
-            <navbar>
-                <li class="{{ ((Request::is('app')) ? 'active' : '' ) }}"><a href="/app">Dashboard</a></li>
-                @if (Auth::user()->permissions == 'admin')
-                    <li class="{{ ((Request::is('app/users')) ? 'active' : '' ) }}"><a href="/app/users">Users</a></li>
-                @endif
-                @if (Auth::user()->permissions == 'admin')
-                    <li class="{{ ((Request::is('app/projects')) ? 'active' : '' ) }}"><a href="/app/projects">Projects</a></li>
-                @endif
-            </navbar>
-
-            @yield('content')
-
-        </div>
+        <app-hub></app-hub>
 
     </div>
 

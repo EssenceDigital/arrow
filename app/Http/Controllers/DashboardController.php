@@ -21,6 +21,30 @@ class DashboardController extends Controller
         return view('app.user-settings');
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getLoggedInUser()
+    {
+        // Get logged in user
+        $user = User::find(Auth::id());
+
+        // Return failed response if collection empty
+        if(! $user){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false,
+            ], 404);
+        }
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'model' => $user
+        ], 200);        
+    }
+
+
     public function updateUserInfo(Request $request){
         // Validate or stop proccessing :)
         $this->validate($request, [
@@ -58,7 +82,7 @@ class DashboardController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'user' => $user->toArray()
+            'model' => $user
         ], 200);
 
     }
