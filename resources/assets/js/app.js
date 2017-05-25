@@ -27,13 +27,13 @@ const user_form = require('./components/app/user/User-form.vue');
 const user_search = require('./components/app/user/User-search.vue');
 const user_settings = require('./components/app/user/User-settings.vue');
 
-
 // Project related components
 const projects_hub = require('./components/app/project/Projects-hub.vue');
 const project_hub = require('./components/app/project/Project-hub.vue');
 const project_table = require('./components/app/project/Project-table.vue');
 const project_form = require('./components/app/project/Project-form.vue');
 const project_search = require('./components/app/project/Project-search.vue');
+
 // Proposal relateld components
 const proposal_table = require('./components/app/proposal/Proposal-table.vue');
 const proposal_form = require('./components/app/proposal/Proposal-form.vue');

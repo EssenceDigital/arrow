@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use App\Project;
 
@@ -85,6 +86,27 @@ class ProjectsController extends Controller
         ], 200);        
     }
 
+    /**
+     * Find unique companies
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function uniqueClients()
+    {
+        $clients = Project::distinct()->get(['client_company_name']);
+
+        // Format unique companies in array
+        $list = [];
+        foreach($clients as $client){
+            array_push($list, $client->client_company_name);
+        }
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'clients' => $list
+        ], 200);
+    }
 
     /**
      * Store a newly created resource in storage.

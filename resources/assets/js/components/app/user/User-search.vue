@@ -66,7 +66,7 @@
 
 <script>
 
-	let hub_controller = require('./../_mixins/hub-controller.js');
+	let api_access = require('./../_mixins/api-access.js');
 	let dropdown = require('./../_ui/Dropdown.vue');
 
 	export default{
@@ -74,7 +74,7 @@
 			'dropdown': dropdown
 		},
 
-		mixins: [hub_controller],		
+		mixins: [api_access],		
 
 		data(){
 			return{

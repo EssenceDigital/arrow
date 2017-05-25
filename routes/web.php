@@ -20,7 +20,6 @@ Route::get('/team', 'SiteController@team');
 
 // App Routes
 Route::get('/app', 'DashboardController@index');
-Route::get('/app/user-settings', 'DashboardController@userSettings');
 
 /*
  * API Routes
@@ -30,16 +29,21 @@ Route::post('/api/change-personal-password', 'DashboardController@changePersonal
 Route::post('/api/get-logged-in-user', 'DashboardController@getLoggedInUser');
 
 // Projects
-//Route::get('/app/projects', 'ProjectsController@hub');
 Route::get('/api/projects/all', 'ProjectsController@all');
+Route::get('/api/projects/unique-clients', 'ProjectsController@uniqueClients');
 Route::get('/api/projects/{id}', 'ProjectsController@single');
 Route::post('/api/projects/create', 'ProjectsController@store');
 Route::post('/api/projects/update', 'ProjectsController@update');
 Route::post('/api/projects/delete', 'ProjectsController@delete');
 
+
 // Proposals
 Route::post('/api/proposals/create', 'ProposalsController@store');
 Route::post('/api/proposals/update', 'ProposalsController@update');
+
+// Timelines
+Route::post('/api/timelines/create', 'TimelinesController@store');
+Route::post('/api/timelines/update', 'TimelinesController@update');
 
 // Users
 Route::get('/api/users', 'UsersController@hub');
