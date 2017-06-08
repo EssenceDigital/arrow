@@ -14386,6 +14386,12 @@ var routes = [
 				project: project_table,
 				proposal: proposal_form
 			}
+		}, {
+			path: 'timeline-form',
+			components: {
+				project: project_table,
+				proposal: timeline_form
+			}
 		}]
 	}, { path: 'create', component: project_form }]
 },
@@ -15797,7 +15803,8 @@ var modal = __webpack_require__(13);
 					land_access_phone: { val: '', err: false, dflt: '' },
 					invoiced_date: { val: '', err: false, dflt: '' },
 					invoice_paid_date: { val: '', err: false, dflt: '' },
-					proposal: { val: '', err: false, dflt: '' }
+					proposal: { val: '', err: false, dflt: '' },
+					timeline: { val: '', err: false, dflt: '' }
 				}
 			}
 		};
@@ -15895,6 +15902,14 @@ var modal = __webpack_require__(13);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -39562,6 +39577,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "name": "proposal",
       "proposal": _vm.project.proposal,
+      "project_id": _vm.project.id
+    }
+  }), _vm._v(" "), _c('router-view', {
+    attrs: {
+      "name": "timeline",
+      "timeline": _vm.project.timeline,
       "project_id": _vm.project.id
     }
   })], 1)

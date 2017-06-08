@@ -29,7 +29,7 @@
                                     <h4>Historical Resource Overviews</h4>
                                     <p>We undertake overview analyses on behalf of clients to determine whether full impact assessments are necessary. Overview assessments identify areas requiring more detailed evaluation, and eliminate areas that have little potential to disturb historical resources from the impact assessment. Overviews can often significantly reduce historical resource impact assessment costs for clients. In Alberta, overviews are referred to as Statements of Justification.</p>
 
-                                    <h4>Historical Resource Impact Assessments</h4>
+                                    <h4>Heritage Resources Impact Assessments</h4>
                                     <p>We assume full responsibility for conducting historical resource impact assessments and acquiring historical resource approval to proceed with the project. We conduct preliminary surveys, archival and other research and assist clients in decisions regarding known or anticipated impacts to historical and cultural resources.</p>
 
                                     <h4>Mitigation Services</h4>

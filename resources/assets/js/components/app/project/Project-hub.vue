@@ -13,7 +13,15 @@
 		:proposal="project.proposal"
 		:project_id="project.id"
 	>		
-	</router-view>										
+	</router-view>	
+
+	<!-- Mount for timeline table and form -->
+	<router-view name="timeline"
+		:timeline="project.timeline"
+		:project_id="project.id"
+	>		
+	</router-view>
+
 </div><!-- / containing div -->
 
 </template>

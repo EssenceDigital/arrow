@@ -357,7 +357,8 @@
 						land_access_phone: {val: '', err: false, dflt: ''},
 						invoiced_date: {val: '', err: false, dflt: ''},
 						invoice_paid_date: {val: '', err: false, dflt: ''},
-						proposal: {val: '', err: false, dflt: ''}				
+						proposal: {val: '', err: false, dflt: ''},
+						timeline: {val: '', err: false, dflt: ''}			
 					}
 				}				
 			}

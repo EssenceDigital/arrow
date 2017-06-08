@@ -17,7 +17,7 @@ class Project extends Model
     /**
      * Get the timeline record associated with the project.
      */
-    public function proposal()
+    public function timeline()
     {
         return $this->hasOne('App\Timeline');
     }

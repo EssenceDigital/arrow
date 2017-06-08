@@ -87,7 +87,7 @@
                                             <p>
                                                 <ol>
                                                     <li>Historical Resource Overviews</li>
-                                                    <li>Historical Resource Impact Assessments</li>
+                                                    <li>Heritage Resources Impact Assessments</li>
                                                     <li>Mitigation Planning and Execution</li>
                                                     <li>Construction Monitoring</li>
                                                     <li>Mapping</li>
@@ -96,7 +96,7 @@
                                                     <li>Land Use Studies</li>
                                                 </ol>
                                             </p>
-                                            <div class="ct-in"><span>Call Us At:</span> 403-345-2821</div>
+                                            <div class="ct-in"><span>Call Us At:</span> <a href="tel:+14033452812">(403) 345-2812</a></div>
                                         </div>
                                     </div>
                                     <div class="col-md-7">

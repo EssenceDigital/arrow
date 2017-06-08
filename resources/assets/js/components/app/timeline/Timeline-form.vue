@@ -1,5 +1,56 @@
 <template>
-	
+
+<!-- Component container -->
+<div>
+	<!-- Loader - shows if data is fetching -->
+	<div v-if="formIsLoading" class="row margin-85-top margin-85-bottom">
+		<div class="col-md-12">
+			<div class="large-center-loader"></div>
+		</div>
+	</div>
+
+	<!-- Form wrapper 'well' -->
+	<div v-if="!formIsLoading" class="col-md-12 well bs-component margin-25-top">
+		<!-- Proposal form -->
+		<form @submit.prevent class="form-horizontal">
+			<fieldset>
+				<legend>
+					{{ form.title }}
+					<!-- Close slot to change sub-tab back -->
+					<button slot="close" @click="$router.go(-1)" class="pull-right btn btn-danger">&times;</button>
+				</legend>
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group" :class="{'has-error': form.permit_application_date.err}">
+		                    <div class="col-lg-10">
+		                    	<label class="control-label">Response By</label>
+		                    	<input v-model="form.form.permit_application_date.val" type="date" class="form-control margin-10-top">
+		                    	<span class="text-danger" v-if="form.form.permit_application_date.err">{{ form.fields.form.permit_application_date.err }}</span>
+		                    </div>
+	                  	</div>					
+					</div>
+				</div>												
+			</fieldset>
+			<!-- Button -->
+			<fieldset>
+				<div class="row">
+					<div class="col-md-3 col-centered">
+						<div class="form-group">
+							<button @click="sendForm" class="btn btn-primary btn-block margin-45-top">
+								<span v-if="!form.isLoading">{{ form.button }}</span>
+								<span v-if="form.isLoading">
+									<div class="center-loader"></div>
+								</span>
+							</button>												
+						</div>					
+					</div>
+				</div>			
+			</fieldset>			
+		</form>
+	</div><!-- / Form 'well' wrapper -->
+</div><!--/ Component container -->
+
 </template>
 
 <script>
@@ -50,7 +101,7 @@
 
 		watch:{
 			// Wait for the proposal prop to be populated and then turn off loading
-			proposal(){
+			timeline(){
 				this.formIsLoading = false;
 			}
 		},

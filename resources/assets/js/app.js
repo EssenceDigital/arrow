@@ -77,7 +77,14 @@ const routes = [
 							project: project_table,
 							proposal: proposal_form
 						}
-					}
+					},
+					{
+						path: 'timeline-form',
+						components: {
+							project: project_table,
+							proposal: timeline_form
+						}
+					}					
 				]
 			},
 			{ path: 'create', component: project_form }

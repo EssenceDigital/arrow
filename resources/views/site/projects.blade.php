@@ -41,7 +41,7 @@
 
                                                             <li>Backcountry and remote location developments.</li>
 
-                                                            <li>Historical resource impact assessment, Aspen Creek Residential Subdivision, Crowsnest Pass.</li>
+                                                            <li>Heritage Resources Impact Assessments</li>
 
                                                             <li>Mines and other surface resource extraction projects, including gravel pits.</li>
 

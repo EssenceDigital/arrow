@@ -122,9 +122,16 @@
                                                             <li>
                                                                 <i class="flaticon-phone-book"></i>
                                                                 <strong>Call Us:</strong>
-                                                                (403) 345-2812
+                                                                <a href="tel:+14033452812">(403) 345-2812</a>
                                                                 <span>02.</span>
                                                             </li>
+
+                                                            <li>
+                                                                <i class="flaticon-black-back-closed-envelope-shape"></i>
+                                                                <strong>Email:</strong>
+                                                                <a href="mailto:nmirau@shaw.ca?Subject=Arrow%20Enquiry" target="_top">nmirau@shaw.ca</a>
+                                                                <span>03.</span>
+                                                            </li>                                                            
                                                         </ul>
                                                     </div>
                                                 </div>
