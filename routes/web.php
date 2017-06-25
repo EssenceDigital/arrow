@@ -19,11 +19,11 @@ Route::get('/projects', 'SiteController@projects');
 Route::get('/team', 'SiteController@team');
 
 // App Routes
-/*
+
 Route::get('/app', 'DashboardController@index');
 
 
- * API Routes
+ /* API Routes */
 
 Route::post('/api/update-user', 'DashboardController@updateUserInfo');
 Route::post('/api/change-personal-password', 'DashboardController@changePersonalPassword');
@@ -54,5 +54,5 @@ Route::post('/api/users/create', 'UsersController@store');
 Route::post('/api/users/update', 'UsersController@update');
 Route::post('/api/users/change-password', 'UsersController@changePassword');
 Route::post('/api/users/delete', 'UsersController@delete');
-Auth::routes();*/
+Auth::routes();
 

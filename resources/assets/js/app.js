@@ -38,6 +38,10 @@ const project_search = require('./components/app/project/Project-search.vue');
 const proposal_table = require('./components/app/proposal/Proposal-table.vue');
 const proposal_form = require('./components/app/proposal/Proposal-form.vue');
 
+// Timeline related components
+const timeline_form = require('./components/app/timeline/Timeline-form.vue');
+const timeline_table = require('./components/app/timeline/Timeline-table.vue');
+
 // UI components
 const navbar = require('./components/app/_ui/Navbar.vue');
 
@@ -60,29 +64,33 @@ const routes = [
 					{ 
 						path: 'hub',
 						components: {
-							'project': project_table,
-							'proposal': proposal_table
+							project: project_table,
+							proposal: proposal_table,
+							timeline: timeline_table
 						}
 					},
 					{
 						path: 'edit',
 						components: {
 							project: project_form,
-							proposal: proposal_table
+							proposal: proposal_table,
+							timeline: timeline_table
 						}
 					},
 					{
 						path: 'proposal-form',
 						components: {
 							project: project_table,
-							proposal: proposal_form
+							proposal: proposal_form,
+							timeline: timeline_table
 						}
 					},
 					{
 						path: 'timeline-form',
 						components: {
 							project: project_table,
-							proposal: timeline_form
+							proposal: proposal_table,
+							timeline: timeline_form
 						}
 					}					
 				]

@@ -77,7 +77,7 @@ class ProjectsController extends Controller
      */
     public function single($id)
     {
-        $project = Project::with('proposal')->find($id);
+        $project = Project::with(['proposal', 'timeline'])->find($id);
 
         // Return response for ajax call
         return response()->json([

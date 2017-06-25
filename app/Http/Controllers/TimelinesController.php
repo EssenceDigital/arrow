@@ -12,11 +12,10 @@ class TimelinesController extends Controller
     private $validationFields = [
         'project_id' => 'required|numeric',
         'permit_application_date' => 'date',
-        'permit_recieved' => 'boolean',
         'permit_recieved_date' => 'date',
         'permit_number' => 'max:50',
         'site_number_application_date' => 'date',
-        'site_number_applied_for' => 'boolean',
+        'site_number_recieved_date' => 'date',
         'site_number' => 'max:50',
         'completion_target' => 'date',
         'field_completion_target' => 'date',
@@ -27,7 +26,6 @@ class TimelinesController extends Controller
         'writing' => 'boolean',
         'draft_submitted' => 'boolean',
         'draft_accepted' => 'boolean',
-        'draft_accepted_date' => 'date',
         'final_approval' => 'boolean'
     ];
 
@@ -44,10 +42,10 @@ class TimelinesController extends Controller
         	if($request->permit_application_date == '' && $key == 'permit_application_date') continue;
         	if($request->permit_recieved_date == '' && $key == 'permit_recieved_date') continue;
         	if($request->site_number_application_date == '' && $key == 'site_number_application_date') continue;
+            if($request->site_number_recieved_date == '' && $key == 'site_number_recieved_date') continue;
         	if($request->completion_target == '' && $key == 'completion_target') continue;
         	if($request->field_completion_target == '' && $key == 'field_completion_target') continue;
         	if($request->report_completion_target == '' && $key == 'report_completion_target') continue;
-        	if($request->draft_accepted_date == '' && $key == 'draft_accepted_date') continue;
 
         	$rules[$key] = $val;
         }

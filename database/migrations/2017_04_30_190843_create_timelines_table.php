@@ -21,8 +21,9 @@ class CreateTimelinesTable extends Migration
             $table->boolean('permit_recieved')->default(false);
             $table->date('permit_recieved_date')->nullable();
             $table->string('permit_number', 50)->nullable();
-            $table->boolean('site_number_applied_for')->default(false);
-            $table->string('site_number', 50);
+            $table->date('site_number_application_date')->nullable();
+            $table->date('site_number_recieved_date')->nullable();
+            $table->string('site_number', 50)->nullable();
             $table->date('completion_target')->nullable();
             $table->date('field_completion_target')->nullable();
             $table->date('report_completion_target')->nullable();
