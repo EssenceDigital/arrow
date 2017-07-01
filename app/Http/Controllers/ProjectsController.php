@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Project;
+use App\User;
 
 use Session;
 
@@ -77,7 +78,7 @@ class ProjectsController extends Controller
      */
     public function single($id)
     {
-        $project = Project::with(['proposal', 'timeline'])->find($id);
+        $project = Project::with(['proposal', 'timeline', 'users'])->find($id);
 
         // Return response for ajax call
         return response()->json([
@@ -106,6 +107,30 @@ class ProjectsController extends Controller
             'result' => 'success',
             'clients' => $list
         ], 200);
+    }
+
+    public function addCrewMember(Request $request){
+        // Find project
+        $project = Project::find($request->project_id);
+        // Find the user now
+        $user = User::find($request->user_id);        
+        // Attempt to store association
+        $result = $project->users()->save($user);
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        } 
+
+
+        
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'model' => $user
+        ], 200);               
     }
 
     /**

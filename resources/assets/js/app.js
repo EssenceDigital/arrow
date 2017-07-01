@@ -38,6 +38,10 @@ const project_search = require('./components/app/project/Project-search.vue');
 const proposal_table = require('./components/app/proposal/Proposal-table.vue');
 const proposal_form = require('./components/app/proposal/Proposal-form.vue');
 
+// Crew related components
+const crew_list = require('./components/app/crew/Crew-list.vue');
+const crew_form = require('./components/app/crew/Crew-form.vue');
+
 // Timeline related components
 const timeline_form = require('./components/app/timeline/Timeline-form.vue');
 const timeline_table = require('./components/app/timeline/Timeline-table.vue');
@@ -66,6 +70,7 @@ const routes = [
 						components: {
 							project: project_table,
 							proposal: proposal_table,
+							crew: crew_list,
 							timeline: timeline_table
 						}
 					},
@@ -73,6 +78,7 @@ const routes = [
 						path: 'edit',
 						components: {
 							project: project_form,
+							crew: crew_list,
 							proposal: proposal_table,
 							timeline: timeline_table
 						}
@@ -82,13 +88,24 @@ const routes = [
 						components: {
 							project: project_table,
 							proposal: proposal_form,
+							crew: crew_list,
 							timeline: timeline_table
 						}
 					},
 					{
+						path: 'crew-form',
+						components: {
+							project: project_table,
+							proposal: proposal_table,
+							crew: crew_form,
+							timeline: timeline_table
+						}
+					},					
+					{
 						path: 'timeline-form',
 						components: {
 							project: project_table,
+							crew: crew_list,
 							proposal: proposal_table,
 							timeline: timeline_form
 						}

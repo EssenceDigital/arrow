@@ -263,7 +263,6 @@
 						id: {val: '', err: false, dflt: ''},
 						project_id: {val: this.project_id, err: false, dflt: ''},
 						permit_application_date: {val: '', err: false, dflt: ''},
-						permit_recieved: {val: '', err: false, dflt: ''},
 						permit_recieved_date: {val: '', err: false, dflt: ''},
 						permit_number: {val: '', err: false, dflt: ''},
 						site_number_application_date: {val: '', err: false, dflt: ''},

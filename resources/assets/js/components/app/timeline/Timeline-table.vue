@@ -13,7 +13,7 @@
 		</button>	
 		<!-- Show the add timeline button if no timeline is yet present -->
 		<button v-if="!timeline" @click="$router.push('timeline-form')" class="btn btn-default">
-			<span class="glyphicon glyphicon-briefcase"></span> Add Timeline
+			<span class="glyphicon glyphicon-briefcase"></span> Start Timeline
 		</button>		
 	</div>
 	<!-- Show alert if no timeline in project -->

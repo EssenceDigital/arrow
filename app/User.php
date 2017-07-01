@@ -32,11 +32,11 @@ class User extends Authenticatable
     ];
 
     /**
-     * The roles that belong to the user.
+     * The projects that this user is assigned to
      */
-    public function timelines()
+    public function projects()
     {
-        return $this->belongsToMany('App\Timeline');
+        return $this->belongsToMany('App\Project');
     }
 
 }

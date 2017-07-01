@@ -2,121 +2,130 @@
 
 <!-- Containing div -->
 <div>
-	<h3>User Details</h3>
-
-	<!-- Tool navigation -->
-	<div class="col-md-12 margin-25-top">
-		<button @click="$router.push('edit')" class="btn btn-default">
-			<span class="glyphicon glyphicon-cog"></span> Edit User
-		</button>	
+	<!-- Loader - shows if prop data is not yet populated -->
+	<div v-if="isLoading" class="row margin-85-top margin-85-bottom">
+		<div class="col-md-12">
+			<div class="large-center-loader"></div>
+		</div>
 	</div>
 
-	<!-- User table in the form of panels (first section) -->
-	<div class="col-md-12 margin-25-top">
-		<h4>Basics</h4>
-		<div class="col-md-4">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h5><strong>Name</strong></h5>
-			    	<div v-if="user.first == null">
-			    		<span class="label label-warning">N/A</span>
-			    	</div>
-			    	<div v-else>
-			    		{{ user.first + ' ' + user.last }}
-			    	</div>									
-				</div>
-			</div>
+	<div v-if="!isLoading">
+		<h3>User Details</h3>
+
+		<!-- Tool navigation -->
+		<div class="col-md-12 margin-25-top">
+			<button @click="$router.push('edit')" class="btn btn-default">
+				<span class="glyphicon glyphicon-cog"></span> Edit User
+			</button>	
 		</div>
 
-		<div class="col-md-4">
-			<div class="panel panel-default">									
-				<div class="panel-body">
-					<h5><strong>Email</strong></h5>
-			    	<div v-if="user.email == null">
-			    		<span class="label label-warning">N/A</span>
-			    	</div>
-			    	<div v-else>
-			    		{{ user.email}}
-			    	</div>										
+		<!-- User table in the form of panels (first section) -->
+		<div class="col-md-12 margin-25-top">
+			<h4>Basics</h4>
+			<div class="col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h5><strong>Name</strong></h5>
+				    	<div v-if="user.first == null">
+				    		<span class="label label-warning">N/A</span>
+				    	</div>
+				    	<div v-else>
+				    		{{ user.first + ' ' + user.last }}
+				    	</div>									
+					</div>
 				</div>
 			</div>
-		</div>								
 
-		<div class="col-md-4">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h5><strong>Permissions</strong></h5>
-			    	<div v-if="user.permissions == null">
-			    		<span class="label label-warning">N/A</span>
-			    	</div>
-			    	<div v-else>
-			    		{{ user.permissions }}
-			    	</div>									
+			<div class="col-md-4">
+				<div class="panel panel-default">									
+					<div class="panel-body">
+						<h5><strong>Email</strong></h5>
+				    	<div v-if="user.email == null">
+				    		<span class="label label-warning">N/A</span>
+				    	</div>
+				    	<div v-else>
+				    		{{ user.email}}
+				    	</div>										
+					</div>
+				</div>
+			</div>								
+
+			<div class="col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h5><strong>Permissions</strong></h5>
+				    	<div v-if="user.permissions == null">
+				    		<span class="label label-warning">N/A</span>
+				    	</div>
+				    	<div v-else>
+				    		{{ user.permissions }}
+				    	</div>									
+					</div>
 				</div>
 			</div>
-		</div>
-	</div><!-- / User table (first section) -->
+		</div><!-- / User table (first section) -->
 
-	<!-- User table (second section) -->
-	<div class="col-md-12 margin-25-top">
-		<h4>Business</h4>
-		<div class="col-md-3">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h5><strong>Company Name</strong></h5>
-			    	<div v-if="user.company_name == null">
-			    		<span class="label label-warning">N/A</span>
-			    	</div>
-			    	<div v-else>
-			    		{{ user.company_name }}
-			    	</div>									
+		<!-- User table (second section) -->
+		<div class="col-md-12 margin-25-top">
+			<h4>Business</h4>
+			<div class="col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h5><strong>Company Name</strong></h5>
+				    	<div v-if="user.company_name == null">
+				    		<span class="label label-warning">N/A</span>
+				    	</div>
+				    	<div v-else>
+				    		{{ user.company_name }}
+				    	</div>									
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="col-md-3">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h5><strong>GST Number</strong></h5>
-			    	<div v-if="user.gst_number == null">
-			    		<span class="label label-warning">N/A</span>
-			    	</div>
-			    	<div v-else>
-			    		{{ user.gst_number }}
-			    	</div>										
+			<div class="col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h5><strong>GST Number</strong></h5>
+				    	<div v-if="user.gst_number == null">
+				    		<span class="label label-warning">N/A</span>
+				    	</div>
+				    	<div v-else>
+				    		{{ user.gst_number }}
+				    	</div>										
+					</div>
+				</div>
+			</div>								
+
+			<div class="col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h5><strong>Hourly No. 1</strong></h5>
+				    	<div v-if="user.hourly_rate_one == null">
+				    		<span class="label label-warning">N/A</span>
+				    	</div>
+				    	<div v-else>
+				    		${{ user.hourly_rate_one }}
+				    	</div>										
+					</div>
 				</div>
 			</div>
-		</div>								
 
-		<div class="col-md-3">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h5><strong>Hourly No. 1</strong></h5>
-			    	<div v-if="user.hourly_rate_one == null">
-			    		<span class="label label-warning">N/A</span>
-			    	</div>
-			    	<div v-else>
-			    		${{ user.hourly_rate_one }}
-			    	</div>										
+			<div class="col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h5><strong>Hourly No. 2</strong></h5>
+				    	<div v-if="user.hourly_rate_two == null">
+				    		<span class="label label-warning">N/A</span>
+				    	</div>
+				    	<div v-else>
+				    		${{ user.hourly_rate_two }}
+				    	</div>									
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="col-md-3">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h5><strong>Hourly No. 2</strong></h5>
-			    	<div v-if="user.hourly_rate_two == null">
-			    		<span class="label label-warning">N/A</span>
-			    	</div>
-			    	<div v-else>
-			    		${{ user.hourly_rate_two }}
-			    	</div>									
-				</div>
-			</div>
-		</div>
-
-	</div><!-- / User table (second section) -->
+		</div><!-- / User table (second section) -->
+	</div><!-- Table wrapper -->
 
 </div><!-- / Containing div -->
 
@@ -125,7 +134,29 @@
 <script>
 	
 	export default{
-		props: ['user']
+		props: ['user'],
+
+		data(){
+			return{
+				// Waiting for prop to be populated
+				isLoading: false
+			}
+		},
+
+		watch:{
+			// Wait for the user prop to be populated and then turn off loading
+			user(){
+				this.isLoading = false;
+			}
+		},
+
+		created(){
+			console.log('User table created');
+			// Show loader if no user cached
+			if(this.user.id == null){
+				this.isLoading = true;
+			}
+		}		
 	}
 
 </script>

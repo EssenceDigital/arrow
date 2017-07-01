@@ -11,10 +11,17 @@
 		<span v-if="fetchingModels">
 			<div class="left-loader"></div>
 		</span>
-	</button>	
+	</button>
+
+	<!-- Loader - shows when a api call to server is pending -->
+	<div v-if="fetchingModels" class="row margin-85-top margin-85-bottom">
+		<div class="col-md-12">
+			<div class="large-center-loader"></div>
+		</div>
+	</div>		
 
 	<!-- Table to show users -->
-	<table class="table table-striped table-hover margin-25-top">
+	<table v-if="!fetchingModels" class="table table-striped table-hover margin-25-top">
 		<thead>
 			<tr class="info">
 				<th>Name</th>
@@ -78,7 +85,7 @@
 
 		data(){
 			return{
-				urlToFetch: '/api/users/all',
+				urlToFetch: '/api/users/all-pages',
 				fetchingModels: false,
 				searchResults: {	
 					models: [],	
@@ -111,6 +118,9 @@
 		// Retrieves models from server
 		created(){
 			console.log('User search created');
+			// Start loader
+			this.fetchingModels = true;
+			// Find projects
 			this.getAndSetModels();
 		}
 	}

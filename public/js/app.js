@@ -14352,6 +14352,10 @@ var project_search = __webpack_require__(65);
 var proposal_table = __webpack_require__(69);
 var proposal_form = __webpack_require__(68);
 
+// Crew related components
+var crew_list = __webpack_require__(105);
+var crew_form = __webpack_require__(108);
+
 // Timeline related components
 var timeline_form = __webpack_require__(70);
 var timeline_table = __webpack_require__(71);
@@ -14377,12 +14381,14 @@ var routes = [
 			components: {
 				project: project_table,
 				proposal: proposal_table,
+				crew: crew_list,
 				timeline: timeline_table
 			}
 		}, {
 			path: 'edit',
 			components: {
 				project: project_form,
+				crew: crew_list,
 				proposal: proposal_table,
 				timeline: timeline_table
 			}
@@ -14391,12 +14397,22 @@ var routes = [
 			components: {
 				project: project_table,
 				proposal: proposal_form,
+				crew: crew_list,
+				timeline: timeline_table
+			}
+		}, {
+			path: 'crew-form',
+			components: {
+				project: project_table,
+				proposal: proposal_table,
+				crew: crew_form,
 				timeline: timeline_table
 			}
 		}, {
 			path: 'timeline-form',
 			components: {
 				project: project_table,
+				crew: crew_list,
 				proposal: proposal_table,
 				timeline: timeline_form
 			}
@@ -15950,6 +15966,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(2);
 
@@ -15975,6 +16000,7 @@ var api_access = __webpack_require__(2);
 			this.grabModel('/api/projects/' + this.$route.params.id, function (model) {
 				// Cache retrieved model
 				this.project = model;
+				console.log(model);
 			});
 		}
 
@@ -15986,13 +16012,27 @@ var api_access = __webpack_require__(2);
 
 		// When the form component alerts this parent that a proposal has been added
 		this.$router.app.$on('child-created', function (model) {
-			// Update cached model
+			// Update model proposal
 			if (model.work_type) {
 				_this.project.proposal = model;
 			}
+			// Update model timeline
 			if (model.permit_application_date) {
 				_this.project.timeline = model;
 			}
+			// Update model crew
+			if (model.first) {
+				_this.project.users.push(model);
+			}
+		});
+
+		this.$router.app.$on('crew-removed', function (user_id) {
+			_this.project.users.forEach(function (user) {
+				if (user.id == user_id) {
+					var index = this.project.users.indexOf(user);
+					array.splice(index, 1);
+				}
+			});
 		});
 	}
 });
@@ -17084,7 +17124,6 @@ var api_access = __webpack_require__(2);
 					id: { val: '', err: false, dflt: '' },
 					project_id: { val: this.project_id, err: false, dflt: '' },
 					permit_application_date: { val: '', err: false, dflt: '' },
-					permit_recieved: { val: '', err: false, dflt: '' },
 					permit_recieved_date: { val: '', err: false, dflt: '' },
 					permit_number: { val: '', err: false, dflt: '' },
 					site_number_application_date: { val: '', err: false, dflt: '' },
@@ -17869,6 +17908,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(2);
 var modal = __webpack_require__(13);
@@ -17882,6 +17932,7 @@ var modal = __webpack_require__(13);
 
 	data: function data() {
 		return {
+			formIsLoading: false,
 			modalActive: false,
 			urlToDelete: '/api/users/delete',
 			isDeleting: false,
@@ -17966,12 +18017,16 @@ var modal = __webpack_require__(13);
 		console.log('User form created');
 
 		if (this.$route.params.id) {
+			// Show form loader
+			this.formIsLoading = true;
 			// Get the requested model
 			this.grabModel('/api/users/' + this.$route.params.id, function (model) {
 				// Populate form
 				this.populateFormFromModel(model);
 				// Adjust form state
 				this.formEditState('edit');
+				// Hide form loader
+				this.formIsLoading = false;
 			});
 		}
 	}
@@ -18106,6 +18161,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 var api_access = __webpack_require__(2);
@@ -18120,7 +18182,7 @@ var dropdown = __webpack_require__(5);
 
 	data: function data() {
 		return {
-			urlToFetch: '/api/users/all',
+			urlToFetch: '/api/users/all-pages',
 			fetchingModels: false,
 			searchResults: {
 				models: [],
@@ -18156,6 +18218,9 @@ var dropdown = __webpack_require__(5);
 	// Retrieves models from server
 	created: function created() {
 		console.log('User search created');
+		// Start loader
+		this.fetchingModels = true;
+		// Find projects
 		this.getAndSetModels();
 	}
 });
@@ -18575,10 +18640,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	props: ['user']
+	props: ['user'],
+
+	data: function data() {
+		return {
+			// Waiting for prop to be populated
+			isLoading: false
+		};
+	},
+
+
+	watch: {
+		// Wait for the user prop to be populated and then turn off loading
+		user: function user() {
+			this.isLoading = false;
+		}
+	},
+
+	created: function created() {
+		console.log('User table created');
+		// Show loader if no user cached
+		if (this.user.id == null) {
+			this.isLoading = true;
+		}
+	}
 });
 
 /***/ }),
@@ -40547,7 +40644,9 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('h3', [_vm._v("User Details")]), _vm._v(" "), _c('div', {
+  return _c('div', [(_vm.isLoading) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.isLoading) ? _c('div', [_c('h3', [_vm._v("User Details")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-12 margin-25-top"
   }, [_c('button', {
     staticClass: "btn btn-default",
@@ -40558,7 +40657,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog"
-  }), _vm._v(" Edit User\r\n\t\t")])]), _vm._v(" "), _c('div', {
+  }), _vm._v(" Edit User\r\n\t\t\t")])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-12 margin-25-top"
   }, [_c('h4', [_vm._v("Basics")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
@@ -40566,25 +40665,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-default"
   }, [_c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(0), _vm._v(" "), (_vm.user.first == null) ? _c('div', [_c('span', {
+  }, [_vm._m(1), _vm._v(" "), (_vm.user.first == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.user.first + ' ' + _vm.user.last) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.first + ' ' + _vm.user.last) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-default"
   }, [_c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(1), _vm._v(" "), (_vm.user.email == null) ? _c('div', [_c('span', {
+  }, [_vm._m(2), _vm._v(" "), (_vm.user.email == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.user.email) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.email) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-default"
   }, [_c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(2), _vm._v(" "), (_vm.user.permissions == null) ? _c('div', [_c('span', {
+  }, [_vm._m(3), _vm._v(" "), (_vm.user.permissions == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.user.permissions) + "\r\n\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.permissions) + "\r\n\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-12 margin-25-top"
   }, [_c('h4', [_vm._v("Business")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3"
@@ -40592,34 +40691,40 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-default"
   }, [_c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(3), _vm._v(" "), (_vm.user.company_name == null) ? _c('div', [_c('span', {
+  }, [_vm._m(4), _vm._v(" "), (_vm.user.company_name == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.user.company_name) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.company_name) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3"
   }, [_c('div', {
     staticClass: "panel panel-default"
   }, [_c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(4), _vm._v(" "), (_vm.user.gst_number == null) ? _c('div', [_c('span', {
+  }, [_vm._m(5), _vm._v(" "), (_vm.user.gst_number == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(_vm.user.gst_number) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.gst_number) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3"
   }, [_c('div', {
     staticClass: "panel panel-default"
   }, [_c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(5), _vm._v(" "), (_vm.user.hourly_rate_one == null) ? _c('div', [_c('span', {
+  }, [_vm._m(6), _vm._v(" "), (_vm.user.hourly_rate_one == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t$" + _vm._s(_vm.user.hourly_rate_one) + "\r\n\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t$" + _vm._s(_vm.user.hourly_rate_one) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3"
   }, [_c('div', {
     staticClass: "panel panel-default"
   }, [_c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(6), _vm._v(" "), (_vm.user.hourly_rate_two == null) ? _c('div', [_c('span', {
+  }, [_vm._m(7), _vm._v(" "), (_vm.user.hourly_rate_two == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t    \t\t$" + _vm._s(_vm.user.hourly_rate_two) + "\r\n\t\t\t    \t")])])])])])])
+  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t$" + _vm._s(_vm.user.hourly_rate_two) + "\r\n\t\t\t\t    \t")])])])])])]) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "large-center-loader"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Name")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Email")])])
@@ -41121,20 +41226,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "proposal": _vm.project.proposal,
       "project_id": _vm.project.id
     }
-  }), _vm._v(" "), _c('div', {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: (_vm.project.proposal),
-      expression: "project.proposal"
-    }]
-  }, [_c('router-view', {
+  }), _vm._v(" "), (_vm.project.proposal) ? _c('div', [(_vm.project.proposal.approval_date) ? _c('div', [_c('router-view', {
+    attrs: {
+      "name": "crew",
+      "crew": _vm.project.users,
+      "project_id": _vm.project.id
+    }
+  }), _vm._v(" "), _c('router-view', {
     attrs: {
       "name": "timeline",
       "timeline": _vm.project.timeline,
       "project_id": _vm.project.id
     }
-  })], 1)], 1), _vm._v(" "), _c('div', {
+  })], 1) : _vm._e()]) : _vm._e()], 1), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -41172,9 +41276,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "glyphicon glyphicon-refresh"
   }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" \r\n\t\t\tRefresh list\r\n\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
     staticClass: "left-loader"
-  })]) : _vm._e()]), _vm._v(" "), _c('table', {
+  })]) : _vm._e()]), _vm._v(" "), (_vm.fetchingModels) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
     staticClass: "table table-striped table-hover margin-25-top"
-  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(user) {
+  }, [_vm._m(1), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(user) {
     return _c('tr', {
       attrs: {
         "user": user
@@ -41190,7 +41296,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_vm._v("View full")])])])], 1)])
-  }))]), _vm._v(" "), _c('div', {
+  }))]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "row text-center margin-45-top"
   }, [_c('ul', {
     staticClass: "pagination"
@@ -41228,6 +41334,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("»")])])], 2)])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "large-center-loader"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', {
     staticClass: "info"
   }, [_c('th', [_vm._v("Name")]), _vm._v(" "), _c('th', [_vm._v("Email")]), _vm._v(" "), _c('th', [_vm._v("Permissions")]), _vm._v(" "), _c('th', [_vm._v("Actions")])])])
@@ -41301,7 +41413,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-briefcase"
-  }), _vm._v(" Add Timeline\r\n\t\t")]) : _vm._e()]), _vm._v(" "), (!_vm.timeline) ? _c('div', [_vm._m(1)]) : _vm._e(), _vm._v(" "), (_vm.timeline) ? _c('div', [_c('div', {
+  }), _vm._v(" Start Timeline\r\n\t\t")]) : _vm._e()]), _vm._v(" "), (!_vm.timeline) ? _c('div', [_vm._m(1)]) : _vm._e(), _vm._v(" "), (_vm.timeline) ? _c('div', [_c('div', {
     staticClass: "col-md-12 margin-35-top"
   }, [_c('div', {
     staticClass: "timeline"
@@ -41682,7 +41794,9 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('div', {
+  return _c('div', [(_vm.formIsLoading) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', [_c('div', {
     staticClass: "well bs-component margin-25-top"
   }, [_c('form', {
     staticClass: "form-horizontal",
@@ -41693,7 +41807,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('fieldset', {
     staticClass: "margin-25-top"
-  }, [_c('legend', [_vm._v("\r\n\t\t\t\t\t" + _vm._s(_vm.form.title) + "\r\n\t\t\t\t\t"), _c('button', {
+  }, [_c('legend', [_vm._v("\r\n\t\t\t\t\t\t" + _vm._s(_vm.form.title) + "\r\n\t\t\t\t\t\t"), _c('button', {
     staticClass: "pull-right btn btn-danger",
     on: {
       "click": function($event) {
@@ -41701,7 +41815,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     },
     slot: "close"
-  }, [_vm._v("\r\n\t\t\t\t\t\t×\r\n\t\t\t\t\t")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\r\n\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t")])]), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-6"
@@ -42205,9 +42319,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('h4', {
     staticClass: "danger",
     slot: "title"
-  }, [_vm._v("\r\n\t\t\tDelete this user?\r\n\t\t")]), _vm._v(" "), _c('p', {
+  }, [_vm._v("\r\n\t\t\t\tDelete this user?\r\n\t\t\t")]), _vm._v(" "), _c('p', {
     slot: "body"
-  }, [_vm._v("\r\n\t\t\tDelete this user until the age that gave it birth comes again?\r\n\t\t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\r\n\t\t\t\tDelete this user until the age that gave it birth comes again?\r\n\t\t\t")]), _vm._v(" "), _c('div', {
     slot: "footer"
   }, [_c('button', {
     staticClass: "btn btn-primary margin-45-top",
@@ -42223,8 +42337,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(!_vm.isDeleting) ? _c('span', [_vm._v("Delete")]) : _vm._e(), _vm._v(" "), (_vm.isDeleting) ? _c('span', [_c('div', {
     staticClass: "loader-center"
-  })]) : _vm._e()])])])], 1)
-},staticRenderFns: []}
+  })]) : _vm._e()])])])], 1) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "large-center-loader"
+  })])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
@@ -52051,6 +52171,471 @@ module.exports = function(module) {
 __webpack_require__(17);
 module.exports = __webpack_require__(18);
 
+
+/***/ }),
+/* 103 */,
+/* 104 */,
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(106),
+  /* template */
+  __webpack_require__(107),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\crew\\Crew-list.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Crew-list.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4cb9ba91", Component.options)
+  } else {
+    hotAPI.reload("data-v-4cb9ba91", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 106 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	// The crew members to populate the list with
+	// The parent project id
+	props: ['crew', 'project_id'],
+
+	methods: {
+		removeCrewFromProject: function removeCrewFromProject(user_id) {
+			// Cache context and post object
+			var context = this,
+			    postData = {
+				project_id: this.project_id,
+				user_id: user_id,
+				_token: window.Laravel.csrfToken
+			};
+			// Send request to server
+			axios.post('/api/projects/remove-crew', postData).then(function (response) {}).catch(function (response) {
+				console.log(response);
+			});
+		}
+	},
+
+	created: function created() {
+		console.log('Crew list created');
+	}
+});
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    on: {
+      "click": function($event) {
+        _vm.$router.push('crew-form')
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-briefcase"
+  }), _vm._v(" Add Crew Member\r\n\t\t")])]), _vm._v(" "), (!_vm.crew) ? _c('div', [_vm._m(1)]) : _vm._e(), _vm._v(" "), (_vm.crew) ? _c('div', [_vm._m(2), _vm._v(" "), _vm._l((_vm.crew), function(user) {
+    return _c('div', {
+      staticClass: "col-md-4 margin-25-top"
+    }, [_c('div', {
+      staticClass: "bs-component"
+    }, [_c('ul', {
+      staticClass: "list-group"
+    }, [_c('li', {
+      staticClass: "list-group-item"
+    }, [_c('button', {
+      staticClass: "btn btn-xs btn-danger pull-right",
+      on: {
+        "click": function($event) {
+          _vm.removeCrewFromProject(user.id)
+        }
+      }
+    }, [_c('span', {
+      staticClass: "glyphicon glyphicon-minus"
+    })]), _vm._v("\r\n\t\r\n\t\t\t\t\t\t" + _vm._s(user.first + " " + user.last) + "\r\n\t\t\t\t\t")])])])])
+  })], 2) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('h3', [_vm._v("Project Crew")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12 margin-35-top"
+  }, [_c('div', {
+    staticClass: "alert alert-info"
+  }, [_c('strong', [_vm._v("Heads up!")]), _vm._v(" No crew has been added yet! Add some now\r\n\t\t\t")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12 margin-25-top"
+  }, [_c('h4', [_vm._v("Current crew:")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-4cb9ba91", module.exports)
+  }
+}
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(109),
+  /* template */
+  __webpack_require__(110),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\crew\\Crew-form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Crew-form.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-18c093b7", Component.options)
+  } else {
+    hotAPI.reload("data-v-18c093b7", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 109 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var api_access = __webpack_require__(2);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	props: ['crew', 'project_id'],
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			formIsLoading: false,
+			form: {
+				model: 'ProjectUser',
+				state: 'create-child',
+				title: 'Add Crew',
+				button: 'Add',
+				action: '/api/projects/add-crew',
+				createAction: '/api/projects/add-crew',
+				updateAction: '/api/projects/add-crew',
+				isLoading: false,
+				successMsg: 'Crew member has been added to project',
+				fields: {
+					project_id: { val: this.project_id, err: false, dflt: '' },
+					user_id: { val: '', err: false, dflt: '' }
+				}
+			},
+			users: []
+		};
+	},
+
+
+	watch: {
+		// Wait for the crew prop to be populated and then turn off loading
+		crew: function crew() {
+			this.formIsLoading = false;
+		}
+	},
+
+	methods: {
+		sendForm: function sendForm() {
+			this.createOrUpdate();
+		}
+	},
+
+	created: function created() {
+		console.log('Crew form-mounted');
+		// Hide loader
+		if (!this.crew) {
+			this.isLoading = true;
+		}
+
+		if (this.project_id) {
+			// Store context
+			var context = this;
+			// Retrieve all users to populate the select list with
+			axios.get('/api/users/all').then(function (response) {
+				;
+				// Current project crew
+				var currentCrew = [];
+
+				// If there is some current crew
+				if (context.crew) {
+					// Populate current crew
+					context.crew.forEach(function (user) {
+						console.log(user);
+						currentCrew.push(user.first + " " + user.last);
+					});
+				}
+
+				// Populate the list of users excluding users already on the crew
+				response.data.users.forEach(function (user) {
+					// If user is not part of the current crew then add to select list
+					if (currentCrew.indexOf(user.first + " " + user.last) == -1) {
+						context.users.push(user);
+					}
+				});
+			}).catch(function (response) {
+				console.log(response);
+			});
+		}
+	}
+});
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [(_vm.formIsLoading) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', {
+    staticClass: "col-md-12 well bs-component margin-25-top"
+  }, [_c('form', {
+    staticClass: "form-horizontal",
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+      }
+    }
+  }, [_c('fieldset', [_c('legend', [_vm._v("\r\n\t\t\t\t\t" + _vm._s(_vm.form.title) + "\r\n\t\t\t\t\t"), _vm._v(" "), _c('button', {
+    staticClass: "pull-right btn btn-danger",
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    },
+    slot: "close"
+  }, [_vm._v("×")])]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-4 col-centered"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.user_id.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Choose a user for the crew")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.user_id.val),
+      expression: "form.fields.user_id.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.form.fields.user_id.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": "",
+      "disabled": ""
+    }
+  }, [_vm._v("Select...")]), _vm._v(" "), _vm._l((_vm.users), function(user) {
+    return _c('option', {
+      domProps: {
+        "value": user.id
+      }
+    }, [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t" + _vm._s(user.first + ' ' + user.last) + "\r\n\t\t\t\t\t\t\t\t\t")])
+  })], 2), _vm._v(" "), (_vm.form.fields.user_id.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.user_id.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3 col-centered"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-45-top",
+    on: {
+      "click": _vm.sendForm
+    }
+  }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])]) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "large-center-loader"
+  })])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-18c093b7", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

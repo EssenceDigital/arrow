@@ -21,4 +21,12 @@ class Project extends Model
     {
         return $this->hasOne('App\Timeline');
     }
+
+    /**
+     * The users that belong to (are assigned to) the project.
+     */
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
 }

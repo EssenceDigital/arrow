@@ -36,6 +36,8 @@ Route::get('/api/projects/{id}', 'ProjectsController@single');
 Route::post('/api/projects/create', 'ProjectsController@store');
 Route::post('/api/projects/update', 'ProjectsController@update');
 Route::post('/api/projects/delete', 'ProjectsController@delete');
+Route::post('/api/projects/add-crew', 'ProjectsController@addCrewMember');
+Route::post('/api/projects/remove-crew', 'ProjectsController@RemoveCrew');
 
 
 // Proposals
@@ -49,6 +51,7 @@ Route::post('/api/timelines/update', 'TimelinesController@update');
 // Users
 Route::get('/api/users', 'UsersController@hub');
 Route::get('/api/users/all', 'UsersController@all');
+Route::get('/api/users/all-pages', 'UsersController@allPages');
 Route::get('/api/users/{id}', 'UsersController@single');
 Route::post('/api/users/create', 'UsersController@store');
 Route::post('/api/users/update', 'UsersController@update');
