@@ -15,14 +15,13 @@ class CreateProjectCommentsTable extends Migration
     {
         Schema::create('project_comments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('timeline_id')->unsigned();
-            $table->foreign('timeline_id')->references('id')->on('timelines');
+            $table->integer('project_id')->unsigned();
+            $table->foreign('project_id')->references('id')->on('projects');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->date('date');
             $table->string('comment');
             $table->boolean('is_issue')->default(false);
-            $table->softDeletes();
             $table->timestamps();
         });
     }

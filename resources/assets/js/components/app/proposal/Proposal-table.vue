@@ -1,12 +1,12 @@
 <template>
 
 <!-- Component container  -->
-<div class="col-md-12">
-	<div class="col-md-12">
+<div>
+	<div class="row row-padded">
 		<h3>Project Proposal</h3>
 	</div>
 	<!-- Tool navigation -->
-	<div class="col-md-12 margin-25-top">
+	<div class="row row-padded margin-25-top">
 		<button v-if="proposal" @click="$router.push('proposal-form')" class="btn btn-default">
 			<span class="glyphicon glyphicon-briefcase"></span> Edit Proposal
 		</button>	
@@ -25,7 +25,7 @@
 	</div>
 	<!-- Proposal table in the form of panels -->
 	<div v-if="proposal">
-		<div class="col-md-12 margin-25-top">
+		<div class="row row-padded margin-25-top">
 			<h4>Work Details</h4>
 			<div class="col-md-4">
 				<div class="panel panel-default">
@@ -67,7 +67,7 @@
 				</div>
 			</div>																	
 		</div><!-- / col-md-12 -->
-		<div class="col-md-12 margin-25-top">
+		<div class="row row-padded margin-25-top">
 			<div class="col-md-4">
 				<div class="panel panel-default">
 					<div class="panel-body">
@@ -95,7 +95,7 @@
 				</div>
 			</div>																		
 		</div><!-- / col-md-12 -->	
-		<div class="col-md-12 margin-25-top">
+		<div class="row row-padded margin-25-top">
 			<h4>Project Approval</h4>
 			<div class="col-md-4">
 				<div class="panel panel-default">

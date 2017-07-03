@@ -11,15 +11,21 @@
 
 	<!-- Table wrapper - only shows after prop data is populated -->
 	<div v-if="!isLoading">
-		<h3>Project Details</h3>
+		<div class="row row-padded">
+			<h3>Project Details</h3>
+		</div>
 		<!-- Tool navigation -->
-		<div class="col-md-12 margin-25-top">
+		<div class="row row-padded margin-25-top">
 			<button @click="$router.push('edit')" class="btn btn-default">
 				<span class="glyphicon glyphicon-cog"></span> Edit Project
 			</button>	
+
+			<button @click="modalActive = true" class="btn btn-default margin-20-left">
+				<span class="glyphicon glyphicon-comment"></span> Add note
+			</button>			
 		</div>
 		<!-- Project table in the form of panels -->
-		<div class="col-md-12 margin-25-top">
+		<div class="row row-padded margin-25-top">
 			<h4>Location</h4>
 			<div class="col-md-4">
 				<div class="panel panel-default">
@@ -61,7 +67,7 @@
 				</div>
 			</div>
 		</div><!-- / col-md-12 -->
-		<div class="col-md-12 margin-25-top">
+		<div class="row row-padded margin-25-top">
 			<h4>Client</h4>
 			<div class="col-md-3">
 				<div class="panel panel-default">
@@ -116,7 +122,7 @@
 				</div>
 			</div>
 		</div><!-- / col-md-12 -->
-		<div class="col-md-12 margin-25-top">
+		<div class="row row-padded margin-25-top">
 			<h4>Land</h4>
 			<div class="col-md-3">
 				<div class="panel panel-default">
@@ -167,7 +173,7 @@
 				</div>
 			</div>
 		</div><!-- / col-md-12 -->
-		<div class="col-md-12 margin-25-top">
+		<div class="row row-padded margin-25-top">
 			<div class="col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-body">
@@ -182,7 +188,7 @@
 				</div>
 			</div>			
 		</div><!-- / col-md-12 -->
-		<div class="col-md-12 margin-25-top">
+		<div class="row row-padded margin-25-top">
 			<h4 class="text-success">Invoicing</h4>
 			<div class="col-md-6">
 				<div class="panel panel-default">
@@ -211,21 +217,54 @@
 				</div>
 			</div>								
 		</div><!-- / col-md-12 -->
+
 	</div><!-- Table wrapper -->
+
+	<!-- Modal to add a note -->
+	<modal :modalActive="modalActive" 
+		@modal-close="modalActive = false"
+	>
+		<h4 slot="title" class="danger">
+			Add Note
+		</h4>
+		<p slot="body">
+			<comment-form
+				:model="'ProjectComment'"
+				:urlPortion="'projects'"
+				:project_id="project.id"
+			>				
+			</comment-form>
+		</p>
+		<div slot="footer">
+			<button @click="modalActive = false" class="btn btn-primary margin-45-top">
+				Cancel
+			</button>
+		</div>
+	</modal><!--- / Modal -->
+
 </div><!-- / Component container -->
 
 </template>
 
 <script>
-	
+	let modal = require('./../_ui/Modal.vue');
+	let comment_form = require('./../comment/Comment-form.vue');
+
 	export default{
+		components: {
+			'modal': modal,
+			'comment-form': comment_form
+		},		
+
 		// The data to populated 'table' with
 		props: ['project'],
 
 		data(){
 			return{
 				// Waiting for prop to be populated
-				isLoading: false
+				isLoading: false,
+				modalActive: false,
+				isAddingNote: false
 			}
 		},
 
@@ -233,6 +272,12 @@
 			// Wait for the project prop to be populated and then turn off loading
 			project(){
 				this.isLoading = false;
+			}
+		},
+
+		methods:{
+			addNote(){
+
 			}
 		},
 

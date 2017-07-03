@@ -32,6 +32,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * Get the comments by the user.
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\ProjectComment');
+    }
+
+    /**
      * The projects that this user is assigned to
      */
     public function projects()

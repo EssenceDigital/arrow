@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+
+    /**
+     * Get the comments for the project.
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\ProjectComment');
+    }
+
     /**
      * Get the proposal record associated with the project.
      */
@@ -29,4 +38,5 @@ class Project extends Model
     {
         return $this->belongsToMany('App\User');
     }
+
 }

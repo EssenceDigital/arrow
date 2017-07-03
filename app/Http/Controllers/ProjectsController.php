@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Project;
+use App\ProjectUser;
+use App\ProjectComment;
 use App\User;
 
 use Session;
@@ -123,14 +125,47 @@ class ProjectsController extends Controller
                 'result' => false
             ], 404);
         } 
-
-
         
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
             'model' => $user
         ], 200);               
+    }
+
+    public function removeCrewMember(Request $request){
+        // Find the association
+        $project = Project::find($request->project_id);
+
+        $result = $project->users()->detach($request->user_id);
+
+        // Verify success
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        // Return successful response for ajax call
+        return response()->json([
+            'result' => 'success'
+        ], 200);
+    }
+
+    public function addComment(Request $request){
+        $this->validate($request, [
+            'project_id' => 'required|numeric',
+            'user_id' => 'required|numeric',
+            'comment' => 'required|max:255'
+        ]);
+
+        // Assemble the comment
+        $comment = new ProjectComment;
+        $comment->comment = $request->comment;
+        $comment->user_id = $request->user_id;
+        $comment->project_id = $request->project_id;
+
     }
 
     /**

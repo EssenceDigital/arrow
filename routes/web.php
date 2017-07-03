@@ -37,7 +37,7 @@ Route::post('/api/projects/create', 'ProjectsController@store');
 Route::post('/api/projects/update', 'ProjectsController@update');
 Route::post('/api/projects/delete', 'ProjectsController@delete');
 Route::post('/api/projects/add-crew', 'ProjectsController@addCrewMember');
-Route::post('/api/projects/remove-crew', 'ProjectsController@RemoveCrew');
+Route::post('/api/projects/remove-crew', 'ProjectsController@RemoveCrewMember');
 
 
 // Proposals

@@ -101,6 +101,14 @@
     margin-left: 10px;
 }
 
+.margin-15-left{
+    margin-left: 15px;
+}
+
+.margin-20-left{
+    margin-left: 20px;
+}
+
 a:hover{
 	cursor: pointer;
 }
@@ -108,6 +116,18 @@ a:hover{
 .col-centered{
     float: none;
     margin: 0 auto;
+}
+
+.row-padded{
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+hr{ 
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-top: 3px double #dadada; 
 }
 
 button{

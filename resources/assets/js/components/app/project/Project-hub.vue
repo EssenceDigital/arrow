@@ -10,12 +10,16 @@
 		>			
 		</router-view>
 
+		<hr><!-- Divider -->
+
 		<!-- Mount for proposal table and form -->
 		<router-view name="proposal"
 			:proposal="project.proposal"
 			:project_id="project.id"
 		>		
 		</router-view>	
+
+		<hr><!-- Divider -->
 
 		<div v-if="project.proposal">
 			<div v-if="project.proposal.approval_date">
@@ -26,12 +30,21 @@
 				>		
 				</router-view>
 
+				<hr> <!-- Divider -->
+
 				<!-- Mount for timeline table and form -->
 				<router-view name="timeline"
 					:timeline="project.timeline"
 					:project_id="project.id"
 				>		
 				</router-view>
+			</div>
+			<div v-else>
+				<div class="row row-padded margin-35-top">
+					<div class="alert alert-warning text-center">
+						<big><strong>Heads up!</strong> Once the project has an approval date the next steps will become available</big>
+					</div>				
+				</div>				
 			</div>
 		</div>
 	</div>
@@ -97,10 +110,11 @@
 			});
 
 			this.$router.app.$on('crew-removed', user_id => {
+				var context = this;
 				this.project.users.forEach(function(user){
 					if(user.id == user_id){
-						var index = this.project.users.indexOf(user); 
-						array.splice(index, 1);
+						var index = context.project.users.indexOf(user); 
+						context.project.users.splice(index, 1);
 					}
 				});
 			});								

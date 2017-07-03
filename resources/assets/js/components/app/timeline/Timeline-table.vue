@@ -1,32 +1,31 @@
 <template>
 	
 <!-- Component container  -->
-<div class="col-md-12">
-
-	<div class="col-md-12">
+<div>
+	<div class="row row-padded">
 		<h3>Project Timeline / Milestones</h3>
 	</div>
 	<!-- Tool navigation -->
-	<div class="col-md-12 margin-25-top">
+	<div class="row row-padded margin-25-top">
 		<button v-if="timeline" @click="$router.push('timeline-form')" class="btn btn-default">
-			<span class="glyphicon glyphicon-briefcase"></span> Edit Timeline
+			<span class="glyphicon glyphicon-hourglass"></span> Edit Timeline
 		</button>	
 		<!-- Show the add timeline button if no timeline is yet present -->
 		<button v-if="!timeline" @click="$router.push('timeline-form')" class="btn btn-default">
-			<span class="glyphicon glyphicon-briefcase"></span> Start Timeline
+			<span class="glyphicon glyphicon-hourglass"></span> Start Timeline
 		</button>		
 	</div>
 	<!-- Show alert if no timeline in project -->
 	<div v-if="!timeline">
-		<div class="col-md-12 margin-35-top">
-			<div class="alert alert-info">
-				<strong>Heads up!</strong> Timeline has not yet been added. Click the button above to get started
+		<div class="row row-padded margin-35-top">
+			<div class="alert alert-warning text-center">
+				<big><strong>Heads up!</strong> Timeline has not yet been added. Click the button above to get started</big>
 			</div>				
 		</div>
 	</div>
 	<!-- timeline table in the form of panels -->
 	<div v-if="timeline">
-		<div class="col-md-12 margin-35-top">
+		<div class="row row-padded margin-35-top">
 		    <!-- Timeline -->
 		    <div class="timeline">
 		    
