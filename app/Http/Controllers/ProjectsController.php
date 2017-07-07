@@ -80,7 +80,7 @@ class ProjectsController extends Controller
      */
     public function single($id)
     {
-        $project = Project::with(['proposal', 'timeline', 'users'])->find($id);
+        $project = Project::with(['comments', 'comments.user', 'proposal', 'timeline', 'users'])->find($id);
 
         // Return response for ajax call
         return response()->json([
@@ -166,6 +166,55 @@ class ProjectsController extends Controller
         $comment->user_id = $request->user_id;
         $comment->project_id = $request->project_id;
 
+        // Attempt to store model
+        $result = $comment->save();
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        // Get the user model
+        $user = User::find($request->user_id);
+
+        // Return failed response if no user
+        if(! $user){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+        // Add user to comment model
+        $comment->user = $user;
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'model' => $comment
+        ], 200);
+
+    }
+
+    public function removeComment(Request $request){
+        // Find user or throw 404 :)
+        $comment = ProjectComment::findOrFail($request->comment_id);
+
+        // Attempt to remove 
+        $result = $comment->delete();
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        // Return successful response for ajax call
+        return response()->json([
+            'result' => 'success'
+        ], 200);        
     }
 
     /**

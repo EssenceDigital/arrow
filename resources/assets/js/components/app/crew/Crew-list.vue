@@ -12,15 +12,15 @@
 		</button>			
 	</div>
 	<!-- Show alert if no crew in project -->
-	<div v-if="!crew">
+	<div v-if="crew.length == 0">
 		<div class="row row-padded margin-35-top">
-			<div class="alert alert-info">
-				<strong>Heads up!</strong> No crew has been added yet! Add some now
+			<div class="alert alert-warning text-center">
+				<big><strong>Heads up!</strong> No users have been added to the crew. You'll need to add some before they can add timesheets to this project.</big>
 			</div>				
 		</div>
 	</div>
 	<!-- crew table in the form of panels -->
-	<div v-if="crew">
+	<div v-if="crew.length > 0">
 		<div class="row row-padded margin-25-top">
 			<h4>Current crew:</h4>			
 		</div>
@@ -88,6 +88,7 @@
 
 		created(){
 			console.log('Crew list created');
+			console.log(this.crew);
 		}		
 	}
 </script>

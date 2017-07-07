@@ -142,7 +142,7 @@ module.exports =  {
 	                     text: context.form.successMsg,
 	                     theme: 'defaultTheme',
 	                     layout: 'center',
-	                     timeout: 650,
+	                     timeout: 1200,
 	                     closeWith: ['click', 'hover'],
 	                     type: 'success'
 	                });

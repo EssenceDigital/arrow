@@ -4,11 +4,11 @@
 		<form @submit.prevent class="form-horizontal">
 			<fieldset>
 				<div class="row">
-					<div class="col-md-8 col-centered">
+					<div class="col-md-12 col-centered">
 						<div class="form-group" :class="{'has-error': form.fields.comment.err}">
 			                <div class="col-md-12">
-			                	<label class="control-label">Note</label>
-			                    <textarea v-model="form.fields.comment.val" class="form-control margin-10-top" rows="3" placeholder="Your note here"></textarea>
+			                	<label class="control-label"><i class="glyphicon glyphicon-hand-right"></i> Add a Note</label>
+			                    <textarea v-model="form.fields.comment.val" class="form-control margin-10-top" rows="3" placeholder="Your note goes here..."></textarea>
 			                    <span v-if="form.fields.comment.err" class="text-danger">{{ form.fields.comment.err }}</span>
 			                </div>
 			            </div>						
@@ -20,7 +20,7 @@
 				<div class="row">
 					<div class="col-md-3 col-centered">
 						<div class="form-group">
-							<button v-on:click="sendForm" class="btn btn-primary btn-block margin-45-top">
+							<button v-on:click="sendForm" class="btn btn-primary btn-block">
 								<span v-if="!form.isLoading">{{ form.button }}</span>
 								<span v-if="form.isLoading">
 									<div class="center-loader"></div>
@@ -47,9 +47,9 @@
 			return {
 					form: {
 						model: this.model,
-						state: 'create',
+						state: 'create-child',
 						title: 'Add Comment',
-						button: 'Save',
+						button: 'Add',
 						action: '/api/' + this.urlPortion + '/add-comment',
 						createAction: '/api/' + this.urlPortion + '/add-comment',
 						updateAction: '/api/' + this.urlPortion + '/update-comment',

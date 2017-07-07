@@ -18,21 +18,17 @@
 		<div class="row row-padded margin-25-top">
 			<button @click="$router.push('edit')" class="btn btn-default">
 				<span class="glyphicon glyphicon-cog"></span> Edit Project
-			</button>	
-
-			<button @click="modalActive = true" class="btn btn-default margin-20-left">
-				<span class="glyphicon glyphicon-comment"></span> Add note
-			</button>			
+			</button>		
 		</div>
 		<!-- Project table in the form of panels -->
 		<div class="row row-padded margin-25-top">
 			<h4>Location</h4>
 			<div class="col-md-4">
-				<div class="panel panel-default">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Province</strong></h5>
 				    	<div v-if="project.province == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.province }}
@@ -40,12 +36,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-4">
-				<div class="panel panel-default">									
+			<div class="col-md-8">
+				<div class="panel panel-white post panel-shadow">									
 					<div class="panel-body">
 						<h5><strong>Location</strong></h5>
 				    	<div v-if="project.location == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.location }}
@@ -53,12 +49,12 @@
 					</div>
 				</div>
 			</div>								
-			<div class="col-md-4">
-				<div class="panel panel-default">
+			<div class="col-md-12">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Details</strong></h5>
 				    	<div v-if="project.details == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.details }}
@@ -66,15 +62,18 @@
 					</div>
 				</div>
 			</div>
-		</div><!-- / col-md-12 -->
+		</div><!-- / row padded-->
+
+		<hr class="dotted"><!-- Divider -->
+
 		<div class="row row-padded margin-25-top">
 			<h4>Client</h4>
-			<div class="col-md-3">
-				<div class="panel panel-default">
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Client</strong></h5>
 				    	<div v-if="project.client_company_name == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.client_company_name }}
@@ -82,12 +81,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
-				<div class="panel panel-default">
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Client Contact</strong></h5>
 				    	<div v-if="project.client_contact_name == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.client_contact_name }}
@@ -95,12 +94,12 @@
 					</div>
 				</div>
 			</div>								
-			<div class="col-md-3">
-				<div class="panel panel-default">
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Contact Phone</strong></h5>
 				    	<div v-if="project.client_contact_phone == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		<a v-bind:href="'tel: +1' + project.client_contact_phone.replace(/-/g, '')">{{ project.client_contact_phone }}</a>
@@ -108,12 +107,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
-				<div class="panel panel-default">
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Contact Email</strong></h5>
 				    	<div v-if="project.client_contact_email == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.client_contact_email }}
@@ -121,15 +120,18 @@
 					</div>
 				</div>
 			</div>
-		</div><!-- / col-md-12 -->
+		</div><!-- / row padded-->
+
+		<hr class="dotted"><!-- Divider -->
+
 		<div class="row row-padded margin-25-top">
 			<h4>Land</h4>
-			<div class="col-md-3">
-				<div class="panel panel-default">
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Land Ownership</strong></h5>
 				    	<div v-if="project.land_ownership == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.land_ownership }}
@@ -137,8 +139,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
-				<div class="panel panel-default">
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Access Granted</strong></h5>
 				    	<div v-if="project.land_access_granted == 0">No</div>
@@ -146,12 +148,12 @@
 					</div>
 				</div>
 			</div>								
-			<div class="col-md-3">
-				<div class="panel panel-default">
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Access Granted By</strong></h5>
 				    	<div v-if="project.land_access_granted_by == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.land_access_granted_by }}
@@ -159,12 +161,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
-				<div class="panel panel-default">
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Access Contact</strong></h5>
 				    	<div v-if="project.land_access_contact == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.land_access_contact }}
@@ -172,14 +174,12 @@
 					</div>
 				</div>
 			</div>
-		</div><!-- / col-md-12 -->
-		<div class="row row-padded margin-25-top">
-			<div class="col-md-3">
-				<div class="panel panel-default">
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Access Contact Phone</strong></h5>
 				    	<div v-if="project.land_access_phone == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.land_access_phone }}
@@ -187,15 +187,18 @@
 					</div>
 				</div>
 			</div>			
-		</div><!-- / col-md-12 -->
+		</div><!-- / row padded-->
+
+		<hr class="dotted"><!-- Divider -->
+
 		<div class="row row-padded margin-25-top">
-			<h4 class="text-success">Invoicing</h4>
-			<div class="col-md-6">
-				<div class="panel panel-default">
+			<h4>Invoicing</h4>
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
 					<div class="panel-body">
 						<h5><strong>Invoiced Date</strong></h5>
 				    	<div v-if="project.invoiced_date == null">
-				    		<span class="label label-warning">Not Invoiced</span>
+				    		<span class="label label-danger">Not Invoiced</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.invoiced_date }}
@@ -203,12 +206,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="panel panel-default">									
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">									
 					<div class="panel-body">
 						<h5><strong>Date Paid</strong></h5>
 				    	<div v-if="project.invoice_paid_date == null">
-				    		<span class="label label-warning">Not Invoiced</span>
+				    		<span class="label label-danger">Not Invoiced</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ project.invoice_paid_date }}
@@ -216,44 +219,50 @@
 					</div>
 				</div>
 			</div>								
-		</div><!-- / col-md-12 -->
+		</div><!-- / row padded-->
+
+		<hr class="dotted"><!-- Divider -->
+
+		<div class="row row-padded margin-25-top">
+			<div class="col-md-12">
+				<comment-list
+					:comments="project.comments"
+				>
+				</comment-list>
+			</div>
+		</div>
+
+		<div class="row row-padded margin-15-top">
+		    <div class="col-md-12">
+		        <div class="panel panel-white post panel-shadow">
+		            <div class="post-description"> 
+						<comment-form
+							:model="'ProjectComment'"
+							:urlPortion="'projects'"
+							:project_id="project.id"
+						>				
+						</comment-form>	
+		            </div>
+		        </div>
+		    </div>		
+		</div>
 
 	</div><!-- Table wrapper -->
 
-	<!-- Modal to add a note -->
-	<modal :modalActive="modalActive" 
-		@modal-close="modalActive = false"
-	>
-		<h4 slot="title" class="danger">
-			Add Note
-		</h4>
-		<p slot="body">
-			<comment-form
-				:model="'ProjectComment'"
-				:urlPortion="'projects'"
-				:project_id="project.id"
-			>				
-			</comment-form>
-		</p>
-		<div slot="footer">
-			<button @click="modalActive = false" class="btn btn-primary margin-45-top">
-				Cancel
-			</button>
-		</div>
-	</modal><!--- / Modal -->
 
 </div><!-- / Component container -->
 
 </template>
 
 <script>
-	let modal = require('./../_ui/Modal.vue');
 	let comment_form = require('./../comment/Comment-form.vue');
+	let comment_list = require('./../comment/Comment-list.vue');
+	
 
 	export default{
 		components: {
-			'modal': modal,
-			'comment-form': comment_form
+			'comment-form': comment_form,
+			'comment-list': comment_list
 		},		
 
 		// The data to populated 'table' with
@@ -263,8 +272,7 @@
 			return{
 				// Waiting for prop to be populated
 				isLoading: false,
-				modalActive: false,
-				isAddingNote: false
+				modalActive: false,				
 			}
 		},
 
@@ -276,7 +284,7 @@
 		},
 
 		methods:{
-			addNote(){
+			removeNote(){
 
 			}
 		},

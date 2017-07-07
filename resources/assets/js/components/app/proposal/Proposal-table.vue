@@ -17,9 +17,9 @@
 	</div>
 	<!-- Show alert if no proposal in project -->
 	<div v-if="!proposal">
-		<div class="col-md-12 margin-35-top">
-			<div class="alert alert-info">
-				<strong>Heads up!</strong> Proposal has not yet been added. Click the button above to get started
+		<div class="row row-padded margin-35-top">
+			<div class="alert alert-warning text-center">
+				<big><strong>Heads up!</strong> The next step is to add information related to the proposal.</big>
 			</div>				
 		</div>
 	</div>
@@ -32,7 +32,7 @@
 					<div class="panel-body">
 						<h5><strong>Work Type</strong></h5>
 				    	<div v-if="proposal.work_type == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ proposal.work_type }}
@@ -45,7 +45,7 @@
 					<div class="panel-body">
 						<h5><strong>Work Overview</strong></h5>
 				    	<div v-if="proposal.work_overview == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ proposal.work_overview }}
@@ -58,7 +58,7 @@
 					<div class="panel-body">
 						<h5><strong>Work Plans</strong></h5>
 				    	<div v-if="proposal.plans == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ proposal.plans }}
@@ -73,7 +73,7 @@
 					<div class="panel-body">
 						<h5><strong>Estimate</strong></h5>
 				    	<div v-if="proposal.estimate == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		${{ proposal.estimate }}
@@ -86,7 +86,7 @@
 					<div class="panel-body">
 						<h5><strong>Response By</strong></h5>
 				    	<div v-if="proposal.response_by == null">
-				    		<span class="label label-warning">N/A</span>
+				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else>
 				    		{{ proposal.response_by }}

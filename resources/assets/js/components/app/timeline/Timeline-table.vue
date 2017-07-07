@@ -19,7 +19,7 @@
 	<div v-if="!timeline">
 		<div class="row row-padded margin-35-top">
 			<div class="alert alert-warning text-center">
-				<big><strong>Heads up!</strong> Timeline has not yet been added. Click the button above to get started</big>
+				<big><strong>Heads up!</strong> Timeline has not been started. Click the button above to begin</big>
 			</div>				
 		</div>
 	</div>

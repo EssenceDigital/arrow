@@ -106,6 +106,11 @@
 				if(model.first){
 					this.project.users.push(model);
 				}
+
+				// Update model comments
+				if(model.comment){
+					this.project.comments.push(model);
+				}
 						
 			});
 
@@ -117,7 +122,17 @@
 						context.project.users.splice(index, 1);
 					}
 				});
-			});								
+			});	
+
+			this.$router.app.$on('comment-removed', comment_id => {
+				var context = this;
+				this.project.comments.forEach(function(comment){
+					if(comment.id == comment_id){
+						var index = context.project.comments.indexOf(comment); 
+						context.project.comments.splice(index, 1);
+					}
+				});
+			});											
 		}
 	}
 	
