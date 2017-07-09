@@ -31,6 +31,13 @@ class CreateProjectsTable extends Migration
             $table->string('land_access_phone', 14)->nullable();
             $table->date('invoiced_date')->nullable();
             $table->date('invoice_paid_date')->nullable();
+            // "Proposal related fields"
+            $table->string('plans', 30)->nullable();
+            $table->string('work_type', 30)->nullable();
+            $table->string('work_overview', 150)->nullable();
+            $table->date('response_by')->nullable();
+            $table->decimal('estimate', 13, 2)->default(0);
+            $table->date('approval_date')->nullable(); 
             $table->softDeletes();
             $table->timestamps();
         });

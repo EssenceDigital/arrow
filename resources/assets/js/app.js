@@ -34,10 +34,6 @@ const project_table = require('./components/app/project/Project-table.vue');
 const project_form = require('./components/app/project/Project-form.vue');
 const project_search = require('./components/app/project/Project-search.vue');
 
-// Proposal relateld components
-const proposal_table = require('./components/app/proposal/Proposal-table.vue');
-const proposal_form = require('./components/app/proposal/Proposal-form.vue');
-
 // Crew related components
 const crew_list = require('./components/app/crew/Crew-list.vue');
 const crew_form = require('./components/app/crew/Crew-form.vue');
@@ -69,7 +65,6 @@ const routes = [
 						path: 'hub',
 						components: {
 							project: project_table,
-							proposal: proposal_table,
 							crew: crew_list,
 							timeline: timeline_table
 						}
@@ -79,16 +74,6 @@ const routes = [
 						components: {
 							project: project_form,
 							crew: crew_list,
-							proposal: proposal_table,
-							timeline: timeline_table
-						}
-					},
-					{
-						path: 'proposal-form',
-						components: {
-							project: project_table,
-							proposal: proposal_form,
-							crew: crew_list,
 							timeline: timeline_table
 						}
 					},
@@ -96,7 +81,6 @@ const routes = [
 						path: 'crew-form',
 						components: {
 							project: project_table,
-							proposal: proposal_table,
 							crew: crew_form,
 							timeline: timeline_table
 						}
@@ -106,7 +90,6 @@ const routes = [
 						components: {
 							project: project_table,
 							crew: crew_list,
-							proposal: proposal_table,
 							timeline: timeline_form
 						}
 					}					

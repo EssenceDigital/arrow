@@ -12,41 +12,32 @@
 
 		<hr><!-- Divider -->
 
-		<!-- Mount for proposal table and form -->
-		<router-view name="proposal"
-			:proposal="project.proposal"
-			:project_id="project.id"
-		>		
-		</router-view>	
 
-		<hr><!-- Divider -->
+		<div v-if="project.approval_date">
+			<!-- Mount for crew list -->
+			<router-view name="crew"
+				:crew="project.users"
+				:project_id="project.id"
+			>		
+			</router-view>
 
-		<div v-if="project.proposal">
-			<div v-if="project.proposal.approval_date">
-				<!-- Mount for crew list -->
-				<router-view name="crew"
-					:crew="project.users"
-					:project_id="project.id"
-				>		
-				</router-view>
+			<hr> <!-- Divider -->
 
-				<hr> <!-- Divider -->
-
-				<!-- Mount for timeline table and form -->
-				<router-view name="timeline"
-					:timeline="project.timeline"
-					:project_id="project.id"
-				>		
-				</router-view>
-			</div>
-			<div v-else>
-				<div class="row row-padded margin-35-top">
-					<div class="alert alert-warning text-center">
-						<big><strong>Heads up!</strong> Once the project has an approval date the next steps will become available</big>
-					</div>				
-				</div>				
-			</div>
+			<!-- Mount for timeline table and form -->
+			<router-view name="timeline"
+				:timeline="project.timeline"
+				:project_id="project.id"
+			>		
+			</router-view>
 		</div>
+		<div v-else>
+			<div class="row row-padded margin-35-top">
+				<div class="alert alert-warning text-center">
+					<big><strong>Heads up!</strong> Once the project has an approval date the next steps will become available</big>
+				</div>				
+			</div>				
+		</div>
+	
 	</div>
 
 	<!-- Loader - shows if data is fetching -->
@@ -94,10 +85,7 @@
 
 			// When the form component alerts this parent that a proposal has been added
 			this.$router.app.$on('child-created', model => {
-				// Update model proposal
-				if(model.work_type){
-					this.project.proposal = model;	
-				}
+
 				// Update model timeline
 				if(model.permit_application_date){
 					this.project.timeline = model;	

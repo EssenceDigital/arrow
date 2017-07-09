@@ -35,6 +35,7 @@ Route::get('/api/projects/unique-clients', 'ProjectsController@uniqueClients');
 Route::get('/api/projects/{id}', 'ProjectsController@single');
 Route::post('/api/projects/create', 'ProjectsController@store');
 Route::post('/api/projects/update', 'ProjectsController@update');
+Route::post('/api/projects/update-field', 'ProjectsController@updateField');
 Route::post('/api/projects/delete', 'ProjectsController@delete');
 Route::post('/api/projects/add-crew', 'ProjectsController@addCrewMember');
 Route::post('/api/projects/remove-crew', 'ProjectsController@RemoveCrewMember');

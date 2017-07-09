@@ -15,22 +15,29 @@ use Session;
 class ProjectsController extends Controller
 {
     private $validationFields = [
-        'province' => 'required|max:20',
-        'location' => 'required|max:100',
+        'province' => 'max:20',
+        'location' => 'max:100',
         'details' => 'max:150',
-        'client_company_name' => 'required|max:30',
-        'client_contact_name' => 'required|max:30',
-        'client_contact_phone' => 'required|max:14',
+        'client_company_name' => 'max:30',
+        'client_contact_name' => 'max:30',
+        'client_contact_phone' => 'max:14',
         'client_contact_email' => 'max:45',
-        'first_contact_by' => 'required|max:30',
-        'first_contact_date' => 'required|date',
+        'first_contact_by' => 'max:30',
+        'first_contact_date' => 'date',
         'land_ownership' => 'max:20',
         'land_access_granted' => 'boolean',
         'land_access_granted_by' => 'max:30',
         'land_access_contact' => 'max:30',
         'land_access_phone' => 'max:14',
         'invoiced_date' => 'date',
-        'invoice_paid_date' => 'date'
+        'invoice_paid_date' => 'date',
+        // "Proposal related fields"
+        'plans' => 'max:30',
+        'work_type' => 'max:30',
+        'work_overview' => 'max:150',
+        'response_by' => 'date',
+        'estimate' => 'numeric|between:0,1000000000000.99',
+        'approval_date' => 'date'
     ];
 
     /**
@@ -43,8 +50,10 @@ class ProjectsController extends Controller
         $rules = [];
 
         foreach($this->validationFields as $key => $val){
+            if($request->first_contact_date == '' && $key == 'first_contact_date') continue;
         	if($request->invoiced_date == '' && $key == 'invoiced_date') continue;
         	if($request->invoice_paid_date == '' && $key == 'invoice_paid_date') continue;
+            if($request->approval_date == '' && $key == 'approval_date') continue;
         	$rules[$key] = $val;
         }
         // Validate or stop proccessing :)
@@ -70,7 +79,7 @@ class ProjectsController extends Controller
      */
     public function all()
     {
-        return Project::with('proposal')->paginate(15);      
+        return Project::paginate(15);      
     }
 
     /**
@@ -80,7 +89,7 @@ class ProjectsController extends Controller
      */
     public function single($id)
     {
-        $project = Project::with(['comments', 'comments.user', 'proposal', 'timeline', 'users'])->find($id);
+        $project = Project::with(['comments', 'comments.user', 'timeline', 'users'])->find($id);
 
         // Return response for ajax call
         return response()->json([
@@ -244,6 +253,48 @@ class ProjectsController extends Controller
             'model' => $project
         ], 200);
 
+    }
+
+    public function updateField(Request $request){
+        // Ensure request field is actually a project field
+        if(in_array($request->field, $this->validationFields)){
+            // Validate field
+            $this->validate($request, [
+                // Dynamically validate proper field
+                $request->field => $this->validationFields[$request->field],
+                'project_id' => 'required|integer'
+            ]);
+
+            // Find project
+            $project = Project::find($request->project_id);
+
+            // Return failed response if collection empty
+            if(! $project){
+                // Return response for ajax call
+                return response()->json([
+                    'result' => false
+                ], 404);
+            }     
+            // Update project model with new field data
+            $project[$request->field] = $request[$request->field];
+
+            // Attempt to store model
+            $result = $project->save();
+
+            // Verify success on store
+            if(! $result){
+                // Return response for ajax call
+                return response()->json([
+                    'result' => false
+                ], 404);
+            }
+
+            // Return response for ajax call
+            return response()->json([
+                'result' => 'success',
+                'model' => $project
+            ], 200);      
+        }
     }
 
     /**

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 111);
+/******/ 	return __webpack_require__(__webpack_require__.s = 114);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -126,7 +126,7 @@ module.exports = function normalizeComponent (
 "use strict";
 
 
-var bind = __webpack_require__(11);
+var bind = __webpack_require__(10);
 
 /*global toString:true*/
 
@@ -834,6 +834,40 @@ process.umask = function() { return 0; };
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(38),
+  /* template */
+  __webpack_require__(106),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Dropdown.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Dropdown.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-f0b7e2bc", Component.options)
+  } else {
+    hotAPI.reload("data-v-f0b7e2bc", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
@@ -855,10 +889,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(7);
+    adapter = __webpack_require__(6);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(7);
+    adapter = __webpack_require__(6);
   }
   return adapter;
 }
@@ -932,79 +966,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(38),
-  /* template */
-  __webpack_require__(103),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Dropdown.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Dropdown.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-f0b7e2bc", Component.options)
-  } else {
-    hotAPI.reload("data-v-f0b7e2bc", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
 /* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(107)
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(39),
-  /* template */
-  __webpack_require__(93),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Modal.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-48d780ec", Component.options)
-  } else {
-    hotAPI.reload("data-v-48d780ec", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1015,7 +977,7 @@ var settle = __webpack_require__(26);
 var buildURL = __webpack_require__(29);
 var parseHeaders = __webpack_require__(35);
 var isURLSameOrigin = __webpack_require__(33);
-var createError = __webpack_require__(10);
+var createError = __webpack_require__(9);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(28);
 
 module.exports = function xhrAdapter(config) {
@@ -1189,7 +1151,7 @@ module.exports = function xhrAdapter(config) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1215,7 +1177,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1227,7 +1189,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1251,7 +1213,7 @@ module.exports = function createError(message, config, code, response) {
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1269,7 +1231,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /*
@@ -1325,7 +1287,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -11585,6 +11547,44 @@ return jQuery;
 
 
 /***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(110)
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(39),
+  /* template */
+  __webpack_require__(95),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Modal.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-48d780ec", Component.options)
+  } else {
+    hotAPI.reload("data-v-48d780ec", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
 /* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -14077,7 +14077,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(108)
+var listToStyles = __webpack_require__(111)
 
 /*
 type StyleObject = {
@@ -14319,9 +14319,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(59);
+__webpack_require__(60);
 
-window.Vue = __webpack_require__(109);
+window.Vue = __webpack_require__(112);
 window.VueRouter = __webpack_require__(14);
 // Add router to vue
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["default"]);
@@ -14331,37 +14331,33 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["default"]);
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-var app_hub = __webpack_require__(64);
+var app_hub = __webpack_require__(65);
 
 // User related components
-var users_hub = __webpack_require__(83);
-var user_hub = __webpack_require__(79);
-var user_table = __webpack_require__(82);
-var user_form = __webpack_require__(78);
-var user_search = __webpack_require__(80);
-var user_settings = __webpack_require__(81);
+var users_hub = __webpack_require__(85);
+var user_hub = __webpack_require__(81);
+var user_table = __webpack_require__(84);
+var user_form = __webpack_require__(80);
+var user_search = __webpack_require__(82);
+var user_settings = __webpack_require__(83);
 
 // Project related components
-var projects_hub = __webpack_require__(73);
-var project_hub = __webpack_require__(70);
-var project_table = __webpack_require__(72);
-var project_form = __webpack_require__(69);
-var project_search = __webpack_require__(71);
-
-// Proposal relateld components
-var proposal_table = __webpack_require__(75);
-var proposal_form = __webpack_require__(74);
+var projects_hub = __webpack_require__(75);
+var project_hub = __webpack_require__(72);
+var project_table = __webpack_require__(74);
+var project_form = __webpack_require__(71);
+var project_search = __webpack_require__(73);
 
 // Crew related components
-var crew_list = __webpack_require__(68);
-var crew_form = __webpack_require__(67);
+var crew_list = __webpack_require__(70);
+var crew_form = __webpack_require__(69);
 
 // Timeline related components
-var timeline_form = __webpack_require__(76);
-var timeline_table = __webpack_require__(77);
+var timeline_form = __webpack_require__(78);
+var timeline_table = __webpack_require__(79);
 
 // UI components
-var navbar = __webpack_require__(65);
+var navbar = __webpack_require__(66);
 
 Vue.component('app-hub', app_hub);
 Vue.component('navbar', navbar);
@@ -14380,7 +14376,6 @@ var routes = [
 			path: 'hub',
 			components: {
 				project: project_table,
-				proposal: proposal_table,
 				crew: crew_list,
 				timeline: timeline_table
 			}
@@ -14389,22 +14384,12 @@ var routes = [
 			components: {
 				project: project_form,
 				crew: crew_list,
-				proposal: proposal_table,
-				timeline: timeline_table
-			}
-		}, {
-			path: 'proposal-form',
-			components: {
-				project: project_table,
-				proposal: proposal_form,
-				crew: crew_list,
 				timeline: timeline_table
 			}
 		}, {
 			path: 'crew-form',
 			components: {
 				project: project_table,
-				proposal: proposal_table,
 				crew: crew_form,
 				timeline: timeline_table
 			}
@@ -14413,7 +14398,6 @@ var routes = [
 			components: {
 				project: project_table,
 				crew: crew_list,
-				proposal: proposal_table,
 				timeline: timeline_form
 			}
 		}]
@@ -14472,9 +14456,9 @@ module.exports = __webpack_require__(20);
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(11);
+var bind = __webpack_require__(10);
 var Axios = __webpack_require__(22);
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(5);
 
 /**
  * Create an instance of Axios
@@ -14507,9 +14491,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(8);
+axios.Cancel = __webpack_require__(7);
 axios.CancelToken = __webpack_require__(21);
-axios.isCancel = __webpack_require__(9);
+axios.isCancel = __webpack_require__(8);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -14530,7 +14514,7 @@ module.exports.default = axios;
 "use strict";
 
 
-var Cancel = __webpack_require__(8);
+var Cancel = __webpack_require__(7);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -14594,7 +14578,7 @@ module.exports = CancelToken;
 "use strict";
 
 
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(5);
 var utils = __webpack_require__(1);
 var InterceptorManager = __webpack_require__(23);
 var dispatchRequest = __webpack_require__(24);
@@ -14747,8 +14731,8 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(1);
 var transformData = __webpack_require__(27);
-var isCancel = __webpack_require__(9);
-var defaults = __webpack_require__(4);
+var isCancel = __webpack_require__(8);
+var defaults = __webpack_require__(5);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -14857,7 +14841,7 @@ module.exports = function enhanceError(error, config, code, response) {
 "use strict";
 
 
-var createError = __webpack_require__(10);
+var createError = __webpack_require__(9);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -15446,7 +15430,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var dropdown = __webpack_require__(5);
+var dropdown = __webpack_require__(4);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
@@ -15546,6 +15530,98 @@ var api_access = __webpack_require__(2);
 
 /***/ }),
 /* 42 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var dropdown = __webpack_require__(4);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		dropdown: dropdown
+	},
+
+	// The comments to populate the list with
+	// The parent project id
+	props: ['comments', 'project_id'],
+
+	data: function data() {
+		return {
+			loggedInUserId: DASHBOARD_USER_ID
+		};
+	},
+
+
+	methods: {
+		removeNote: function removeNote(comment_id) {
+			// Cache context and post object
+			var context = this,
+			    postData = {
+				comment_id: comment_id,
+				_token: window.Laravel.csrfToken
+			};
+			// Send request to server
+			axios.post('/api/projects/remove-comment', postData).then(function (response) {
+				context.$router.app.$emit('comment-removed', comment_id);
+				// Clear form, notify, and reset loader
+				noty({
+					text: 'Comment removed from project',
+					theme: 'defaultTheme',
+					layout: 'center',
+					timeout: 650,
+					closeWith: ['click', 'hover'],
+					type: 'success'
+				});
+			}).catch(function (response) {
+				console.log(response);
+			});
+		}
+	},
+
+	created: function created() {
+		console.log('Comment list created');
+		console.log(this.comments);
+	}
+});
+
+/***/ }),
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15696,7 +15772,7 @@ var api_access = __webpack_require__(2);
 });
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15794,7 +15870,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16108,9 +16184,106 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(2);
-var modal = __webpack_require__(6);
+var modal = __webpack_require__(13);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -16158,7 +16331,14 @@ var modal = __webpack_require__(6);
 					land_access_phone: { val: '', err: false, dflt: '' },
 					invoiced_date: { val: '', err: false, dflt: '' },
 					invoice_paid_date: { val: '', err: false, dflt: '' },
-					proposal: { val: '', err: false, dflt: '' },
+					// "Proposal" related fields
+					plans: { val: '', err: false, dflt: '' },
+					work_type: { val: '', err: false, dflt: '' },
+					work_overview: { val: '', err: false, dflt: '' },
+					response_by: { val: '', err: false, dflt: '' },
+					estimate: { val: '0.00', err: false, dflt: '0.00' },
+					approval_date: { val: '', err: false, dflt: '' },
+					// Timeline 
 					timeline: { val: '', err: false, dflt: '' }
 				}
 			}
@@ -16252,20 +16432,11 @@ var modal = __webpack_require__(6);
 });
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -16356,10 +16527,7 @@ var api_access = __webpack_require__(2);
 
 		// When the form component alerts this parent that a proposal has been added
 		this.$router.app.$on('child-created', function (model) {
-			// Update model proposal
-			if (model.work_type) {
-				_this.project.proposal = model;
-			}
+
 			// Update model timeline
 			if (model.permit_application_date) {
 				_this.project.timeline = model;
@@ -16394,157 +16562,6 @@ var api_access = __webpack_require__(2);
 				}
 			});
 		});
-	}
-});
-
-/***/ }),
-/* 46 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var api_access = __webpack_require__(2);
-var dropdown = __webpack_require__(5);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		'dropdown': dropdown
-	},
-
-	mixins: [api_access],
-
-	data: function data() {
-		return {
-			urlToFetch: '/api/projects/all',
-			fetchingModels: false,
-			// Results from Laravel pagination json
-			searchResults: {
-				models: [],
-				modelsPageTotal: 0,
-				modelsCurrentPage: 0,
-				modelsPageLinks: {},
-				modelsNextPageUrl: '',
-				modelsPrevPageUrl: ''
-			}
-		};
-	},
-
-
-	methods: {
-		// Refreshes the models cache from server
-		refresh: function refresh() {
-			this.getAndSetModels();
-		},
-
-
-		// Used by the pagination buttons
-		getSpecificProjectsPage: function getSpecificProjectsPage(link) {
-			this.getAndSetModels(link);
-		},
-
-
-		// Emits an event to parent
-		viewProject: function viewProject(id) {
-			this.$router.push('/projects/view/' + id + '/hub');
-		}
-	},
-
-	// Retrieves models from server
-	created: function created() {
-		console.log('Project search created');
-		// Start loader
-		this.fetchingModels = true;
-		// Find projects
-		this.getAndSetModels();
 	}
 });
 
@@ -16642,6 +16659,578 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+var api_access = __webpack_require__(2);
+var dropdown = __webpack_require__(4);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'dropdown': dropdown
+	},
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			urlToFetch: '/api/projects/all',
+			fetchingModels: false,
+			// Results from Laravel pagination json
+			searchResults: {
+				models: [],
+				modelsPageTotal: 0,
+				modelsCurrentPage: 0,
+				modelsPageLinks: {},
+				modelsNextPageUrl: '',
+				modelsPrevPageUrl: ''
+			}
+		};
+	},
+
+
+	methods: {
+		// Refreshes the models cache from server
+		refresh: function refresh() {
+			this.getAndSetModels();
+		},
+
+
+		// Used by the pagination buttons
+		getSpecificProjectsPage: function getSpecificProjectsPage(link) {
+			this.getAndSetModels(link);
+		},
+
+
+		// Emits an event to parent
+		viewProject: function viewProject(id) {
+			this.$router.push('/projects/view/' + id + '/hub');
+		}
+	},
+
+	// Retrieves models from server
+	created: function created() {
+		console.log('Project search created');
+		// Start loader
+		this.fetchingModels = true;
+		// Find projects
+		this.getAndSetModels();
+	}
+});
+
+/***/ }),
+/* 48 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -16811,8 +17400,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var comment_form = __webpack_require__(66);
-var comment_list = __webpack_require__(115);
+var comment_form = __webpack_require__(67);
+var comment_list = __webpack_require__(68);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -16827,7 +17416,38 @@ var comment_list = __webpack_require__(115);
 		return {
 			// Waiting for prop to be populated
 			isLoading: false,
-			modalActive: false
+			modalActive: false,
+			clients: [],
+			editingField: {
+				field: '',
+				val: '',
+				err: false
+			},
+			fieldIsEditing: {
+				province: false,
+				location: false,
+				details: false,
+				client_company_name: false,
+				client_contact_name: false,
+				client_contact_phone: false,
+				client_contact_email: false,
+				first_contact_by: false,
+				first_contact_date: false,
+				land_ownership: false,
+				land_access_granted: false,
+				land_access_granted_by: false,
+				land_access_contact: false,
+				land_access_phone: false,
+				invoiced_date: false,
+				invoice_paid_date: false,
+				// "Proposal" related fields
+				plans: false,
+				work_type: false,
+				work_overview: false,
+				response_by: false,
+				estimate: false,
+				approval_date: false
+			}
 		};
 	},
 
@@ -16840,7 +17460,58 @@ var comment_list = __webpack_require__(115);
 	},
 
 	methods: {
-		removeNote: function removeNote() {}
+		showEditField: function showEditField(field) {
+			// Set the field that shows the editing input
+			this.fieldIsEditing[field] = true;
+			// Set the values for the input
+			this.editingField.field = field;
+			this.editingField.val = this.project[field];
+		},
+		closeEditingField: function closeEditingField(field) {
+			this.fieldIsEditing[field] = false;
+		},
+		submitUpdatedField: function submitUpdatedField() {
+			var context = this,
+			    postData = {
+				project_id: this.project.id,
+				_token: window.Laravel.csrfToken
+			};
+			// Add updated field and data
+			postData.field = this.editingField.field;
+			postData[this.editingField.field] = this.editingField.val;
+
+			axios.post('/api/projects/update-field', postData).then(function (response) {
+				// Notify success
+				noty({
+					text: 'Update was successful',
+					theme: 'defaultTheme',
+					layout: 'center',
+					timeout: 1200,
+					closeWith: ['click', 'hover'],
+					type: 'success'
+				});
+				// Let parent know it should update the project model
+				context.$router.app.$emit('model-updated', response.data.model);
+			}).catch(function (error) {
+				if (error.response) {
+					// If the server responded with error data
+					this.editingField.err = error.response.data[key][0];
+				}
+			});
+		},
+
+
+		// Retrieve all the unique clients from api
+		getAndSetUniqueClients: function getAndSetUniqueClients() {
+			var context = this;
+			// Send request to retrieve unique clients
+			axios.get('/api/projects/unique-clients').then(function (response) {
+				// Set the clients prop
+				context.clients = response.data.clients;
+			}).catch(function (error) {
+				console.log(error);
+			});
+		}
 	},
 
 	created: function created() {
@@ -16849,11 +17520,14 @@ var comment_list = __webpack_require__(115);
 		if (this.project.id == null) {
 			this.isLoading = true;
 		}
+
+		// Get unique clients from api
+		this.getAndSetUniqueClients();
 	}
 });
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16945,326 +17619,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 49 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var api_access = __webpack_require__(2);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	props: ['proposal', 'project_id'],
-
-	mixins: [api_access],
-
-	data: function data() {
-		return {
-			formIsLoading: false,
-			form: {
-				model: 'Proposal',
-				state: 'create-child',
-				title: 'Add Proposal',
-				button: 'Save',
-				action: '/api/proposals/create',
-				createAction: '/api/proposals/create',
-				updateAction: '/api/proposals/update',
-				isLoading: false,
-				successMsg: 'Proposal has been saved to project',
-				fields: {
-					id: { val: '', err: false, dflt: '' },
-					project_id: { val: this.project_id, err: false, dflt: '' },
-					plans: { val: '', err: false, dflt: '' },
-					work_type: { val: '', err: false, dflt: '' },
-					work_overview: { val: '', err: false, dflt: '' },
-					response_by: { val: '', err: false, dflt: '' },
-					estimate: { val: '0.00', err: false, dflt: '0.00' },
-					approval_date: { val: '', err: false, dflt: '' }
-				}
-			}
-		};
-	},
-
-
-	watch: {
-		// Wait for the proposal prop to be populated and then turn off loading
-		proposal: function proposal() {
-			this.formIsLoading = false;
-		}
-	},
-
-	methods: {
-		sendForm: function sendForm() {
-			this.createOrUpdate();
-		}
-	},
-
-	created: function created() {
-		console.log('Form-mounted');
-		if (!this.proposal) {
-			this.isLoading = true;
-		}
-
-		if (this.proposal) {
-			// Populate form
-			this.populateFormFromModel(this.proposal);
-			// Set the form state
-			this.formEditState('edit-child');
-		}
-	}
-});
-
-/***/ }),
-/* 50 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	// The proposol to populate the table with
-	// The parent project id
-	props: ['proposal', 'project_id'],
-
-	created: function created() {
-		console.log('Proposal table created');
-	}
-});
-
-/***/ }),
-/* 51 */
+/* 50 */,
+/* 51 */,
+/* 52 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17586,7 +17943,7 @@ var api_access = __webpack_require__(2);
 });
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18075,7 +18432,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18330,7 +18687,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 var api_access = __webpack_require__(2);
-var modal = __webpack_require__(6);
+var modal = __webpack_require__(13);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -18442,7 +18799,7 @@ var modal = __webpack_require__(6);
 });
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18499,7 +18856,7 @@ var api_access = __webpack_require__(2);
 });
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18580,7 +18937,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 var api_access = __webpack_require__(2);
-var dropdown = __webpack_require__(5);
+var dropdown = __webpack_require__(4);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -18635,7 +18992,7 @@ var dropdown = __webpack_require__(5);
 });
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18920,7 +19277,7 @@ var api_access = __webpack_require__(2);
 });
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19088,7 +19445,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19172,13 +19529,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(62);
+window._ = __webpack_require__(63);
 
-window.noty = __webpack_require__(63);
+window.noty = __webpack_require__(64);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -19187,7 +19544,7 @@ window.noty = __webpack_require__(63);
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(13);
+  window.$ = window.jQuery = __webpack_require__(12);
 } catch (e) {}
 
 /**
@@ -19217,21 +19574,21 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // });
 
 /***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(12)();
-exports.push([module.i, "\n.log-out{\n    margin-left: 10px;\n}\n\n", ""]);
-
-/***/ }),
 /* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(12)();
-exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n\n", ""]);
+exports = module.exports = __webpack_require__(11)();
+exports.push([module.i, "\n.log-out{\n    margin-left: 10px;\n}\n\n", ""]);
 
 /***/ }),
 /* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(11)();
+exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n\n", ""]);
+
+/***/ }),
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -36320,15 +36677,15 @@ exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n\n", ""]);
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16), __webpack_require__(110)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16), __webpack_require__(113)(module)))
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!function(root, factory) {
 	 if (true) {
-		 !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(13)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		 !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(12)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -38207,14 +38564,14 @@ return window.noty;
 });
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(37),
   /* template */
-  __webpack_require__(89),
+  __webpack_require__(91),
   /* scopeId */
   null,
   /* cssModules */
@@ -38241,18 +38598,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(106)
+__webpack_require__(109)
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(40),
   /* template */
-  __webpack_require__(86),
+  __webpack_require__(88),
   /* scopeId */
   null,
   /* cssModules */
@@ -38279,14 +38636,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(41),
   /* template */
-  __webpack_require__(98),
+  __webpack_require__(100),
   /* scopeId */
   null,
   /* cssModules */
@@ -38313,14 +38670,48 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(42),
   /* template */
-  __webpack_require__(85),
+  __webpack_require__(103),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\comment\\Comment-list.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Comment-list.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-b049d89e", Component.options)
+  } else {
+    hotAPI.reload("data-v-b049d89e", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(43),
+  /* template */
+  __webpack_require__(87),
   /* scopeId */
   null,
   /* cssModules */
@@ -38347,14 +38738,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(43),
+  __webpack_require__(44),
   /* template */
-  __webpack_require__(95),
+  __webpack_require__(97),
   /* scopeId */
   null,
   /* cssModules */
@@ -38381,14 +38772,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(44),
+  __webpack_require__(45),
   /* template */
-  __webpack_require__(92),
+  __webpack_require__(94),
   /* scopeId */
   null,
   /* cssModules */
@@ -38415,14 +38806,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(45),
+  __webpack_require__(46),
   /* template */
-  __webpack_require__(101),
+  __webpack_require__(104),
   /* scopeId */
   null,
   /* cssModules */
@@ -38449,14 +38840,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(46),
+  __webpack_require__(47),
   /* template */
-  __webpack_require__(100),
+  __webpack_require__(102),
   /* scopeId */
   null,
   /* cssModules */
@@ -38483,14 +38874,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(47),
+  __webpack_require__(48),
   /* template */
-  __webpack_require__(96),
+  __webpack_require__(98),
   /* scopeId */
   null,
   /* cssModules */
@@ -38517,14 +38908,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(48),
+  __webpack_require__(49),
   /* template */
-  __webpack_require__(91),
+  __webpack_require__(93),
   /* scopeId */
   null,
   /* cssModules */
@@ -38551,82 +38942,16 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 74 */
+/* 76 */,
+/* 77 */,
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(49),
+  __webpack_require__(52),
   /* template */
-  __webpack_require__(87),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\proposal\\Proposal-form.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Proposal-form.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-233bae97", Component.options)
-  } else {
-    hotAPI.reload("data-v-233bae97", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 75 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(50),
-  /* template */
-  __webpack_require__(97),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\proposal\\Proposal-table.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Proposal-table.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-64758d8b", Component.options)
-  } else {
-    hotAPI.reload("data-v-64758d8b", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 76 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(51),
-  /* template */
-  __webpack_require__(88),
+  __webpack_require__(90),
   /* scopeId */
   null,
   /* cssModules */
@@ -38653,14 +38978,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(52),
+  __webpack_require__(53),
   /* template */
-  __webpack_require__(104),
+  __webpack_require__(107),
   /* scopeId */
   null,
   /* cssModules */
@@ -38687,14 +39012,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(53),
+  __webpack_require__(54),
   /* template */
-  __webpack_require__(105),
+  __webpack_require__(108),
   /* scopeId */
   null,
   /* cssModules */
@@ -38721,14 +39046,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(54),
+  __webpack_require__(55),
   /* template */
-  __webpack_require__(84),
+  __webpack_require__(86),
   /* scopeId */
   null,
   /* cssModules */
@@ -38755,14 +39080,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(55),
+  __webpack_require__(56),
   /* template */
-  __webpack_require__(102),
+  __webpack_require__(105),
   /* scopeId */
   null,
   /* cssModules */
@@ -38789,14 +39114,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(56),
+  __webpack_require__(57),
   /* template */
-  __webpack_require__(90),
+  __webpack_require__(92),
   /* scopeId */
   null,
   /* cssModules */
@@ -38823,14 +39148,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(57),
+  __webpack_require__(58),
   /* template */
-  __webpack_require__(94),
+  __webpack_require__(96),
   /* scopeId */
   null,
   /* cssModules */
@@ -38857,14 +39182,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 83 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(58),
+  __webpack_require__(59),
   /* template */
-  __webpack_require__(99),
+  __webpack_require__(101),
   /* scopeId */
   null,
   /* cssModules */
@@ -38891,7 +39216,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 84 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -38911,7 +39236,7 @@ if (false) {
 }
 
 /***/ }),
-/* 85 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -39010,7 +39335,7 @@ if (false) {
 }
 
 /***/ }),
-/* 86 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -39091,289 +39416,8 @@ if (false) {
 }
 
 /***/ }),
-/* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [(_vm.formIsLoading) ? _c('div', {
-    staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', {
-    staticClass: "col-md-12 well bs-component margin-25-top"
-  }, [_c('form', {
-    staticClass: "form-horizontal",
-    on: {
-      "submit": function($event) {
-        $event.preventDefault();
-      }
-    }
-  }, [_c('fieldset', [_c('legend', [_vm._v("\r\n\t\t\t\t\t" + _vm._s(_vm.form.title) + "\r\n\t\t\t\t\t"), _vm._v(" "), _c('button', {
-    staticClass: "pull-right btn btn-danger",
-    on: {
-      "click": function($event) {
-        _vm.$router.go(-1)
-      }
-    },
-    slot: "close"
-  }, [_vm._v("×")])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.work_type.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Work Type")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.work_type.val),
-      expression: "form.fields.work_type.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.work_type.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "",
-      "selected": "",
-      "disabled": ""
-    }
-  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "HRIA"
-    }
-  }, [_vm._v("HRIA")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Archaeology"
-    }
-  }, [_vm._v("Archaeology")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Palaeontology"
-    }
-  }, [_vm._v("Palaeontology")])]), _vm._v(" "), (_vm.form.fields.work_type.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.work_type.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.plans.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Project Plans")]), _vm._v(" "), _c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.plans.val),
-      expression: "form.fields.plans.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "rows": "3",
-      "placeholder": "Project plans"
-    },
-    domProps: {
-      "value": (_vm.form.fields.plans.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.plans.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.plans.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.plans.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.work_overview.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Work Overview")]), _vm._v(" "), _c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.work_overview.val),
-      expression: "form.fields.work_overview.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "rows": "3",
-      "placeholder": "Overview of work"
-    },
-    domProps: {
-      "value": (_vm.form.fields.work_overview.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.work_overview.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.work_overview.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.work_overview.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.estimate.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Estimate")]), _vm._v(" "), _c('div', {
-    staticClass: "input-group margin-10-top"
-  }, [_c('span', {
-    staticClass: "input-group-addon"
-  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.estimate.val),
-      expression: "form.fields.estimate.val"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      "type": "text"
-    },
-    domProps: {
-      "value": (_vm.form.fields.estimate.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.estimate.val = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), (_vm.form.fields.estimate.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.estimate.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.response_by.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Response By")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.response_by.val),
-      expression: "form.fields.response_by.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.response_by.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.response_by.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.response_by.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.response_by.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.approval_date.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Approval Date")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.approval_date.val),
-      expression: "form.fields.approval_date.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.approval_date.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.approval_date.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.approval_date.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.approval_date.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-3 col-centered"
-  }, [_c('div', {
-    staticClass: "form-group"
-  }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-45-top",
-    on: {
-      "click": _vm.sendForm
-    }
-  }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
-    staticClass: "center-loader"
-  })]) : _vm._e()])])])])])])]) : _vm._e()])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "col-md-12"
-  }, [_c('div', {
-    staticClass: "large-center-loader"
-  })])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-233bae97", module.exports)
-  }
-}
-
-/***/ }),
-/* 88 */
+/* 89 */,
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -40023,7 +40067,7 @@ if (false) {
 }
 
 /***/ }),
-/* 89 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -40056,7 +40100,7 @@ if (false) {
 }
 
 /***/ }),
-/* 90 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -40349,7 +40393,7 @@ if (false) {
 }
 
 /***/ }),
-/* 91 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -40412,7 +40456,7 @@ if (false) {
 }
 
 /***/ }),
-/* 92 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -40427,149 +40471,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         $event.preventDefault();
       }
     }
-  }, [_c('fieldset', [_c('legend', [_vm._v("\r\n\t\t\t\t\t\t" + _vm._s(_vm.form.title) + "\r\n\t\t\t\t\t\t"), _c('button', {
+  }, [_c('fieldset', [_c('legend', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-8"
+  }, [_c('h2', {
+    staticClass: "pull-left",
+    staticStyle: {
+      "margin-top": "6px"
+    }
+  }, [_vm._v(_vm._s(_vm.form.title))])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('button', {
     staticClass: "pull-right btn btn-danger",
     on: {
       "click": function($event) {
         _vm.$router.go(-1)
       }
-    },
-    slot: "close"
-  }, [_vm._v("\r\n\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t")])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.province.err
     }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Province")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.province.val),
-      expression: "form.fields.province.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.province.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "",
-      "selected": "",
-      "disabled": ""
-    }
-  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Alberta"
-    }
-  }, [_vm._v("Alberta")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "British Columbia"
-    }
-  }, [_vm._v("British Columbia")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Saskatchewan"
-    }
-  }, [_vm._v("Saskatchewan")])]), _vm._v(" "), (_vm.form.fields.province.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.province.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.location.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Location")]), _vm._v(" "), _c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.location.val),
-      expression: "form.fields.location.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "rows": "3",
-      "placeholder": "Specific location"
-    },
-    domProps: {
-      "value": (_vm.form.fields.location.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.location.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.location.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.location.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.details.err
-    }
-  }, [_c('div', {
-    staticClass: "col-lg-10"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Details")]), _vm._v(" "), _c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.details.val),
-      expression: "form.fields.details.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "rows": "3",
-      "placeholder": "Project details"
-    },
-    domProps: {
-      "value": (_vm.form.fields.details.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.details.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.details.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.details.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
+  }, [_vm._v("\r\n\t\t\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t\t\t")])])])])]), _vm._v(" "), _c('fieldset', {
     staticClass: "margin-25-top"
-  }, [_c('legend', [_vm._v("Client and contact")]), _vm._v(" "), _c('div', {
+  }, [_vm._m(1), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [(_vm.form.state != 'edit') ? _c('div', {
-    staticClass: "col-md-6"
+    staticClass: "col-md-5"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.form.fields.province.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
   }, [_vm._v("Client company")]), _vm._v(" "), _c('select', {
@@ -40604,7 +40536,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t\t" + _vm._s(client) + "\r\n\t\t\t\t\t\t\t\t\t\t")])
   })], 2), _vm._v(" "), (_vm.client_company_name.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_company_name.err))]) : _vm._e()])])]) : _vm._e(), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.client_company_name.err))]) : _vm._e()])])]) : _vm._e(), _vm._v(" "), _vm._m(2), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
@@ -40612,12 +40544,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       'has-error': _vm.form.fields.client_company_name.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [(_vm.form.state != 'edit') ? _c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Add new company")]) : _c('label', {
+  }, [_vm._v("Add New Company")]) : _c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Company name")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("Company Name")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -40642,19 +40574,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), (_vm.form.fields.client_company_name.err) ? _c('span', {
     staticClass: "text-danger"
   }, [_vm._v(_vm._s(_vm.form.fields.client_company_name.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
+    staticClass: "row margin-15-top"
   }, [_c('div', {
-    staticClass: "col-md-6"
+    staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.form.fields.client_contact_name.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Client contact")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("Client Contact")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -40678,17 +40610,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), (_vm.form.fields.client_contact_name.err) ? _c('span', {
     staticClass: "text-danger"
   }, [_vm._v(_vm._s(_vm.form.fields.client_contact_name.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
+    staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.form.fields.client_contact_phone.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Client contact phone")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("Contact's Phone No.")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -40711,20 +40643,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.client_contact_phone.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_phone.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
+  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_phone.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.form.fields.client_contact_email.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Client contact email")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("Contact's Email")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -40747,18 +40677,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.client_contact_email.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_email.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
+  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_email.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.form.fields.first_contact_by.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("First contact by")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("First Contacted By")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -40814,20 +40746,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" \r\n\t\t\t\t\t\t\t\t\t\t\t\tSame person as client contact?\r\n\t\t\t\t\t\t\t\t\t\t")])]), _vm._v(" "), (_vm.form.fields.first_contact_by.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.first_contact_by.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
+  }, [_vm._v(_vm._s(_vm.form.fields.first_contact_by.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.form.fields.first_contact_date.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("First contact date")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("First Contact Date")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -40849,22 +40779,346 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.first_contact_date.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.first_contact_date.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
-    staticClass: "margin-25-top"
-  }, [_c('legend', [_vm._v("Land ownership")]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.first_contact_date.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('hr', {
+    staticClass: "dotted"
+  }), _vm._v(" "), _c('fieldset', [_vm._m(3), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.province.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Province")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.province.val),
+      expression: "form.fields.province.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.form.fields.province.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": "",
+      "disabled": ""
+    }
+  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Alberta"
+    }
+  }, [_vm._v("Alberta")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "British Columbia"
+    }
+  }, [_vm._v("British Columbia")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Saskatchewan"
+    }
+  }, [_vm._v("Saskatchewan")])]), _vm._v(" "), (_vm.form.fields.province.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.province.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.location.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Specific Location")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.location.val),
+      expression: "form.fields.location.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Specific location"
+    },
+    domProps: {
+      "value": (_vm.form.fields.location.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.location.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.location.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.location.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.details.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Basic Details")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.details.val),
+      expression: "form.fields.details.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Project details"
+    },
+    domProps: {
+      "value": (_vm.form.fields.details.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.details.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.details.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.details.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('hr', {
+    staticClass: "dotted"
+  }), _vm._v(" "), _c('fieldset', {
+    staticClass: "margin-25-top"
+  }, [_vm._m(4), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.work_type.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Work Type")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.work_type.val),
+      expression: "form.fields.work_type.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.form.fields.work_type.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": "",
+      "disabled": ""
+    }
+  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "HRIA"
+    }
+  }, [_vm._v("HRIA")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Archaeology"
+    }
+  }, [_vm._v("Archaeology")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Palaeontology"
+    }
+  }, [_vm._v("Palaeontology")])]), _vm._v(" "), (_vm.form.fields.work_type.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.work_type.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.response_by.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Response By")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.response_by.val),
+      expression: "form.fields.response_by.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.form.fields.response_by.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.response_by.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.response_by.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.response_by.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.estimate.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Estimate")]), _vm._v(" "), _c('div', {
+    staticClass: "input-group margin-10-top"
+  }, [_c('span', {
+    staticClass: "input-group-addon"
+  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.estimate.val),
+      expression: "form.fields.estimate.val"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.form.fields.estimate.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.estimate.val = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), (_vm.form.fields.estimate.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.estimate.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.work_overview.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Work Overview")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.work_overview.val),
+      expression: "form.fields.work_overview.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Overview of work"
+    },
+    domProps: {
+      "value": (_vm.form.fields.work_overview.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.work_overview.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.work_overview.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.work_overview.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.plans.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Work Plans")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.plans.val),
+      expression: "form.fields.plans.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Work plans"
+    },
+    domProps: {
+      "value": (_vm.form.fields.plans.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.plans.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.plans.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.plans.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('hr', {
+    staticClass: "dotted"
+  }), _vm._v(" "), _c('fieldset', {
+    staticClass: "margin-25-top"
+  }, [_vm._m(5), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.form.fields.land_ownership.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Land ownership")]), _vm._v(" "), _c('select', {
+  }, [_vm._v("Land Ownership")]), _vm._v(" "), _c('select', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -40890,17 +41144,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "disabled": ""
     }
   }, [_vm._v("Select...")]), _vm._v(" "), _c('option', [_vm._v("Crown")]), _vm._v(" "), _c('option', [_vm._v("Freehold")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
+    staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.form.fields.land_access_granted.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Land access granted")]), _vm._v(" "), _c('select', {
+  }, [_vm._v("Land Access Granted?")]), _vm._v(" "), _c('select', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -40927,20 +41181,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "value": "1"
     }
-  }, [_vm._v("Yes")])])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
+  }, [_vm._v("Yes")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.form.fields.land_access_granted_by.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Land access granted by")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("Access Granted By")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -40963,18 +41215,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.land_access_granted_by.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.land_access_granted_by.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
+  }, [_vm._v(_vm._s(_vm.form.fields.land_access_granted_by.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.form.fields.land_access_contact.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Land access contact")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("Contact")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -41030,20 +41284,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" \r\n\t\t\t\t\t\t\t\t\t\t\t\tSame person as land access granted by?\r\n\t\t\t\t\t\t\t\t\t\t")])]), _vm._v(" "), (_vm.form.fields.land_access_contact.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.land_access_contact.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
+  }, [_vm._v(_vm._s(_vm.form.fields.land_access_contact.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
       'has-error': _vm.form.fields.land_access_phone.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Land access phone")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("Contact's Phone No.")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -41066,9 +41318,48 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.land_access_phone.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.land_access_phone.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
+  }, [_vm._v(_vm._s(_vm.form.fields.land_access_phone.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('hr', {
+    staticClass: "dotted"
+  }), _vm._v(" "), _c('fieldset', [_vm._m(6), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.approval_date.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Approval Date")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.approval_date.val),
+      expression: "form.fields.approval_date.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.form.fields.approval_date.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.approval_date.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.approval_date.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.approval_date.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('hr', {
+    staticClass: "dotted"
+  }), _vm._v(" "), _c('fieldset', {
     staticClass: "margin-25-top"
-  }, [_c('legend', [_vm._v("Invoicing")]), _vm._v(" "), _c('div', {
+  }, [_vm._m(7), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-6"
@@ -41078,7 +41369,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       'has-error': _vm.form.fields.invoiced_date.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
   }, [_vm._v("Invoiced date")]), _vm._v(" "), _c('input', {
@@ -41111,7 +41402,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       'has-error': _vm.form.fields.invoice_paid_date.err
     }
   }, [_c('div', {
-    staticClass: "col-lg-10"
+    staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
   }, [_vm._v("Invoice paid date")]), _vm._v(" "), _c('input', {
@@ -41203,6 +41494,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "large-center-loader"
   })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('legend', [_c('h3', [_vm._v("Client and contact")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-1 margin-50-top"
+  }, [_c('strong', [_vm._v("- OR -")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('legend', [_c('h3', [_vm._v("Location")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('legend', [_c('h3', [_vm._v("Work Details")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('legend', [_c('h3', [_vm._v("Land ownership")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('legend', [_c('h3', [_vm._v("Approval")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('legend', [_c('h3', [_vm._v("Invoicing")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -41213,7 +41520,7 @@ if (false) {
 }
 
 /***/ }),
-/* 93 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41250,7 +41557,7 @@ if (false) {
 }
 
 /***/ }),
-/* 94 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41358,7 +41665,7 @@ if (false) {
 }
 
 /***/ }),
-/* 95 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41417,7 +41724,7 @@ if (false) {
 }
 
 /***/ }),
-/* 96 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41425,144 +41732,1355 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row margin-85-top margin-85-bottom"
   }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.isLoading) ? _c('div', [_vm._m(1), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
-  }, [_c('button', {
-    staticClass: "btn btn-default",
+  }, [_c('h3', [_vm._v("Client")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.client_company_name) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(2), _vm._v(" "), (_vm.project.client_company_name == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.client_company_name) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
     on: {
       "click": function($event) {
-        _vm.$router.push('edit')
+        _vm.showEditField('client_company_name')
       }
     }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Client company")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": ""
+    }
+  }, [_vm._v("Select existing client...")]), _vm._v(" "), _vm._l((_vm.clients), function(client) {
+    return _c('option', {
+      domProps: {
+        "value": client
+      }
+    }, [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t" + _vm._s(client) + "\r\n\t\t\t\t\t\t\t\t\t")])
+  })], 2)]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
   }, [_c('span', {
-    staticClass: "glyphicon glyphicon-cog"
-  }), _vm._v(" Edit Project\r\n\t\t\t")])]), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded margin-25-top"
-  }, [_c('h4', [_vm._v("Location")]), _vm._v(" "), _c('div', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('client_company_name')
+      }
+    }
+  })])])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
+  }, [(!_vm.fieldIsEditing.client_contact_name) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(2), _vm._v(" "), (_vm.project.province == null) ? _c('div', [_c('span', {
+  }, [_vm._m(3), _vm._v(" "), (_vm.project.client_contact_name == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
     staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.province) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-8"
-  }, [_c('div', {
-    staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.client_contact_name) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('client_contact_name')
+      }
+    }
+  })])]) : _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(3), _vm._v(" "), (_vm.project.location == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.location) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12"
   }, [_c('div', {
-    staticClass: "panel panel-white post panel-shadow"
+    staticClass: "form-group"
   }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(4), _vm._v(" "), (_vm.project.details == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.details) + "\r\n\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('hr', {
-    staticClass: "dotted"
-  }), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded margin-25-top"
-  }, [_c('h4', [_vm._v("Client")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Client Contact")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Name of contact"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('client_contact_name')
+      }
+    }
+  })])])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
+  }, [(!_vm.fieldIsEditing.client_contact_phone) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(5), _vm._v(" "), (_vm.project.client_company_name == null) ? _c('div', [_c('span', {
+  }, [_vm._m(4), _vm._v(" "), (_vm.project.client_contact_phone == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
     staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.client_company_name) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(6), _vm._v(" "), (_vm.project.client_contact_name == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.client_contact_name) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(7), _vm._v(" "), (_vm.project.client_contact_phone == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_c('a', {
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('a', {
     attrs: {
       "href": 'tel: +1' + _vm.project.client_contact_phone.replace(/-/g, '')
     }
-  }, [_vm._v(_vm._s(_vm.project.client_contact_phone))])])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.project.client_contact_phone))])]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('client_contact_phone')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Contact's Phone No.")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Contact phone number"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('client_contact_phone')
+      }
+    }
+  })])])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
+  }, [(!_vm.fieldIsEditing.client_contact_email) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(8), _vm._v(" "), (_vm.project.client_contact_email == null) ? _c('div', [_c('span', {
+  }, [_vm._m(5), _vm._v(" "), (_vm.project.client_contact_email == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
     staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.client_contact_email) + "\r\n\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('hr', {
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.client_contact_email) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('client_contact_email')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Contact's Email")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Contact email"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('client_contact_email')
+      }
+    }
+  })])])])])])]), _vm._v(" "), _c('hr', {
     staticClass: "dotted"
   }), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
-  }, [_c('h4', [_vm._v("Land")]), _vm._v(" "), _c('div', {
+  }, [_c('h3', [_vm._v("Location")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
+  }, [(!_vm.fieldIsEditing.province) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(9), _vm._v(" "), (_vm.project.land_ownership == null) ? _c('div', [_c('span', {
+  }, [_vm._m(6), _vm._v(" "), (_vm.project.province == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
     staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.land_ownership) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.province) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('province')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Province")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": "",
+      "disabled": ""
+    }
+  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Alberta"
+    }
+  }, [_vm._v("Alberta")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "British Columbia"
+    }
+  }, [_vm._v("British Columbia")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Saskatchewan"
+    }
+  }, [_vm._v("Saskatchewan")])]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.province.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('province')
+      }
+    }
+  })])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-8"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
+  }, [(!_vm.fieldIsEditing.location) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(10), _vm._v(" "), (_vm.project.land_access_granted == 0) ? _c('div', [_vm._v("No")]) : _vm._e(), _vm._v(" "), (_vm.project.land_access_granted == 1) ? _c('div', [_vm._v("Yes")]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(11), _vm._v(" "), (_vm.project.land_access_granted_by == null) ? _c('div', [_c('span', {
+  }, [_vm._m(7), _vm._v(" "), (_vm.project.location == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
     staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.land_access_granted_by) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.location) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('location')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Specific Location")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Specific location"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('location')
+      }
+    }
+  })])])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-12"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
+  }, [(!_vm.fieldIsEditing.details) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(12), _vm._v(" "), (_vm.project.land_access_contact == null) ? _c('div', [_c('span', {
+  }, [_vm._m(8), _vm._v(" "), (_vm.project.details == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
     staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.land_access_contact) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.details) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('details')
+      }
+    }
+  })])]) : _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(13), _vm._v(" "), (_vm.project.land_access_phone == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.land_access_phone) + "\r\n\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('hr', {
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Basic Details")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Project details"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('details')
+      }
+    }
+  })])])])])])]), _vm._v(" "), _c('hr', {
     staticClass: "dotted"
   }), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
-  }, [_c('h4', [_vm._v("Invoicing")]), _vm._v(" "), _c('div', {
+  }, [_c('h3', [_vm._v("Work Details")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
+  }, [(!_vm.fieldIsEditing.work_type) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(14), _vm._v(" "), (_vm.project.invoiced_date == null) ? _c('div', [_c('span', {
+  }, [_vm._m(9), _vm._v(" "), (_vm.project.work_type == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
     staticClass: "label label-danger"
-  }, [_vm._v("Not Invoiced")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.invoiced_date) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.work_type) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('work_type')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Work Type")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": "",
+      "disabled": ""
+    }
+  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "HRIA"
+    }
+  }, [_vm._v("HRIA")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Archaeology"
+    }
+  }, [_vm._v("Archaeology")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Palaeontology"
+    }
+  }, [_vm._v("Palaeontology")])]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('work_type')
+      }
+    }
+  })])])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
+  }, [(!_vm.fieldIsEditing.response_by) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(15), _vm._v(" "), (_vm.project.invoice_paid_date == null) ? _c('div', [_c('span', {
+  }, [_vm._m(10), _vm._v(" "), (_vm.project.response_by == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
     staticClass: "label label-danger"
-  }, [_vm._v("Not Invoiced")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.invoice_paid_date) + "\r\n\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('hr', {
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.response_by) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('response_by')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Respond By")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('response_by')
+      }
+    }
+  })])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.estimate) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(11), _vm._v(" "), (_vm.project.estimate == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t$" + _vm._s(_vm.project.estimate) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('estimate')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Estimate")]), _vm._v(" "), _c('div', {
+    staticClass: "input-group margin-10-top"
+  }, [_c('span', {
+    staticClass: "input-group-addon"
+  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('estimate')
+      }
+    }
+  })])])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.work_overview) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(12), _vm._v(" "), (_vm.project.work_overview == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.work_overview) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('work_overview')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Work Overview")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Overview of work"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('work_overview')
+      }
+    }
+  })])])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.plans) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(13), _vm._v(" "), (_vm.project.plans == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.plans) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('plans')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Work Plans")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Work plans"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('plans')
+      }
+    }
+  })])])])])])]), _vm._v(" "), _c('hr', {
+    staticClass: "dotted"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-25-top"
+  }, [_c('h3', [_vm._v("Land")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.land_ownership) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(14), _vm._v(" "), (_vm.project.land_ownership == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.land_ownership) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('land_ownership')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Land Ownership")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": "",
+      "disabled": ""
+    }
+  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', [_vm._v("Crown")]), _vm._v(" "), _c('option', [_vm._v("Freehold")])])]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('land_ownership')
+      }
+    }
+  })])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.land_access_granted) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(15), _vm._v(" "), _c('div', {
+    staticClass: "col-md-11"
+  }, [(_vm.project.land_access_granted == 0) ? _c('div', [_vm._v("No")]) : _vm._e(), _vm._v(" "), (_vm.project.land_access_granted == 1) ? _c('div', [_vm._v("Yes")]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('land_access_granted')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Land Access Granted?")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Yes")])])]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('land_access_granted')
+      }
+    }
+  })])])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.land_access_granted_by) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(16), _vm._v(" "), (_vm.project.land_access_granted_by == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.land_access_granted_by) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('land_access_granted_by')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Access Granted By")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Access granted by"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('land_access_granted_by')
+      }
+    }
+  })])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.land_access_contact) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(17), _vm._v(" "), (_vm.project.land_access_contact == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.land_access_contact) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('land_access_contact')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Access Contact")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Access contact name"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('land_access_contact')
+      }
+    }
+  })])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.land_access_phone) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(18), _vm._v(" "), (_vm.project.land_access_phone == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.land_access_phone) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('land_access_phone')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Contact's Phone")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Contact's phone no."
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('land_access_phone')
+      }
+    }
+  })])])])])])]), _vm._v(" "), _c('hr', {
+    staticClass: "dotted"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-25-top"
+  }, [_c('h3', [_vm._v("Invoicing")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.invoiced_date) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(19), _vm._v(" "), (_vm.project.invoiced_date == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("Not Invoiced")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.invoiced_date) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('invoiced_date')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Invoiced Date")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('invoiced_date')
+      }
+    }
+  })])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.invoice_paid_date) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(20), _vm._v(" "), (_vm.project.invoice_paid_date == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("Not Invoiced")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.invoice_paid_date) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('invoice_paid_date')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Invoiced Paid On")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('invoice_paid_date')
+      }
+    }
+  })])])])])])]), _vm._v(" "), _c('hr', {
+    staticClass: "dotted"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-25-top"
+  }, [_c('h3', [_vm._v("Project Approval")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.approval_date) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(21), _vm._v(" "), (_vm.project.approval_date == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("Not yet approved")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.approval_date) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('approval_date')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Project Approved On")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('approval_date')
+      }
+    }
+  })])])])])])]), _vm._v(" "), _c('hr', {
     staticClass: "dotted"
   }), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
@@ -41596,35 +43114,47 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row row-padded"
-  }, [_c('h3', [_vm._v("Project Details")])])
+  }, [_c('h2', [_vm._v("Project Details")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Client Company")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Company Contact")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Contact's Phone No.")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Contact's Email")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Province")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Location")])])
+  return _c('h5', [_c('strong', [_vm._v("Specific Location")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Details")])])
+  return _c('h5', [_c('strong', [_vm._v("Basic Details")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Client")])])
+  return _c('h5', [_c('strong', [_vm._v("Work Type")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Client Contact")])])
+  return _c('h5', [_c('strong', [_vm._v("Respond By")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Contact Phone")])])
+  return _c('h5', [_c('strong', [_vm._v("Estimate")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Contact Email")])])
+  return _c('h5', [_c('strong', [_vm._v("Work Overview")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Work Plans")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Land Ownership")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Access Granted")])])
+  return _c('h5', [_c('strong', [_vm._v("Is Access Granted?")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Access Granted By")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Access Contact")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Access Contact Phone")])])
+  return _c('h5', [_c('strong', [_vm._v("Contact's Phone")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Invoiced Date")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Date Paid")])])
+  return _c('h5', [_c('strong', [_vm._v("Invoice Paid On")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Project Approved On")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -41635,116 +43165,8 @@ if (false) {
 }
 
 /***/ }),
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_vm._m(0), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded margin-25-top"
-  }, [(_vm.proposal) ? _c('button', {
-    staticClass: "btn btn-default",
-    on: {
-      "click": function($event) {
-        _vm.$router.push('proposal-form')
-      }
-    }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-briefcase"
-  }), _vm._v(" Edit Proposal\r\n\t\t")]) : _vm._e(), _vm._v(" "), (!_vm.proposal) ? _c('button', {
-    staticClass: "btn btn-default",
-    on: {
-      "click": function($event) {
-        _vm.$router.push('proposal-form')
-      }
-    }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-briefcase"
-  }), _vm._v(" Add Proposal\r\n\t\t")]) : _vm._e()]), _vm._v(" "), (!_vm.proposal) ? _c('div', [_c('div', {
-    staticClass: "row row-padded margin-35-top"
-  }, [_c('div', {
-    staticClass: "alert alert-warning text-center"
-  }, [_c('big', [_c('strong', [_vm._v("Heads up!")]), _vm._v(" The next step is to add information related to the proposal.")])], 1)])]) : _vm._e(), _vm._v(" "), (_vm.proposal) ? _c('div', [_c('div', {
-    staticClass: "row row-padded margin-25-top"
-  }, [_c('h4', [_vm._v("Work Details")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(1), _vm._v(" "), (_vm.proposal.work_type == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.proposal.work_type) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(2), _vm._v(" "), (_vm.proposal.work_overview == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.proposal.work_overview) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(3), _vm._v(" "), (_vm.proposal.plans == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.proposal.plans) + "\r\n\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded margin-25-top"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(4), _vm._v(" "), (_vm.proposal.estimate == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t$" + _vm._s(_vm.proposal.estimate) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(5), _vm._v(" "), (_vm.proposal.response_by == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.proposal.response_by) + "\r\n\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded margin-25-top"
-  }, [_c('h4', [_vm._v("Project Approval")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(6), _vm._v(" "), (_vm.proposal.approval_date == null) ? _c('div', [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("Not yet approved")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.proposal.approval_date) + "\r\n\t\t\t\t    \t")])])])])])]) : _vm._e()])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "row row-padded"
-  }, [_c('h3', [_vm._v("Project Proposal")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Work Type")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Work Overview")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Work Plans")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Estimate")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Response By")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Approval Date")])])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-64758d8b", module.exports)
-  }
-}
-
-/***/ }),
-/* 98 */
+/* 99 */,
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41819,7 +43241,7 @@ if (false) {
 }
 
 /***/ }),
-/* 99 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41878,7 +43300,7 @@ if (false) {
 }
 
 /***/ }),
-/* 100 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41974,7 +43396,52 @@ if (false) {
 }
 
 /***/ }),
-/* 101 */
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_c('h4', [_vm._v("Notes")]), _vm._v(" "), _vm._l((_vm.comments), function(comment) {
+    return _c('div', [_c('div', {
+      staticClass: "panel panel-white post panel-shadow"
+    }, [_c('div', {
+      staticClass: "post-heading"
+    }, [_c('div', {
+      staticClass: "pull-left meta"
+    }, [_c('div', {
+      staticClass: "title h5"
+    }, [_c('a', {
+      attrs: {
+        "href": "#"
+      }
+    }, [_c('b', [_vm._v(_vm._s(comment.user.first + ' ' + comment.user.last))])]), _vm._v("\r\n                       \tadded a note.\r\n                    ")]), _vm._v(" "), _c('h6', {
+      staticClass: "text-muted time"
+    }, [_vm._v(_vm._s(comment.date))])]), _vm._v(" "), _c('div', {
+      staticClass: "pull-right meta"
+    }, [_c('dropdown', {
+      attrs: {
+        "title": 'Actions'
+      }
+    }, [(comment.user.id == _vm.loggedInUserId) ? _c('li', [_c('a', {
+      on: {
+        "click": function($event) {
+          _vm.removeNote(comment.id)
+        }
+      }
+    }, [_vm._v("Remove")])]) : _vm._e()])], 1)]), _vm._v(" "), _c('div', {
+      staticClass: "post-description"
+    }, [_c('p', [_vm._v("\r\n                \t" + _vm._s(comment.comment) + "\r\n                ")])])])])
+  })], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-b049d89e", module.exports)
+  }
+}
+
+/***/ }),
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41990,13 +43457,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "name": "project",
       "project": _vm.project
     }
-  }), _vm._v(" "), _c('hr'), _vm._v(" "), _c('router-view', {
-    attrs: {
-      "name": "proposal",
-      "proposal": _vm.project.proposal,
-      "project_id": _vm.project.id
-    }
-  }), _vm._v(" "), _c('hr'), _vm._v(" "), (_vm.project.proposal) ? _c('div', [(_vm.project.proposal.approval_date) ? _c('div', [_c('router-view', {
+  }), _vm._v(" "), _c('hr'), _vm._v(" "), (_vm.project.approval_date) ? _c('div', [_c('router-view', {
     attrs: {
       "name": "crew",
       "crew": _vm.project.users,
@@ -42012,7 +43473,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row row-padded margin-35-top"
   }, [_c('div', {
     staticClass: "alert alert-warning text-center"
-  }, [_c('big', [_c('strong', [_vm._v("Heads up!")]), _vm._v(" Once the project has an approval date the next steps will become available")])], 1)])])]) : _vm._e()], 1), _vm._v(" "), _c('div', {
+  }, [_c('big', [_c('strong', [_vm._v("Heads up!")]), _vm._v(" Once the project has an approval date the next steps will become available")])], 1)])])], 1), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -42037,7 +43498,7 @@ if (false) {
 }
 
 /***/ }),
-/* 102 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -42127,7 +43588,7 @@ if (false) {
 }
 
 /***/ }),
-/* 103 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -42161,7 +43622,7 @@ if (false) {
 }
 
 /***/ }),
-/* 104 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -42560,7 +44021,7 @@ if (false) {
 }
 
 /***/ }),
-/* 105 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43124,13 +44585,13 @@ if (false) {
 }
 
 /***/ }),
-/* 106 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(60);
+var content = __webpack_require__(61);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43150,13 +44611,13 @@ if(false) {
 }
 
 /***/ }),
-/* 107 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(61);
+var content = __webpack_require__(62);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43176,7 +44637,7 @@ if(false) {
 }
 
 /***/ }),
-/* 108 */
+/* 111 */
 /***/ (function(module, exports) {
 
 /**
@@ -43209,7 +44670,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 109 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52907,7 +54368,7 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(16)))
 
 /***/ }),
-/* 110 */
+/* 113 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -52935,185 +54396,12 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 111 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
 module.exports = __webpack_require__(18);
 
-
-/***/ }),
-/* 112 */,
-/* 113 */,
-/* 114 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var dropdown = __webpack_require__(5);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		dropdown: dropdown
-	},
-
-	// The comments to populate the list with
-	// The parent project id
-	props: ['comments', 'project_id'],
-
-	data: function data() {
-		return {
-			loggedInUserId: DASHBOARD_USER_ID
-		};
-	},
-
-
-	methods: {
-		removeNote: function removeNote(comment_id) {
-			// Cache context and post object
-			var context = this,
-			    postData = {
-				comment_id: comment_id,
-				_token: window.Laravel.csrfToken
-			};
-			// Send request to server
-			axios.post('/api/projects/remove-comment', postData).then(function (response) {
-				context.$router.app.$emit('comment-removed', comment_id);
-				// Clear form, notify, and reset loader
-				noty({
-					text: 'Comment removed from project',
-					theme: 'defaultTheme',
-					layout: 'center',
-					timeout: 650,
-					closeWith: ['click', 'hover'],
-					type: 'success'
-				});
-			}).catch(function (response) {
-				console.log(response);
-			});
-		}
-	},
-
-	created: function created() {
-		console.log('Comment list created');
-		console.log(this.comments);
-	}
-});
-
-/***/ }),
-/* 115 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(114),
-  /* template */
-  __webpack_require__(116),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\comment\\Comment-list.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Comment-list.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-b049d89e", Component.options)
-  } else {
-    hotAPI.reload("data-v-b049d89e", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 116 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('h4', [_vm._v("Notes")]), _vm._v(" "), _vm._l((_vm.comments), function(comment) {
-    return _c('div', [_c('div', {
-      staticClass: "panel panel-white post panel-shadow"
-    }, [_c('div', {
-      staticClass: "post-heading"
-    }, [_c('div', {
-      staticClass: "pull-left meta"
-    }, [_c('div', {
-      staticClass: "title h5"
-    }, [_c('a', {
-      attrs: {
-        "href": "#"
-      }
-    }, [_c('b', [_vm._v(_vm._s(comment.user.first + ' ' + comment.user.last))])]), _vm._v("\r\n                       \tadded a note.\r\n                    ")]), _vm._v(" "), _c('h6', {
-      staticClass: "text-muted time"
-    }, [_vm._v(_vm._s(comment.date))])]), _vm._v(" "), _c('div', {
-      staticClass: "pull-right meta"
-    }, [_c('dropdown', {
-      attrs: {
-        "title": 'Actions'
-      }
-    }, [(comment.user.id == _vm.loggedInUserId) ? _c('li', [_c('a', {
-      on: {
-        "click": function($event) {
-          _vm.removeNote(comment.id)
-        }
-      }
-    }, [_vm._v("Remove")])]) : _vm._e()])], 1)]), _vm._v(" "), _c('div', {
-      staticClass: "post-description"
-    }, [_c('p', [_vm._v("\r\n                \t" + _vm._s(comment.comment) + "\r\n                ")])])])])
-  })], 2)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-b049d89e", module.exports)
-  }
-}
 
 /***/ })
 /******/ ]);
