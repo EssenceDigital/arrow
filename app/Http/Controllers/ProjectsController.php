@@ -257,7 +257,7 @@ class ProjectsController extends Controller
 
     public function updateField(Request $request){
         // Ensure request field is actually a project field
-        if(in_array($request->field, $this->validationFields)){
+        if(array_key_exists($request->field, $this->validationFields)){
             // Validate field
             $this->validate($request, [
                 // Dynamically validate proper field
@@ -266,7 +266,7 @@ class ProjectsController extends Controller
             ]);
 
             // Find project
-            $project = Project::find($request->project_id);
+            $project = Project::with(['comments', 'comments.user', 'timeline', 'users'])->find($request->project_id);
 
             // Return failed response if collection empty
             if(! $project){

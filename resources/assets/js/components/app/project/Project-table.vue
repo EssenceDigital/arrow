@@ -47,6 +47,18 @@
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('client_company_name')" class="glyphicon glyphicon-remove hover"></span>
 					    	</div>							
+						</div>
+						<div class="row row-padded">
+							<div class="col-md-11">
+								<div class="form-group">
+									<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<span v-if="!fieldIsUpdating">Save</span>
+										<span v-if="fieldIsUpdating">
+											<div class="center-loader"></div>
+										</span>
+									</button>												
+								</div>					
+							</div>
 						</div>						
 					</div>
 				</div>
@@ -76,7 +88,19 @@
 		                    </div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('client_contact_name')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>		                    
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    			                    
 	                  	</div>						
 					</div>					
 				</div>
@@ -104,7 +128,19 @@
 		                    </div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('client_contact_phone')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>		                    
+					    	</div>		
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    	                    
 	                  	</div>						
 					</div>					
 				</div>
@@ -132,7 +168,19 @@
 		                    </div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('client_contact_email')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>		                    
+					    	</div>	
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    		                    
 	                  	</div>						
 					</div>					
 				</div>
@@ -172,7 +220,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('province')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>							
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    								
 						</div>						
 					</div>					
 				</div>
@@ -200,7 +260,19 @@
 			                </div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('location')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>			                
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    				                
 			            </div>						
 					</div>					
 				</div>
@@ -230,7 +302,19 @@
 			                </div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('details')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>			                
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    				                
 			            </div>						
 					</div>					
 				</div>
@@ -269,7 +353,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('work_type')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>								
+					    	</div>	
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    								
 						</div>						
 					</div>					
 				</div>
@@ -297,7 +393,19 @@
 		                    </div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('response_by')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>		                    
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    			                    
 	                  	</div>						
 					</div>					
 				</div>
@@ -328,7 +436,19 @@
 		                    </div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('estimate')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>		                    
+					    	</div>	
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    		                    
 	                  	</div>					
 					</div>					
 				</div>
@@ -358,7 +478,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('work_overview')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>							
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    								
 						</div>					
 					</div>					
 				</div>
@@ -388,7 +520,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('plans')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>							
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    								
 						</div>					
 					</div>					
 				</div>
@@ -425,7 +569,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('land_ownership')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>							
+					    	</div>	
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    							
 						</div>					
 					</div>					
 				</div>
@@ -453,7 +609,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('land_access_granted')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>							
+					    	</div>	
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    							
 						</div>					
 					</div>					
 				</div>
@@ -483,7 +651,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('land_access_granted_by')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>							
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    								
 						</div>					
 					</div>					
 				</div>
@@ -511,7 +691,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('land_access_contact')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>							
+					    	</div>	
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    							
 						</div>					
 					</div>					
 				</div>
@@ -539,7 +731,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('land_access_phone')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>							
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    								
 						</div>					
 					</div>					
 				</div>
@@ -573,7 +777,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('invoiced_date')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>							
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    								
 						</div>					
 					</div>					
 				</div>
@@ -601,7 +817,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('invoice_paid_date')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>							
+					    	</div>	
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    							
 						</div>					
 					</div>					
 				</div>
@@ -635,7 +863,19 @@
 							</div>
 					    	<div class="pull-right">
 					    		<span @click="closeEditingField('approval_date')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>							
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    								
 						</div>					
 					</div>					
 				</div>
@@ -695,6 +935,7 @@
 				isLoading: false,
 				modalActive: false,
 				clients: [],
+				fieldIsUpdating: false,
 				editingField: {
 					field: '', 
 					val: '', 
@@ -750,6 +991,9 @@
 			},
 
 			submitUpdatedField(){
+				// Show loader
+				this.fieldIsUpdating = true;
+				// Cache needed data
 				var context = this,
 					postData = {
 						project_id: this.project.id,
@@ -759,8 +1003,16 @@
 				postData.field = this.editingField.field;
 				postData[this.editingField.field] = this.editingField.val;
 
+				console.log(postData);
+
 				axios.post('/api/projects/update-field', postData)
 					.then(function(response){
+						// Let parent know it should update the project model
+						context.$router.app.$emit('model-updated', response.data.model);
+						// Hide loader
+						context.fieldIsUpdating = false;
+						// Hide form field
+						context.fieldIsEditing[context.editingField.field] = false;
 						// Notify success
 		                 noty({
 		                     text: 'Update was successful',
@@ -769,9 +1021,7 @@
 		                     timeout: 1200,
 		                     closeWith: ['click', 'hover'],
 		                     type: 'success'
-		                });
-						// Let parent know it should update the project model
-						context.$router.app.$emit('model-updated', response.data.model);
+		                });						
 					})
 					.catch(function(error){
 	                    if (error.response) {
