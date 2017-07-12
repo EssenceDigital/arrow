@@ -10,7 +10,7 @@ use App\Timeline;
 class TimelinesController extends Controller
 {
     private $validationFields = [
-        'project_id' => 'required|numeric',
+        'project_id' => 'numeric',
         'permit_application_date' => 'date',
         'permit_recieved_date' => 'date',
         'permit_number' => 'max:50',
@@ -90,6 +90,14 @@ class TimelinesController extends Controller
             'model' => $timeline
         ], 200);
 
+    }
+
+    public function updateField(Request $request){
+        return $this->updateModelField(
+            $request,
+            Timeline::find($request->id),
+            $this->validationFields
+        );        
     }
 
     /**

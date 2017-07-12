@@ -9,16 +9,26 @@
 		</div>
 	</div>
 
-	<!-- Table wrapper - only shows after prop data is populated -->
+	<!-- Table wrapper - only shows after project is loaded -->
 	<div v-if="!isLoading">
 		<div class="row row-padded">
 			<h2>Project Details</h2>
 		</div>
 
+		<!-- Tool navigation -->
+		<div class="row row-padded margin-25-top">
+			<button @click="$router.push('options')" class="btn btn-default">
+				<span class="glyphicon glyphicon-wrench"></span>&nbsp;Options
+			</button>	
+		</div>		
+
+		<!-- Client row 1 -->
 		<div class="row row-padded margin-25-top">
 			<h3>Client</h3>
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.client_company_name" class="panel-body">
 						<h5><strong>Client Company</strong></h5>
 				    	<div v-if="project.client_company_name == null" class="col-md-11">
@@ -31,6 +41,7 @@
 				    		<span @click="showEditField('client_company_name')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>									
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group">
 							<div class="col-md-11">
@@ -51,7 +62,7 @@
 						<div class="row row-padded">
 							<div class="col-md-11">
 								<div class="form-group">
-									<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+									<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 										<span v-if="!fieldIsUpdating">Save</span>
 										<span v-if="fieldIsUpdating">
 											<div class="center-loader"></div>
@@ -60,13 +71,17 @@
 								</div>					
 							</div>
 						</div>						
-					</div>
+					</div><!-- / Input form toggle panel -->
 				</div>
-			</div>
-		</div>
+			</div><!-- / Field column -->
+		</div><!-- / client row 1 -->
+
+		<!-- Client row 2 -->
 		<div class="row row-padded">
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.client_contact_name" class="panel-body">
 						<h5><strong>Company Contact</strong></h5>
 				    	<div v-if="project.client_contact_name == null" class="col-md-11">
@@ -79,6 +94,7 @@
 				    		<span @click="showEditField('client_contact_name')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group">
 		                    <div class="col-md-11">
@@ -92,7 +108,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -102,11 +118,13 @@
 								</div>
 							</div>					    			                    
 	                  	</div>						
-					</div>					
+					</div><!-- / Input form toggle panel -->				
 				</div>
-			</div>								
+			</div><!-- / Field column -->
+			<!-- Field column -->								
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.client_contact_phone" class="panel-body">
 						<h5><strong>Contact's Phone No.</strong></h5>
 				    	<div v-if="project.client_contact_phone == null" class="col-md-11">
@@ -119,6 +137,7 @@
 				    		<span @click="showEditField('client_contact_phone')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 		                    <div class="col-md-11">
@@ -132,7 +151,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -142,11 +161,13 @@
 								</div>
 							</div>					    	                    
 	                  	</div>						
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
+			</div><!-- / Field column -->
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.client_contact_email" class="panel-body">
 						<h5><strong>Contact's Email</strong></h5>
 				    	<div v-if="project.client_contact_email == null" class="col-md-11">
@@ -159,6 +180,7 @@
 				    		<span @click="showEditField('client_contact_email')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 		                    <div class="col-md-11">
@@ -172,7 +194,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -182,18 +204,20 @@
 								</div>
 							</div>					    		                    
 	                  	</div>						
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
-		</div><!-- / row padded-->
+			</div><!-- / Field column -->
+		</div><!-- / client row 2 -->
 
 		<hr class="dotted"><!-- Divider -->
 
-		<!-- Project table in the form of panels -->
+		<!-- Location row -->
 		<div class="row row-padded margin-25-top">
 			<h3>Location</h3>
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.province" class="panel-body">
 						<h5><strong>Province</strong></h5>
 				    	<div v-if="project.province == null" class="col-md-11">
@@ -206,6 +230,7 @@
 				    		<span @click="showEditField('province')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -224,7 +249,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -234,11 +259,13 @@
 								</div>
 							</div>					    								
 						</div>						
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
+			</div><!-- / Field column -->
+			<!-- Field column -->
 			<div class="col-md-8">
 				<div class="panel panel-white post panel-shadow">									
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.location" class="panel-body">
 						<h5><strong>Specific Location</strong></h5>
 				    	<div v-if="project.location == null" class="col-md-11">
@@ -251,6 +278,7 @@
 				    		<span @click="showEditField('location')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>					    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 			                <div class="col-md-11">
@@ -264,7 +292,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -274,13 +302,17 @@
 								</div>
 							</div>					    				                
 			            </div>						
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>	
-		</div>
-		<div class="row row-padded">							
+			</div><!-- / Field column -->
+		</div><!-- / Location row 1-->
+
+		<!-- Basic details row -->
+		<div class="row row-padded">
+			<!-- Field column -->							
 			<div class="col-md-12">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.details" class="panel-body">
 						<h5><strong>Basic Details</strong></h5>
 				    	<div v-if="project.details == null" class="col-md-11">
@@ -293,6 +325,7 @@
 				    		<span @click="showEditField('details')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 			                <div class="col-md-11">
@@ -306,7 +339,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -316,17 +349,20 @@
 								</div>
 							</div>					    				                
 			            </div>						
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
-		</div><!-- / row padded-->
+			</div><!-- / Field column -->
+		</div><!-- / Basic details row -->
 
 		<hr class="dotted"><!-- Divider -->
 
+		<!-- Work details row 1 -->
 		<div class="row row-padded margin-25-top">
 			<h3>Work Details</h3>
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.work_type" class="panel-body">
 						<h5><strong>Work Type</strong></h5>
 				    	<div v-if="project.work_type == null" class="col-md-11">
@@ -339,6 +375,7 @@
 				    		<span @click="showEditField('work_type')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -357,7 +394,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -367,11 +404,13 @@
 								</div>
 							</div>					    								
 						</div>						
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
+			</div><!-- / Field column -->
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.response_by" class="panel-body">
 						<h5><strong>Respond By</strong></h5>
 				    	<div v-if="project.response_by == null" class="col-md-11">
@@ -384,6 +423,7 @@
 				    		<span @click="showEditField('response_by')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 		                    <div class="col-md-11">
@@ -397,7 +437,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -407,11 +447,13 @@
 								</div>
 							</div>					    			                    
 	                  	</div>						
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>																			
+			</div><!-- / Field column -->	
+			<!-- Field column -->																		
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.estimate" class="panel-body">
 						<h5><strong>Estimate</strong></h5>
 				    	<div v-if="project.estimate == null" class="col-md-11">
@@ -424,6 +466,7 @@
 				    		<span @click="showEditField('estimate')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 		                    <div class="col-md-11">
@@ -440,7 +483,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -450,13 +493,17 @@
 								</div>
 							</div>					    		                    
 	                  	</div>					
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>			
-		</div>
+			</div><!-- / Field column -->		
+		</div><!-- / Work details row -->
+
+		<!-- Work details row 2 -->
 		<div class="row row-padded">
+			<!-- Field column -->
 			<div class="col-md-12">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.work_overview" class="panel-body">
 						<h5><strong>Work Overview</strong></h5>
 				    	<div v-if="project.work_overview == null" class="col-md-11">
@@ -469,6 +516,7 @@
 				    		<span @click="showEditField('work_overview')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -482,7 +530,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -492,13 +540,17 @@
 								</div>
 							</div>					    								
 						</div>					
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
-		</div>
+			</div><!-- / Field column -->
+		</div> <!-- Work details row 2 -->
+
+		<!-- Work details row 3 -->
 		<div class="row row-padded">
+			<!-- Field column -->
 			<div class="col-md-12">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.plans" class="panel-body">
 						<h5><strong>Work Plans</strong></h5>
 				    	<div v-if="project.plans == null" class="col-md-11">
@@ -511,6 +563,7 @@
 				    		<span @click="showEditField('plans')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    									
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -524,7 +577,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -534,17 +587,20 @@
 								</div>
 							</div>					    								
 						</div>					
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
-		</div>
+			</div><!-- / Field column -->
+		</div><!-- Work details row 3 -->
 
 		<hr class="dotted"><!-- Divider -->
 
+		<!-- Land row 1 -->
 		<div class="row row-padded margin-25-top">
 			<h3>Land</h3>
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.land_ownership" class="panel-body">
 						<h5><strong>Land Ownership</strong></h5>
 				    	<div v-if="project.land_ownership == null" class="col-md-11">
@@ -557,6 +613,7 @@
 				    		<span @click="showEditField('land_ownership')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -573,7 +630,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -583,11 +640,13 @@
 								</div>
 							</div>					    							
 						</div>					
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
+			</div><!-- / Field column -->
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.land_access_granted" class="panel-body">
 						<h5><strong>Is Access Granted?</strong></h5>
 						<div class="col-md-11">
@@ -598,6 +657,7 @@
 				    		<span @click="showEditField('land_access_granted')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>					    
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -613,7 +673,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -623,13 +683,17 @@
 								</div>
 							</div>					    							
 						</div>					
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
-		</div>
-		<div class="row row-padded">								
+			</div><!-- / Field column -->
+		</div><!-- / Land row 1 -->
+
+		<!-- Land row 2 -->
+		<div class="row row-padded">
+			<!-- Field column -->								
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.land_access_granted_by" class="panel-body">
 						<h5><strong>Access Granted By</strong></h5>
 				    	<div v-if="project.land_access_granted_by == null" class="col-md-11">
@@ -642,6 +706,7 @@
 				    		<span @click="showEditField('land_access_granted_by')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -655,7 +720,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -665,11 +730,13 @@
 								</div>
 							</div>					    								
 						</div>					
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
+			</div><!-- / Field column -->
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.land_access_contact" class="panel-body">
 						<h5><strong>Access Contact</strong></h5>
 				    	<div v-if="project.land_access_contact == null" class="col-md-11">
@@ -682,6 +749,7 @@
 				    		<span @click="showEditField('land_access_contact')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -695,7 +763,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -705,11 +773,13 @@
 								</div>
 							</div>					    							
 						</div>					
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
+			</div><!-- / Field column -->
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.land_access_phone" class="panel-body">
 						<h5><strong>Contact's Phone</strong></h5>
 				    	<div v-if="project.land_access_phone == null" class="col-md-11">
@@ -722,6 +792,7 @@
 				    		<span @click="showEditField('land_access_phone')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -735,7 +806,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -745,17 +816,20 @@
 								</div>
 							</div>					    								
 						</div>					
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>			
-		</div><!-- / row padded-->
+			</div><!-- / Field column -->			
+		</div><!-- Land row 2 -->
 
 		<hr class="dotted"><!-- Divider -->
 
+		<!-- Invoicing row -->
 		<div class="row row-padded margin-25-top">
 			<h3>Invoicing</h3>
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.invoiced_date"  class="panel-body">
 						<h5><strong>Invoiced Date</strong></h5>
 				    	<div v-if="project.invoiced_date == null" class="col-md-11">
@@ -768,6 +842,7 @@
 				    		<span @click="showEditField('invoiced_date')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>					    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -781,7 +856,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -791,11 +866,13 @@
 								</div>
 							</div>					    								
 						</div>					
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>
+			</div><!-- / Field column -->
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">									
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.invoice_paid_date" class="panel-body">
 						<h5><strong>Invoice Paid On</strong></h5>
 				    	<div v-if="project.invoice_paid_date == null" class="col-md-11">
@@ -808,6 +885,7 @@
 				    		<span @click="showEditField('invoice_paid_date')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    											
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -821,7 +899,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -831,17 +909,20 @@
 								</div>
 							</div>					    							
 						</div>					
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>								
-		</div><!-- / row padded-->
+			</div><!-- / Field column -->								
+		</div><!-- / Invoicing row -->
 
 		<hr class="dotted"><!-- Divider -->
 
+		<!-- Approval row -->
 		<div class="row row-padded margin-25-top">
 			<h3>Project Approval</h3>
+			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
 					<div v-if="!fieldIsEditing.approval_date" class="panel-body">
 						<h5><strong>Project Approved On</strong></h5>
 				    	<div v-if="project.approval_date == null" class="col-md-11">
@@ -854,6 +935,7 @@
 				    		<span @click="showEditField('approval_date')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>				    										
 					</div>
+					<!-- Show input form if edit mode is toggled -->
 					<div v-else class="panel-body">
 						<div class="form-group" :class="{'has-error': editingField.err}">
 							<div class="col-md-11">
@@ -867,7 +949,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="submitUpdatedField" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -877,13 +959,14 @@
 								</div>
 							</div>					    								
 						</div>					
-					</div>					
+					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div>																	
-		</div><!-- / padded row -->
+			</div><!-- / Field column -->																	
+		</div><!-- / Approval row -->
 
 		<hr class="dotted"><!-- Divider -->
 
+		<!-- Project comments row -->
 		<div class="row row-padded margin-25-top">
 			<div class="col-md-12">
 				<comment-list
@@ -891,8 +974,9 @@
 				>
 				</comment-list>
 			</div>
-		</div>
+		</div><!-- / Project comments row -->
 
+		<!-- Project comment form row -->
 		<div class="row row-padded margin-15-top">
 		    <div class="col-md-12">
 		        <div class="panel panel-white post panel-shadow">
@@ -906,10 +990,9 @@
 		            </div>
 		        </div>
 		    </div>		
-		</div>
+		</div><!-- / Project comment form row -->
 
 	</div><!-- Table wrapper -->
-
 
 </div><!-- / Component container -->
 
@@ -918,9 +1001,11 @@
 <script>
 	let comment_form = require('./../comment/Comment-form.vue');
 	let comment_list = require('./../comment/Comment-list.vue');
+	let api_access = require('./../_mixins/api-access.js');
 	
 
 	export default{
+		//
 		components: {
 			'comment-form': comment_form,
 			'comment-list': comment_list
@@ -929,18 +1014,23 @@
 		// The data to populated 'table' with
 		props: ['project'],
 
+		mixins: [api_access],
+
 		data(){
 			return{
 				// Waiting for prop to be populated
 				isLoading: false,
 				modalActive: false,
 				clients: [],
+				// Used by API access
 				fieldIsUpdating: false,
+				// Used by API access
 				editingField: {
 					field: '', 
 					val: '', 
 					err: false
 				},
+				// Used by API access
 				fieldIsEditing: {
 					province: false,
 					location: false,
@@ -977,59 +1067,23 @@
 		},
 
 		methods:{
+			// Shows the field input and hides the field table
 			showEditField(field){
 				// Set the field that shows the editing input
 				this.fieldIsEditing[field] = true;
 				// Set the values for the input
 				this.editingField.field = field;
 				this.editingField.val = this.project[field];
-				
 			},
-
+			// Shows the field table and hides the field input
 			closeEditingField(field){
 				this.fieldIsEditing[field] = false;
 			},
 
-			submitUpdatedField(){
-				// Show loader
-				this.fieldIsUpdating = true;
-				// Cache needed data
-				var context = this,
-					postData = {
-						project_id: this.project.id,
-						_token: window.Laravel.csrfToken						
-					};
-				// Add updated field and data
-				postData.field = this.editingField.field;
-				postData[this.editingField.field] = this.editingField.val;
-
-				console.log(postData);
-
-				axios.post('/api/projects/update-field', postData)
-					.then(function(response){
-						// Let parent know it should update the project model
-						context.$router.app.$emit('model-updated', response.data.model);
-						// Hide loader
-						context.fieldIsUpdating = false;
-						// Hide form field
-						context.fieldIsEditing[context.editingField.field] = false;
-						// Notify success
-		                 noty({
-		                     text: 'Update was successful',
-		                     theme: 'defaultTheme',
-		                     layout: 'center',
-		                     timeout: 1200,
-		                     closeWith: ['click', 'hover'],
-		                     type: 'success'
-		                });						
-					})
-					.catch(function(error){
-	                    if (error.response) {
-	                        // If the server responded with error data
-	                        this.editingField.err = error.response.data[key][0];                              
-	                    }
-					});
-
+			// Update the field
+			sendFieldUpdate(){
+				// Use API access method to submit the change
+				this.updateField('/api/projects/update-field', this.project.id);				
 			},
 
 			// Retrieve all the unique clients from api
@@ -1049,6 +1103,7 @@
 
 		created(){
 			console.log('Project table created');
+
 			// Show loader if no project cached
 			if(this.project.id == null){
 				this.isLoading = true;

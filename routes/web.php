@@ -49,6 +49,7 @@ Route::post('/api/proposals/update', 'ProposalsController@update');
 // Timelines
 Route::post('/api/timelines/create', 'TimelinesController@store');
 Route::post('/api/timelines/update', 'TimelinesController@update');
+Route::post('/api/timelines/update-field', 'TimelinesController@updateField');
 
 // Users
 Route::get('/api/users', 'UsersController@hub');
@@ -57,6 +58,7 @@ Route::get('/api/users/all-pages', 'UsersController@allPages');
 Route::get('/api/users/{id}', 'UsersController@single');
 Route::post('/api/users/create', 'UsersController@store');
 Route::post('/api/users/update', 'UsersController@update');
+Route::post('/api/users/update-field', 'UsersController@updateField');
 Route::post('/api/users/change-password', 'UsersController@changePassword');
 Route::post('/api/users/delete', 'UsersController@delete');
 Auth::routes();

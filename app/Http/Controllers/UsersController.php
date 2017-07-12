@@ -139,6 +139,15 @@ class UsersController extends Controller
 
     }
 
+    public function updateField(Request $request){
+
+        return $this->updateModelField(
+            $request,
+            User::find($request->id),
+            $this->validationFields
+        );
+    }
+
     /**
      * Update a resource in storage.
      *

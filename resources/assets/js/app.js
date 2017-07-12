@@ -70,7 +70,7 @@ const routes = [
 						}
 					},
 					{
-						path: 'edit',
+						path: 'options',
 						components: {
 							project: project_form,
 							crew: crew_list,
@@ -115,7 +115,7 @@ const routes = [
 						}
 					},
 					{
-						path: 'edit',
+						path: 'options',
 						components: {
 							user: user_form,
 

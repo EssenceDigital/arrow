@@ -3,7 +3,7 @@
 <!-- Containing row -->
 <div class="row margin-75-top">
 	<div class="col-md-12">
-
+	
 		<!-- Panel -->	
 		<div class="panel panel-primary">
 			<!-- Panel heading -->

@@ -602,6 +602,43 @@ module.exports = {
 				}
 			});
 		},
+		updateField: function updateField(action, id) {
+			// Show loader
+			this.fieldIsUpdating = true;
+			// Cache needed data
+			var context = this,
+			    postData = {
+				id: id,
+				_token: window.Laravel.csrfToken
+			};
+			// Add updated field and data
+			postData.field = this.editingField.field;
+			postData[this.editingField.field] = this.editingField.val;
+
+			// Send post request to update the field
+			axios.post(action, postData).then(function (response) {
+				// Let parent know it should update the project model
+				context.$router.app.$emit('model-updated', response.data.model);
+				// Hide loader
+				context.fieldIsUpdating = false;
+				// Hide form field
+				context.fieldIsEditing[context.editingField.field] = false;
+				// Notify success
+				noty({
+					text: 'Update was successful',
+					theme: 'defaultTheme',
+					layout: 'center',
+					timeout: 1200,
+					closeWith: ['click', 'hover'],
+					type: 'success'
+				});
+			}).catch(function (error) {
+				if (error.response) {
+					// If the server responded with error data
+					this.editingField.err = error.response.data[key][0];
+				}
+			});
+		},
 
 
 		// Sends a POST request to delete the specified and confirmed model
@@ -14380,7 +14417,7 @@ var routes = [
 				timeline: timeline_table
 			}
 		}, {
-			path: 'edit',
+			path: 'options',
 			components: {
 				project: project_form,
 				crew: crew_list,
@@ -14416,7 +14453,7 @@ var routes = [
 				user: user_table
 			}
 		}, {
-			path: 'edit',
+			path: 'options',
 			components: {
 				user: user_form
 
@@ -16281,6 +16318,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(2);
 var modal = __webpack_require__(13);
@@ -16499,35 +16544,40 @@ var api_access = __webpack_require__(2);
 
 	data: function data() {
 		return {
+			// The project
 			project: false
 		};
 	},
-
-
-	// If an id is in the route then retrieve the model from server
 	created: function created() {
 		var _this = this;
 
 		console.log('Project hub created');
 
+		// If the ID is present then do this
 		if (this.$route.params.id) {
 			// Get a fresh version of the requested model
 			this.grabModel('/api/projects/' + this.$route.params.id, function (model) {
 				// Cache retrieved model
 				this.project = model;
-				console.log(model);
 			});
 		}
 
-		// When the form component alerts this parent of a successful updated
+		// When the form component alerts this parent of a successful update
 		this.$router.app.$on('model-updated', function (model) {
-			// Update cached model
-			_this.project = model;
+			// Update project if the model is a project
+			if (model.province) {
+				// Update cached model
+				_this.project = model;
+			}
+
+			// Update timeline if the model is a timeline
+			if (model.permit_application_date) {
+				_this.project.timeline = model;
+			}
 		});
 
-		// When the form component alerts this parent that a proposal has been added
+		// When this parent is alerted a foreign key model has been created
 		this.$router.app.$on('child-created', function (model) {
-
 			// Update model timeline
 			if (model.permit_application_date) {
 				_this.project.timeline = model;
@@ -16536,15 +16586,16 @@ var api_access = __webpack_require__(2);
 			if (model.first) {
 				_this.project.users.push(model);
 			}
-
 			// Update model comments
 			if (model.comment) {
 				_this.project.comments.push(model);
 			}
 		});
 
+		// When this parent is alerted a crew member has been removed
 		this.$router.app.$on('crew-removed', function (user_id) {
 			var context = _this;
+			// Find the crew member in the model and remove it
 			_this.project.users.forEach(function (user) {
 				if (user.id == user_id) {
 					var index = context.project.users.indexOf(user);
@@ -16553,8 +16604,10 @@ var api_access = __webpack_require__(2);
 			});
 		});
 
+		// When this parent is alreted a comment has been removed
 		this.$router.app.$on('comment-removed', function (comment_id) {
 			var context = _this;
+			// Find the comment in the model and remove it
 			_this.project.comments.forEach(function (comment) {
 				if (comment.id == comment_id) {
 					var index = context.project.comments.indexOf(comment);
@@ -17639,11 +17692,96 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var comment_form = __webpack_require__(65);
 var comment_list = __webpack_require__(66);
+var api_access = __webpack_require__(2);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+	//
 	components: {
 		'comment-form': comment_form,
 		'comment-list': comment_list
@@ -17652,18 +17790,23 @@ var comment_list = __webpack_require__(66);
 	// The data to populated 'table' with
 	props: ['project'],
 
+	mixins: [api_access],
+
 	data: function data() {
 		return {
 			// Waiting for prop to be populated
 			isLoading: false,
 			modalActive: false,
 			clients: [],
+			// Used by API access
 			fieldIsUpdating: false,
+			// Used by API access
 			editingField: {
 				field: '',
 				val: '',
 				err: false
 			},
+			// Used by API access
 			fieldIsEditing: {
 				province: false,
 				location: false,
@@ -17701,6 +17844,7 @@ var comment_list = __webpack_require__(66);
 	},
 
 	methods: {
+		// Shows the field input and hides the field table
 		showEditField: function showEditField(field) {
 			// Set the field that shows the editing input
 			this.fieldIsEditing[field] = true;
@@ -17708,46 +17852,17 @@ var comment_list = __webpack_require__(66);
 			this.editingField.field = field;
 			this.editingField.val = this.project[field];
 		},
+
+		// Shows the field table and hides the field input
 		closeEditingField: function closeEditingField(field) {
 			this.fieldIsEditing[field] = false;
 		},
-		submitUpdatedField: function submitUpdatedField() {
-			// Show loader
-			this.fieldIsUpdating = true;
-			// Cache needed data
-			var context = this,
-			    postData = {
-				project_id: this.project.id,
-				_token: window.Laravel.csrfToken
-			};
-			// Add updated field and data
-			postData.field = this.editingField.field;
-			postData[this.editingField.field] = this.editingField.val;
 
-			console.log(postData);
 
-			axios.post('/api/projects/update-field', postData).then(function (response) {
-				// Let parent know it should update the project model
-				context.$router.app.$emit('model-updated', response.data.model);
-				// Hide loader
-				context.fieldIsUpdating = false;
-				// Hide form field
-				context.fieldIsEditing[context.editingField.field] = false;
-				// Notify success
-				noty({
-					text: 'Update was successful',
-					theme: 'defaultTheme',
-					layout: 'center',
-					timeout: 1200,
-					closeWith: ['click', 'hover'],
-					type: 'success'
-				});
-			}).catch(function (error) {
-				if (error.response) {
-					// If the server responded with error data
-					this.editingField.err = error.response.data[key][0];
-				}
-			});
+		// Update the field
+		sendFieldUpdate: function sendFieldUpdate() {
+			// Use API access method to submit the change
+			this.updateField('/api/projects/update-field', this.project.id);
 		},
 
 
@@ -17766,6 +17881,7 @@ var comment_list = __webpack_require__(66);
 
 	created: function created() {
 		console.log('Project table created');
+
 		// Show loader if no project cached
 		if (this.project.id == null) {
 			this.isLoading = true;
@@ -18667,12 +18783,496 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+var api_access = __webpack_require__(2);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// The timeline to populate the table with
 	// The parent project id
 	props: ['timeline', 'project_id'],
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			// Used by API access
+			fieldIsUpdating: false,
+			// Used by API access
+			editingField: {
+				field: '',
+				val: '',
+				err: false
+			},
+			// Used by API access
+			fieldIsEditing: {
+				permit_application_date: false,
+				permit_recieved_date: false,
+				permit_number: false,
+				site_number_application_date: false,
+				site_number_recieved_date: false,
+				site_number: false,
+				completion_target: false,
+				field_completion_target: false,
+				report_completion_target: false,
+				fieldwork_scheduled: false,
+				artifact_analysis: false,
+				mapping: false,
+				writing: false,
+				draft_submitted: false,
+				draft_accepted: false,
+				final_approval: false
+			}
+		};
+	},
+
+
+	methods: {
+		// Shows the field input and hides the field table
+		showEditField: function showEditField(field) {
+			// Set the field that shows the editing input
+			this.fieldIsEditing[field] = true;
+			// Set the values for the input
+			this.editingField.field = field;
+			this.editingField.val = this.timeline[field];
+		},
+
+		// Shows the field table and hides the field input
+		closeEditingField: function closeEditingField(field) {
+			this.fieldIsEditing[field] = false;
+		},
+
+		// Update the field
+		sendFieldUpdate: function sendFieldUpdate() {
+			// Use API access method to submit the change
+			this.updateField('/api/timelines/update-field', this.timeline.id);
+		}
+	},
 
 	created: function created() {
 		console.log('Timeline table created');
@@ -18685,6 +19285,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -19663,15 +20273,303 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+var api_access = __webpack_require__(2);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: ['user'],
 
+	mixins: [api_access],
+
 	data: function data() {
 		return {
 			// Waiting for prop to be populated
-			isLoading: false
+			isLoading: false,
+			// Used by API access
+			fieldIsUpdating: false,
+			// Used by API access
+			editingField: {
+				field: '',
+				val: '',
+				err: false
+			},
+			// Used by API access
+			fieldIsEditing: {
+				first: false,
+				last: false,
+				permissions: false,
+				email: false,
+				password: false,
+				password_confirmation: false,
+				company_name: false,
+				hourly_rate_one: false,
+				hourly_rate_two: false,
+				gst_number: false
+			}
 		};
 	},
 
@@ -19680,6 +20578,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		// Wait for the user prop to be populated and then turn off loading
 		user: function user() {
 			this.isLoading = false;
+		}
+	},
+
+	methods: {
+		// Shows the field input and hides the field table
+		showEditField: function showEditField(field) {
+			// Set the field that shows the editing input
+			this.fieldIsEditing[field] = true;
+			// Set the values for the input
+			this.editingField.field = field;
+			this.editingField.val = this.user[field];
+		},
+
+		// Shows the field table and hides the field input
+		closeEditingField: function closeEditingField(field) {
+			this.fieldIsEditing[field] = false;
+		},
+
+		// Update the field
+		sendFieldUpdate: function sendFieldUpdate() {
+			// Use API access method to submit the change
+			this.updateField('/api/users/update-field', this.user.id);
 		}
 	},
 
@@ -40707,7 +41627,7 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.formIsLoading) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', [_c('div', {
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', [(_vm.form.state == 'create') ? _c('div', {
     staticClass: "well bs-component margin-25-top"
   }, [_c('form', {
     staticClass: "form-horizontal",
@@ -41685,11 +42605,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
     staticClass: "center-loader"
-  })]) : _vm._e()])])])])])])]), _vm._v(" "), (_vm.form.state == 'edit') ? _c('div', {
+  })]) : _vm._e()])])])])])])]) : _vm._e(), _vm._v(" "), (_vm.form.state == 'edit') ? _c('div', {
     staticClass: "well bs-component"
   }, [_c('legend', {
     staticClass: "danger"
-  }, [_vm._v("Delete Project")]), _vm._v(" "), _c('fieldset', [_c('div', {
+  }, [_vm._v("\r\n\t\t\t\tDelete Project\r\n\t\t\t\t"), _c('button', {
+    staticClass: "pull-right btn btn-danger",
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_vm._v("\r\n\t\t\t\t\t×\r\n\t\t\t\t")])]), _vm._v(" "), _c('fieldset', [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-3 col-centered"
@@ -41808,88 +42735,653 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.isLoading) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.isLoading) ? _c('div', [_c('h3', [_vm._v("User Details")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12 margin-25-top"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.isLoading) ? _c('div', [_vm._m(1), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-25-top"
   }, [_c('button', {
     staticClass: "btn btn-default",
     on: {
       "click": function($event) {
-        _vm.$router.push('edit')
+        _vm.$router.push('options')
       }
     }
   }, [_c('span', {
-    staticClass: "glyphicon glyphicon-cog"
-  }), _vm._v(" Edit User\r\n\t\t\t")])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12 margin-25-top"
+    staticClass: "glyphicon glyphicon-wrench"
+  }), _vm._v(" Options\r\n\t\t\t")])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-25-top"
   }, [_c('h4', [_vm._v("Basics")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.first) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(1), _vm._v(" "), (_vm.user.first == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.first + ' ' + _vm.user.last) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._m(2), _vm._v(" "), (_vm.user.first == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.first) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('first')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "First name"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('first')
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.last) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(2), _vm._v(" "), (_vm.user.email == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.email) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._m(3), _vm._v(" "), (_vm.user.last == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.last) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('last')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Last name"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('last')
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.email) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(3), _vm._v(" "), (_vm.user.permissions == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.permissions) + "\r\n\t\t\t\t    \t")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12 margin-25-top"
+  }, [_vm._m(4), _vm._v(" "), (_vm.user.email == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.email) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('email')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Email address"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('email')
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.permissions) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(5), _vm._v(" "), (_vm.user.permissions == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.permissions) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('permissions')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Permissions")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": "",
+      "disabled": ""
+    }
+  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "user"
+    }
+  }, [_vm._v("User")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "admin"
+    }
+  }, [_vm._v("Administrator")])]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.permissions.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('permissions')
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-25-top"
   }, [_c('h4', [_vm._v("Business")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3"
   }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.company_name) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(4), _vm._v(" "), (_vm.user.company_name == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.company_name) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._m(6), _vm._v(" "), (_vm.user.company_name == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.company_name) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('company_name')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Company Name")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "company_name address"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('company_name')
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3"
   }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.gst_number) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(5), _vm._v(" "), (_vm.user.gst_number == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.gst_number) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._m(7), _vm._v(" "), (_vm.user.gst_number == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.gst_number) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('gst_number')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("GST Number")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "gst_number address"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('gst_number')
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3"
   }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.hourly_rate_one) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(6), _vm._v(" "), (_vm.user.hourly_rate_one == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t$" + _vm._s(_vm.user.hourly_rate_one) + "\r\n\t\t\t\t    \t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._m(8), _vm._v(" "), (_vm.user.hourly_rate_one == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t$" + _vm._s(_vm.user.hourly_rate_one) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('hourly_rate_one')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('div', {
+    staticClass: "input-group margin-10-top"
+  }, [_c('span', {
+    staticClass: "input-group-addon"
+  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text",
+      "placeholder": "0.00"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('hourly_rate_one')
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3"
   }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.hourly_rate_two) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(7), _vm._v(" "), (_vm.user.hourly_rate_two == null) ? _c('div', [_c('span', {
-    staticClass: "label label-warning"
-  }, [_vm._v("N/A")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t$" + _vm._s(_vm.user.hourly_rate_two) + "\r\n\t\t\t\t    \t")])])])])])]) : _vm._e()])
+  }, [_vm._m(9), _vm._v(" "), (_vm.user.hourly_rate_two == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.user.hourly_rate_two) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('hourly_rate_two')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Hourly No. 2")]), _vm._v(" "), _c('div', {
+    staticClass: "input-group margin-10-top"
+  }, [_c('span', {
+    staticClass: "input-group-addon"
+  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text",
+      "placeholder": "0.00"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('hourly_rate_two')
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])])])])]) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "col-md-12"
+    staticClass: "row row-padded"
   }, [_c('div', {
     staticClass: "large-center-loader"
   })])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Name")])])
+  return _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v("User Details")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Email")])])
+  return _c('h5', [_c('strong', [_vm._v("First Name")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Last Name")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Email Address")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Permissions")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41897,7 +43389,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("GST Number")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Hourly No. 1")])])
+  return _c('h5', [_c('strong', [_vm._v("Hourly No. One")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Hourly No. 2")])])
 }]}
@@ -41977,6 +43469,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row margin-85-top margin-85-bottom"
   }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.isLoading) ? _c('div', [_vm._m(1), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    on: {
+      "click": function($event) {
+        _vm.$router.push('options')
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-wrench"
+  }), _vm._v(" Options\r\n\t\t\t")])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-25-top"
   }, [_c('h3', [_vm._v("Client")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
@@ -42054,7 +43557,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -42130,7 +43633,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -42211,7 +43714,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -42288,7 +43791,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -42385,7 +43888,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -42462,7 +43965,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -42541,7 +44044,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -42638,7 +44141,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -42714,7 +44217,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -42794,7 +44297,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -42873,7 +44376,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -42952,7 +44455,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -43035,7 +44538,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -43112,7 +44615,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -43191,7 +44694,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -43268,7 +44771,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -43345,7 +44848,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -43425,7 +44928,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -43501,7 +45004,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -43581,7 +45084,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "btn btn-primary btn-block margin-10-top",
     on: {
-      "click": _vm.submitUpdatedField
+      "click": _vm.sendFieldUpdate
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
@@ -43953,6 +45456,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "show",
       rawName: "v-show",
+      value: (!_vm.project),
+      expression: "!project"
+    }],
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
       value: (_vm.project),
       expression: "project"
     }]
@@ -43977,15 +45488,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row row-padded margin-35-top"
   }, [_c('div', {
     staticClass: "alert alert-warning text-center"
-  }, [_c('big', [_c('strong', [_vm._v("Heads up!")]), _vm._v(" Once the project has an approval date the next steps will become available")])], 1)])])], 1), _vm._v(" "), _c('div', {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: (!_vm.project),
-      expression: "!project"
-    }],
-    staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)])])
+  }, [_c('big', [_c('strong', [_vm._v("Heads up!")]), _vm._v(" Once the project has an approval date the next steps will become available")])], 1)])])], 1)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-12"
@@ -44164,161 +45667,1120 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-info"
-  }, [_vm._m(1), _vm._v(" "), _vm._m(2), _vm._v(" "), _c('div', {
+  }, [_vm._m(1), _vm._v(" "), _vm._m(2), _vm._v(" "), (!_vm.fieldIsEditing.permit_application_date) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._v("\r\n\t\t                " + _vm._s(_vm.timeline.permit_application_date) + "\r\n\t\t            ")]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("\r\n\t\t                " + _vm._s(_vm.timeline.permit_application_date) + "\r\n\t\t\t\t    \t"), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('permit_application_date')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('permit_application_date')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3 margin-20-top"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-info"
-  }, [_vm._m(3), _vm._v(" "), _vm._m(4), _vm._v(" "), _c('div', {
+  }, [_vm._m(3), _vm._v(" "), _vm._m(4), _vm._v(" "), (!_vm.fieldIsEditing.permit_recieved_date) ? _c('div', {
     staticClass: "panel-body"
   }, [(_vm.timeline.permit_recieved_date == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.permit_recieved_date) + "\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.permit_recieved_date) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('permit_recieved_date')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('permit_recieved_date')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3 margin-20-top"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-info"
-  }, [_vm._m(5), _vm._v(" "), _vm._m(6), _vm._v(" "), _c('div', {
+  }, [_vm._m(5), _vm._v(" "), _vm._m(6), _vm._v(" "), (!_vm.fieldIsEditing.permit_number) ? _c('div', {
     staticClass: "panel-body"
   }, [(_vm.timeline.permit_number == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.permit_number) + "\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t" + _vm._s(_vm.timeline.permit_number) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('permit_number')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Permit No."
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('permit_number')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-primary"
-  }, [_vm._m(7), _vm._v(" "), _vm._m(8), _vm._v(" "), _c('div', {
+  }, [_vm._m(7), _vm._v(" "), _vm._m(8), _vm._v(" "), (!_vm.fieldIsEditing.site_number_application_date) ? _c('div', {
     staticClass: "panel-body"
   }, [(_vm.timeline.site_number_application_date == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.site_number_application_date) + "\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.site_number_application_date) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('site_number_application_date')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('site_number_application_date')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3 margin-20-top"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-primary"
-  }, [_vm._m(9), _vm._v(" "), _vm._m(10), _vm._v(" "), _c('div', {
+  }, [_vm._m(9), _vm._v(" "), _vm._m(10), _vm._v(" "), (!_vm.fieldIsEditing.site_number_recieved_date) ? _c('div', {
     staticClass: "panel-body"
   }, [(_vm.timeline.site_number_recieved_date == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.site_number_recieved_date) + "\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.site_number_recieved_date) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('site_number_recieved_date')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('site_number_recieved_date')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3 margin-20-top"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-primary"
-  }, [_vm._m(11), _vm._v(" "), _vm._m(12), _vm._v(" "), _c('div', {
+  }, [_vm._m(11), _vm._v(" "), _vm._m(12), _vm._v(" "), (!_vm.fieldIsEditing.site_number) ? _c('div', {
     staticClass: "panel-body"
   }, [(_vm.timeline.site_number == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.site_number) + "\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t" + _vm._s(_vm.timeline.permit_number) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('site_number')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Site No."
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('site_number')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-success"
-  }, [_vm._m(13), _vm._v(" "), _vm._m(14), _vm._v(" "), _c('div', {
+  }, [_vm._m(13), _vm._v(" "), _vm._m(14), _vm._v(" "), (!_vm.fieldIsEditing.completion_target) ? _c('div', {
     staticClass: "panel-body"
   }, [(_vm.timeline.completion_target == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.completion_target) + "\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.completion_target) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('completion_target')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('completion_target')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3 margin-20-top"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-success"
-  }, [_vm._m(15), _vm._v(" "), _vm._m(16), _vm._v(" "), _c('div', {
+  }, [_vm._m(15), _vm._v(" "), _vm._m(16), _vm._v(" "), (!_vm.fieldIsEditing.field_completion_target) ? _c('div', {
     staticClass: "panel-body"
   }, [(_vm.timeline.field_completion_target == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.field_completion_target) + "\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.field_completion_target) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('field_completion_target')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('field_completion_target')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3 margin-20-top"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-success"
-  }, [_vm._m(17), _vm._v(" "), _vm._m(18), _vm._v(" "), _c('div', {
+  }, [_vm._m(17), _vm._v(" "), _vm._m(18), _vm._v(" "), (!_vm.fieldIsEditing.report_completion_target) ? _c('div', {
     staticClass: "panel-body"
   }, [(_vm.timeline.report_completion_target == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.report_completion_target) + "\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.report_completion_target) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('report_completion_target')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('report_completion_target')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3 margin-20-top"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-default"
-  }, [_vm._m(19), _vm._v(" "), _vm._m(20), _vm._v(" "), _c('div', {
+  }, [_vm._m(19), _vm._v(" "), _vm._m(20), _vm._v(" "), (!_vm.fieldIsEditing.fieldwork_scheduled) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.fieldwork_scheduled == false) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.fieldwork_scheduled == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\tYES\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.fieldwork_scheduled == false) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('fieldwork_scheduled')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('fieldwork_scheduled')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-default"
-  }, [_vm._m(21), _vm._v(" "), _vm._m(22), _vm._v(" "), _c('div', {
+  }, [_vm._m(21), _vm._v(" "), _vm._m(22), _vm._v(" "), (!_vm.fieldIsEditing.artifact_analysis) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.artifact_analysis == false) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.artifact_analysis == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\tYES\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.artifact_analysis == false) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('artifact_analysis')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('artifact_analysis')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-default"
-  }, [_vm._m(23), _vm._v(" "), _vm._m(24), _vm._v(" "), _c('div', {
+  }, [_vm._m(23), _vm._v(" "), _vm._m(24), _vm._v(" "), (!_vm.fieldIsEditing.mapping) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.mapping == false) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.mapping == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\tYES\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.mapping == false) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('mapping')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('mapping')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-default"
-  }, [_vm._m(25), _vm._v(" "), _vm._m(26), _vm._v(" "), _c('div', {
+  }, [_vm._m(25), _vm._v(" "), _vm._m(26), _vm._v(" "), (!_vm.fieldIsEditing.writing) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.writing == false) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.writing == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\tYES\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.writing == false) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('writing')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('writing')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-danger"
-  }, [_vm._m(27), _vm._v(" "), _vm._m(28), _vm._v(" "), _c('div', {
+  }, [_vm._m(27), _vm._v(" "), _vm._m(28), _vm._v(" "), (!_vm.fieldIsEditing.draft_submitted) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.draft_submitted == false) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.draft_submitted == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\tYES\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.draft_submitted == false) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('draft_submitted')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('draft_submitted')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-danger"
-  }, [_vm._m(29), _vm._v(" "), _vm._m(30), _vm._v(" "), _c('div', {
+  }, [_vm._m(29), _vm._v(" "), _vm._m(30), _vm._v(" "), (!_vm.fieldIsEditing.draft_accepted) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.draft_accepted == false) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.draft_accepted == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\tYES\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.draft_accepted == false) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('draft_accepted')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('draft_accepted')
+      }
+    }
   })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "separator text-muted"
   }), _vm._v(" "), _c('article', {
     staticClass: "panel panel-danger"
-  }, [_vm._m(31), _vm._v(" "), _vm._m(32), _vm._v(" "), _c('div', {
+  }, [_vm._m(31), _vm._v(" "), _vm._m(32), _vm._v(" "), (!_vm.fieldIsEditing.final_approval) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.final_approval == false) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.final_approval == null) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\tYES\r\n\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-footer"
-  })])])])]) : _vm._e()])
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.final_approval == false) ? _c('div', [_c('span', {
+    staticClass: "label label-warning"
+  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('final_approval')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.editingField.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('final_approval')
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])])])]) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row row-padded"
@@ -44394,7 +46856,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel-heading"
   }, [_c('h2', {
     staticClass: "panel-title"
-  }, [_vm._v("Site Numer")])])
+  }, [_vm._v("Site Number")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "panel-heading icon"
@@ -44531,7 +46993,7 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.formIsLoading) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', [_c('div', {
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', [(_vm.form.state == 'create') ? _c('div', {
     staticClass: "well bs-component margin-25-top"
   }, [_c('form', {
     staticClass: "form-horizontal",
@@ -44546,10 +47008,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "pull-right btn btn-danger",
     on: {
       "click": function($event) {
-        _vm.$router.push('/users/view/' + _vm.form.fields.id.val + '/hub')
+        _vm.$router.go(-1)
       }
-    },
-    slot: "close"
+    }
   }, [_vm._v("\r\n\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t")])]), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
@@ -44700,7 +47161,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "value": "admin"
     }
-  }, [_vm._v("Administrator")])])])])])]), _vm._v(" "), (_vm.form.state == 'create') ? _c('div', {
+  }, [_vm._v("Administrator")])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-6"
@@ -44770,7 +47231,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.password_confirmation.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.password_confirmation.err))]) : _vm._e()])])])]) : _vm._e(), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.password_confirmation.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-6"
@@ -44931,7 +47392,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
     staticClass: "center-loader"
-  })]) : _vm._e()])])])])])])]), _vm._v(" "), (_vm.form.state == 'edit') ? _c('div', {
+  })]) : _vm._e()])])])])])])]) : _vm._e(), _vm._v(" "), (_vm.form.state == 'edit') ? _c('div', {
     staticClass: "well bs-component"
   }, [_c('form', {
     staticClass: "form-horizontal",
@@ -44940,7 +47401,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         $event.preventDefault();
       }
     }
-  }, [_c('legend', [_vm._v("Change Password")]), _vm._v(" "), _c('fieldset', {
+  }, [_c('legend', [_vm._v("\r\n\t\t\t\t\tChange Password\r\n\t\t\t\t\t"), _c('button', {
+    staticClass: "pull-right btn btn-danger",
+    on: {
+      "click": function($event) {
+        _vm.$router.push('/users/view/' + _vm.form.fields.id.val + '/hub')
+      }
+    },
+    slot: "close"
+  }, [_vm._v("\r\n\t\t\t\t\t\t×\r\n\t\t\t\t\t")])]), _vm._v(" "), _c('fieldset', {
     staticClass: "margin-25-top"
   }, [_c('div', {
     staticClass: "row"
@@ -45029,7 +47498,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "well bs-component"
   }, [_c('legend', {
     staticClass: "danger"
-  }, [_vm._v("Delete User")]), _vm._v(" "), _c('fieldset', [_c('div', {
+  }, [_vm._v("\r\n\t\t\t\tDelete User\t\t\t\t\t\t\t\r\n\t\t\t")]), _vm._v(" "), _c('fieldset', [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-3 col-centered"

@@ -12,7 +12,7 @@
 	<!-- Contains edit and delete forms - only shows after loading -->
 	<div v-if="!formIsLoading">
 		<!-- Create / edit user form container -->
-		<div class="well bs-component margin-25-top">
+		<div v-if="form.state == 'create'" class="well bs-component margin-25-top">
 			<form class="form-horizontal"
 				@submit.prevent
 			>
@@ -20,8 +20,7 @@
 					<legend>
 						{{ form.title }}
 						<button 
-							slot="close"
-							@click="$router.push('/users/view/'+form.fields.id.val+'/hub')" 
+							@click="$router.go(-1)" 
 							class="pull-right btn btn-danger"
 						>
 							&times;
@@ -72,7 +71,7 @@
 							</div>					
 						</div>
 					</div>
-					<div v-if="form.state == 'create'" class="row">
+					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group" :class="{'has-error': form.fields.password.err}">
 			                    <div class="col-lg-10">
@@ -163,7 +162,16 @@
 			<form class="form-horizontal"
 				@submit.prevent
 			>
-				<legend>Change Password</legend>
+				<legend>
+					Change Password
+					<button 
+						slot="close"
+						@click="$router.push('/users/view/'+form.fields.id.val+'/hub')" 
+						class="pull-right btn btn-danger"
+					>
+						&times;
+					</button>					
+				</legend>
 				<fieldset class="margin-25-top">
 					<div class="row">
 						<div class="col-md-6">
@@ -206,7 +214,9 @@
 
 		<!-- Container for delete button (triggers the modal below to confirm) -->	
 		<div v-if="form.state == 'edit'" class="well bs-component">
-			<legend class="danger">Delete User</legend>
+			<legend class="danger">
+				Delete User							
+			</legend>
 			<fieldset>
 				<div class="row">
 					<div class="col-md-3 col-centered">

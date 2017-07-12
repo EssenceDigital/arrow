@@ -176,6 +176,47 @@ module.exports =  {
 				});
 		},
 
+		updateField(action, id){
+			// Show loader
+			this.fieldIsUpdating = true;
+			// Cache needed data
+			var context = this,
+				postData = {
+					id: id,
+					_token: window.Laravel.csrfToken						
+				};
+			// Add updated field and data
+			postData.field = this.editingField.field;
+			postData[this.editingField.field] = this.editingField.val;
+
+			// Send post request to update the field
+			axios.post(action, postData)
+				.then(function(response){
+					// Let parent know it should update the project model
+					context.$router.app.$emit('model-updated', response.data.model);
+					// Hide loader
+					context.fieldIsUpdating = false;
+					// Hide form field
+					context.fieldIsEditing[context.editingField.field] = false;
+					// Notify success
+	                 noty({
+	                     text: 'Update was successful',
+	                     theme: 'defaultTheme',
+	                     layout: 'center',
+	                     timeout: 1200,
+	                     closeWith: ['click', 'hover'],
+	                     type: 'success'
+	                });						
+				})
+				.catch(function(error){
+                    if (error.response) {
+                        // If the server responded with error data
+                        this.editingField.err = error.response.data[key][0];                              
+                    }
+				});
+
+		},
+
 		// Sends a POST request to delete the specified and confirmed model
 		deleteModel(){
 			// Show loader

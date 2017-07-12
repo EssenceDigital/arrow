@@ -12,7 +12,7 @@
 	<!-- Contains edit and delete forms - only shows after loading -->
 	<div v-if="!formIsLoading">
 		<!-- 'Well' to hold form -->
-		<div class="well bs-component margin-25-top">
+		<div v-if="form.state == 'create'" class="well bs-component margin-25-top">
 			<!-- The project form -->
 			<form @submit.prevent class="form-horizontal">
 				<fieldset>
@@ -362,7 +362,15 @@
 
 		<!-- 'Well' for delete button (triggers the modal below to confirm) -->	
 		<div v-if="form.state == 'edit'" class="well bs-component">
-			<legend class="danger">Delete Project</legend>
+			<legend class="danger">
+				Delete Project
+				<button 
+					@click="$router.go(-1)" 
+					class="pull-right btn btn-danger"
+				>
+					&times;
+				</button>					
+			</legend>
 			<fieldset>
 				<div class="row">
 					<div class="col-md-3 col-centered">

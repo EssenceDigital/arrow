@@ -256,45 +256,11 @@ class ProjectsController extends Controller
     }
 
     public function updateField(Request $request){
-        // Ensure request field is actually a project field
-        if(array_key_exists($request->field, $this->validationFields)){
-            // Validate field
-            $this->validate($request, [
-                // Dynamically validate proper field
-                $request->field => $this->validationFields[$request->field],
-                'project_id' => 'required|integer'
-            ]);
-
-            // Find project
-            $project = Project::with(['comments', 'comments.user', 'timeline', 'users'])->find($request->project_id);
-
-            // Return failed response if collection empty
-            if(! $project){
-                // Return response for ajax call
-                return response()->json([
-                    'result' => false
-                ], 404);
-            }     
-            // Update project model with new field data
-            $project[$request->field] = $request[$request->field];
-
-            // Attempt to store model
-            $result = $project->save();
-
-            // Verify success on store
-            if(! $result){
-                // Return response for ajax call
-                return response()->json([
-                    'result' => false
-                ], 404);
-            }
-
-            // Return response for ajax call
-            return response()->json([
-                'result' => 'success',
-                'model' => $project
-            ], 200);      
-        }
+        return $this->updateModelField(
+            $request,
+            Project::with(['comments', 'comments.user', 'timeline', 'users'])->find($request->id),
+            $this->validationFields
+        );        
     }
 
     /**
