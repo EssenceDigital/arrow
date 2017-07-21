@@ -60,7 +60,7 @@
 
 		data(){
 			return{
-				// The project
+				// The project. Get sets by the created() method
 				project: false
 			}
 		},
@@ -68,9 +68,9 @@
 		created(){
 			console.log('Project hub created');
 
-			// If the ID is present then do this
+			// If the ID is present then get and set the project
 			if(this.$route.params.id){
-				// Get a fresh version of the requested model
+				// Get a fresh version of the requested model using API access
 				this.grabModel('/api/projects/' + this.$route.params.id, function(model){
 					// Cache retrieved model
 					this.project = model;

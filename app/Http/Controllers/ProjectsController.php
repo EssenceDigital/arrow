@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -14,6 +13,7 @@ use Session;
 
 class ProjectsController extends Controller
 {
+    // Fields and their respective validation rules
     private $validationFields = [
         'province' => 'max:20',
         'location' => 'max:100',
@@ -31,7 +31,6 @@ class ProjectsController extends Controller
         'land_access_phone' => 'max:14',
         'invoiced_date' => 'date',
         'invoice_paid_date' => 'date',
-        // "Proposal related fields"
         'plans' => 'max:30',
         'work_type' => 'max:30',
         'work_overview' => 'max:150',
@@ -41,39 +40,7 @@ class ProjectsController extends Controller
     ];
 
     /**
-     * Validates request data and then adds it to a model. Helper method used by store() and update()
-     *
-     * @return App\Model
-     */
-    private function validateAndPopulate(Request $request, $project)
-    {
-        $rules = [];
-
-        foreach($this->validationFields as $key => $val){
-            if($request->first_contact_date == '' && $key == 'first_contact_date') continue;
-        	if($request->invoiced_date == '' && $key == 'invoiced_date') continue;
-        	if($request->invoice_paid_date == '' && $key == 'invoice_paid_date') continue;
-            if($request->approval_date == '' && $key == 'approval_date') continue;
-        	$rules[$key] = $val;
-        }
-        // Validate or stop proccessing :)
-        $this->validate($request, $rules);
-
-        // Add request data to model
-        foreach($this->validationFields as $key => $val){
-            $project->$key = $request->$key;
-        }
-
-        return $project;
-    }
-
-    // Returns the associated view
-    public function hub(){
-        return view('app.projects-hub');
-    }
-
-    /**
-     * Find all projects
+     * Find all projects and returns a paginated result
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -85,10 +52,12 @@ class ProjectsController extends Controller
     /**
      * Find a project
      *
+     * @param Int - The primary key
      * @return \Illuminate\Http\JsonResponse
      */
     public function single($id)
     {
+        // With all foreign keys / children
         $project = Project::with(['comments', 'comments.user', 'timeline', 'users'])->find($id);
 
         // Return response for ajax call
@@ -99,12 +68,13 @@ class ProjectsController extends Controller
     }
 
     /**
-     * Find unique companies
+     * Find unique clients from all projects
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function uniqueClients()
     {
+        // Run query to find unique clients from projects
         $clients = Project::distinct()->get(['client_company_name']);
 
         // Format unique companies in array
@@ -120,6 +90,42 @@ class ProjectsController extends Controller
         ], 200);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        // Validate and populate the request
+        $project = $this->validateAndPopulate($request, new Project, $this->validationFields);
+
+        // Attempt to store model
+        $result = $project->save();
+
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'model' => $project
+        ], 200);
+
+    }
+
+    /**
+     * Associates a user with a project based on the id in the request
+     *
+     * @param Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+    */
     public function addCrewMember(Request $request){
         // Find project
         $project = Project::find($request->project_id);
@@ -142,12 +148,17 @@ class ProjectsController extends Controller
         ], 200);               
     }
 
+    /**
+     * Unassociates a user with a project based on the id in the request
+     *
+     * @param Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+    */
     public function removeCrewMember(Request $request){
         // Find the association
         $project = Project::find($request->project_id);
-
+        // Attempt to detach
         $result = $project->users()->detach($request->user_id);
-
         // Verify success
         if(! $result){
             // Return response for ajax call
@@ -162,7 +173,14 @@ class ProjectsController extends Controller
         ], 200);
     }
 
+    /**
+     * Adds a ProjectComment to storage
+     *
+     * @param Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+    */
     public function addComment(Request $request){
+        // Validate request
         $this->validate($request, [
             'project_id' => 'required|numeric',
             'user_id' => 'required|numeric',
@@ -185,9 +203,9 @@ class ProjectsController extends Controller
             ], 404);
         }
 
+        // Add the user to the comment model before returning response
         // Get the user model
         $user = User::find($request->user_id);
-
         // Return failed response if no user
         if(! $user){
             // Return response for ajax call
@@ -206,8 +224,14 @@ class ProjectsController extends Controller
 
     }
 
+    /**
+     * Removes a ProjectComment from storage.
+     *
+     * @param Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+    */
     public function removeComment(Request $request){
-        // Find user or throw 404 :)
+        // Find or throw 404
         $comment = ProjectComment::findOrFail($request->comment_id);
 
         // Attempt to remove 
@@ -226,36 +250,15 @@ class ProjectsController extends Controller
         ], 200);        
     }
 
+
     /**
-     * Store a newly created resource in storage.
+     * Updates a single field on a project
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Illuminate\Http\Request
      * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        // Validate and populate the request
-        $project = $this->validateAndPopulate($request, new Project);
-
-        // Attempt to store model
-        $result = $project->save();
-        // Verify success on store
-        if(! $result){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
-
-        // Return response for ajax call
-        return response()->json([
-            'result' => 'success',
-            'model' => $project
-        ], 200);
-
-    }
-
+    */
     public function updateField(Request $request){
+        // Use the parent method to update
         return $this->updateModelField(
             $request,
             Project::with(['comments', 'comments.user', 'timeline', 'users'])->find($request->id),
@@ -282,7 +285,7 @@ class ProjectsController extends Controller
         }
 
         // Validate and populate the request
-        $project = $this->validateAndPopulate($request, $project);
+        $project = $this->validateAndPopulate($request, $project, $this->validationFields);
 
         // Attempt to store model
         $result = $project->save();
@@ -329,6 +332,5 @@ class ProjectsController extends Controller
             'result' => 'success'
         ], 200);
     }
-
 
 }

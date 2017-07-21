@@ -29,6 +29,18 @@ Route::post('/api/update-user', 'DashboardController@updateUserInfo');
 Route::post('/api/change-personal-password', 'DashboardController@changePersonalPassword');
 Route::post('/api/get-logged-in-user', 'DashboardController@getLoggedInUser');
 
+// Dashboard 
+Route::get('/api/dashboard/users-projects', 'DashboardController@usersProjects');
+Route::get('/api/dashboard/project-timesheets/{projectId}', 'DashboardController@projectTimesheets');
+
+// Timesheets
+Route::post('/api/timesheets/create', 'TimesheetsController@store');
+Route::post('/api/timesheets/update', 'TimesheetsController@update');
+Route::get('/api/timesheets/{id}', 'TimesheetsController@single');
+// Work Jobs
+Route::post('/api/work-jobs/create', 'WorkJobController@store');
+Route::post('/api/work-jobs/update', 'WorkJobController@update');
+
 // Projects
 Route::get('/api/projects/all', 'ProjectsController@all');
 Route::get('/api/projects/unique-clients', 'ProjectsController@uniqueClients');

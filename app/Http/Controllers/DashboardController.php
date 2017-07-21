@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\User;
+use App\Timesheet;
 
 use Hash;
 
@@ -44,7 +44,53 @@ class DashboardController extends Controller
         ], 200);        
     }
 
+    public function usersProjects(){
+        // Get logged in user
+        $user = User::with('projects')->find(Auth::id());    
+        
+        // Return failed response if collection empty
+        if(! $user){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false,
+            ], 404);
+        }   
+        
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'models' => $user->projects
+        ], 200);           
+    }
 
+    public function projectTimesheets($projectId){
+        // Get the users timesheets for the requested project
+        $timesheets = Timesheet::where([
+            ['user_id', '=', Auth::id()],
+            ['project_id', '=', $projectId],
+        ])->get();
+
+        // Return failed response if collection empty
+        if(! $timesheets){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false,
+            ], 404);
+        }   
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'models' => $timesheets
+        ], 200);                  
+    }
+
+    /**
+     * Updates the logged in users basic info.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function updateUserInfo(Request $request){
         // Validate or stop proccessing :)
         $this->validate($request, [
@@ -53,6 +99,7 @@ class DashboardController extends Controller
 	        'gst_number' => 'required|string|max:25'
         ]);
 
+        // Find the logged in user
         $user = User::find(Auth::id());
 
         // Return failed response if collection empty
@@ -87,6 +134,12 @@ class DashboardController extends Controller
 
     }
 
+    /**
+     * Changes the logged in users personal password
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function changePersonalPassword(Request $request){
         // Validate or stop proccessing :)
         $this->validate($request, [
@@ -94,7 +147,7 @@ class DashboardController extends Controller
 	        'password' => 'required|string|min:6|confirmed'
         ]);
 
-        // Find user in storage
+        // Find logged in user
         $user = User::find(Auth::id());
         // Return failed response if collection empty
         if(! $user){

@@ -3,45 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-use App\Project;
-use App\Proposal;
+use App\WorkJob;
 
-class ProposalsController extends Controller
+class WorkJobsController extends Controller
 {
+    // Fields and their respective validation rules
     private $validationFields = [
         'project_id' => 'required|numeric',
-        'plans' => 'required|max:30',
-        'work_type' => 'required|max:30',
-        'work_overview' => 'required|max:150',
-        'response_by' => 'required|date',
-        'estimate' => 'required|numeric|between:0,1000000000000.99',
-        'approval_date' => 'date'
+        'date' => 'required|date',
+        'per_diem' => 'numeric|between:0,1000000000000.99',
+        'comment' => 'max:255'
     ];
 
     /**
-     * Validates request data and then adds it to a model. Helper method used by store() and update()
+     * Find a timesheet
      *
-     * @return App\Model
+     * @param Int - The primary key
+     * @return \Illuminate\Http\JsonResponse
      */
-    private function validateAndPopulate(Request $request, $project)
+    public function single($id)
     {
-        $rules = [];
+        // Find the timesheet
+        $timesheet = Timesheet::findOrFail($id);
 
-        foreach($this->validationFields as $key => $val){
-        	if($request->approval_date == '' && $key == 'approval_date') continue;
-        	$rules[$key] = $val;
-        }
-        // Validate or stop proccessing :)
-        $this->validate($request, $rules);
-
-        // Add request data to model
-        foreach($this->validationFields as $key => $val){
-            $project->$key = $request->$key;
-        }
-
-        return $project;
-    }
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'model' => $timesheet
+        ], 200);        
+    } 
 
     /**
      * Store a newly created resource in storage.
@@ -52,25 +44,26 @@ class ProposalsController extends Controller
     public function store(Request $request)
     {
         // Validate and populate the request
-        $proposal = $this->validateAndPopulate($request, new Proposal);
-
-        // Find parent project
-        $project = Project::with('proposal')->findOrFail($request->project_id);
+        $timesheet = $this->validateAndPopulate($request, new Timesheet, $this->validationFields);
+        
+        // Add user id to the timesheet
+        $timesheet->user_id = Auth::id();
 
         // Attempt to store model
-        $result = $project->proposal()->save($proposal);
+        $result = $timesheet->save();
+
         // Verify success on store
         if(! $result){
             // Return response for ajax call
             return response()->json([
-                'result' => false,
+                'result' => false
             ], 404);
         }
 
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $proposal
+            'model' => $timesheet
         ], 200);
 
     }
@@ -83,10 +76,10 @@ class ProposalsController extends Controller
      */
     public function update(Request $request)
     {   
-        $proposal = Proposal::find($request->id);
+        $timesheet = Timesheet::findOrFail($request->id);
 
         // Return failed response if collection empty
-        if(! $proposal){
+        if(! $timesheet){
             // Return response for ajax call
             return response()->json([
                 'result' => false
@@ -94,10 +87,10 @@ class ProposalsController extends Controller
         }
 
         // Validate and populate the request
-        $proposal = $this->validateAndPopulate($request, $proposal);
+        $timesheet = $this->validateAndPopulate($request, $project, $this->validationFields);
 
         // Attempt to store model
-        $result = $proposal->save();
+        $result = $timesheet->save();
 
         // Verify success on store
         if(! $result){
@@ -110,7 +103,7 @@ class ProposalsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $proposal
+            'model' => $timesheet
         ], 200);
 
     }    

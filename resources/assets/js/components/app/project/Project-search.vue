@@ -99,9 +99,11 @@
 
 		data(){
 			return{
+				// Used by API access
 				urlToFetch: '/api/projects/all',
+				// Used by API access
 				fetchingModels: false,
-				// Results from Laravel pagination json
+				// Results from Laravel pagination json. Used by API access.
 				searchResults: {	
 					models: [],	
 					modelsPageTotal: 0,
@@ -114,12 +116,12 @@
 		},
 
 		methods: {
-			// Refreshes the models cache from server
+			// Refreshes the models cache from server. Uses API access
 			refresh(){
 				this.getAndSetModels();
 			},
 
-			// Used by the pagination buttons
+			// Used by the pagination buttons. Uses API access
 			getSpecificProjectsPage(link){
 				this.getAndSetModels(link);
 			},

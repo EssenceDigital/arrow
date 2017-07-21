@@ -1,9 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+/** Controls the website views
+*/
 class SiteController extends Controller
 {
     // Returns the associated view

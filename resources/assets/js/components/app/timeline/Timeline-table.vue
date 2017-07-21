@@ -909,13 +909,13 @@
 			return{
 				// Used by API access
 				fieldIsUpdating: false,
-				// Used by API access
+				// Used by API access to determine the field that needs updating
 				editingField: {
 					field: '', 
 					val: '', 
 					err: false
 				},				
-				// Used by API access
+				// Used by API access, When one is true the field form input should show
 				fieldIsEditing: {
 					permit_application_date: false,
 					permit_recieved_date: false,

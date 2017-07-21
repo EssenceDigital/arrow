@@ -13,11 +13,16 @@ window.VueRouter = require('vue-router');
 Vue.use(VueRouter);
 
 /**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
+ * Components
  */
 const app_hub = require('./components/app/App-hub.vue');
+
+// Dashboard related components
+const dashboard_hub = require('./components/app/dashboard/Dashboard-hub.vue');
+const dashboard_projects = require('./components/app/dashboard/Dashboard-projects.vue');
+
+// Timesheet related components
+const timesheets_hub = require('./components/app/timesheet/Timesheets-hub.vue');
 
 // User related components
 const users_hub = require('./components/app/user/Users-hub.vue');
@@ -51,6 +56,20 @@ Vue.component('navbar', navbar);
 //Vue.component('user-settings', require('./components/app/User-settings.vue'));
 
 const routes = [
+	{
+		path: '/dashboard',
+		component: dashboard_hub,
+		children: [
+			{
+				path: 'projects',
+				component: dashboard_projects
+			},
+			{
+				path: 'timesheets/:project_id',
+				component: timesheets_hub
+			}
+		]
+	},
 	// Project related routes
 	{ 
 		path: '/projects', 

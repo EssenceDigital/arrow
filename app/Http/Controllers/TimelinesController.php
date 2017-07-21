@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -9,6 +8,7 @@ use App\Timeline;
 
 class TimelinesController extends Controller
 {
+    // Fields and their respective validation rules
     private $validationFields = [
         'project_id' => 'numeric',
         'permit_application_date' => 'date',
@@ -30,37 +30,6 @@ class TimelinesController extends Controller
     ];
 
     /**
-     * Validates request data and then adds it to a model. Helper method used by store() and update()
-     *
-     * @return App\Model
-     */
-    private function validateAndPopulate(Request $request, $timeline)
-    {
-        $rules = [];
-
-        foreach($this->validationFields as $key => $val){
-        	if($request->permit_application_date == '' && $key == 'permit_application_date') continue;
-        	if($request->permit_recieved_date == '' && $key == 'permit_recieved_date') continue;
-        	if($request->site_number_application_date == '' && $key == 'site_number_application_date') continue;
-            if($request->site_number_recieved_date == '' && $key == 'site_number_recieved_date') continue;
-        	if($request->completion_target == '' && $key == 'completion_target') continue;
-        	if($request->field_completion_target == '' && $key == 'field_completion_target') continue;
-        	if($request->report_completion_target == '' && $key == 'report_completion_target') continue;
-
-        	$rules[$key] = $val;
-        }
-        // Validate or stop proccessing :)
-        $this->validate($request, $rules);
-
-        // Add request data to model
-        foreach($this->validationFields as $key => $val){
-            $timeline->$key = $request->$key;
-        }
-
-        return $timeline;
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -69,7 +38,7 @@ class TimelinesController extends Controller
     public function store(Request $request)
     {
         // Validate and populate the request
-        $timeline = $this->validateAndPopulate($request, new Timeline);
+        $timeline = $this->validateAndPopulate($request, new Timeline, $this->validationFields);
 
         // Find parent project
         $project = Project::with('timeline')->findOrFail($request->project_id);
@@ -92,6 +61,12 @@ class TimelinesController extends Controller
 
     }
 
+    /**
+     * Updates a single field on a timeline
+     *
+     * @param Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+    */
     public function updateField(Request $request){
         return $this->updateModelField(
             $request,

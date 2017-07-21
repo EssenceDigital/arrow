@@ -7,7 +7,7 @@
 				<button v-on:click="close" type="button" class="close">&times;</button>
 				<h4 class="modal-title"><slot name="title"></slot></h4>
 			</div>
-			<div class="modal-body">
+			<div class="row row-padded">
 				<slot name="body"></slot>
 			</div>
 			<div class="modal-footer">

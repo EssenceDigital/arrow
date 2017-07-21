@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -8,12 +7,44 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
+
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected function updateModelField(Request $request, $model, Array $validationFields){
+    /**
+     * Validates request data and then adds it to a model. Helper method used by store() and update()
+     * @param Illuminate\Http\Request
+     * @param App\Project (model)
+     * @return App\Model
+     */
+    protected function validateAndPopulate(Request $request, Model $model, Array $validationFields)
+    {
+        // Ends up looking like validationFields
+        $rules = [];
+
+        // Populate rules[], but skip any dates that are an empty string in the request
+        // Bypasses validation allowing an empty 'date' to be inserted in the db. (So it's optional not required)
+        foreach($validationFields as $key => $val){
+            // If a date rule and an empty string do not add to rules[]
+            if($val == 'date' && $request->$key == '') continue;
+            // If not a date field then add current field and its rule to the rules[]
+            $rules[$key] = $val;
+        }
+        // Validate or stop proccessing :)
+        $this->validate($request, $rules);
+
+        // Add request data to model
+        foreach($validationFields as $key => $val){
+            $model->$key = $request->$key;
+        }
+
+        return $model;
+    }
+
+    protected function updateModelField(Request $request, Model $model, Array $validationFields){
         // Ensure request field is actually a project field
         if(array_key_exists($request->field, $validationFields)){
             // Validate field
@@ -51,5 +82,9 @@ class Controller extends BaseController
                 'model' => $model
             ], 200);      
         }
-    }    
+    } 
+
+
+
+
 }

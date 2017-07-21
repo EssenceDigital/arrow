@@ -34,12 +34,7 @@
 						:class="{ 'active': $route.path == ('/projects/view/'+$route.params.id+'/edit') }"
 					>
 						<a>Editing Project</a>
-					</li>	
-					<li v-if="$route.path == ('/projects/view/'+$route.params.id+'/proposal-form')" 
-						:class="{ 'active': $route.path == ('/projects/view/'+$route.params.id+'/proposal-form') }"
-					>
-						<a>Editing Proposal</a>
-					</li>									
+					</li>										
 				</ul>	
 
 				<!-- Tabs are here -->

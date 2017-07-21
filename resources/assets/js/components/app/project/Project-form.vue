@@ -36,7 +36,7 @@
 					<legend><h3>Client and contact</h3></legend>
 					<div class="row">
 						<div v-if="form.state != 'edit'" class="col-md-5">
-							<div class="form-group" :class="{'has-error': form.fields.province.err}">
+							<div class="form-group" :class="{'has-error': form.fields.client_company_name.err}">
 								<div class="col-md-12">
 									<label class="control-label">Client company</label>
 									<select v-model="client_company_name" class="form-control margin-10-top">

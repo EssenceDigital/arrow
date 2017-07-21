@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -8,7 +7,7 @@ use App\User;
 
 class UsersController extends Controller
 {
-
+    // Fields and their respective validation rules
     private $validationFields = [
         'first' => 'required|string|max:25',
         'last' => 'required|string|max:25',
@@ -26,13 +25,16 @@ class UsersController extends Controller
      *
      * @return App\Model
      */
-    private function validateAndPopulate(Request $request, $user)
+    private function validateUser(Request $request, App\User $user)
     {
+        // Make sure hourly rate two is an integer
     	if($request->hourly_rate_two == null){
     		$request->hourly_rate_two = 0;
     	}
 
+        // Ends up looking like this->validationFields
         $fields = [];
+        // Populate rules[], but skip the password field
         foreach($this->validationFields as $key => $val){
             // If it's an edit then skip the password field
             if($user->id && $key == 'password') continue;
@@ -64,13 +66,8 @@ class UsersController extends Controller
         return $user;
     }
 
-    // Returns the associated view
-    public function hub(){
-        return view('app.users-hub');
-    }
-
     /**
-     * Find all users and paginates
+     * Find all users
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -119,7 +116,7 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         // Validate and populate the request
-        $user = $this->validateAndPopulate($request, new User);
+        $user = $this->validateUser($request, new User);
 
         // Attempt to store model
         $result = $user->save();
@@ -167,7 +164,7 @@ class UsersController extends Controller
         }
 
         // Validate and populate the request
-        $user = $this->validateAndPopulate($request, $user);
+        $user = $this->validateUser($request, $user);
 
         // Attempt to store model
         $result = $user->save();
@@ -255,7 +252,5 @@ class UsersController extends Controller
             'result' => 'success'
         ], 200);
     }
-
-
 
 }
