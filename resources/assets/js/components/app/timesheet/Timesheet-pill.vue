@@ -2,7 +2,6 @@
 
 <!-- Component container -->	
 <div>
-	
 	<!-- Pill column -->
 	<div class="col-md-10 col-centered">
 		<div class="panel panel-white post panel-shadow">
@@ -132,7 +131,90 @@
 								{{ workjob.comment }}								
 							</div>
 						</div>
-					</li><!-- / Work hours section -->																											
+					</li><!-- / Work hours section -->
+
+					<!-- Equipment rental heading -->				
+					<li 
+						v-if="timesheet.equipment_rentals.length > 0"
+						class="list-group-item"
+					>
+						<h4>
+							<span class="label label-primary">Equipment Rentals</span>
+						</h4>
+					</li>
+					<!-- Equipment rental section -->	
+					<li 
+						v-if="timesheet.equipment_rentals.length > 0"
+						v-for="equipmentRental in timesheet.equipment_rentals"
+						class="list-group-item"
+					>
+						<div class="row">
+							<div class="col-md-5">
+								<strong>Equipment Type</strong><br>
+								{{ equipmentRental.equipment_type }}								
+							</div>
+							<div class="col-md-5">
+								<strong>Rental Fee</strong><br>
+								${{ equipmentRental.rental_fee }}									
+							</div>
+							<div class="col-md-2">
+						    	<div class="pull-right">
+						    		<span @click="editEquipmentRental(equipmentRental)" class="glyphicon glyphicon-cog hover"></span>
+						    	</div>								
+							</div>							
+						</div>
+						<div 
+							v-if="equipmentRental.comment"
+							class="row margin-20-top"
+						>
+							<div class="col-md-12">
+								<strong>Comment</strong><br>
+								{{ equipmentRental.comment }}								
+							</div>
+						</div>
+					</li><!-- / Equipment rental section -->
+
+					<!-- Other costs heading -->				
+					<li 
+						v-if="timesheet.other_costs.length > 0"
+						class="list-group-item"
+					>
+						<h4>
+							<span class="label label-primary">Other Costs</span>
+						</h4>
+					</li>
+					<!-- Other costs section -->	
+					<li 
+						v-if="timesheet.other_costs.length > 0"
+						v-for="otherCost in timesheet.other_costs"
+						class="list-group-item"
+					>
+						<div class="row">
+							<div class="col-md-5">
+								<strong>Cost Name</strong><br>
+								{{ otherCost.cost_name }}								
+							</div>
+							<div class="col-md-5">
+								<strong>Cost</strong><br>
+								${{ otherCost.cost }}									
+							</div>
+							<div class="col-md-2">
+						    	<div class="pull-right">
+						    		<span @click="editOtherCost(otherCost)" class="glyphicon glyphicon-cog hover"></span>
+						    	</div>								
+							</div>							
+						</div>
+						<div 
+							v-if="otherCost.comment"
+							class="row margin-20-top"
+						>
+							<div class="col-md-12">
+								<strong>Comment</strong><br>
+								{{ otherCost.comment }}								
+							</div>
+						</div>
+					</li><!-- / Other costs section -->						
+
 				</ul><!-- / The timesheet table tab -->	
 
 				<!-- Work job form tab -->
@@ -171,6 +253,8 @@
 				<equipment-rental-form
 					v-if="tabToShow == 'Equipment-rental'"
 					:timesheet_id="timesheet.id"
+					:equipment_rental_id="currentEquipmentRental.id"
+					:equipment_rental="currentEquipmentRental"
 				>
 					<button 
 						slot="close-form"
@@ -185,6 +269,8 @@
 				<other-cost-form
 					v-if="tabToShow == 'Other-cost'"
 					:timesheet_id="timesheet.id"
+					:other_cost_id="currentOtherCost.id"
+					:other_cost="currentOtherCost"
 				>
 					<button 
 						slot="close-form"
@@ -242,12 +328,16 @@
 				tabToShow: 'List',
 				// Show modal or not
 				modalActive: false,
+				// Holds currently selected child models. Set by the edit methods
 				currentWorkJob: '',
-				currentTravelJob: ''			
+				currentTravelJob: '',
+				currentEquipmentRental: '',
+				currentOtherCost: ''		
 			}
 		},
 
 		methods:{
+			// Shows the travel job form or shows an alert indicating a travel job is already present
 			addTravel(id){
 				if(this.timesheet.travel_jobs.length >= 1){
 	                 noty({
@@ -264,39 +354,57 @@
 				}
 			},
 
+			// Show the travel job form and sets the current travel job
 			editTravel(travelJob){
 				this.currentTravelJob = travelJob;
 				this.tabToShow = 'Travel-job';
 			},
 
+			// Shows the work job form
 			addWorkHours(id){
 				this.currentWorkJob = ''
 				this.tabToShow = 'Work-job';
 
 			},
 
+			// Shows the work job form and sets the current work job
 			editWorkHours(workJob){
 				this.currentWorkJob = workJob;
 				this.tabToShow = 'Work-job';
 			},
 
+			// Shows the equipment rental form
 			addEquipmentRental(id){
+				this.currentEquipmentRental = '';
 				this.tabToShow = 'Equipment-rental';
 			},
 
+			// Shows the equipment rental form and sets the current equipment rental
+			editEquipmentRental(equipmentRental){
+				this.currentEquipmentRental = equipmentRental;
+				this.tabToShow = 'Equipment-rental';
+			},			
+
+			// Shows the other costs form
 			addOtherCost(id){
+				this.currentOtherCost = '';
 				this.tabToShow = 'Other-cost';
-			}
+			},
+
+			// Shows the other costs form and sets the current other cost
+			editOtherCost(otherCost){
+				this.currentOtherCost = otherCost;
+				this.tabToShow = 'Other-cost';
+			}	
 		},
 
 		created(){
-
 			// When the form component alerts this parent of a successful create
 			this.$router.app.$on('child-created', model => {
 				this.tabToShow = 'List';				
 			});	
 
-			// When the form component alerts this parent of a successful create
+			// When the form component alerts a child was deleted
 			this.$router.app.$on('child-deleted', model => {
 				this.tabToShow = 'List';	
 			});			

@@ -21,7 +21,7 @@ class CreateEquipmentRentalsTable extends Migration
             // Fields
             $table->string('equipment_type', 75);
             $table->decimal('rental_fee', 13, 2)->default(0);
-            $table->string('comment', 255);
+            $table->string('comment', 255)->nullable();
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@
 
 	<!-- Form wrapper 'well' -->
 	<div v-if="!formIsLoading" class="col-md-12 well bs-component margin-10-top">
-		<!-- Work job form -->
+		<!-- Equipment rental form -->
 		<form @submit.prevent class="form-horizontal">
 			<fieldset>
 				<legend>
@@ -95,12 +95,14 @@
 		data(){
 			return{
 				formIsLoading: false,
+				urlToDelete: '/api/equipment/delete',
+				isDeleting: false,					
 				form: {
 					model: 'EquipmentRental',
-					state: 'create',
+					state: 'create-child',
 					title: 'Add Equipment Rental',
 					button: 'Add',
-					action: '/api/travel/create',
+					action: '/api/equipment/create',
 					createAction: '/api/equipment/create',
 					updateAction: '/api/equipment/update',
 					isLoading: false,					
@@ -120,7 +122,12 @@
 			// Submits the form to server via API access
 			sendForm(){
 				this.createOrUpdate();
-			}
+			},
+
+			// Submits a delete to server via mixin
+			deleteEquipmentRental(){
+				this.deleteChild();
+			}				
 		},
 
 		created(){
@@ -131,7 +138,7 @@
 				// Populate form
 				this.populateFormFromModel(this.equipment_rental);
 				// Adjust form state
-				this.formEditState('edit');
+				this.formEditState('edit-child');
 				// Hide form loader
 				this.formIsLoading = false;						
 			}

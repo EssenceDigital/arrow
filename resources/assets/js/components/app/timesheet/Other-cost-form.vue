@@ -11,7 +11,7 @@
 
 	<!-- Form wrapper 'well' -->
 	<div v-if="!formIsLoading" class="col-md-12 well bs-component margin-10-top">
-		<!-- Work job form -->
+		<!-- Other cost form -->
 		<form @submit.prevent class="form-horizontal">
 			<fieldset>
 				<legend>
@@ -95,9 +95,11 @@
 		data(){
 			return{
 				formIsLoading: false,
+				urlToDelete: '/api/other-costs/delete',
+				isDeleting: false,					
 				form: {
 					model: 'OtherCost',
-					state: 'create',
+					state: 'create-child',
 					title: 'Add Other Cost',
 					button: 'Add',
 					action: '/api/other-costs/create',
@@ -120,7 +122,12 @@
 			// Submits the form to server via API access
 			sendForm(){
 				this.createOrUpdate();
-			}
+			},
+
+			// Submits a delete to server via mixin
+			deleteEquipmentRental(){
+				this.deleteChild();
+			}				
 		},
 
 		created(){
@@ -131,7 +138,7 @@
 				// Populate form
 				this.populateFormFromModel(this.other_cost);
 				// Adjust form state
-				this.formEditState('edit');
+				this.formEditState('edit-child');
 				// Hide form loader
 				this.formIsLoading = false;						
 			}

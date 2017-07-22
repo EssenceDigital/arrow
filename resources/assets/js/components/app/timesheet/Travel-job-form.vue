@@ -11,7 +11,7 @@
 
 	<!-- Form wrapper 'well' -->
 	<div v-if="!formIsLoading" class="col-md-12 well bs-component margin-10-top">
-		<!-- Work job form -->
+		<!-- Travel job form -->
 		<form @submit.prevent class="form-horizontal">
 			<fieldset>
 				<legend>

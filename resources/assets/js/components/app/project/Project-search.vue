@@ -24,10 +24,10 @@
 	<table v-if="!fetchingModels" class="table table-striped table-hover margin-25-top">
 		<thead>
 			<tr class="info">
-				<th>Client Company</th>
-				<th>Contact Name</th>
-				<th>Contact Phone</th>
-				<th>Invoice Paid</th>
+				<th v-if="fullTable">Client Company</th>
+				<th v-if="fullTable">Contact Name</th>
+				<th v-if="fullTable">Contact Phone</th>
+				<th v-if="fullTable">Invoice Paid</th>
 				<th>Actions</th>
 			</tr>
 		</thead>
@@ -35,34 +35,36 @@
 		    <tr v-for="project in searchResults.models"
 		    	:project="project"
 		    >
-			    <td>
+			    <td v-if="fullTable">
 			    	{{ project.client_company_name }}
 			    </td>
-			    <td>
+			    <td v-if="fullTable">
 			    	{{ project.client_contact_name }}
 			    </td>
-			    <td>
+			    <td v-if="fullTable">
 			    	<a :href="'tel: +1' + project.client_contact_phone.replace(/-/g, '')">
 			    		{{ project.client_contact_phone }}
 			    	</a>
 			    </td>
-			    <td>
+			    <td v-if="fullTable">
 			    	<div v-if="project.invoiced_date == null" class="text-warning">
 			    		Not Invoiced
 			    	</div>
 			    </td>
 			    <td>
-			    	<dropdown v-bind:title="'Actions'">
-						<li>
-							<a @click="viewProject(project.id)">View full</a>
-						</li>
-			    	</dropdown>
+			    	<button
+			    		v-if="fullTable"
+			    		@click="viewProject(project.id)" 
+			    		class="btn btn-sm btn-success"
+			    	>
+			    		<span class="glyphicon glyphicon-screenshot"></span> View
+			    	</button>
 			    </td>
 		    </tr>
 		</tbody>
 	</table><!-- / Table to show projects -->	
 	<!-- Pagination buttons -->	
-	<div class="row text-center margin-45-top">
+	<div v-if="!fetchingModels" class="row text-center margin-45-top">
 		<ul class="pagination">
 			<!-- Page back button -->
 			<li :class="{ 'disabled': searchResults.modelsCurrentPage == 1 }">
@@ -99,6 +101,7 @@
 
 		data(){
 			return{
+				fullTable: false,
 				// Used by API access
 				urlToFetch: '/api/projects/all',
 				// Used by API access
@@ -135,6 +138,15 @@
 		// Retrieves models from server
 		created(){
 			console.log('Project search created');
+
+			// Determine what route is mounting this component to determine if the full table (admin only) 
+			// should be shown
+			if(this.$route.path == '/projects/search'){
+				this.fullTable = true;
+			} else if(this.$route.path == '/dashboard/projects'){
+				this.fullTable = false;
+			}
+
 			// Start loader
 			this.fetchingModels = true;
 			// Find projects

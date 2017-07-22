@@ -46,8 +46,9 @@ Route::post('/api/travel-jobs/create', 'TravelJobsController@store');
 Route::post('/api/travel-jobs/update', 'TravelJobsController@update');
 Route::post('/api/travel-jobs/delete', 'TravelJobsController@delete');
 // Equipment Rentals
-Route::post('/api/equipment/create', 'EquipmentController@store');
-Route::post('/api/equipment/update', 'EquipmentController@update');
+Route::post('/api/equipment/create', 'EquipmentRentalsController@store');
+Route::post('/api/equipment/update', 'EquipmentRentalsController@update');
+Route::post('/api/equipment/delete', 'EquipmentRentalsController@delete');
 // Other costs
 Route::post('/api/other-costs/create', 'OtherCostsController@store');
 Route::post('/api/other-costs/update', 'OtherCostsController@update');

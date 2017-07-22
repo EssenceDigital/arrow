@@ -1,7 +1,12 @@
 <template>
+<!-- CENTRAL HUB FOR THE ENTIRE AP
+**** HOLDS THE NAVIGATION LINKS AND MAIN ROUTER MOUNT
+ -->
 
+ <!-- App container -->
 <div class="container">
     <navbar>
+        <!-- Nav links -->
         <li v-bind:class="{ 'active': $route.path.substring(0,10) == '/dashboard' }">
             <router-link to="/dashboard/projects">Dashboard</router-link>
         </li>         
@@ -13,8 +18,10 @@
         </li>       
     </navbar>
 
+    <!-- Primary router mount (Where primary routes are rendered) -->
    <router-view></router-view>
-</div>
+
+</div> <!-- / App container -->
 
 </template>
 
