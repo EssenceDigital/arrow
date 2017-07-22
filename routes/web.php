@@ -38,8 +38,19 @@ Route::post('/api/timesheets/create', 'TimesheetsController@store');
 Route::post('/api/timesheets/update', 'TimesheetsController@update');
 Route::get('/api/timesheets/{id}', 'TimesheetsController@single');
 // Work Jobs
-Route::post('/api/work-jobs/create', 'WorkJobController@store');
-Route::post('/api/work-jobs/update', 'WorkJobController@update');
+Route::post('/api/work-jobs/create', 'WorkJobsController@store');
+Route::post('/api/work-jobs/update', 'WorkJobsController@update');
+Route::post('/api/work-jobs/delete', 'WorkJobsController@delete');
+// Travel Jobs
+Route::post('/api/travel-jobs/create', 'TravelJobsController@store');
+Route::post('/api/travel-jobs/update', 'TravelJobsController@update');
+Route::post('/api/travel-jobs/delete', 'TravelJobsController@delete');
+// Equipment Rentals
+Route::post('/api/equipment/create', 'EquipmentController@store');
+Route::post('/api/equipment/update', 'EquipmentController@update');
+// Other costs
+Route::post('/api/other-costs/create', 'OtherCostsController@store');
+Route::post('/api/other-costs/update', 'OtherCostsController@update');
 
 // Projects
 Route::get('/api/projects/all', 'ProjectsController@all');

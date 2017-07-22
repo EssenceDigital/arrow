@@ -11,29 +11,11 @@ class WorkJobsController extends Controller
 {
     // Fields and their respective validation rules
     private $validationFields = [
-        'project_id' => 'required|numeric',
-        'date' => 'required|date',
-        'per_diem' => 'numeric|between:0,1000000000000.99',
+        'timesheet_id' => 'required|numeric',
+        'job_type' => 'required|max:75',
+        'hours_worked' => 'numeric|between:0,1000000000000.9',
         'comment' => 'max:255'
     ];
-
-    /**
-     * Find a timesheet
-     *
-     * @param Int - The primary key
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function single($id)
-    {
-        // Find the timesheet
-        $timesheet = Timesheet::findOrFail($id);
-
-        // Return response for ajax call
-        return response()->json([
-            'result' => 'success',
-            'model' => $timesheet
-        ], 200);        
-    } 
 
     /**
      * Store a newly created resource in storage.
@@ -44,13 +26,10 @@ class WorkJobsController extends Controller
     public function store(Request $request)
     {
         // Validate and populate the request
-        $timesheet = $this->validateAndPopulate($request, new Timesheet, $this->validationFields);
-        
-        // Add user id to the timesheet
-        $timesheet->user_id = Auth::id();
+        $workjob = $this->validateAndPopulate($request, new WorkJob, $this->validationFields);
 
         // Attempt to store model
-        $result = $timesheet->save();
+        $result = $workjob->save();
 
         // Verify success on store
         if(! $result){
@@ -63,9 +42,8 @@ class WorkJobsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $timesheet
+            'model' => $workjob
         ], 200);
-
     }
 
     /**
@@ -76,10 +54,10 @@ class WorkJobsController extends Controller
      */
     public function update(Request $request)
     {   
-        $timesheet = Timesheet::findOrFail($request->id);
+        $workjob = WorkJob::findOrFail($request->id);
 
         // Return failed response if collection empty
-        if(! $timesheet){
+        if(! $workjob){
             // Return response for ajax call
             return response()->json([
                 'result' => false
@@ -87,10 +65,10 @@ class WorkJobsController extends Controller
         }
 
         // Validate and populate the request
-        $timesheet = $this->validateAndPopulate($request, $project, $this->validationFields);
+        $workjob = $this->validateAndPopulate($request, $workjob, $this->validationFields);
 
         // Attempt to store model
-        $result = $timesheet->save();
+        $result = $workjob->save();
 
         // Verify success on store
         if(! $result){
@@ -103,9 +81,39 @@ class WorkJobsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $timesheet
+            'model' => $workjob
         ], 200);
 
-    }    
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Request $request)
+    {
+        // Find or throw 404 :)
+        $workjob = WorkJob::findOrFail($request->id);
+        // To return
+        $return = $workjob;
+
+        // Attempt to remove 
+        $result = $workjob->delete();
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        // Return successful response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'model' => $return
+        ], 200);
+    }        
 
 }

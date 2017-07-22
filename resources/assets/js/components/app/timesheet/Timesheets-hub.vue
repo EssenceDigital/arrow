@@ -14,6 +14,26 @@
 	<div v-if="!fetchingModels">
 		<div class="row row-padded">
 			<h2>Project Timesheets</h2>
+			<p class="margin-25-top">
+				<h4>
+					<strong>Project Identifier:</strong> <span class="label label-success">{{ this.$route.params.project_id }}</span>
+				</h4>
+			</p>
+			<p class="margin-25-top">
+				<h4>
+					<strong>Total Timesheets:</strong> <span class="label label-success">{{ totalTimesheets }}</span>
+				</h4>
+			</p>
+			<p class="margin-25-top">
+				<h4>
+					<strong>Accumulated Work Hours:</strong> <span class="label label-success">{{ totalWorkHours }}</span>
+				</h4>
+			</p>
+			<p class="margin-25-top">
+				<h4>
+					<strong>Accumulated Travel Hours:</strong> <span class="label label-success">{{  }}</span>
+				</h4>
+			</p>									
 		</div>
 
 		<!-- Tool navigation -->
@@ -29,8 +49,7 @@
 				<timesheet-pill
 					v-for="timesheet in searchResults.models"
 					:timesheet="timesheet"
-				>
-					
+				>					
 				</timesheet-pill>
 			</div>
 
@@ -97,6 +116,31 @@
 			}
 		},
 
+		computed: {
+			totalTimesheets(){
+				return this.searchResults.models.length;
+			},
+
+			totalWorkHours(){
+				// Cache total
+				var totalHours = parseInt(0);
+				// Iterate through each timesheet
+				this.searchResults.models.forEach(function(timesheet){
+					// If work jobs are present
+					if(timesheet.work_jobs.length > 0){
+						// Iterate through each job in timesheet
+						timesheet.work_jobs.forEach(function(workjob){
+							// Update total
+							totalHours += parseFloat(workjob.hours_worked);
+						});						
+					}
+
+				});
+
+				return totalHours.toFixed(2);
+			}
+		},
+
 		methods: {
 			timesheetFormModal(){
 				this.currentModal = 'Timesheet';
@@ -114,12 +158,108 @@
 				this.modalActive = false;						
 			});	
 
-		},
+			// When the form component alerts this parent a child has been created or updated
+			this.$router.app.$on('child-created', model => {
+				// Cache context
+				var context = this;
+				// Iterate through all cached timesheets and execute 
+				this.searchResults.models.forEach(function(timesheet){
+					// When the timesheet id matches the models id
+					if(timesheet.id == model.timesheet_id){
 
-		mounted(){
-			console.log(this.searchResults.models);
+						// If the model is a work job
+						if(model.job_type){
+							// Flag which indicates whether the workjob has been added to cache
+							var updated = false;						
+							// Iterate through work jobs to determine if a job should be updated or a new 
+							// job should be pushed to the collection
+							timesheet.work_jobs.forEach(function(workjob){
+								// Replace existing updated work job
+								if(workjob.id == model.id){
+									// Update workjob fields
+									workjob.job_type = model.job_type;
+									workjob.hours_worked = model.hours_worked;
+									workjob.comment = model.comment
+									// Update flag
+									updated = true;
+								}
+							});
+							// Add a new work job
+							if(!updated){
+								timesheet.work_jobs.push(model);
+							}
+						}
+
+						// If the model is a travel job
+						if(model.travel_distance){
+							console.log(model);
+							// Flag which indicates whether the workjob has been added to cache
+							var updated = false;						
+							// Iterate through work jobs to determine if a job should be updated or a new 
+							// job should be pushed to the collection
+							timesheet.travel_jobs.forEach(function(travelJob){
+								// Replace existing updated work job
+								if(travelJob.id == model.id){
+									// Update workjob fields
+									travelJob.travel_distance = model.travel_distance;
+									travelJob.travel_time = model.travel_time;
+									travelJob.comment = model.comment
+									// Update flag
+									updated = true;
+								}
+							});
+							// Add a new work job
+							if(!updated){
+								timesheet.travel_jobs.push(model);
+							}							
+						}
+						
+					}
+				});
+									
+			});	
+
+			// When the form component alerts this parent of a successful create
+			this.$router.app.$on('child-deleted', model => {
+				// Iterate through all cached timesheets and execute 
+				this.searchResults.models.forEach(function(timesheet){
+					// When the timesheet id matches the models id
+					if(timesheet.id == model.timesheet_id){
+						// If the model is a work job
+						if(model.job_type){
+							// Flag which indicates whether the workjob has been added to cache
+							var updated = false;						
+							// Iterate through work jobs to determine if a job should be updated or a new 
+							// job should be pushed to the collection
+							timesheet.work_jobs.forEach(function(workjob){
+								// Replace existing updated work job
+								if(workjob.id == model.id){
+									var index = timesheet.work_jobs.indexOf(workjob); 
+									timesheet.work_jobs.splice(index, 1);
+								}
+							});
+						}
+
+						// If the model is a travel job
+						if(model.travel_distance){
+							// Flag which indicates whether the workjob has been added to cache
+							var updated = false;						
+							// Iterate through work jobs to determine if a job should be updated or a new 
+							// job should be pushed to the collection
+							timesheet.travel_jobs.forEach(function(travelJob){
+								// Replace existing updated work job
+								if(travelJob.id == model.id){
+									var index = timesheet.travel_jobs.indexOf(travelJob); 
+									timesheet.travel_jobs.splice(index, 1);
+								}
+							});
+						}						
+						
+					}
+				});										
+			});							
+
 		}
-
 
 	}
 	

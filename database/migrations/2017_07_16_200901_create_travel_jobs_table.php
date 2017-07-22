@@ -20,8 +20,8 @@ class CreateTravelJobsTable extends Migration
             $table->foreign('timesheet_id')->references('id')->on('timesheets');
             // Fields
             $table->integer('travel_distance');
-            $table->decimal('travel_time', 13, 2)->default(0);
-            $table->string('comment', 255); 
+            $table->decimal('travel_time', 13, 1)->default(0);
+            $table->string('comment', 255)->nullable(); 
             $table->timestamps();
         });
     }

@@ -116,7 +116,7 @@
 				// Retrieve all users to populate the select list with
 				axios.get('/api/users/all')
 					.then(function(response){
-						;
+						
 						// Current project crew
 						var currentCrew = [];
 

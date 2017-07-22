@@ -10,12 +10,19 @@
 	</div>
 
 	<!-- Form wrapper 'well' -->
-	<div v-if="!formIsLoading" class="col-md-12 well bs-component margin-45-top">
+	<div v-if="!formIsLoading" class="col-md-12 well bs-component margin-10-top">
 		<!-- Work job form -->
 		<form @submit.prevent class="form-horizontal">
 			<fieldset>
 				<legend>
-					{{ form.title }}
+					<div class="row">
+						<div class="col-md-8">
+							<h3 class="pull-left" style="margin-top:6px;">{{ form.title }}</h3>
+						</div>
+						<div class="col-md-4">
+							<slot name="close-form"></slot>
+						</div>
+					</div>
 				</legend>
 
 				<div class="row margin-15-top">					
@@ -39,7 +46,7 @@
 		                    	<label class="control-label">Hours Worked</label>
 		                    	<div class="input-group margin-10-top">
 		                    		<span class="input-group-addon">Hrs.</span>
-		                    		<input v-model="form.fields.hours_worked.val" type="text" class="form-control">
+		                    		<input v-model="form.fields.hours_worked.val" type="number" min="0" max="20" step="0.1" class="form-control">
 		                    	</div>	                    	
 		                    	<span class="text-danger" v-if="form.fields.hours_worked.err">{{ form.fields.hours_worked.err }}</span>
 		                    </div>
@@ -74,7 +81,22 @@
 						</div>					
 					</div>
 				</div>			
-			</fieldset>			
+			</fieldset>	
+			<!-- Button -->
+			<fieldset v-if="work_job_id">
+				<div class="row">
+					<div class="col-md-3 col-centered">
+						<div class="form-group">
+							<button @click="deleteWorkJob" class="btn btn-danger btn-block margin-25-top">
+								<span v-if="!isDeleting">Remove</span>
+								<span v-if="isDeleting">
+									<div class="loader-center"></div>
+								</span>
+							</button>												
+						</div>					
+					</div>
+				</div>			
+			</fieldset>					
 		</form>
 	</div><!-- / Form 'well' wrapper -->
 </div><!--/ Component container -->
@@ -93,9 +115,11 @@
 		data(){
 			return{
 				formIsLoading: false,
+				urlToDelete: '/api/work-jobs/delete',
+				isDeleting: false,					
 				form: {
 					model: 'WorkJob',
-					state: 'create',
+					state: 'create-child',
 					title: 'Add Work Hours',
 					button: 'Add',
 					action: '/api/work-jobs/create',
@@ -118,7 +142,12 @@
 			// Submits the form to server via API access
 			sendForm(){
 				this.createOrUpdate();
-			}
+			},
+
+			// Submits a delete to server via mixin
+			deleteWorkJob(){
+				this.deleteChild();
+			}		
 		},
 
 		created(){
@@ -130,7 +159,7 @@
 				// Populate form
 				this.populateFormFromModel(this.work_job);
 				// Adjust form state
-				this.formEditState('edit');
+				this.formEditState('edit-child');
 				// Hide form loader
 				this.formIsLoading = false;						
 			}

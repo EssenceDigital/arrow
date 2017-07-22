@@ -68,7 +68,7 @@ class DashboardController extends Controller
         $timesheets = Timesheet::where([
             ['user_id', '=', Auth::id()],
             ['project_id', '=', $projectId],
-        ])->get();
+        ])->with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->get();
 
         // Return failed response if collection empty
         if(! $timesheets){

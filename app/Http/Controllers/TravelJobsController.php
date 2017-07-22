@@ -5,35 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Timesheet;
+use App\TravelJob;
 
-class TimesheetsController extends Controller
+class TravelJobsController extends Controller
 {
     // Fields and their respective validation rules
     private $validationFields = [
-        'project_id' => 'required|numeric',
-        'date' => 'required|date',
-        'per_diem' => 'numeric|between:0,1000000000000.99',
+        'timesheet_id' => 'required|numeric',
+        'travel_distance' => 'required|numeric',
+        'travel_time' => 'required|numeric|between:0,1000000000000.9',
         'comment' => 'max:255'
     ];
-
-    /**
-     * Find a timesheet
-     *
-     * @param Int - The primary key
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function single($id)
-    {
-        // Find the timesheet
-        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->find($id);
-
-        // Return response for ajax call
-        return response()->json([
-            'result' => 'success',
-            'model' => $timesheet
-        ], 200);        
-    } 
 
     /**
      * Store a newly created resource in storage.
@@ -44,13 +26,10 @@ class TimesheetsController extends Controller
     public function store(Request $request)
     {
         // Validate and populate the request
-        $timesheet = $this->validateAndPopulate($request, new Timesheet, $this->validationFields);
-        
-        // Add user id to the timesheet
-        $timesheet->user_id = Auth::id();
+        $travelJob = $this->validateAndPopulate($request, new TravelJob, $this->validationFields);
 
         // Attempt to store model
-        $result = $timesheet->save();
+        $result = $travelJob->save();
 
         // Verify success on store
         if(! $result){
@@ -63,9 +42,8 @@ class TimesheetsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $timesheet
+            'model' => $travelJob
         ], 200);
-
     }
 
     /**
@@ -76,10 +54,10 @@ class TimesheetsController extends Controller
      */
     public function update(Request $request)
     {   
-        $timesheet = Timesheet::findOrFail($request->id);
+        $travelJob = TravelJob::findOrFail($request->id);
 
         // Return failed response if collection empty
-        if(! $timesheet){
+        if(! $travelJob){
             // Return response for ajax call
             return response()->json([
                 'result' => false
@@ -87,10 +65,10 @@ class TimesheetsController extends Controller
         }
 
         // Validate and populate the request
-        $timesheet = $this->validateAndPopulate($request, $timesheet, $this->validationFields);
+        $travelJob = $this->validateAndPopulate($request, $travelJob, $this->validationFields);
 
         // Attempt to store model
-        $result = $timesheet->save();
+        $result = $travelJob->save();
 
         // Verify success on store
         if(! $result){
@@ -103,9 +81,39 @@ class TimesheetsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $timesheet
+            'model' => $travelJob
         ], 200);
 
-    }    
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Request $request)
+    {
+        // Find or throw 404 :)
+        $travelJob = TravelJob::findOrFail($request->id);
+        // To return
+        $return = $travelJob;
+
+        // Attempt to remove 
+        $result = $travelJob->delete();
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        // Return successful response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'model' => $return
+        ], 200);
+    }        
 
 }

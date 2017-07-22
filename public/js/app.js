@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 117);
+/******/ 	return __webpack_require__(__webpack_require__.s = 126);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -406,6 +406,42 @@ module.exports = {
 				}
 			});
 		},
+		deleteChild: function deleteChild(id) {
+			var idToDelete;
+			if (id) {
+				idToDelete = id;
+			} else {
+				idToDelete = this.form.fields.id.val;
+			}
+			// Show loader
+			this.isDeleting = true;
+			// Assemble object for POST
+			var data = {
+				id: idToDelete,
+				_token: window.Laravel.csrfToken
+			};
+			// Store context
+			var context = this;
+			// Send GET request to delete
+			axios.post(this.urlToDelete, data).then(function (response) {
+				// Notify
+				noty({
+					text: context.form.model + ' has been deleted',
+					theme: 'defaultTheme',
+					layout: 'center',
+					timeout: 850,
+					closeWith: ['click', 'hover'],
+					type: 'success'
+				});
+				// Hide loader
+				context.isDeleting = false;
+				console.log(response.data.model);
+				// Emit even
+				context.$router.app.$emit('child-deleted', response.data.model);
+			}).catch(function (response) {
+				console.log(response);
+			});
+		},
 
 
 		/* Sends a POST request to delete the specified row from storage. Uses a properly set up 'hub' from. See top most comment.
@@ -452,7 +488,7 @@ module.exports = {
 "use strict";
 
 
-var bind = __webpack_require__(10);
+var bind = __webpack_require__(11);
 
 /*global toString:true*/
 
@@ -753,6 +789,40 @@ module.exports = {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(38),
+  /* template */
+  __webpack_require__(118),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Dropdown.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Dropdown.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-f0b7e2bc", Component.options)
+  } else {
+    hotAPI.reload("data-v-f0b7e2bc", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -942,22 +1012,26 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(122)
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(38),
+  __webpack_require__(39),
   /* template */
-  __webpack_require__(109),
+  __webpack_require__(102),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Dropdown.vue"
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Modal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Dropdown.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -966,9 +1040,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-f0b7e2bc", Component.options)
+    hotAPI.createRecord("data-v-48d780ec", Component.options)
   } else {
-    hotAPI.reload("data-v-f0b7e2bc", Component.options)
+    hotAPI.reload("data-v-48d780ec", Component.options)
   }
 })()}
 
@@ -976,7 +1050,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1000,10 +1074,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(6);
+    adapter = __webpack_require__(7);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(6);
+    adapter = __webpack_require__(7);
   }
   return adapter;
 }
@@ -1074,10 +1148,10 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1088,7 +1162,7 @@ var settle = __webpack_require__(26);
 var buildURL = __webpack_require__(29);
 var parseHeaders = __webpack_require__(35);
 var isURLSameOrigin = __webpack_require__(33);
-var createError = __webpack_require__(9);
+var createError = __webpack_require__(10);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(28);
 
 module.exports = function xhrAdapter(config) {
@@ -1259,10 +1333,10 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1288,7 +1362,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1300,7 +1374,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1324,7 +1398,7 @@ module.exports = function createError(message, config, code, response) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1342,7 +1416,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /*
@@ -1398,7 +1472,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -11658,44 +11732,6 @@ return jQuery;
 
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(113)
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(39),
-  /* template */
-  __webpack_require__(96),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Modal.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-48d780ec", Component.options)
-  } else {
-    hotAPI.reload("data-v-48d780ec", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
 /* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -14166,7 +14202,7 @@ if (inBrowser && window.Vue) {
 
 /* harmony default export */ __webpack_exports__["default"] = (VueRouter);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
 /* 15 */
@@ -14188,7 +14224,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(114)
+var listToStyles = __webpack_require__(123)
 
 /*
 type StyleObject = {
@@ -14430,9 +14466,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(61);
+__webpack_require__(64);
 
-window.Vue = __webpack_require__(115);
+window.Vue = __webpack_require__(124);
 window.VueRouter = __webpack_require__(14);
 // Add router to vue
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["default"]);
@@ -14440,40 +14476,40 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["default"]);
 /**
  * Components
  */
-var app_hub = __webpack_require__(66);
+var app_hub = __webpack_require__(69);
 
 // Dashboard related components
-var dashboard_hub = __webpack_require__(72);
-var dashboard_projects = __webpack_require__(73);
+var dashboard_hub = __webpack_require__(75);
+var dashboard_projects = __webpack_require__(76);
 
 // Timesheet related components
-var timesheets_hub = __webpack_require__(81);
+var timesheets_hub = __webpack_require__(86);
 
 // User related components
-var users_hub = __webpack_require__(87);
-var user_hub = __webpack_require__(83);
-var user_table = __webpack_require__(86);
-var user_form = __webpack_require__(82);
-var user_search = __webpack_require__(84);
-var user_settings = __webpack_require__(85);
+var users_hub = __webpack_require__(93);
+var user_hub = __webpack_require__(89);
+var user_table = __webpack_require__(92);
+var user_form = __webpack_require__(88);
+var user_search = __webpack_require__(90);
+var user_settings = __webpack_require__(91);
 
 // Project related components
-var projects_hub = __webpack_require__(78);
-var project_hub = __webpack_require__(75);
-var project_table = __webpack_require__(77);
-var project_form = __webpack_require__(74);
-var project_search = __webpack_require__(76);
+var projects_hub = __webpack_require__(81);
+var project_hub = __webpack_require__(78);
+var project_table = __webpack_require__(80);
+var project_form = __webpack_require__(77);
+var project_search = __webpack_require__(79);
 
 // Crew related components
-var crew_list = __webpack_require__(71);
-var crew_form = __webpack_require__(70);
+var crew_list = __webpack_require__(74);
+var crew_form = __webpack_require__(73);
 
 // Timeline related components
-var timeline_form = __webpack_require__(79);
-var timeline_table = __webpack_require__(80);
+var timeline_form = __webpack_require__(82);
+var timeline_table = __webpack_require__(83);
 
 // UI components
-var navbar = __webpack_require__(67);
+var navbar = __webpack_require__(70);
 
 Vue.component('app-hub', app_hub);
 Vue.component('navbar', navbar);
@@ -14582,9 +14618,9 @@ module.exports = __webpack_require__(20);
 
 
 var utils = __webpack_require__(2);
-var bind = __webpack_require__(10);
+var bind = __webpack_require__(11);
 var Axios = __webpack_require__(22);
-var defaults = __webpack_require__(5);
+var defaults = __webpack_require__(6);
 
 /**
  * Create an instance of Axios
@@ -14617,9 +14653,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(7);
+axios.Cancel = __webpack_require__(8);
 axios.CancelToken = __webpack_require__(21);
-axios.isCancel = __webpack_require__(8);
+axios.isCancel = __webpack_require__(9);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -14640,7 +14676,7 @@ module.exports.default = axios;
 "use strict";
 
 
-var Cancel = __webpack_require__(7);
+var Cancel = __webpack_require__(8);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -14704,7 +14740,7 @@ module.exports = CancelToken;
 "use strict";
 
 
-var defaults = __webpack_require__(5);
+var defaults = __webpack_require__(6);
 var utils = __webpack_require__(2);
 var InterceptorManager = __webpack_require__(23);
 var dispatchRequest = __webpack_require__(24);
@@ -14857,8 +14893,8 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(2);
 var transformData = __webpack_require__(27);
-var isCancel = __webpack_require__(8);
-var defaults = __webpack_require__(5);
+var isCancel = __webpack_require__(9);
+var defaults = __webpack_require__(6);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -14967,7 +15003,7 @@ module.exports = function enhanceError(error, config, code, response) {
 "use strict";
 
 
-var createError = __webpack_require__(9);
+var createError = __webpack_require__(10);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -15559,7 +15595,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var dropdown = __webpack_require__(4);
+var dropdown = __webpack_require__(3);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
@@ -15699,7 +15735,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var dropdown = __webpack_require__(4);
+var dropdown = __webpack_require__(3);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -15873,7 +15909,7 @@ var api_access = __webpack_require__(1);
 			var context = this;
 			// Retrieve all users to populate the select list with
 			axios.get('/api/users/all').then(function (response) {
-				;
+
 				// Current project crew
 				var currentCrew = [];
 
@@ -16605,7 +16641,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 var api_access = __webpack_require__(1);
-var modal = __webpack_require__(13);
+var modal = __webpack_require__(5);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -16991,7 +17027,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 var api_access = __webpack_require__(1);
-var dropdown = __webpack_require__(4);
+var dropdown = __webpack_require__(3);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -18055,8 +18091,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var comment_form = __webpack_require__(68);
-var comment_list = __webpack_require__(69);
+var comment_form = __webpack_require__(71);
+var comment_list = __webpack_require__(72);
 var api_access = __webpack_require__(1);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -19627,59 +19663,72 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(1);
-var modal = __webpack_require__(13);
-var timesheet_pill = __webpack_require__(124);
-var timesheet_form = __webpack_require__(121);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		'modal': modal,
-		'timesheet-pill': timesheet_pill,
-		'timesheet-form': timesheet_form
-	},
+	props: ['timesheet_id', 'project_id'],
 
 	mixins: [api_access],
 
 	data: function data() {
 		return {
-			currentModal: '',
-			// For the form modal
-			modalActive: false,
-			// Used by API access
-			urlToFetch: '/api/dashboard/project-timesheets/' + this.$route.params.project_id,
-			// Used by API access
-			fetchingModels: false,
-			// Results from Laravel pagination json. Used by API access.
-			searchResults: {
-				models: []
+			formIsLoading: false,
+			form: {
+				model: 'Timesheet',
+				state: 'create',
+				title: 'Add Tmesheet',
+				button: 'Add',
+				action: '/api/timesheets/create',
+				createAction: '/api/timesheets/create',
+				updateAction: '/api/timesheets/update',
+				isLoading: false,
+				successMsg: 'Your timesheet has been added to the project',
+				fields: {
+					id: { val: '', err: false, dflt: '' },
+					project_id: { val: this.project_id, err: false, dflt: '' },
+					date: { val: '', err: false, dflt: '' },
+					per_diem: { val: '0.00', err: false, dflt: '0.00' },
+					comment: { val: '', err: false, dflt: '' }
+				}
 			}
 		};
 	},
 
 
 	methods: {
-		timesheetFormModal: function timesheetFormModal() {
-			this.currentModal = 'Timesheet';
-			this.modalActive = true;
+		// Submits the form to server via API access
+		sendForm: function sendForm() {
+			this.createOrUpdate();
 		}
 	},
 
 	created: function created() {
-		var _this = this;
 
-		// Retrieve model through API access
-		this.getAndSetModels();
-
-		// When the form component alerts this parent of a successful create
-		this.$router.app.$on('model-created', function (model) {
-			_this.searchResults.models.push(model);
-			_this.modalActive = false;
-		});
-	},
-	mounted: function mounted() {
-		console.log(this.searchResults.models);
+		// If an id is present then set up the form for edit
+		if (this.timesheet_id) {
+			// Show form loader
+			this.formIsLoading = true;
+			// Get the requested model
+			this.grabModel('/api/timesheets/' + this.timesheet_id, function (model) {
+				// Populate form
+				this.populateFormFromModel(model);
+				// Adjust form state
+				this.formEditState('edit');
+				// Hide form loader
+				this.formIsLoading = false;
+			});
+		}
 	}
 });
 
@@ -19907,6 +19956,142 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+var dropdown = __webpack_require__(3);
+var modal = __webpack_require__(5);
+var work_job_form = __webpack_require__(87);
+var travel_job_form = __webpack_require__(130);
+var equipment_rental_form = __webpack_require__(133);
+var other_cost_form = __webpack_require__(136);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'dropdown': dropdown,
+		'modal': modal,
+		'work-job-form': work_job_form,
+		'travel-job-form': travel_job_form,
+		'equipment-rental-form': equipment_rental_form,
+		'other-cost-form': other_cost_form
+	},
+
+	props: ['timesheet'],
+
+	data: function data() {
+		return {
+			// Toggles which form to show in the modal
+			tabToShow: 'List',
+			// Show modal or not
+			modalActive: false,
+			currentWorkJob: '',
+			currentTravelJob: ''
+		};
+	},
+
+
+	methods: {
+		addTravel: function addTravel(id) {
+			if (this.timesheet.travel_jobs.length >= 1) {
+				noty({
+					text: '<h4>Travel hours already on this timesheet!</h4>',
+					theme: 'defaultTheme',
+					layout: 'center',
+					timeout: 2000,
+					closeWith: ['click', 'hover'],
+					type: 'success'
+				});
+			} else {
+				this.currentTravelJob = '';
+				this.tabToShow = 'Travel-job';
+			}
+		},
+		editTravel: function editTravel(travelJob) {
+			this.currentTravelJob = travelJob;
+			this.tabToShow = 'Travel-job';
+		},
+		addWorkHours: function addWorkHours(id) {
+			this.currentWorkJob = '';
+			this.tabToShow = 'Work-job';
+		},
+		editWorkHours: function editWorkHours(workJob) {
+			this.currentWorkJob = workJob;
+			this.tabToShow = 'Work-job';
+		},
+		addEquipmentRental: function addEquipmentRental(id) {
+			this.tabToShow = 'Equipment-rental';
+		},
+		addOtherCost: function addOtherCost(id) {
+			this.tabToShow = 'Other-cost';
+		}
+	},
+
+	created: function created() {
+		var _this = this;
+
+		// When the form component alerts this parent of a successful create
+		this.$router.app.$on('child-created', function (model) {
+			_this.tabToShow = 'List';
+		});
+
+		// When the form component alerts this parent of a successful create
+		this.$router.app.$on('child-deleted', function (model) {
+			_this.tabToShow = 'List';
+		});
+	}
+});
+
+/***/ }),
+/* 56 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -19949,7 +20134,621 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 var api_access = __webpack_require__(1);
-var modal = __webpack_require__(13);
+var modal = __webpack_require__(5);
+var timesheet_pill = __webpack_require__(85);
+var timesheet_form = __webpack_require__(84);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'modal': modal,
+		'timesheet-pill': timesheet_pill,
+		'timesheet-form': timesheet_form
+	},
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			currentModal: '',
+			// For the form modal
+			modalActive: false,
+			// Used by API access
+			urlToFetch: '/api/dashboard/project-timesheets/' + this.$route.params.project_id,
+			// Used by API access
+			fetchingModels: false,
+			// Results from Laravel pagination json. Used by API access.
+			searchResults: {
+				models: []
+			}
+		};
+	},
+
+
+	computed: {
+		totalTimesheets: function totalTimesheets() {
+			return this.searchResults.models.length;
+		},
+		totalWorkHours: function totalWorkHours() {
+			// Cache total
+			var totalHours = parseInt(0);
+			// Iterate through each timesheet
+			this.searchResults.models.forEach(function (timesheet) {
+				// If work jobs are present
+				if (timesheet.work_jobs.length > 0) {
+					// Iterate through each job in timesheet
+					timesheet.work_jobs.forEach(function (workjob) {
+						// Update total
+						totalHours += parseFloat(workjob.hours_worked);
+					});
+				}
+			});
+
+			return totalHours.toFixed(2);
+		}
+	},
+
+	methods: {
+		timesheetFormModal: function timesheetFormModal() {
+			this.currentModal = 'Timesheet';
+			this.modalActive = true;
+		}
+	},
+
+	created: function created() {
+		var _this = this;
+
+		// Retrieve model through API access
+		this.getAndSetModels();
+
+		// When the form component alerts this parent of a successful create
+		this.$router.app.$on('model-created', function (model) {
+			_this.searchResults.models.push(model);
+			_this.modalActive = false;
+		});
+
+		// When the form component alerts this parent a child has been created or updated
+		this.$router.app.$on('child-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+
+					// If the model is a work job
+					if (model.job_type) {
+						// Flag which indicates whether the workjob has been added to cache
+						var updated = false;
+						// Iterate through work jobs to determine if a job should be updated or a new 
+						// job should be pushed to the collection
+						timesheet.work_jobs.forEach(function (workjob) {
+							// Replace existing updated work job
+							if (workjob.id == model.id) {
+								// Update workjob fields
+								workjob.job_type = model.job_type;
+								workjob.hours_worked = model.hours_worked;
+								workjob.comment = model.comment;
+								// Update flag
+								updated = true;
+							}
+						});
+						// Add a new work job
+						if (!updated) {
+							timesheet.work_jobs.push(model);
+						}
+					}
+
+					// If the model is a travel job
+					if (model.travel_distance) {
+						console.log(model);
+						// Flag which indicates whether the workjob has been added to cache
+						var updated = false;
+						// Iterate through work jobs to determine if a job should be updated or a new 
+						// job should be pushed to the collection
+						timesheet.travel_jobs.forEach(function (travelJob) {
+							// Replace existing updated work job
+							if (travelJob.id == model.id) {
+								// Update workjob fields
+								travelJob.travel_distance = model.travel_distance;
+								travelJob.travel_time = model.travel_time;
+								travelJob.comment = model.comment;
+								// Update flag
+								updated = true;
+							}
+						});
+						// Add a new work job
+						if (!updated) {
+							timesheet.travel_jobs.push(model);
+						}
+					}
+				}
+			});
+		});
+
+		// When the form component alerts this parent of a successful create
+		this.$router.app.$on('child-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// If the model is a work job
+					if (model.job_type) {
+						// Flag which indicates whether the workjob has been added to cache
+						var updated = false;
+						// Iterate through work jobs to determine if a job should be updated or a new 
+						// job should be pushed to the collection
+						timesheet.work_jobs.forEach(function (workjob) {
+							// Replace existing updated work job
+							if (workjob.id == model.id) {
+								var index = timesheet.work_jobs.indexOf(workjob);
+								timesheet.work_jobs.splice(index, 1);
+							}
+						});
+					}
+
+					// If the model is a travel job
+					if (model.travel_distance) {
+						// Flag which indicates whether the workjob has been added to cache
+						var updated = false;
+						// Iterate through work jobs to determine if a job should be updated or a new 
+						// job should be pushed to the collection
+						timesheet.travel_jobs.forEach(function (travelJob) {
+							// Replace existing updated work job
+							if (travelJob.id == model.id) {
+								var index = timesheet.travel_jobs.indexOf(travelJob);
+								timesheet.travel_jobs.splice(index, 1);
+							}
+						});
+					}
+				}
+			});
+		});
+	}
+});
+
+/***/ }),
+/* 57 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var api_access = __webpack_require__(1);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+	props: ['work_job_id', 'work_job', 'timesheet_id'],
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			formIsLoading: false,
+			urlToDelete: '/api/work-jobs/delete',
+			isDeleting: false,
+			form: {
+				model: 'WorkJob',
+				state: 'create-child',
+				title: 'Add Work Hours',
+				button: 'Add',
+				action: '/api/work-jobs/create',
+				createAction: '/api/work-jobs/create',
+				updateAction: '/api/work-jobs/update',
+				isLoading: false,
+				successMsg: 'Work hours added',
+				fields: {
+					id: { val: '', err: false, dflt: '' },
+					timesheet_id: { val: this.timesheet_id, err: false, dflt: '' },
+					job_type: { val: '', err: false, dflt: '' },
+					hours_worked: { val: '0', err: false, dflt: '0' },
+					comment: { val: '', err: false, dflt: '' }
+				}
+			}
+		};
+	},
+
+
+	methods: {
+		// Submits the form to server via API access
+		sendForm: function sendForm() {
+			this.createOrUpdate();
+		},
+
+
+		// Submits a delete to server via mixin
+		deleteWorkJob: function deleteWorkJob() {
+			this.deleteChild();
+		}
+	},
+
+	created: function created() {
+
+		// If an id is present then set up the form for edit
+		if (this.work_job_id) {
+			// Show form loader
+			this.formIsLoading = true;
+			// Populate form
+			this.populateFormFromModel(this.work_job);
+			// Adjust form state
+			this.formEditState('edit-child');
+			// Hide form loader
+			this.formIsLoading = false;
+		}
+	}
+});
+
+/***/ }),
+/* 58 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var api_access = __webpack_require__(1);
+var modal = __webpack_require__(5);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -20061,7 +20860,7 @@ var modal = __webpack_require__(13);
 });
 
 /***/ }),
-/* 56 */
+/* 59 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20118,7 +20917,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 57 */
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20199,7 +20998,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 var api_access = __webpack_require__(1);
-var dropdown = __webpack_require__(4);
+var dropdown = __webpack_require__(3);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -20254,7 +21053,7 @@ var dropdown = __webpack_require__(4);
 });
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20539,7 +21338,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21017,7 +21816,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21101,13 +21900,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(64);
+window._ = __webpack_require__(67);
 
-window.noty = __webpack_require__(65);
+window.noty = __webpack_require__(68);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -21116,7 +21915,7 @@ window.noty = __webpack_require__(65);
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(12);
+  window.$ = window.jQuery = __webpack_require__(13);
 } catch (e) {}
 
 /**
@@ -21146,21 +21945,21 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // });
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)();
+exports = module.exports = __webpack_require__(12)();
 exports.push([module.i, "\n.log-out{\n    margin-left: 10px;\n}\n\n", ""]);
 
 /***/ }),
-/* 63 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)();
+exports = module.exports = __webpack_require__(12)();
 exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n\n", ""]);
 
 /***/ }),
-/* 64 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -38249,15 +39048,15 @@ exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n\n", ""]);
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16), __webpack_require__(116)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16), __webpack_require__(125)(module)))
 
 /***/ }),
-/* 65 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!function(root, factory) {
 	 if (true) {
-		 !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(12)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		 !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(13)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -40136,14 +40935,14 @@ return window.noty;
 });
 
 /***/ }),
-/* 66 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(37),
   /* template */
-  __webpack_require__(92),
+  __webpack_require__(98),
   /* scopeId */
   null,
   /* cssModules */
@@ -40170,18 +40969,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(112)
+__webpack_require__(121)
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(40),
   /* template */
-  __webpack_require__(90),
+  __webpack_require__(96),
   /* scopeId */
   null,
   /* cssModules */
@@ -40208,14 +41007,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(41),
   /* template */
-  __webpack_require__(101),
+  __webpack_require__(109),
   /* scopeId */
   null,
   /* cssModules */
@@ -40242,14 +41041,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 69 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(42),
   /* template */
-  __webpack_require__(105),
+  __webpack_require__(114),
   /* scopeId */
   null,
   /* cssModules */
@@ -40276,14 +41075,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 70 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(43),
   /* template */
-  __webpack_require__(89),
+  __webpack_require__(95),
   /* scopeId */
   null,
   /* cssModules */
@@ -40310,14 +41109,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 71 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(44),
   /* template */
-  __webpack_require__(98),
+  __webpack_require__(104),
   /* scopeId */
   null,
   /* cssModules */
@@ -40344,14 +41143,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 72 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(45),
   /* template */
-  __webpack_require__(108),
+  __webpack_require__(117),
   /* scopeId */
   null,
   /* cssModules */
@@ -40378,14 +41177,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 73 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(46),
   /* template */
-  __webpack_require__(100),
+  __webpack_require__(107),
   /* scopeId */
   null,
   /* cssModules */
@@ -40412,14 +41211,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 74 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(47),
   /* template */
-  __webpack_require__(95),
+  __webpack_require__(101),
   /* scopeId */
   null,
   /* cssModules */
@@ -40446,14 +41245,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 75 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(48),
   /* template */
-  __webpack_require__(106),
+  __webpack_require__(115),
   /* scopeId */
   null,
   /* cssModules */
@@ -40480,14 +41279,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 76 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(49),
   /* template */
-  __webpack_require__(103),
+  __webpack_require__(111),
   /* scopeId */
   null,
   /* cssModules */
@@ -40514,14 +41313,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 77 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(50),
   /* template */
-  __webpack_require__(99),
+  __webpack_require__(105),
   /* scopeId */
   null,
   /* cssModules */
@@ -40548,14 +41347,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 78 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(51),
   /* template */
-  __webpack_require__(94),
+  __webpack_require__(100),
   /* scopeId */
   null,
   /* cssModules */
@@ -40582,14 +41381,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 79 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(52),
   /* template */
-  __webpack_require__(91),
+  __webpack_require__(97),
   /* scopeId */
   null,
   /* cssModules */
@@ -40616,14 +41415,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 80 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(53),
   /* template */
-  __webpack_require__(110),
+  __webpack_require__(119),
   /* scopeId */
   null,
   /* cssModules */
@@ -40650,14 +41449,82 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 81 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(54),
   /* template */
-  __webpack_require__(104),
+  __webpack_require__(112),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheet-form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Timesheet-form.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-a6dc0f9e", Component.options)
+  } else {
+    hotAPI.reload("data-v-a6dc0f9e", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(55),
+  /* template */
+  __webpack_require__(108),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheet-pill.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Timesheet-pill.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-73ad2a26", Component.options)
+  } else {
+    hotAPI.reload("data-v-73ad2a26", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(56),
+  /* template */
+  __webpack_require__(113),
   /* scopeId */
   null,
   /* cssModules */
@@ -40684,14 +41551,48 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 82 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(55),
+  __webpack_require__(57),
   /* template */
-  __webpack_require__(111),
+  __webpack_require__(106),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Work-job-form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Work-job-form.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5f2d6d4e", Component.options)
+  } else {
+    hotAPI.reload("data-v-5f2d6d4e", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(58),
+  /* template */
+  __webpack_require__(120),
   /* scopeId */
   null,
   /* cssModules */
@@ -40718,14 +41619,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 83 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(56),
+  __webpack_require__(59),
   /* template */
-  __webpack_require__(88),
+  __webpack_require__(94),
   /* scopeId */
   null,
   /* cssModules */
@@ -40752,14 +41653,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 84 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(57),
+  __webpack_require__(60),
   /* template */
-  __webpack_require__(107),
+  __webpack_require__(116),
   /* scopeId */
   null,
   /* cssModules */
@@ -40786,14 +41687,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 85 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(58),
+  __webpack_require__(61),
   /* template */
-  __webpack_require__(93),
+  __webpack_require__(99),
   /* scopeId */
   null,
   /* cssModules */
@@ -40820,14 +41721,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 86 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(59),
+  __webpack_require__(62),
   /* template */
-  __webpack_require__(97),
+  __webpack_require__(103),
   /* scopeId */
   null,
   /* cssModules */
@@ -40854,14 +41755,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 87 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(60),
+  __webpack_require__(63),
   /* template */
-  __webpack_require__(102),
+  __webpack_require__(110),
   /* scopeId */
   null,
   /* cssModules */
@@ -40888,7 +41789,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 88 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -40908,7 +41809,7 @@ if (false) {
 }
 
 /***/ }),
-/* 89 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41007,7 +41908,7 @@ if (false) {
 }
 
 /***/ }),
-/* 90 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41088,7 +41989,7 @@ if (false) {
 }
 
 /***/ }),
-/* 91 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41738,7 +42639,7 @@ if (false) {
 }
 
 /***/ }),
-/* 92 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -41779,7 +42680,7 @@ if (false) {
 }
 
 /***/ }),
-/* 93 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -42072,7 +42973,7 @@ if (false) {
 }
 
 /***/ }),
-/* 94 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -42131,7 +43032,7 @@ if (false) {
 }
 
 /***/ }),
-/* 95 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43202,7 +44103,7 @@ if (false) {
 }
 
 /***/ }),
-/* 96 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43239,7 +44140,7 @@ if (false) {
 }
 
 /***/ }),
-/* 97 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43912,7 +44813,7 @@ if (false) {
 }
 
 /***/ }),
-/* 98 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43971,7 +44872,7 @@ if (false) {
 }
 
 /***/ }),
-/* 99 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -45683,7 +46584,206 @@ if (false) {
 }
 
 /***/ }),
-/* 100 */
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [(_vm.formIsLoading) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', {
+    staticClass: "col-md-12 well bs-component margin-10-top"
+  }, [_c('form', {
+    staticClass: "form-horizontal",
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+      }
+    }
+  }, [_c('fieldset', [_c('legend', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-8"
+  }, [_c('h3', {
+    staticClass: "pull-left",
+    staticStyle: {
+      "margin-top": "6px"
+    }
+  }, [_vm._v(_vm._s(_vm.form.title))])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_vm._t("close-form")], 2)])]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.job_type.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Job Type")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.job_type.val),
+      expression: "form.fields.job_type.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.form.fields.job_type.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": ""
+    }
+  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Fieldwork"
+    }
+  }, [_vm._v("Fieldwork")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Documentation"
+    }
+  }, [_vm._v("Documentation")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Report Writing"
+    }
+  }, [_vm._v("Report Writing")])]), _vm._v(" "), (_vm.form.fields.job_type.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.job_type.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.hours_worked.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Hours Worked")]), _vm._v(" "), _c('div', {
+    staticClass: "input-group margin-10-top"
+  }, [_c('span', {
+    staticClass: "input-group-addon"
+  }, [_vm._v("Hrs.")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.hours_worked.val),
+      expression: "form.fields.hours_worked.val"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "number",
+      "min": "0",
+      "max": "20",
+      "step": "0.1"
+    },
+    domProps: {
+      "value": (_vm.form.fields.hours_worked.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.hours_worked.val = $event.target.value
+      },
+      "blur": function($event) {
+        _vm.$forceUpdate()
+      }
+    }
+  })]), _vm._v(" "), (_vm.form.fields.hours_worked.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.hours_worked.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.comment.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Comments")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.comment.val),
+      expression: "form.fields.comment.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Any additional comments"
+    },
+    domProps: {
+      "value": (_vm.form.fields.comment.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.comment.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.comment.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.comment.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3 col-centered"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-45-top",
+    on: {
+      "click": _vm.sendForm
+    }
+  }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])]), _vm._v(" "), (_vm.work_job_id) ? _c('fieldset', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3 col-centered"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-danger btn-block margin-25-top",
+    on: {
+      "click": _vm.deleteWorkJob
+    }
+  }, [(!_vm.isDeleting) ? _c('span', [_vm._v("Remove")]) : _vm._e(), _vm._v(" "), (_vm.isDeleting) ? _c('span', [_c('div', {
+    staticClass: "loader-center"
+  })]) : _vm._e()])])])])]) : _vm._e()])]) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "large-center-loader"
+  })])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-5f2d6d4e", module.exports)
+  }
+}
+
+/***/ }),
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -45752,7 +46852,218 @@ if (false) {
 }
 
 /***/ }),
-/* 101 */
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_c('div', {
+    staticClass: "col-md-10 col-centered"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [_c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-6 col-centered"
+  }, [_c('div', {
+    staticClass: "btn-toolbar"
+  }, [_c('a', {
+    staticClass: "btn btn-info btn-sm margin-10-top",
+    on: {
+      "click": function($event) {
+        _vm.addWorkHours(_vm.timesheet.id)
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-hourglass"
+  }), _vm._v(" Add Hours\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('a', {
+    staticClass: "btn btn-info btn-sm margin-10-top",
+    on: {
+      "click": function($event) {
+        _vm.addTravel(_vm.timesheet.id)
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-road"
+  }), _vm._v(" Add Travel\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('a', {
+    staticClass: "btn btn-info btn-sm margin-10-top",
+    on: {
+      "click": function($event) {
+        _vm.addEquipmentRental(_vm.timesheet.id)
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-tags"
+  }), _vm._v(" Add Equipment\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('a', {
+    staticClass: "btn btn-info btn-sm margin-10-top",
+    on: {
+      "click": function($event) {
+        _vm.addOtherCost(_vm.timesheet.id)
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-usd"
+  }), _vm._v(" Add Other\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [(_vm.tabToShow == 'List') ? _c('ul', {
+    staticClass: "list-group margin-10-top"
+  }, [_c('li', {
+    staticClass: "list-group-item"
+  }, [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('strong', [_vm._v("Date")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(_vm.timesheet.date) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('strong', [_vm._v("Per Diem")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t$" + _vm._s(_vm.timesheet.per_diem) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-20-top"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(_vm.timesheet.comment) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])])]), _vm._v(" "), (_vm.timesheet.travel_jobs.length > 0) ? _c('li', {
+    staticClass: "list-group-item"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), _vm._l((_vm.timesheet.travel_jobs), function(travelJob) {
+    return (_vm.timesheet.travel_jobs.length > 0) ? _c('li', {
+      staticClass: "list-group-item"
+    }, [_c('div', {
+      staticClass: "row"
+    }, [_c('div', {
+      staticClass: "col-md-5"
+    }, [_c('strong', [_vm._v("Travel Distance")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(travelJob.travel_distance) + " km\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
+      staticClass: "col-md-5"
+    }, [_c('strong', [_vm._v("Travel Hours")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(parseFloat(travelJob.travel_time)) + "\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
+      staticClass: "col-md-2"
+    }, [_c('div', {
+      staticClass: "pull-right"
+    }, [_c('span', {
+      staticClass: "glyphicon glyphicon-cog hover",
+      on: {
+        "click": function($event) {
+          _vm.editTravel(travelJob)
+        }
+      }
+    })])])]), _vm._v(" "), (travelJob.comment) ? _c('div', {
+      staticClass: "row margin-20-top"
+    }, [_c('div', {
+      staticClass: "col-md-12"
+    }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(travelJob.comment) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]) : _vm._e()]) : _vm._e()
+  }), _vm._v(" "), (_vm.timesheet.work_jobs.length > 0) ? _c('li', {
+    staticClass: "list-group-item"
+  }, [_vm._m(1)]) : _vm._e(), _vm._v(" "), _vm._l((_vm.timesheet.work_jobs), function(workjob) {
+    return (_vm.timesheet.work_jobs.length > 0) ? _c('li', {
+      staticClass: "list-group-item"
+    }, [_c('div', {
+      staticClass: "row"
+    }, [_c('div', {
+      staticClass: "col-md-5"
+    }, [_c('strong', [_vm._v("Job Type")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(workjob.job_type) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
+      staticClass: "col-md-5"
+    }, [_c('strong', [_vm._v("Hours")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(parseFloat(workjob.hours_worked)) + "\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
+      staticClass: "col-md-2"
+    }, [_c('div', {
+      staticClass: "pull-right"
+    }, [_c('span', {
+      staticClass: "glyphicon glyphicon-cog hover",
+      on: {
+        "click": function($event) {
+          _vm.editWorkHours(workjob)
+        }
+      }
+    })])])]), _vm._v(" "), (workjob.comment) ? _c('div', {
+      staticClass: "row margin-20-top"
+    }, [_c('div', {
+      staticClass: "col-md-12"
+    }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(workjob.comment) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]) : _vm._e()]) : _vm._e()
+  })], 2) : _vm._e(), _vm._v(" "), (_vm.tabToShow == 'Work-job') ? _c('work-job-form', {
+    attrs: {
+      "timesheet_id": _vm.timesheet.id,
+      "work_job_id": _vm.currentWorkJob.id,
+      "work_job": _vm.currentWorkJob
+    }
+  }, [_c('button', {
+    staticClass: "pull-right btn btn-danger",
+    on: {
+      "click": function($event) {
+        _vm.tabToShow = 'List'
+      }
+    },
+    slot: "close-form"
+  }, [_vm._v("\r\n\t\t\t\t\t\t×\r\n\t\t\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.tabToShow == 'Travel-job') ? _c('travel-job-form', {
+    attrs: {
+      "timesheet_id": _vm.timesheet.id,
+      "travel_job_id": _vm.currentTravelJob.id,
+      "travel_job": _vm.currentTravelJob
+    }
+  }, [_c('button', {
+    staticClass: "pull-right btn btn-danger",
+    on: {
+      "click": function($event) {
+        _vm.tabToShow = 'List'
+      }
+    },
+    slot: "close-form"
+  }, [_vm._v("\r\n\t\t\t\t\t\t×\r\n\t\t\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.tabToShow == 'Equipment-rental') ? _c('equipment-rental-form', {
+    attrs: {
+      "timesheet_id": _vm.timesheet.id
+    }
+  }, [_c('button', {
+    staticClass: "pull-right btn btn-danger",
+    on: {
+      "click": function($event) {
+        _vm.tabToShow = 'List'
+      }
+    },
+    slot: "close-form"
+  }, [_vm._v("\r\n\t\t\t\t\t\t×\r\n\t\t\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.tabToShow == 'Other-cost') ? _c('other-cost-form', {
+    attrs: {
+      "timesheet_id": _vm.timesheet.id
+    }
+  }, [_c('button', {
+    staticClass: "pull-right btn btn-danger",
+    on: {
+      "click": function($event) {
+        _vm.tabToShow = 'List'
+      }
+    },
+    slot: "close-form"
+  }, [_vm._v("\r\n\t\t\t\t\t\t×\r\n\t\t\t\t\t")])]) : _vm._e()], 1)])]), _vm._v(" "), _c('modal', {
+    attrs: {
+      "modalActive": _vm.modalActive
+    },
+    on: {
+      "modal-close": function($event) {
+        _vm.modalActive = false
+      }
+    }
+  }, [_c('p', {
+    slot: "body"
+  }), _vm._v(" "), _c('div', {
+    slot: "footer"
+  }, [_c('button', {
+    staticClass: "btn btn-primary margin-45-top",
+    on: {
+      "click": function($event) {
+        _vm.modalActive = false
+      }
+    }
+  }, [_vm._v("Cancel")])])])], 1)
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h4', [_c('span', {
+    staticClass: "label label-primary"
+  }, [_vm._v("Travel Hours")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h4', [_c('span', {
+    staticClass: "label label-primary"
+  }, [_vm._v("Work Hours")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-73ad2a26", module.exports)
+  }
+}
+
+/***/ }),
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -45827,7 +47138,7 @@ if (false) {
 }
 
 /***/ }),
-/* 102 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -45886,7 +47197,7 @@ if (false) {
 }
 
 /***/ }),
-/* 103 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -45982,13 +47293,184 @@ if (false) {
 }
 
 /***/ }),
-/* 104 */
+/* 112 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [(_vm.formIsLoading) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', {
+    staticClass: "col-md-12 well bs-component margin-45-top"
+  }, [_c('form', {
+    staticClass: "form-horizontal",
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+      }
+    }
+  }, [_c('fieldset', [_c('legend', [_vm._v("\r\n\t\t\t\t\t" + _vm._s(_vm.form.title) + "\r\n\t\t\t\t")]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.date.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Date")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.date.val),
+      expression: "form.fields.date.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.form.fields.date.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.date.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.date.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.date.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.per_diem.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Per Diem")]), _vm._v(" "), _c('div', {
+    staticClass: "input-group margin-10-top"
+  }, [_c('span', {
+    staticClass: "input-group-addon"
+  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.per_diem.val),
+      expression: "form.fields.per_diem.val"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.form.fields.per_diem.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.per_diem.val = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), (_vm.form.fields.per_diem.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.per_diem.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.comment.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Comment")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.comment.val),
+      expression: "form.fields.comment.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Overview of work"
+    },
+    domProps: {
+      "value": (_vm.form.fields.comment.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.comment.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.comment.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.comment.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3 col-centered"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-45-top",
+    on: {
+      "click": _vm.sendForm
+    }
+  }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])]) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "large-center-loader"
+  })])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-a6dc0f9e", module.exports)
+  }
+}
+
+/***/ }),
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.fetchingModels) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [_vm._m(1), _vm._v(" "), _c('div', {
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [_c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v("Project Timesheets")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }), _c('h4', [_c('strong', [_vm._v("Project Identifier:")]), _vm._v(" "), _c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v(_vm._s(this.$route.params.project_id))])]), _vm._v(" "), _c('p'), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }), _c('h4', [_c('strong', [_vm._v("Total Timesheets:")]), _vm._v(" "), _c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v(_vm._s(_vm.totalTimesheets))])]), _vm._v(" "), _c('p'), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }), _c('h4', [_c('strong', [_vm._v("Accumulated Work Hours:")]), _vm._v(" "), _c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v(_vm._s(_vm.totalWorkHours))])]), _vm._v(" "), _c('p'), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }), _c('h4', [_c('strong', [_vm._v("Accumulated Travel Hours:")]), _vm._v(" "), _c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v(_vm._s())])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
   }, [_c('button', {
     staticClass: "btn btn-default",
@@ -46040,10 +47522,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "large-center-loader"
   })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "row row-padded"
-  }, [_c('h2', [_vm._v("Project Timesheets")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -46054,7 +47532,7 @@ if (false) {
 }
 
 /***/ }),
-/* 105 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -46099,7 +47577,7 @@ if (false) {
 }
 
 /***/ }),
-/* 106 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -46156,7 +47634,7 @@ if (false) {
 }
 
 /***/ }),
-/* 107 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -46246,7 +47724,7 @@ if (false) {
 }
 
 /***/ }),
-/* 108 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -46297,7 +47775,7 @@ if (false) {
 }
 
 /***/ }),
-/* 109 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -46331,7 +47809,7 @@ if (false) {
 }
 
 /***/ }),
-/* 110 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -47689,7 +49167,7 @@ if (false) {
 }
 
 /***/ }),
-/* 111 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -48260,13 +49738,13 @@ if (false) {
 }
 
 /***/ }),
-/* 112 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(62);
+var content = __webpack_require__(65);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -48286,13 +49764,13 @@ if(false) {
 }
 
 /***/ }),
-/* 113 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(63);
+var content = __webpack_require__(66);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -48312,7 +49790,7 @@ if(false) {
 }
 
 /***/ }),
-/* 114 */
+/* 123 */
 /***/ (function(module, exports) {
 
 /**
@@ -48345,7 +49823,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 115 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58040,10 +59518,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(16)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(16)))
 
 /***/ }),
-/* 116 */
+/* 125 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -58071,7 +59549,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 117 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
@@ -58079,9 +59557,9 @@ module.exports = __webpack_require__(18);
 
 
 /***/ }),
-/* 118 */,
-/* 119 */,
-/* 120 */
+/* 127 */,
+/* 128 */,
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58164,32 +59642,59 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(1);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	props: ['timesheet_id', 'project_id'],
+
+	props: ['travel_job_id', 'travel_job', 'timesheet_id'],
 
 	mixins: [api_access],
 
 	data: function data() {
 		return {
 			formIsLoading: false,
+			urlToDelete: '/api/travel-jobs/delete',
+			isDeleting: false,
 			form: {
-				model: 'Timesheet',
-				state: 'create',
-				title: 'Add Tmesheet',
+				model: 'TravelJob',
+				state: 'create-child',
+				title: 'Add Travel Hours',
 				button: 'Add',
-				action: '/api/timesheets/create',
-				createAction: '/api/timesheets/create',
-				updateAction: '/api/timesheets/update',
+				action: '/api/travel-jobs/create',
+				createAction: '/api/travel-jobs/create',
+				updateAction: '/api/travel-jobs/update',
 				isLoading: false,
-				successMsg: 'Your timesheet has been added to the project',
+				successMsg: 'Travel hours added',
 				fields: {
 					id: { val: '', err: false, dflt: '' },
-					project_id: { val: this.project_id, err: false, dflt: '' },
-					date: { val: '', err: false, dflt: '' },
-					per_diem: { val: '0.00', err: false, dflt: '0.00' },
+					timesheet_id: { val: this.timesheet_id, err: false, dflt: '' },
+					travel_distance: { val: '0', err: false, dflt: '0' },
+					travel_time: { val: '0', err: false, dflt: '0' },
 					comment: { val: '', err: false, dflt: '' }
 				}
 			}
@@ -58201,45 +59706,47 @@ var api_access = __webpack_require__(1);
 		// Submits the form to server via API access
 		sendForm: function sendForm() {
 			this.createOrUpdate();
+		},
+
+
+		// Submits a delete to server via mixin
+		deleteTravelJob: function deleteTravelJob() {
+			this.deleteChild();
 		}
 	},
 
 	created: function created() {
-
 		// If an id is present then set up the form for edit
-		if (this.timesheet_id) {
+		if (this.travel_job_id) {
 			// Show form loader
 			this.formIsLoading = true;
-			// Get the requested model
-			this.grabModel('/api/timesheets/' + this.timesheet_id, function (model) {
-				// Populate form
-				this.populateFormFromModel(model);
-				// Adjust form state
-				this.formEditState('edit');
-				// Hide form loader
-				this.formIsLoading = false;
-			});
+			// Populate form
+			this.populateFormFromModel(this.travel_job);
+			// Adjust form state
+			this.formEditState('edit-child');
+			// Hide form loader
+			this.formIsLoading = false;
 		}
 	}
 });
 
 /***/ }),
-/* 121 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(120),
+  __webpack_require__(129),
   /* template */
-  __webpack_require__(122),
+  __webpack_require__(131),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheet-form.vue"
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Travel-job-form.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Timesheet-form.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] Travel-job-form.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -58248,9 +59755,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-a6dc0f9e", Component.options)
+    hotAPI.createRecord("data-v-068fba65", Component.options)
   } else {
-    hotAPI.reload("data-v-a6dc0f9e", Component.options)
+    hotAPI.reload("data-v-068fba65", Component.options)
   }
 })()}
 
@@ -58258,14 +59765,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 122 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.formIsLoading) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
   }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', {
-    staticClass: "col-md-12 well bs-component margin-45-top"
+    staticClass: "col-md-12 well bs-component margin-10-top"
   }, [_c('form', {
     staticClass: "form-horizontal",
     on: {
@@ -58273,79 +59780,106 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         $event.preventDefault();
       }
     }
-  }, [_c('fieldset', [_c('legend', [_vm._v("\r\n\t\t\t\t\t" + _vm._s(_vm.form.title) + "\r\n\t\t\t\t")]), _vm._v(" "), _c('div', {
+  }, [_c('fieldset', [_c('legend', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-8"
+  }, [_c('h3', {
+    staticClass: "pull-left",
+    staticStyle: {
+      "margin-top": "6px"
+    }
+  }, [_vm._v(_vm._s(_vm.form.title))])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_vm._t("close-form")], 2)])]), _vm._v(" "), _c('div', {
     staticClass: "row margin-15-top"
   }, [_c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
-      'has-error': _vm.form.fields.date.err
+      'has-error': _vm.form.fields.travel_distance.err
     }
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Date")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("Travel Distance")]), _vm._v(" "), _c('div', {
+    staticClass: "input-group margin-10-top"
+  }, [_c('span', {
+    staticClass: "input-group-addon"
+  }, [_vm._v("KMs")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.form.fields.date.val),
-      expression: "form.fields.date.val"
+      value: (_vm.form.fields.travel_distance.val),
+      expression: "form.fields.travel_distance.val"
     }],
-    staticClass: "form-control margin-10-top",
+    staticClass: "form-control",
     attrs: {
-      "type": "date"
+      "type": "number",
+      "min": "0",
+      "max": "1000",
+      "step": "1"
     },
     domProps: {
-      "value": (_vm.form.fields.date.val)
+      "value": (_vm.form.fields.travel_distance.val)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.form.fields.date.val = $event.target.value
+        _vm.form.fields.travel_distance.val = $event.target.value
+      },
+      "blur": function($event) {
+        _vm.$forceUpdate()
       }
     }
-  }), _vm._v(" "), (_vm.form.fields.date.err) ? _c('span', {
+  })]), _vm._v(" "), (_vm.form.fields.travel_distance.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.date.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.travel_distance.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
-      'has-error': _vm.form.fields.per_diem.err
+      'has-error': _vm.form.fields.travel_time.err
     }
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Per Diem")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Travel Time")]), _vm._v(" "), _c('div', {
     staticClass: "input-group margin-10-top"
   }, [_c('span', {
     staticClass: "input-group-addon"
-  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("Hrs.")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.form.fields.per_diem.val),
-      expression: "form.fields.per_diem.val"
+      value: (_vm.form.fields.travel_time.val),
+      expression: "form.fields.travel_time.val"
     }],
     staticClass: "form-control",
     attrs: {
-      "type": "text"
+      "type": "number",
+      "min": "0",
+      "max": "20",
+      "step": "0.1"
     },
     domProps: {
-      "value": (_vm.form.fields.per_diem.val)
+      "value": (_vm.form.fields.travel_time.val)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.form.fields.per_diem.val = $event.target.value
+        _vm.form.fields.travel_time.val = $event.target.value
+      },
+      "blur": function($event) {
+        _vm.$forceUpdate()
       }
     }
-  })]), _vm._v(" "), (_vm.form.fields.per_diem.err) ? _c('span', {
+  })]), _vm._v(" "), (_vm.form.fields.travel_time.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.per_diem.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.travel_time.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
     staticClass: "row margin-15-top"
   }, [_c('div', {
     staticClass: "col-md-12"
@@ -58358,7 +59892,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Comment")]), _vm._v(" "), _c('textarea', {
+  }, [_vm._v("Comments")]), _vm._v(" "), _c('textarea', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -58368,7 +59902,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "form-control margin-10-top",
     attrs: {
       "rows": "3",
-      "placeholder": "Overview of work"
+      "placeholder": "Any additional comments"
     },
     domProps: {
       "value": (_vm.form.fields.comment.val)
@@ -58394,7 +59928,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
     staticClass: "center-loader"
-  })]) : _vm._e()])])])])])])]) : _vm._e()])
+  })]) : _vm._e()])])])])]), _vm._v(" "), (_vm.travel_job_id) ? _c('fieldset', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3 col-centered"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-danger btn-block margin-25-top",
+    on: {
+      "click": _vm.deleteTravelJob
+    }
+  }, [(!_vm.isDeleting) ? _c('span', [_vm._v("Remove")]) : _vm._e(), _vm._v(" "), (_vm.isDeleting) ? _c('span', [_c('div', {
+    staticClass: "loader-center"
+  })]) : _vm._e()])])])])]) : _vm._e()])]) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-12"
@@ -58406,256 +59953,18 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-a6dc0f9e", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-068fba65", module.exports)
   }
 }
 
 /***/ }),
-/* 123 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var dropdown = __webpack_require__(4);
-var modal = __webpack_require__(13);
-var workjob_form = __webpack_require__(127);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		'dropdown': dropdown,
-		'modal': modal,
-		'work-job-form': workjob_form
-	},
-
-	props: ['timesheet'],
-
-	data: function data() {
-		return {
-			// Toggles which form to show in the modal
-			formToShow: '',
-			// Show modal or not
-			modalActive: false
-		};
-	},
-
-
-	methods: {
-		addTravel: function addTravel(id) {
-			this.formToShow = 'Travel-time';
-			this.modalActive = true;
-		},
-		addWorkHours: function addWorkHours(id) {
-			this.formToShow = 'Work-job';
-			this.modalActive = true;
-		},
-		addEquipmentRental: function addEquipmentRental(id) {
-			this.formToShow = 'Equipment-rental';
-			this.modalActive = true;
-		},
-		addOtherCost: function addOtherCost(id) {
-			this.formToShow = 'Other-cost';
-			this.modalActive = true;
-		}
-	}
-});
-
-/***/ }),
-/* 124 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(123),
-  /* template */
-  __webpack_require__(125),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheet-pill.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Timesheet-pill.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-73ad2a26", Component.options)
-  } else {
-    hotAPI.reload("data-v-73ad2a26", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 125 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-white post panel-shadow"
-  }, [_c('div', {
-    staticClass: "row row-padded"
-  }, [_c('dropdown', {
-    staticClass: "pull-right",
-    attrs: {
-      "title": 'Actions'
-    }
-  }, [_c('li', [_c('a', {
-    on: {
-      "click": function($event) {
-        _vm.addWorkHours(_vm.timesheet.id)
-      }
-    }
-  }, [_vm._v("Add Work Hours")])]), _vm._v(" "), _c('li', [_c('a', {
-    on: {
-      "click": function($event) {
-        _vm.addTravel(_vm.timesheet.id)
-      }
-    }
-  }, [_vm._v("Add Travel")])]), _vm._v(" "), _c('li', [_c('a', {
-    on: {
-      "click": function($event) {
-        _vm.addEquipmentRental(_vm.timesheet.id)
-      }
-    }
-  }, [_vm._v("Add Equipment Rental")])]), _vm._v(" "), _c('li', [_c('a', {
-    on: {
-      "click": function($event) {
-        _vm.addOtherCost(_vm.timesheet.id)
-      }
-    }
-  }, [_vm._v("Add Other Cost")])])])], 1), _vm._v(" "), _c('div', {
-    staticClass: "panel-body"
-  }, [_c('ul', {
-    staticClass: "list-group margin-10-top"
-  }, [_c('li', {
-    staticClass: "list-group-item"
-  }, [_c('strong', [_vm._v("Project Identifier")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t" + _vm._s(_vm.timesheet.project_id) + "\r\n\t\t\t\t\t")]), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('strong', [_vm._v("Date")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t" + _vm._s(_vm.timesheet.date) + "\r\n\t\t\t\t\t")]), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('strong', [_vm._v("Per Diem")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t$" + _vm._s(_vm.timesheet.per_diem) + "\r\n\t\t\t\t\t")]), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t" + _vm._s(_vm.timesheet.comment) + "\r\n\t\t\t\t\t")])])])])]), _vm._v(" "), _c('modal', {
-    attrs: {
-      "modalActive": _vm.modalActive
-    },
-    on: {
-      "modal-close": function($event) {
-        _vm.modalActive = false
-      }
-    }
-  }, [_c('p', {
-    slot: "body"
-  }, [(_vm.formToShow == 'Work-job') ? _c('work-job-form', {
-    attrs: {
-      "timesheet_id": _vm.timesheet.id
-    }
-  }) : _vm._e()], 1), _vm._v(" "), _c('div', {
-    slot: "footer"
-  }, [_c('button', {
-    staticClass: "btn btn-primary margin-45-top",
-    on: {
-      "click": function($event) {
-        _vm.modalActive = false
-      }
-    }
-  }, [_vm._v("Cancel")])])])], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-73ad2a26", module.exports)
-  }
-}
-
-/***/ }),
-/* 126 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
@@ -58744,7 +60053,7 @@ var api_access = __webpack_require__(1);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
-	props: ['work_job_id', 'work_job', 'timesheet_id'],
+	props: ['equipment_rental_id', 'equipment_rental', 'timesheet_id'],
 
 	mixins: [api_access],
 
@@ -58752,20 +60061,20 @@ var api_access = __webpack_require__(1);
 		return {
 			formIsLoading: false,
 			form: {
-				model: 'WorkJob',
+				model: 'EquipmentRental',
 				state: 'create',
-				title: 'Add Work Hours',
+				title: 'Add Equipment Rental',
 				button: 'Add',
-				action: '/api/work-jobs/create',
-				createAction: '/api/work-jobs/create',
-				updateAction: '/api/work-jobs/update',
+				action: '/api/travel/create',
+				createAction: '/api/equipment/create',
+				updateAction: '/api/equipment/update',
 				isLoading: false,
-				successMsg: 'Work hours added',
+				successMsg: 'Equipment rental added',
 				fields: {
 					id: { val: '', err: false, dflt: '' },
 					timesheet_id: { val: this.timesheet_id, err: false, dflt: '' },
-					job_type: { val: '', err: false, dflt: '' },
-					hours_worked: { val: '0', err: false, dflt: '0' },
+					equipment_type: { val: '', err: false, dflt: '' },
+					rental_fee: { val: '0.00', err: false, dflt: '0.00' },
 					comment: { val: '', err: false, dflt: '' }
 				}
 			}
@@ -58781,13 +60090,12 @@ var api_access = __webpack_require__(1);
 	},
 
 	created: function created() {
-
 		// If an id is present then set up the form for edit
-		if (this.work_job_id) {
+		if (this.equipment_rental_id) {
 			// Show form loader
 			this.formIsLoading = true;
 			// Populate form
-			this.populateFormFromModel(this.work_job);
+			this.populateFormFromModel(this.equipment_rental);
 			// Adjust form state
 			this.formEditState('edit');
 			// Hide form loader
@@ -58797,22 +60105,22 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 127 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(126),
+  __webpack_require__(132),
   /* template */
-  __webpack_require__(128),
+  __webpack_require__(134),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Work-job-form.vue"
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Equipment-rental-form.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Work-job-form.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] Equipment-rental-form.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -58821,9 +60129,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5f2d6d4e", Component.options)
+    hotAPI.createRecord("data-v-f51fdb68", Component.options)
   } else {
-    hotAPI.reload("data-v-5f2d6d4e", Component.options)
+    hotAPI.reload("data-v-f51fdb68", Component.options)
   }
 })()}
 
@@ -58831,14 +60139,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 128 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.formIsLoading) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
   }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', {
-    staticClass: "col-md-12 well bs-component margin-45-top"
+    staticClass: "col-md-12 well bs-component margin-10-top"
   }, [_c('form', {
     staticClass: "form-horizontal",
     on: {
@@ -58846,95 +60154,91 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         $event.preventDefault();
       }
     }
-  }, [_c('fieldset', [_c('legend', [_vm._v("\r\n\t\t\t\t\t" + _vm._s(_vm.form.title) + "\r\n\t\t\t\t")]), _vm._v(" "), _c('div', {
+  }, [_c('fieldset', [_c('legend', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-8"
+  }, [_c('h3', {
+    staticClass: "pull-left",
+    staticStyle: {
+      "margin-top": "6px"
+    }
+  }, [_vm._v(_vm._s(_vm.form.title))])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_vm._t("close-form")], 2)])]), _vm._v(" "), _c('div', {
     staticClass: "row margin-15-top"
   }, [_c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
-      'has-error': _vm.form.fields.job_type.err
+      'has-error': _vm.form.fields.equipment_type.err
     }
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Job Type")]), _vm._v(" "), _c('select', {
+  }, [_vm._v("Equipment Type")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.form.fields.job_type.val),
-      expression: "form.fields.job_type.val"
+      value: (_vm.form.fields.equipment_type.val),
+      expression: "form.fields.equipment_type.val"
     }],
     staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Type of equipment"
+    },
+    domProps: {
+      "value": (_vm.form.fields.equipment_type.val)
+    },
     on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.job_type.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.equipment_type.val = $event.target.value
       }
     }
-  }, [_c('option', {
-    attrs: {
-      "value": "",
-      "selected": ""
-    }
-  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Fieldwork"
-    }
-  }, [_vm._v("Fieldwork")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Documentation"
-    }
-  }, [_vm._v("Documentation")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Report Writing"
-    }
-  }, [_vm._v("Report Writing")])]), _vm._v(" "), (_vm.form.fields.job_type.err) ? _c('span', {
+  }), _vm._v(" "), (_vm.form.fields.equipment_type.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.job_type.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.equipment_type.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
-      'has-error': _vm.form.fields.hours_worked.err
+      'has-error': _vm.form.fields.rental_fee.err
     }
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('label', {
     staticClass: "control-label"
-  }, [_vm._v("Hours Worked")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Rental Fee")]), _vm._v(" "), _c('div', {
     staticClass: "input-group margin-10-top"
   }, [_c('span', {
     staticClass: "input-group-addon"
-  }, [_vm._v("Hrs.")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.form.fields.hours_worked.val),
-      expression: "form.fields.hours_worked.val"
+      value: (_vm.form.fields.rental_fee.val),
+      expression: "form.fields.rental_fee.val"
     }],
     staticClass: "form-control",
     attrs: {
       "type": "text"
     },
     domProps: {
-      "value": (_vm.form.fields.hours_worked.val)
+      "value": (_vm.form.fields.rental_fee.val)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.form.fields.hours_worked.val = $event.target.value
+        _vm.form.fields.rental_fee.val = $event.target.value
       }
     }
-  })]), _vm._v(" "), (_vm.form.fields.hours_worked.err) ? _c('span', {
+  })]), _vm._v(" "), (_vm.form.fields.rental_fee.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.hours_worked.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.rental_fee.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
     staticClass: "row margin-15-top"
   }, [_c('div', {
     staticClass: "col-md-12"
@@ -58995,7 +60299,353 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-5f2d6d4e", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-f51fdb68", module.exports)
+  }
+}
+
+/***/ }),
+/* 135 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var api_access = __webpack_require__(1);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+	props: ['other_cost_id', 'other_cost', 'timesheet_id'],
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			formIsLoading: false,
+			form: {
+				model: 'OtherCost',
+				state: 'create',
+				title: 'Add Other Cost',
+				button: 'Add',
+				action: '/api/other-costs/create',
+				createAction: '/api/other-costs/create',
+				updateAction: '/api/other-costs/update',
+				isLoading: false,
+				successMsg: 'Other cost added',
+				fields: {
+					id: { val: '', err: false, dflt: '' },
+					timesheet_id: { val: this.timesheet_id, err: false, dflt: '' },
+					cost_name: { val: '', err: false, dflt: '' },
+					cost: { val: '0.00', err: false, dflt: '0.00' },
+					comment: { val: '', err: false, dflt: '' }
+				}
+			}
+		};
+	},
+
+
+	methods: {
+		// Submits the form to server via API access
+		sendForm: function sendForm() {
+			this.createOrUpdate();
+		}
+	},
+
+	created: function created() {
+		// If an id is present then set up the form for edit
+		if (this.other_cost_id) {
+			// Show form loader
+			this.formIsLoading = true;
+			// Populate form
+			this.populateFormFromModel(this.other_cost);
+			// Adjust form state
+			this.formEditState('edit');
+			// Hide form loader
+			this.formIsLoading = false;
+		}
+	}
+});
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(135),
+  /* template */
+  __webpack_require__(137),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Other-cost-form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Other-cost-form.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-9285e6f6", Component.options)
+  } else {
+    hotAPI.reload("data-v-9285e6f6", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [(_vm.formIsLoading) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.formIsLoading) ? _c('div', {
+    staticClass: "col-md-12 well bs-component margin-10-top"
+  }, [_c('form', {
+    staticClass: "form-horizontal",
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+      }
+    }
+  }, [_c('fieldset', [_c('legend', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-8"
+  }, [_c('h3', {
+    staticClass: "pull-left",
+    staticStyle: {
+      "margin-top": "6px"
+    }
+  }, [_vm._v(_vm._s(_vm.form.title))])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_vm._t("close-form")], 2)])]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.cost_name.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Cost Name")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.cost_name.val),
+      expression: "form.fields.cost_name.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "text",
+      "placeholder": "Name of cost"
+    },
+    domProps: {
+      "value": (_vm.form.fields.cost_name.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.cost_name.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.cost_name.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.cost_name.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.cost.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Cost")]), _vm._v(" "), _c('div', {
+    staticClass: "input-group margin-10-top"
+  }, [_c('span', {
+    staticClass: "input-group-addon"
+  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.cost.val),
+      expression: "form.fields.cost.val"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.form.fields.cost.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.cost.val = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), (_vm.form.fields.cost.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.cost.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.form.fields.comment.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Comments")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.form.fields.comment.val),
+      expression: "form.fields.comment.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "rows": "3",
+      "placeholder": "Any additional comments"
+    },
+    domProps: {
+      "value": (_vm.form.fields.comment.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.form.fields.comment.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.form.fields.comment.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.form.fields.comment.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3 col-centered"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-45-top",
+    on: {
+      "click": _vm.sendForm
+    }
+  }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])]) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "large-center-loader"
+  })])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-9285e6f6", module.exports)
   }
 }
 

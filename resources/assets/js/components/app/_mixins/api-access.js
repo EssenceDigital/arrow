@@ -277,6 +277,45 @@ module.exports =  {
 
 		},
 
+		deleteChild(id){
+			var idToDelete;
+			if(id){
+				idToDelete = id;
+			} else{
+				idToDelete = this.form.fields.id.val;
+			}
+			// Show loader
+			this.isDeleting = true;
+			// Assemble object for POST
+			var data = {
+				id: idToDelete,
+				_token: window.Laravel.csrfToken
+			};
+			// Store context
+			var context = this;
+			// Send GET request to delete
+			axios.post(this.urlToDelete, data)
+				.then(function(response){
+					// Notify
+	                 noty({
+	                     text: context.form.model + ' has been deleted',
+	                     theme: 'defaultTheme',
+	                     layout: 'center',
+	                     timeout: 850,
+	                     closeWith: ['click', 'hover'],
+	                     type: 'success'
+	                });
+					// Hide loader
+					context.isDeleting = false;	
+					console.log(response.data.model);
+					// Emit even
+					context.$router.app.$emit('child-deleted', response.data.model);				
+				})
+				.catch(function(response){
+					console.log(response);
+				});				
+		},
+
 		/* Sends a POST request to delete the specified row from storage. Uses a properly set up 'hub' from. See top most comment.
 		 * @return emits an event letting the caller know if the request was successfull
 		*/
