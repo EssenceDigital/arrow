@@ -2,8 +2,9 @@
 
 <!-- Component container -->
 <div>
-	<h4>Notes</h4>
-    <div v-for="comment in comments">
+	<h3>Notes</h3>
+
+    <div v-for="comment in comments" class="margin-25-top">
         <div class="panel panel-white post panel-shadow">
             <div class="post-heading">
                 <div class="pull-left meta">

@@ -116,12 +116,15 @@
 				isDeleting: false,				
 				form: {
 					model: 'TravelJob',
-					state: 'create-child',
+					state: 'create',
 					title: 'Add Travel Hours',
 					button: 'Add',
 					action: '/api/travel-jobs/create',
 					createAction: '/api/travel-jobs/create',
 					updateAction: '/api/travel-jobs/update',
+					createEvent: 'travel-job-created',
+					updateEvent: 'travel-job-created',	
+					deleteEvent: 'travel-job-deleted',						
 					isLoading: false,					
 					successMsg: 'Travel hours added',
 					fields: {
@@ -155,7 +158,7 @@
 				// Populate form
 				this.populateFormFromModel(this.travel_job);
 				// Adjust form state
-				this.formEditState('edit-child');
+				this.formEditState('edit');
 				// Hide form loader
 				this.formIsLoading = false;						
 			}

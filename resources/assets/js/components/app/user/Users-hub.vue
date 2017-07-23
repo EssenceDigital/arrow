@@ -61,13 +61,13 @@
 			console.log("Users hub created");
 
 			// When the form component alerts this parent of a successful creation
-			this.$router.app.$on('model-created', model => {
+			this.$router.app.$on('user-created', model => {
 				// Redirect
 				this.$router.push('/users/view/'+model.id+'/hub');				
 			});
 
 			// When the form component alerts this parent of a successful creation
-			this.$router.app.$on('model-deleted', function() {
+			this.$router.app.$on('user-deleted', function() {
 				// Redirect
 				this.$router.push('/users/search');				
 			});			

@@ -4,6 +4,10 @@
 <div>
 	<div class="row row-padded">
 		<h3>Project Crew</h3>
+		<p class="margin-25-top text-info">
+			<span class="glyphicon glyphicon-question-sign"></span>
+			Only users that have been added to the project crew will be able to add timesheets to the project.
+		</p>		
 	</div>
 	<!-- Tool navigation -->
 	<div class="row row-padded margin-25-top">

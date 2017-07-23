@@ -2,8 +2,55 @@
 
 <!-- Containing div -->
 <div>
+
+	<!-- Loader - shows when a api call to server is pending -->
+	<div v-if="fetchingModels" class="row margin-85-top margin-85-bottom">
+		<div class="col-md-12">
+			<div class="large-center-loader"></div>
+		</div>
+	</div>	
+
+	<div v-if="!fetchingModels">
+		<!-- Show the user only intro -->
+		<div v-if="!fullTable">
+			<div class="row row-padded">
+				<h2>Your Projects</h2>
+				<p class="margin-25-top">
+					This is where you'll find all of the projects that you're a part of.
+				</p>
+				<p class="margin-25-top text-info">
+					<span class="glyphicon glyphicon-question-sign"></span>
+					Use the view button on each project row to view your timesheets for that project.
+				</p>
+				<p class="margin-25-top">
+					<h4>
+						<strong>Number of Projects:</strong> <span class="label label-success">{{ searchResults.models.length}}</span>
+					</h4>
+				</p>				
+			</div>			
+		</div>
+
+		<!-- Show the admin only intro -->
+		<div v-if="fullTable">
+			<div class="row row-padded">
+				<h2>Find &amp; Add Projects</h2>
+				<p class="margin-25-top">
+					This is where you can find and sort all of the projects added to the system.
+				</p>
+				<p class="margin-25-top text-info">
+					<span class="glyphicon glyphicon-question-sign"></span>
+					Use the view button on each project row to view and edit that project.
+				</p>
+				<p class="margin-25-top text-info">
+					<span class="glyphicon glyphicon-question-sign"></span>
+					You can add a new project using the 'Create Project' link above.
+				</p>								
+			</div>			
+		</div>		
+	</div>
+
 	<!-- Refresh models from server button -->
-	<button @click="refresh" class="btn btn-default">
+	<button @click="refresh" class="btn btn-default margin-35-top">
 		<span class="glyphicon glyphicon-refresh"></span>
 		<span v-if="!fetchingModels"> 
 			Refresh list
@@ -13,28 +60,54 @@
 		</span>
 	</button>
 
-	<!-- Loader - shows when a api call to server is pending -->
-	<div v-if="fetchingModels" class="row margin-85-top margin-85-bottom">
-		<div class="col-md-12">
-			<div class="large-center-loader"></div>
-		</div>
-	</div>	
-
-	<!-- Table to show projects - only shows once api call has finished -->				
+	<!-- Table to show projects - only shows once api call has finished 
+	**** The table fields change depending on whether it's being viewed from and admin
+	**** or user perspective
+	-->				
 	<table v-if="!fetchingModels" class="table table-striped table-hover margin-25-top">
+		<!-- Table header -->
 		<thead>
 			<tr class="info">
-				<th v-if="fullTable">Client Company</th>
-				<th v-if="fullTable">Contact Name</th>
-				<th v-if="fullTable">Contact Phone</th>
-				<th v-if="fullTable">Invoice Paid</th>
-				<th>Actions</th>
+				<!-- Admin viewing only headers -->
+				<th v-if="fullTable">
+					Client Company
+				</th>
+				<th v-if="fullTable">
+					Contact Name
+				</th>
+				<th v-if="fullTable">
+					Contact Phone
+				</th>
+				<th v-if="fullTable">
+					Invoice Paid
+				</th><!-- / Admin viewing only headers -->
+
+				<!-- User viewing only headers -->
+				<th v-if="!fullTable">
+					Identifier
+				</th>				
+				<th v-if="!fullTable">
+					Province
+				</th>
+				<th v-if="!fullTable">
+					Location
+				</th>
+				<th v-if="!fullTable">
+					Timesheets
+				</th>
+
+				<!-- Actions header shows at all times -->
+				<th>
+					Actions
+				</th>
 			</tr>
-		</thead>
+		</thead><!-- / Table header -->
+		<!-- Table body -->
 		<tbody>
 		    <tr v-for="project in searchResults.models"
 		    	:project="project"
 		    >
+		    	<!-- Admin viewing only fields -->
 			    <td v-if="fullTable">
 			    	{{ project.client_company_name }}
 			    </td>
@@ -42,16 +115,35 @@
 			    	{{ project.client_contact_name }}
 			    </td>
 			    <td v-if="fullTable">
-			    	<a :href="'tel: +1' + project.client_contact_phone.replace(/-/g, '')">
+			    	<a 
+			    		v-if="project.client_contact_phone"
+			    		:href="'tel: +1' + project.client_contact_phone.replace(/-/g, '')">
 			    		{{ project.client_contact_phone }}
 			    	</a>
 			    </td>
 			    <td v-if="fullTable">
 			    	<div v-if="project.invoiced_date == null" class="text-warning">
-			    		Not Invoiced
+			    		<span class="label label-warning">Not Invoiced</span>
 			    	</div>
+			    </td><!-- / Admin viewing only fields -->
+
+			    <!-- User viewing only fields -->
+			    <td v-if="!fullTable">
+			    	{{ project.id }}
+			    </td>			    
+			    <td v-if="!fullTable">
+			    	{{ project.province }}
 			    </td>
+			    <td v-if="!fullTable">
+			    	{{ project.location }}
+			    </td>
+			    <td v-if="!fullTable">
+			    	{{ project.timesheets.length }}
+			    </td>
+
+			    <!-- Action field -->
 			    <td>
+			    	<!-- Admin viewing only button -->
 			    	<button
 			    		v-if="fullTable"
 			    		@click="viewProject(project.id)" 
@@ -59,10 +151,20 @@
 			    	>
 			    		<span class="glyphicon glyphicon-screenshot"></span> View
 			    	</button>
+
+			    	<!-- User viewing only button -->
+			    	<button
+			    		v-if="!fullTable"
+			    		@click="viewTimesheets(project.id)" 
+			    		class="btn btn-sm btn-success"
+			    	>
+			    		<span class="glyphicon glyphicon-screenshot"></span> View
+			    	</button>			    	
 			    </td>
 		    </tr>
-		</tbody>
-	</table><!-- / Table to show projects -->	
+		</tbody><!-- / Table body -->
+	</table><!-- / Table to show projects -->
+
 	<!-- Pagination buttons -->	
 	<div v-if="!fetchingModels" class="row text-center margin-45-top">
 		<ul class="pagination">
@@ -84,6 +186,7 @@
 			</li>
 		</ul>							
 	</div><!-- / Pagination buttons -->
+
 </div><!-- Containing div -->
 	
 </template>
@@ -102,8 +205,8 @@
 		data(){
 			return{
 				fullTable: false,
-				// Used by API access
-				urlToFetch: '/api/projects/all',
+				// Used by API access. Set in the created method
+				urlToFetch: '',
 				// Used by API access
 				fetchingModels: false,
 				// Results from Laravel pagination json. Used by API access.
@@ -129,9 +232,18 @@
 				this.getAndSetModels(link);
 			},
 
-			// Emits an event to parent
+			/* Routes to the full view of the project
+			 * Can only be called from the admin only button
+			*/ 
 			viewProject(id){
 				this.$router.push('/projects/view/' + id + '/hub');
+			},
+
+			/* Routes to the users dashboard view showing their timesheets for the selected project
+			 * Can only be called from the admin only button
+			*/ 
+			viewTimesheets(id){
+				this.$router.push('/dashboard/timesheets/' + id);
 			}			
 		},
 
@@ -142,9 +254,14 @@
 			// Determine what route is mounting this component to determine if the full table (admin only) 
 			// should be shown
 			if(this.$route.path == '/projects/search'){
-				this.fullTable = true;
+				// Verify the current user is an admin for extra security
+				if(DASHBOARD_USER_PERMISSIONS == 'admin'){
+					this.fullTable = true;
+					this.urlToFetch = '/api/projects/all';
+				}
 			} else if(this.$route.path == '/dashboard/projects'){
 				this.fullTable = false;
+				this.urlToFetch = '/api/dashboard/users-projects';
 			}
 
 			// Start loader

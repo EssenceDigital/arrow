@@ -82,7 +82,7 @@
 					</div>
 				</div>			
 			</fieldset>	
-			<!-- Button -->
+			<!-- Delete Button -->
 			<fieldset v-if="work_job_id">
 				<div class="row">
 					<div class="col-md-3 col-centered">
@@ -119,12 +119,15 @@
 				isDeleting: false,					
 				form: {
 					model: 'WorkJob',
-					state: 'create-child',
+					state: 'create',
 					title: 'Add Work Hours',
 					button: 'Add',
 					action: '/api/work-jobs/create',
 					createAction: '/api/work-jobs/create',
 					updateAction: '/api/work-jobs/update',
+					createEvent: 'work-job-created',
+					updateEvent: 'work-job-created',	
+					deleteEvent: 'work-job-deleted',						
 					isLoading: false,					
 					successMsg: 'Work hours added',
 					fields: {
@@ -159,7 +162,7 @@
 				// Populate form
 				this.populateFormFromModel(this.work_job);
 				// Adjust form state
-				this.formEditState('edit-child');
+				this.formEditState('edit');
 				// Hide form loader
 				this.formIsLoading = false;						
 			}

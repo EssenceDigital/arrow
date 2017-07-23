@@ -69,24 +69,47 @@
 						</div>					
 					</div>
 				</div>			
-			</fieldset>			
+			</fieldset>	
+			<!-- Delete Button -->
+			<fieldset v-if="timesheet_id">
+				<div class="row">
+					<div class="col-md-3 col-centered">
+						<div class="form-group">
+							<button @click="deleteTimesheet" class="btn btn-danger btn-block margin-25-top">
+								<span v-if="!isDeleting">Remove</span>
+								<span v-if="isDeleting">
+									<div class="loader-center"></div>
+								</span>
+							</button>												
+						</div>					
+					</div>
+				</div>			
+			</fieldset>						
 		</form>
 	</div><!-- / Form 'well' wrapper -->
+
 </div><!--/ Component container -->
 	
 </template>
 
 <script>
 	let api_access = require('./../_mixins/api-access.js');
+	let modal = require('./../_ui/Modal.vue');
 
 	export default{
-		props: ['timesheet_id', 'project_id'],
+		components: {
+			'modal': modal
+		},
+
+		props: ['timesheet_id', 'timesheet', 'project_id'],
 
 		mixins: [api_access],
 
 		data(){
 			return{
 				formIsLoading: false,
+				urlToDelete: '/api/timesheets/delete',
+				isDeleting: false,					
 				form: {
 					model: 'Timesheet',
 					state: 'create',
@@ -95,6 +118,9 @@
 					action: '/api/timesheets/create',
 					createAction: '/api/timesheets/create',
 					updateAction: '/api/timesheets/update',
+					createEvent: 'timesheet-created',
+					updateEvent: 'timesheet-created',
+					deleteEvent: 'timesheet-deleted',
 					isLoading: false,					
 					successMsg: 'Your timesheet has been added to the project',
 					fields: {
@@ -112,6 +138,10 @@
 			// Submits the form to server via API access
 			sendForm(){
 				this.createOrUpdate();
+			},
+
+			deleteTimesheet(){
+
 			}
 		},
 
@@ -121,15 +151,12 @@
 			if(this.timesheet_id){
 				// Show form loader
 				this.formIsLoading = true;
-				// Get the requested model
-				this.grabModel('/api/timesheets/' + this.timesheet_id, function(model){
-					// Populate form
-					this.populateFormFromModel(model);
-					// Adjust form state
-					this.formEditState('edit');
-					// Hide form loader
-					this.formIsLoading = false;
-				});								
+				// Populate form
+				this.populateFormFromModel(this.timesheet);
+				// Adjust form state
+				this.formEditState('edit');
+				// Hide form loader
+				this.formIsLoading = false;									
 			}
 
 		}

@@ -99,12 +99,15 @@
 				isDeleting: false,					
 				form: {
 					model: 'EquipmentRental',
-					state: 'create-child',
+					state: 'create',
 					title: 'Add Equipment Rental',
 					button: 'Add',
 					action: '/api/equipment/create',
 					createAction: '/api/equipment/create',
 					updateAction: '/api/equipment/update',
+					createEvent: 'equipment-rental-created',
+					updateEvent: 'equipment-rental-created',	
+					deleteEvent: 'equipment-rental-deleted',						
 					isLoading: false,					
 					successMsg: 'Equipment rental added',
 					fields: {
@@ -138,7 +141,7 @@
 				// Populate form
 				this.populateFormFromModel(this.equipment_rental);
 				// Adjust form state
-				this.formEditState('edit-child');
+				this.formEditState('edit');
 				// Hide form loader
 				this.formIsLoading = false;						
 			}

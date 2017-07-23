@@ -1,7 +1,7 @@
 <template>
 
 <!-- Containing row -->
-<div class="row margin-75-top">
+<div class="row margin-95-top">
 	<div class="col-md-12">
 	
 		<!-- Panel -->	
@@ -38,7 +38,7 @@
 				</ul>	
 
 				<!-- Tabs are here -->
-				<div class="row margin-45-top">
+				<div class="row margin-25-top">
 
 					<div class="col-md-12">
 						<!-- Show tab component -->
@@ -64,13 +64,13 @@
 			console.log("Projects hub created");
 
 			// When the form component alerts this parent of a successful creation
-			this.$router.app.$on('model-created', model => {
+			this.$router.app.$on('project-created', model => {
 				// Redirect
 				this.$router.push('/projects/view/'+model.id+'/hub');				
 			});
 
 			// When the form component alerts this parent of a successful creation
-			this.$router.app.$on('model-deleted', function() {
+			this.$router.app.$on('project-deleted', function() {
 				// Redirect
 				this.$router.push('/projects/search');				
 			});			

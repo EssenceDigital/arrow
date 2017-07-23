@@ -62,7 +62,7 @@ const routes = [
 		children: [
 			{
 				path: 'projects',
-				component: dashboard_projects
+				component: project_search
 			},
 			{
 				path: 'timesheets/:project_id',

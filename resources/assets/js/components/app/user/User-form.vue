@@ -281,7 +281,10 @@
 					button: 'Save',
 					action: '/api/users/create',
 					createAction: '/api/users/create',
-					updateAction: '/api/users/update',					
+					updateAction: '/api/users/update',	
+					createEvent: 'user-created',
+					updateEvent: 'user-updated',
+					deleteEvent: 'user-deleted',				
 					isLoading: false,
 					successMsg: 'User has been saved',
 					fields: {

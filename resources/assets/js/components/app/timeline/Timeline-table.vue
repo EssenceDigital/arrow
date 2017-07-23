@@ -933,6 +933,9 @@
 					draft_submitted: false,
 					draft_accepted: false,
 					final_approval: false					
+				},
+				form: {
+					updateEvent: 'timeline-updated'
 				}
 			}
 		},

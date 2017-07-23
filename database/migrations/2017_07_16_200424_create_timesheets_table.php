@@ -25,6 +25,7 @@ class CreateTimesheetsTable extends Migration
             $table->date('date');    
             $table->decimal('per_diem', 13, 2)->default(0); 
             $table->string('comment', 255)->nullable(); 
+            $table->boolean('is_approved')->default(false);
             $table->timestamps(); 
         });
     }

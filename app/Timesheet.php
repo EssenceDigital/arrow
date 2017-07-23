@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Timesheet extends Model
 {
     /**
+     * Get the project that the comment belongs to.
+     */
+    public function project()
+    {
+        return $this->belongsTo('App\Project');
+    }
+
+    /**
      * Get the work jobs for the timesheet.
      */
     public function workJobs()

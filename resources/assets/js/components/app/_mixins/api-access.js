@@ -199,13 +199,9 @@ module.exports =  {
 					// Emit an event depending on the 'hub' form state
 					if(context.form.state == 'create'){
 						context.clearForm();
-						context.$router.app.$emit('model-created', response.data.model);
+						context.$router.app.$emit(context.form.createEvent, response.data.model);
 					} else if(context.form.state == 'edit'){
-						context.$router.app.$emit('model-updated', response.data.model);
-					} else if(context.form.state == 'create-child'){
-						context.$router.app.$emit('child-created', response.data.model);
-					} else if(context.form.state == 'edit-child'){
-						context.$router.app.$emit('child-created', response.data.model);
+						context.$router.app.$emit(context.form.updateEvent, response.data.model);
 					}
 
 					// Clear any form errors
@@ -253,7 +249,7 @@ module.exports =  {
 			axios.post(action, postData)
 				.then(function(response){
 					// Let parent know it should update the project model
-					context.$router.app.$emit('model-updated', response.data.model);
+					context.$router.app.$emit(context.form.updateEvent, response.data.model);
 					// Hide loader
 					context.fieldIsUpdating = false;
 					// Hide form field
@@ -309,7 +305,7 @@ module.exports =  {
 					context.isDeleting = false;	
 					console.log(response.data.model);
 					// Emit even
-					context.$router.app.$emit('child-deleted', response.data.model);				
+					context.$router.app.$emit(context.form.deleteEvent, response.data.model);				
 				})
 				.catch(function(response){
 					console.log(response);
@@ -346,7 +342,7 @@ module.exports =  {
 					// Hide loader
 					context.isDeleting = false;	
 					// Emit even
-					context.$router.app.$emit('model-deleted');				
+					context.$router.app.$emit(context.deleteEvent);				
 				})
 				.catch(function(response){
 					console.log(response);

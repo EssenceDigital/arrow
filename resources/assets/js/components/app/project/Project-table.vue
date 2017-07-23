@@ -13,6 +13,13 @@
 	<div v-if="!isLoading">
 		<div class="row row-padded">
 			<h2>Project Details</h2>
+			<p class="margin-25-top">
+				This is where you can edit and track the project you've selected.
+			</p>	
+			<p class="margin-25-top text-info">
+				<span class="glyphicon glyphicon-question-sign"></span>
+				To edit a field just click the gear icon next to that field.
+			</p>					
 		</div>
 
 		<!-- Tool navigation -->
@@ -24,7 +31,7 @@
 
 		<!-- Client row 1 -->
 		<div class="row row-padded margin-25-top">
-			<h3>Client</h3>
+			<h3 class="margin-15-bottom">Client</h3>
 			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
@@ -213,7 +220,7 @@
 
 		<!-- Location row -->
 		<div class="row row-padded margin-25-top">
-			<h3>Location</h3>
+			<h3 class="margin-15-bottom">Location</h3>
 			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
@@ -358,7 +365,7 @@
 
 		<!-- Work details row 1 -->
 		<div class="row row-padded margin-25-top">
-			<h3>Work Details</h3>
+			<h3 class="margin-15-bottom">Work Details</h3>
 			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
@@ -596,7 +603,7 @@
 
 		<!-- Land row 1 -->
 		<div class="row row-padded margin-25-top">
-			<h3>Land</h3>
+			<h3 class="margin-15-bottom">Land</h3>
 			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
@@ -825,7 +832,7 @@
 
 		<!-- Invoicing row -->
 		<div class="row row-padded margin-25-top">
-			<h3>Invoicing</h3>
+			<h3 class="margin-15-bottom">Invoicing</h3>
 			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
@@ -918,7 +925,7 @@
 
 		<!-- Approval row -->
 		<div class="row row-padded margin-25-top">
-			<h3>Project Approval</h3>
+			<h3 class="margin-15-bottom">Project Approval</h3>
 			<!-- Field column -->
 			<div class="col-md-4">
 				<div class="panel panel-white post panel-shadow">
@@ -1055,6 +1062,9 @@
 					response_by: false,
 					estimate: false,
 					approval_date: false					
+				},
+				form: {
+					updateEvent: 'project-updated'
 				}			
 			}
 		},

@@ -46,7 +46,7 @@ class DashboardController extends Controller
 
     public function usersProjects(){
         // Get logged in user
-        $user = User::with('projects')->find(Auth::id());    
+        $user = User::with('projects', 'projects.timesheets')->find(Auth::id());    
         
         // Return failed response if collection empty
         if(! $user){

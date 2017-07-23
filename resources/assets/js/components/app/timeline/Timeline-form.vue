@@ -251,12 +251,14 @@
 				formIsLoading: false,
 				form: {
 					model: 'Timeline',
-					state: 'create-child',
+					state: 'create',
 					title: 'Add Timeline',
 					button: 'Save',
 					action: '/api/timelines/create',
 					createAction: '/api/timelines/create',
 					updateAction: '/api/timelines/update',
+					createEvent: 'timeline-created',
+					updateEvent: 'timeline-updated',				
 					isLoading: false,					
 					successMsg: 'Timeline has been saved to project',
 					fields: {

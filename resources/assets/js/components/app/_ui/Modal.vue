@@ -39,4 +39,8 @@
 		display: block;
 	}
 
+	.modal {
+		background-color: rgba(0,0,0,0.7);
+	}
+
 </style>

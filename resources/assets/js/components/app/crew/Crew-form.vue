@@ -73,12 +73,14 @@
 				formIsLoading: false,
 				form: {
 					model: 'ProjectUser',
-					state: 'create-child',
+					state: 'create',
 					title: 'Add Crew',
 					button: 'Add',
 					action: '/api/projects/add-crew',
 					createAction: '/api/projects/add-crew',
 					updateAction: '/api/projects/add-crew',
+					createEvent: 'crew-created',
+					updateEvent: 'crew-updated',
 					isLoading: false,					
 					successMsg: 'Crew member has been added to project',
 					fields: {

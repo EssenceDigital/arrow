@@ -331,13 +331,9 @@ module.exports = {
 				// Emit an event depending on the 'hub' form state
 				if (context.form.state == 'create') {
 					context.clearForm();
-					context.$router.app.$emit('model-created', response.data.model);
+					context.$router.app.$emit(context.form.createEvent, response.data.model);
 				} else if (context.form.state == 'edit') {
-					context.$router.app.$emit('model-updated', response.data.model);
-				} else if (context.form.state == 'create-child') {
-					context.$router.app.$emit('child-created', response.data.model);
-				} else if (context.form.state == 'edit-child') {
-					context.$router.app.$emit('child-created', response.data.model);
+					context.$router.app.$emit(context.form.updateEvent, response.data.model);
 				}
 
 				// Clear any form errors
@@ -385,7 +381,7 @@ module.exports = {
 			// Send post request to update the field
 			axios.post(action, postData).then(function (response) {
 				// Let parent know it should update the project model
-				context.$router.app.$emit('model-updated', response.data.model);
+				context.$router.app.$emit(context.form.updateEvent, response.data.model);
 				// Hide loader
 				context.fieldIsUpdating = false;
 				// Hide form field
@@ -437,7 +433,7 @@ module.exports = {
 				context.isDeleting = false;
 				console.log(response.data.model);
 				// Emit even
-				context.$router.app.$emit('child-deleted', response.data.model);
+				context.$router.app.$emit(context.form.deleteEvent, response.data.model);
 			}).catch(function (response) {
 				console.log(response);
 			});
@@ -473,7 +469,7 @@ module.exports = {
 				// Hide loader
 				context.isDeleting = false;
 				// Emit even
-				context.$router.app.$emit('model-deleted');
+				context.$router.app.$emit(context.deleteEvent);
 			}).catch(function (response) {
 				console.log(response);
 			});
@@ -14521,7 +14517,7 @@ var routes = [{
 	component: dashboard_hub,
 	children: [{
 		path: 'projects',
-		component: dashboard_projects
+		component: project_search
 	}, {
 		path: 'timesheets/:project_id',
 		component: timesheets_hub
@@ -15673,12 +15669,14 @@ var api_access = __webpack_require__(1);
 		return {
 			form: {
 				model: this.model,
-				state: 'create-child',
+				state: 'create',
 				title: 'Add Comment',
 				button: 'Add',
 				action: '/api/' + this.urlPortion + '/add-comment',
 				createAction: '/api/' + this.urlPortion + '/add-comment',
 				updateAction: '/api/' + this.urlPortion + '/update-comment',
+				createEvent: 'comment-created',
+				updateEvent: 'comment-updated',
 				isLoading: false,
 				successMsg: 'Comment has been saved',
 				fields: {
@@ -15706,6 +15704,7 @@ var api_access = __webpack_require__(1);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -15873,12 +15872,14 @@ var api_access = __webpack_require__(1);
 			formIsLoading: false,
 			form: {
 				model: 'ProjectUser',
-				state: 'create-child',
+				state: 'create',
 				title: 'Add Crew',
 				button: 'Add',
 				action: '/api/projects/add-crew',
 				createAction: '/api/projects/add-crew',
 				updateAction: '/api/projects/add-crew',
+				createEvent: 'crew-created',
+				updateEvent: 'crew-updated',
 				isLoading: false,
 				successMsg: 'Crew member has been added to project',
 				fields: {
@@ -15949,6 +15950,10 @@ var api_access = __webpack_require__(1);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
 //
 //
 //
@@ -16646,6 +16651,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(1);
 var modal = __webpack_require__(5);
@@ -16671,11 +16683,14 @@ var modal = __webpack_require__(5);
 			form: {
 				model: 'Project',
 				state: 'create',
-				title: 'Create Project',
-				button: 'Save',
+				title: 'Start Project',
+				button: 'Begin',
 				action: '/api/projects/create',
 				createAction: '/api/projects/create',
 				updateAction: '/api/projects/update',
+				createEvent: 'project-created',
+				updateEvent: 'project-updated',
+				deleteEvent: 'project-deleted',
 				isLoading: false,
 				successMsg: 'Project has been saved',
 				fields: {
@@ -16882,37 +16897,29 @@ var api_access = __webpack_require__(1);
 			});
 		}
 
-		// When the form component alerts this parent of a successful update
-		this.$router.app.$on('model-updated', function (model) {
-			// Update project if the model is a project
-			if (model.province) {
-				// Update cached model
-				_this.project = model;
-			}
-
-			// Update timeline if the model is a timeline
-			if (model.permit_application_date) {
-				_this.project.timeline = model;
-			}
+		// When the form component alerts this parent of a project update
+		this.$router.app.$on('project-updated', function (model) {
+			// Update cached model
+			_this.project = model;
 		});
 
-		// When this parent is alerted a foreign key model has been created
-		this.$router.app.$on('child-created', function (model) {
-			// Update model timeline
-			if (model.permit_application_date) {
-				_this.project.timeline = model;
-			}
-			// Update model crew
-			if (model.first) {
-				_this.project.users.push(model);
-			}
-			// Update model comments
-			if (model.comment) {
-				_this.project.comments.push(model);
-			}
+		/* Timeline related events
+  */
+		this.$router.app.$on('timeline-created', function (model) {
+			// Update cached model
+			_this.project.timeline = model;
+		});
+		this.$router.app.$on('timeline-updated', function (model) {
+			// Update cached model
+			_this.project.timeline = model;
 		});
 
-		// When this parent is alerted a crew member has been removed
+		/* Crew related events
+  */
+		this.$router.app.$on('crew-created', function (model) {
+			// Update cached model
+			_this.project.users.push(model);
+		});
 		this.$router.app.$on('crew-removed', function (user_id) {
 			var context = _this;
 			// Find the crew member in the model and remove it
@@ -16924,7 +16931,12 @@ var api_access = __webpack_require__(1);
 			});
 		});
 
-		// When this parent is alreted a comment has been removed
+		/* Comment related events
+  */
+		this.$router.app.$on('comment-created', function (model) {
+			// Update cached model
+			_this.project.comments.push(model);
+		});
 		this.$router.app.$on('comment-removed', function (comment_id) {
 			var context = _this;
 			// Find the comment in the model and remove it
@@ -17034,6 +17046,109 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(1);
 var dropdown = __webpack_require__(3);
@@ -17048,8 +17163,8 @@ var dropdown = __webpack_require__(3);
 	data: function data() {
 		return {
 			fullTable: false,
-			// Used by API access
-			urlToFetch: '/api/projects/all',
+			// Used by API access. Set in the created method
+			urlToFetch: '',
 			// Used by API access
 			fetchingModels: false,
 			// Results from Laravel pagination json. Used by API access.
@@ -17078,9 +17193,19 @@ var dropdown = __webpack_require__(3);
 		},
 
 
-		// Emits an event to parent
+		/* Routes to the full view of the project
+   * Can only be called from the admin only button
+  */
 		viewProject: function viewProject(id) {
 			this.$router.push('/projects/view/' + id + '/hub');
+		},
+
+
+		/* Routes to the users dashboard view showing their timesheets for the selected project
+   * Can only be called from the admin only button
+  */
+		viewTimesheets: function viewTimesheets(id) {
+			this.$router.push('/dashboard/timesheets/' + id);
 		}
 	},
 
@@ -17091,9 +17216,14 @@ var dropdown = __webpack_require__(3);
 		// Determine what route is mounting this component to determine if the full table (admin only) 
 		// should be shown
 		if (this.$route.path == '/projects/search') {
-			this.fullTable = true;
+			// Verify the current user is an admin for extra security
+			if (DASHBOARD_USER_PERMISSIONS == 'admin') {
+				this.fullTable = true;
+				this.urlToFetch = '/api/projects/all';
+			}
 		} else if (this.$route.path == '/dashboard/projects') {
 			this.fullTable = false;
+			this.urlToFetch = '/api/dashboard/users-projects';
 		}
 
 		// Start loader
@@ -17109,6 +17239,13 @@ var dropdown = __webpack_require__(3);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -18165,6 +18302,9 @@ var api_access = __webpack_require__(1);
 				response_by: false,
 				estimate: false,
 				approval_date: false
+			},
+			form: {
+				updateEvent: 'project-updated'
 			}
 		};
 	},
@@ -18300,13 +18440,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		console.log("Projects hub created");
 
 		// When the form component alerts this parent of a successful creation
-		this.$router.app.$on('model-created', function (model) {
+		this.$router.app.$on('project-created', function (model) {
 			// Redirect
 			_this.$router.push('/projects/view/' + model.id + '/hub');
 		});
 
 		// When the form component alerts this parent of a successful creation
-		this.$router.app.$on('model-deleted', function () {
+		this.$router.app.$on('project-deleted', function () {
 			// Redirect
 			this.$router.push('/projects/search');
 		});
@@ -18572,12 +18712,14 @@ var api_access = __webpack_require__(1);
 			formIsLoading: false,
 			form: {
 				model: 'Timeline',
-				state: 'create-child',
+				state: 'create',
 				title: 'Add Timeline',
 				button: 'Save',
 				action: '/api/timelines/create',
 				createAction: '/api/timelines/create',
 				updateAction: '/api/timelines/update',
+				createEvent: 'timeline-created',
+				updateEvent: 'timeline-updated',
 				isLoading: false,
 				successMsg: 'Timeline has been saved to project',
 				fields: {
@@ -19576,6 +19718,9 @@ var api_access = __webpack_require__(1);
 				draft_submitted: false,
 				draft_accepted: false,
 				final_approval: false
+			},
+			form: {
+				updateEvent: 'timeline-updated'
 			}
 		};
 	},
@@ -19715,12 +19860,15 @@ var api_access = __webpack_require__(1);
 			isDeleting: false,
 			form: {
 				model: 'EquipmentRental',
-				state: 'create-child',
+				state: 'create',
 				title: 'Add Equipment Rental',
 				button: 'Add',
 				action: '/api/equipment/create',
 				createAction: '/api/equipment/create',
 				updateAction: '/api/equipment/update',
+				createEvent: 'equipment-rental-created',
+				updateEvent: 'equipment-rental-created',
+				deleteEvent: 'equipment-rental-deleted',
 				isLoading: false,
 				successMsg: 'Equipment rental added',
 				fields: {
@@ -19756,7 +19904,7 @@ var api_access = __webpack_require__(1);
 			// Populate form
 			this.populateFormFromModel(this.equipment_rental);
 			// Adjust form state
-			this.formEditState('edit-child');
+			this.formEditState('edit');
 			// Hide form loader
 			this.formIsLoading = false;
 		}
@@ -19870,12 +20018,15 @@ var api_access = __webpack_require__(1);
 			isDeleting: false,
 			form: {
 				model: 'OtherCost',
-				state: 'create-child',
+				state: 'create',
 				title: 'Add Other Cost',
 				button: 'Add',
 				action: '/api/other-costs/create',
 				createAction: '/api/other-costs/create',
 				updateAction: '/api/other-costs/update',
+				createEvent: 'other-cost-created',
+				updateEvent: 'other-cost-created',
+				deleteEvent: 'other-cost-deleted',
 				isLoading: false,
 				successMsg: 'Other cost added',
 				fields: {
@@ -19911,7 +20062,7 @@ var api_access = __webpack_require__(1);
 			// Populate form
 			this.populateFormFromModel(this.other_cost);
 			// Adjust form state
-			this.formEditState('edit-child');
+			this.formEditState('edit');
 			// Hide form loader
 			this.formIsLoading = false;
 		}
@@ -20002,17 +20153,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(1);
+var modal = __webpack_require__(5);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	props: ['timesheet_id', 'project_id'],
+	components: {
+		'modal': modal
+	},
+
+	props: ['timesheet_id', 'timesheet', 'project_id'],
 
 	mixins: [api_access],
 
 	data: function data() {
 		return {
 			formIsLoading: false,
+			urlToDelete: '/api/timesheets/delete',
+			isDeleting: false,
 			form: {
 				model: 'Timesheet',
 				state: 'create',
@@ -20021,6 +20195,9 @@ var api_access = __webpack_require__(1);
 				action: '/api/timesheets/create',
 				createAction: '/api/timesheets/create',
 				updateAction: '/api/timesheets/update',
+				createEvent: 'timesheet-created',
+				updateEvent: 'timesheet-created',
+				deleteEvent: 'timesheet-deleted',
 				isLoading: false,
 				successMsg: 'Your timesheet has been added to the project',
 				fields: {
@@ -20039,7 +20216,8 @@ var api_access = __webpack_require__(1);
 		// Submits the form to server via API access
 		sendForm: function sendForm() {
 			this.createOrUpdate();
-		}
+		},
+		deleteTimesheet: function deleteTimesheet() {}
 	},
 
 	created: function created() {
@@ -20048,15 +20226,12 @@ var api_access = __webpack_require__(1);
 		if (this.timesheet_id) {
 			// Show form loader
 			this.formIsLoading = true;
-			// Get the requested model
-			this.grabModel('/api/timesheets/' + this.timesheet_id, function (model) {
-				// Populate form
-				this.populateFormFromModel(model);
-				// Adjust form state
-				this.formEditState('edit');
-				// Hide form loader
-				this.formIsLoading = false;
-			});
+			// Populate form
+			this.populateFormFromModel(this.timesheet);
+			// Adjust form state
+			this.formEditState('edit');
+			// Hide form loader
+			this.formIsLoading = false;
 		}
 	}
 });
@@ -20371,9 +20546,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var dropdown = __webpack_require__(3);
 var modal = __webpack_require__(5);
+var timesheet_form = __webpack_require__(89);
 var work_job_form = __webpack_require__(93);
 var travel_job_form = __webpack_require__(92);
 var equipment_rental_form = __webpack_require__(87);
@@ -20383,6 +20579,7 @@ var other_cost_form = __webpack_require__(88);
 	components: {
 		'dropdown': dropdown,
 		'modal': modal,
+		'timesheet-form': timesheet_form,
 		'work-job-form': work_job_form,
 		'travel-job-form': travel_job_form,
 		'equipment-rental-form': equipment_rental_form,
@@ -20395,6 +20592,7 @@ var other_cost_form = __webpack_require__(88);
 		return {
 			// Toggles which form to show in the modal
 			tabToShow: 'List',
+			currentModel: '',
 			// Show modal or not
 			modalActive: false,
 			// Holds currently selected child models. Set by the edit methods
@@ -20407,16 +20605,22 @@ var other_cost_form = __webpack_require__(88);
 
 
 	methods: {
+		editTimesheet: function editTimesheet(id) {
+			this.currentModel = 'Timesheet-edit';
+			this.modalActive = true;
+		},
+
+
 		// Shows the travel job form or shows an alert indicating a travel job is already present
 		addTravel: function addTravel(id) {
 			if (this.timesheet.travel_jobs.length >= 1) {
 				noty({
-					text: '<h4>Travel hours already on this timesheet!</h4>',
+					text: '<h4>Travel hours exist!</h4>',
 					theme: 'defaultTheme',
 					layout: 'center',
 					timeout: 2000,
 					closeWith: ['click', 'hover'],
-					type: 'success'
+					type: 'warning'
 				});
 			} else {
 				this.currentTravelJob = '';
@@ -20477,13 +20681,36 @@ var other_cost_form = __webpack_require__(88);
 	created: function created() {
 		var _this = this;
 
+		this.$router.app.$on('timesheet-created', function (model) {
+			_this.currentModel = '';
+			_this.modalActive = false;
+		});
+
 		// When the form component alerts this parent of a successful create
-		this.$router.app.$on('child-created', function (model) {
+		this.$router.app.$on('work-job-created', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('travel-job-created', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('equipment-rental-created', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('other-cost-created', function (model) {
 			_this.tabToShow = 'List';
 		});
 
 		// When the form component alerts a child was deleted
-		this.$router.app.$on('child-deleted', function (model) {
+		this.$router.app.$on('work-job-deleted', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('travel-job-deleted', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('equipment-rental-deleted', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('other-cost-deleted', function (model) {
 			_this.tabToShow = 'List';
 		});
 	}
@@ -20495,6 +20722,24 @@ var other_cost_form = __webpack_require__(88);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -20622,21 +20867,13 @@ var timesheet_form = __webpack_require__(89);
 			return this.searchResults.models.length;
 		},
 		totalWorkHours: function totalWorkHours() {
-			// Cache total
-			var totalHours = parseInt(0);
-			// Iterate through each timesheet
-			this.searchResults.models.forEach(function (timesheet) {
-				// If work jobs are present
-				if (timesheet.work_jobs.length > 0) {
-					// Iterate through each job in timesheet
-					timesheet.work_jobs.forEach(function (workjob) {
-						// Update total
-						totalHours += parseFloat(workjob.hours_worked);
-					});
-				}
-			});
-
-			return totalHours.toFixed(2);
+			return this.stepAndDisectTimesheets('work_jobs', 'hours_worked');
+		},
+		totalTravelHours: function totalTravelHours() {
+			return this.stepAndDisectTimesheets('travel_jobs', 'travel_time');
+		},
+		totalTravelDistance: function totalTravelDistance() {
+			return this.stepAndDisectTimesheets('travel_jobs', 'travel_distance');
 		}
 	},
 
@@ -20644,6 +20881,28 @@ var timesheet_form = __webpack_require__(89);
 		timesheetFormModal: function timesheetFormModal() {
 			this.currentModal = 'Timesheet';
 			this.modalActive = true;
+		},
+
+
+		/* Iterates through each of the users timesheets. On each timesheet, an array of foreign relationship assets is
+   * iterated through and the supplied field is sumed up. The final total is returned
+   * @param assetToIterate - the foreign relationship field
+   * @param fieldToAddUp - the field on the foreign relationship to add up 
+  */
+		stepAndDisectTimesheets: function stepAndDisectTimesheets(assetToIterate, fieldToAddUp) {
+			var total = parseInt(0);
+			// Iterate through each timesheet
+			this.searchResults.models.forEach(function (timesheet) {
+				if (timesheet[assetToIterate].length > 0) {
+					// Iterate through each travel job in timesheet
+					timesheet[assetToIterate].forEach(function (current) {
+						// Update total
+						total += parseFloat(current[fieldToAddUp]);
+					});
+				}
+			});
+
+			return total.toFixed(2);
 		}
 	},
 
@@ -20654,114 +20913,130 @@ var timesheet_form = __webpack_require__(89);
 		this.getAndSetModels();
 
 		// When the form component alerts this parent of a successful create
-		this.$router.app.$on('model-created', function (model) {
-			_this.searchResults.models.push(model);
+		this.$router.app.$on('timesheet-created', function (model) {
+			model.work_jobs = [];
+			model.travel_jobs = [];
+			model.equipment_rentals = [];
+			model.other_costs = [];
+			_this.searchResults.models.unshift(model);
 			_this.modalActive = false;
 		});
 
-		// When the form component alerts this parent a child has been created or updated
-		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-		this.$router.app.$on('child-created', function (model) {
+		this.$router.app.$on('work-job-created', function (model) {
 			// Cache context
 			var context = _this;
 			// Iterate through all cached timesheets and execute 
 			_this.searchResults.models.forEach(function (timesheet) {
 				// When the timesheet id matches the models id
 				if (timesheet.id == model.timesheet_id) {
-
-					// If the model is a work job
-					if (model.job_type) {
-						// Flag which indicates whether the workjob has been added to cache
-						var updated = false;
-						// Iterate through work jobs to determine if a job should be updated or a new 
-						// job should be pushed to the collection
-						timesheet.work_jobs.forEach(function (workjob) {
-							// Replace existing updated work job
-							if (workjob.id == model.id) {
-								// Update workjob fields
-								workjob.job_type = model.job_type;
-								workjob.hours_worked = model.hours_worked;
-								workjob.comment = model.comment;
-								// Update flag
-								updated = true;
-							}
-						});
-						// Add a new work job
-						if (!updated) {
-							timesheet.work_jobs.push(model);
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.work_jobs.forEach(function (workjob) {
+						// Replace existing updated work job
+						if (workjob.id == model.id) {
+							// Update workjob fields
+							workjob.job_type = model.job_type;
+							workjob.hours_worked = model.hours_worked;
+							workjob.comment = model.comment;
+							// Update flag
+							updated = true;
 						}
+					});
+					// Add a new work job
+					if (!updated) {
+						timesheet.work_jobs.push(model);
 					}
+				}
+			});
+		});
 
-					// If the model is a travel job
-					if (model.travel_distance) {
-						console.log(model);
-						// Flag which indicates whether the travel job has been added to cache
-						var updated = false;
-						// Iterate through travel jobs to determine if a job should be updated or a new 
-						// job should be pushed to the collection
-						timesheet.travel_jobs.forEach(function (travelJob) {
-							// Replace existing updated travel job
-							if (travelJob.id == model.id) {
-								// Update travel job fields
-								travelJob.travel_distance = model.travel_distance;
-								travelJob.travel_time = model.travel_time;
-								travelJob.comment = model.comment;
-								// Update flag
-								updated = true;
-							}
-						});
-						// Add a new travel job
-						if (!updated) {
-							timesheet.travel_jobs.push(model);
+		this.$router.app.$on('travel-job-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the travel job has been added to cache
+					var updated = false;
+					// Iterate through travel jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.travel_jobs.forEach(function (travelJob) {
+						// Replace existing updated travel job
+						if (travelJob.id == model.id) {
+							// Update travel job fields
+							travelJob.travel_distance = model.travel_distance;
+							travelJob.travel_time = model.travel_time;
+							travelJob.comment = model.comment;
+							// Update flag
+							updated = true;
 						}
+					});
+					// Add a new travel job
+					if (!updated) {
+						timesheet.travel_jobs.push(model);
 					}
+				}
+			});
+		});
 
-					// If the model is an equipment rental
-					if (model.equipment_type) {
-						console.log(model);
-						// Flag which indicates whether the equipment rental has been added to cache
-						var updated = false;
-						// Iterate through equipment rentals to determine if a rental should be updated or a new 
-						// job should be pushed to the collection
-						timesheet.equipment_rentals.forEach(function (equipmentRental) {
-							// Replace existing updated equipment rental
-							if (equipmentRental.id == model.id) {
-								// Update equipment rental fields
-								equipmentRental.equipment_type = model.equipment_type;
-								equipmentRental.rental_fee = model.rental_fee;
-								equipmentRental.comment = model.comment;
-								// Update flag
-								updated = true;
-							}
-						});
-						// Add a new equipment rental
-						if (!updated) {
-							timesheet.equipment_rentals.push(model);
+		this.$router.app.$on('equipment-rental-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the equipment rental has been added to cache
+					var updated = false;
+					// Iterate through equipment rentals to determine if a rental should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.equipment_rentals.forEach(function (equipmentRental) {
+						// Replace existing updated equipment rental
+						if (equipmentRental.id == model.id) {
+							// Update equipment rental fields
+							equipmentRental.equipment_type = model.equipment_type;
+							equipmentRental.rental_fee = model.rental_fee;
+							equipmentRental.comment = model.comment;
+							// Update flag
+							updated = true;
 						}
+					});
+					// Add a new equipment rental
+					if (!updated) {
+						timesheet.equipment_rentals.push(model);
 					}
+				}
+			});
+		});
 
-					// If the model is an other cost
-					if (model.cost_name) {
-						console.log(model);
-						// Flag which indicates whether the other cost has been added to cache
-						var updated = false;
-						// Iterate through other costs to determine if a cost should be updated or a new 
-						// job should be pushed to the collection
-						timesheet.other_costs.forEach(function (otherCost) {
-							// Replace existing updated other cost
-							if (otherCost.id == model.id) {
-								// Update other cost fields
-								otherCost.cost_name = model.cost_name;
-								otherCost.cost = model.cost;
-								otherCost.comment = model.comment;
-								// Update flag
-								updated = true;
-							}
-						});
-						// Add a new other cost
-						if (!updated) {
-							timesheet.other_costs.push(model);
+		this.$router.app.$on('other-cost-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the other cost has been added to cache
+					var updated = false;
+					// Iterate through other costs to determine if a cost should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.other_costs.forEach(function (otherCost) {
+						// Replace existing updated other cost
+						if (otherCost.id == model.id) {
+							// Update other cost fields
+							otherCost.cost_name = model.cost_name;
+							otherCost.cost = model.cost;
+							otherCost.comment = model.comment;
+							// Update flag
+							updated = true;
 						}
+					});
+					// Add a new other cost
+					if (!updated) {
+						timesheet.other_costs.push(model);
 					}
 				}
 			});
@@ -20769,71 +21044,88 @@ var timesheet_form = __webpack_require__(89);
 
 		// When the form component alerts this parent of a successful create
 		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-		this.$router.app.$on('child-deleted', function (model) {
+		this.$router.app.$on('work-job-deleted', function (model) {
 			// Iterate through all cached timesheets and execute 
 			_this.searchResults.models.forEach(function (timesheet) {
 				// When the timesheet id matches the models id
 				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.work_jobs.forEach(function (workjob) {
+						// Replace existing updated work job
+						if (workjob.id == model.id) {
+							var index = timesheet.work_jobs.indexOf(workjob);
+							timesheet.work_jobs.splice(index, 1);
+						}
+					});
+				}
+			});
+		});
 
-					// If the model is a work job
-					if (model.job_type) {
-						// Flag which indicates whether the workjob has been added to cache
-						var updated = false;
-						// Iterate through work jobs to determine if a job should be updated or a new 
-						// job should be pushed to the collection
-						timesheet.work_jobs.forEach(function (workjob) {
-							// Replace existing updated work job
-							if (workjob.id == model.id) {
-								var index = timesheet.work_jobs.indexOf(workjob);
-								timesheet.work_jobs.splice(index, 1);
-							}
-						});
-					}
+		// When the form component alerts this parent of a successful create
+		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+		this.$router.app.$on('travel-job-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.travel_jobs.forEach(function (travelJob) {
+						// Replace existing updated travel job
+						if (travelJob.id == model.id) {
+							var index = timesheet.travel_jobs.indexOf(travelJob);
+							timesheet.travel_jobs.splice(index, 1);
+						}
+					});
+				}
+			});
+		});
 
-					// If the model is a travel job
-					if (model.travel_distance) {
-						// Flag which indicates whether the travel job has been added to cache
-						var updated = false;
-						// Iterate through travel jobs to determine if a job should be updated or a new 
-						// job should be pushed to the collection
-						timesheet.travel_jobs.forEach(function (travelJob) {
-							// Replace existing updated travel job
-							if (travelJob.id == model.id) {
-								var index = timesheet.travel_jobs.indexOf(travelJob);
-								timesheet.travel_jobs.splice(index, 1);
-							}
-						});
-					}
+		// When the form component alerts this parent of a successful create
+		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+		this.$router.app.$on('equipment-rental-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.equipment_rentals.forEach(function (equipmentRental) {
+						// Replace existing updated equipment rental
+						if (equipmentRental.id == model.id) {
+							var index = timesheet.equipment_rentals.indexOf(equipmentRental);
+							timesheet.equipment_rentals.splice(index, 1);
+						}
+					});
+				}
+			});
+		});
 
-					// If the model is an equipment rental
-					if (model.equipment_type) {
-						// Flag which indicates whether the equipment rental has been added to cache
-						var updated = false;
-						// Iterate through equipment rental to determine if a rental should be updated or a new 
-						// job should be pushed to the collection
-						timesheet.equipment_rentals.forEach(function (equipmentRental) {
-							// Replace existing updated equipment rental
-							if (equipmentRental.id == model.id) {
-								var index = timesheet.equipment_rentals.indexOf(equipmentRental);
-								timesheet.equipment_rentals.splice(index, 1);
-							}
-						});
-					}
-
-					// If the model is an other cost
-					if (model.cost_name) {
-						// Flag which indicates whether the other cost has been added to cache
-						var updated = false;
-						// Iterate through other costs to determine if a cost should be updated or a new 
-						// job should be pushed to the collection
-						timesheet.other_costs.forEach(function (otherCost) {
-							// Replace existing updated other cost
-							if (otherCost.id == model.id) {
-								var index = timesheet.other_costs.indexOf(otherCost);
-								timesheet.other_costs.splice(index, 1);
-							}
-						});
-					}
+		// When the form component alerts this parent of a successful create
+		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+		this.$router.app.$on('other-cost-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.other_costs.forEach(function (otherCost) {
+						// Replace existing updated other cost
+						if (otherCost.id == model.id) {
+							var index = timesheet.other_costs.indexOf(otherCost);
+							timesheet.other_costs.splice(index, 1);
+						}
+					});
 				}
 			});
 		});
@@ -20964,12 +21256,15 @@ var api_access = __webpack_require__(1);
 			isDeleting: false,
 			form: {
 				model: 'TravelJob',
-				state: 'create-child',
+				state: 'create',
 				title: 'Add Travel Hours',
 				button: 'Add',
 				action: '/api/travel-jobs/create',
 				createAction: '/api/travel-jobs/create',
 				updateAction: '/api/travel-jobs/update',
+				createEvent: 'travel-job-created',
+				updateEvent: 'travel-job-created',
+				deleteEvent: 'travel-job-deleted',
 				isLoading: false,
 				successMsg: 'Travel hours added',
 				fields: {
@@ -21005,7 +21300,7 @@ var api_access = __webpack_require__(1);
 			// Populate form
 			this.populateFormFromModel(this.travel_job);
 			// Adjust form state
-			this.formEditState('edit-child');
+			this.formEditState('edit');
 			// Hide form loader
 			this.formIsLoading = false;
 		}
@@ -21139,12 +21434,15 @@ var api_access = __webpack_require__(1);
 			isDeleting: false,
 			form: {
 				model: 'WorkJob',
-				state: 'create-child',
+				state: 'create',
 				title: 'Add Work Hours',
 				button: 'Add',
 				action: '/api/work-jobs/create',
 				createAction: '/api/work-jobs/create',
 				updateAction: '/api/work-jobs/update',
+				createEvent: 'work-job-created',
+				updateEvent: 'work-job-created',
+				deleteEvent: 'work-job-deleted',
 				isLoading: false,
 				successMsg: 'Work hours added',
 				fields: {
@@ -21181,7 +21479,7 @@ var api_access = __webpack_require__(1);
 			// Populate form
 			this.populateFormFromModel(this.work_job);
 			// Adjust form state
-			this.formEditState('edit-child');
+			this.formEditState('edit');
 			// Hide form loader
 			this.formIsLoading = false;
 		}
@@ -21478,6 +21776,9 @@ var modal = __webpack_require__(5);
 				action: '/api/users/create',
 				createAction: '/api/users/create',
 				updateAction: '/api/users/update',
+				createEvent: 'user-created',
+				updateEvent: 'user-updated',
+				deleteEvent: 'user-deleted',
 				isLoading: false,
 				successMsg: 'User has been saved',
 				fields: {
@@ -21615,7 +21916,7 @@ var api_access = __webpack_require__(1);
 		}
 
 		// When the form component alerts this parent of a successful updated
-		this.$router.app.$on('model-updated', function (model) {
+		this.$router.app.$on('user-updated', function (model) {
 			// Update cached model
 			_this.user = model;
 		});
@@ -22478,6 +22779,9 @@ var api_access = __webpack_require__(1);
 				hourly_rate_one: false,
 				hourly_rate_two: false,
 				gst_number: false
+			},
+			form: {
+				updateEvent: 'user-updated'
 			}
 		};
 	},
@@ -22592,13 +22896,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		console.log("Users hub created");
 
 		// When the form component alerts this parent of a successful creation
-		this.$router.app.$on('model-created', function (model) {
+		this.$router.app.$on('user-created', function (model) {
 			// Redirect
 			_this.$router.push('/users/view/' + model.id + '/hub');
 		});
 
 		// When the form component alerts this parent of a successful creation
-		this.$router.app.$on('model-deleted', function () {
+		this.$router.app.$on('user-deleted', function () {
 			// Redirect
 			this.$router.push('/users/search');
 		});
@@ -22662,7 +22966,7 @@ exports.push([module.i, "\n.log-out{\n    margin-left: 10px;\n}\n\n", ""]);
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)();
-exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n\n", ""]);
+exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n.modal {\n\tbackground-color: rgba(0,0,0,0.7);\n}\n\n", ""]);
 
 /***/ }),
 /* 70 */
@@ -43979,7 +44283,7 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "row margin-75-top"
+    staticClass: "row margin-95-top"
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('div', {
@@ -44013,7 +44317,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       'active': _vm.$route.path == ('/projects/view/' + _vm.$route.params.id + '/edit')
     }
   }, [_c('a', [_vm._v("Editing Project")])]) : _vm._e()]), _vm._v(" "), _c('div', {
-    staticClass: "row margin-45-top"
+    staticClass: "row margin-25-top"
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('router-view')], 1)])])])])])
@@ -44049,26 +44353,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   }, [_c('fieldset', [_c('legend', [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-8"
+    staticClass: "row row-padded"
   }, [_c('h2', {
     staticClass: "pull-left",
     staticStyle: {
       "margin-top": "6px"
     }
-  }, [_vm._v(_vm._s(_vm.form.title))])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('button', {
+  }, [_vm._v(_vm._s(_vm.form.title))]), _vm._v(" "), _c('button', {
     staticClass: "pull-right btn btn-danger",
     on: {
       "click": function($event) {
         _vm.$router.go(-1)
       }
     }
-  }, [_vm._v("\r\n\t\t\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t\t\t")])])])])]), _vm._v(" "), _c('fieldset', {
+  }, [_vm._v("\r\n\t\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _vm._m(1)])]), _vm._v(" "), _c('fieldset', {
     staticClass: "margin-25-top"
-  }, [_vm._m(1), _vm._v(" "), _c('div', {
+  }, [_vm._m(2), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [(_vm.form.state != 'edit') ? _c('div', {
     staticClass: "col-md-5"
@@ -44113,7 +44413,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t\t" + _vm._s(client) + "\r\n\t\t\t\t\t\t\t\t\t\t")])
   })], 2), _vm._v(" "), (_vm.client_company_name.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_company_name.err))]) : _vm._e()])])]) : _vm._e(), _vm._v(" "), _vm._m(2), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.client_company_name.err))]) : _vm._e()])])]) : _vm._e(), _vm._v(" "), _vm._m(3), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "form-group",
@@ -44150,861 +44450,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.client_company_name.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_company_name.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row margin-15-top"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.client_contact_name.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Client Contact")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.client_contact_name.val),
-      expression: "form.fields.client_contact_name.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Name of contact"
-    },
-    domProps: {
-      "value": (_vm.form.fields.client_contact_name.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.client_contact_name.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.client_contact_name.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_name.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.client_contact_phone.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Contact's Phone No.")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.client_contact_phone.val),
-      expression: "form.fields.client_contact_phone.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Contact phone number"
-    },
-    domProps: {
-      "value": (_vm.form.fields.client_contact_phone.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.client_contact_phone.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.client_contact_phone.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_phone.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.client_contact_email.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Contact's Email")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.client_contact_email.val),
-      expression: "form.fields.client_contact_email.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Contact email"
-    },
-    domProps: {
-      "value": (_vm.form.fields.client_contact_email.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.client_contact_email.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.client_contact_email.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.client_contact_email.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row margin-15-top"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.first_contact_by.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("First Contacted By")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.first_contact_by.val),
-      expression: "form.fields.first_contact_by.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "First contact by"
-    },
-    domProps: {
-      "value": (_vm.form.fields.first_contact_by.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.first_contact_by.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), _c('div', {
-    staticClass: "checkbox"
-  }, [_c('label', [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.firstContactChecked),
-      expression: "firstContactChecked"
-    }],
-    attrs: {
-      "type": "checkbox"
-    },
-    domProps: {
-      "checked": Array.isArray(_vm.firstContactChecked) ? _vm._i(_vm.firstContactChecked, null) > -1 : (_vm.firstContactChecked)
-    },
-    on: {
-      "__c": function($event) {
-        var $$a = _vm.firstContactChecked,
-          $$el = $event.target,
-          $$c = $$el.checked ? (true) : (false);
-        if (Array.isArray($$a)) {
-          var $$v = null,
-            $$i = _vm._i($$a, $$v);
-          if ($$c) {
-            $$i < 0 && (_vm.firstContactChecked = $$a.concat($$v))
-          } else {
-            $$i > -1 && (_vm.firstContactChecked = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
-          }
-        } else {
-          _vm.firstContactChecked = $$c
-        }
-      }
-    }
-  }), _vm._v(" \r\n\t\t\t\t\t\t\t\t\t\t\t\tSame person as client contact?\r\n\t\t\t\t\t\t\t\t\t\t")])]), _vm._v(" "), (_vm.form.fields.first_contact_by.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.first_contact_by.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.first_contact_date.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("First Contact Date")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.first_contact_date.val),
-      expression: "form.fields.first_contact_date.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.first_contact_date.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.first_contact_date.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.first_contact_date.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.first_contact_date.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('hr', {
-    staticClass: "dotted"
-  }), _vm._v(" "), _c('fieldset', [_vm._m(3), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.province.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Province")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.province.val),
-      expression: "form.fields.province.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.province.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "",
-      "selected": "",
-      "disabled": ""
-    }
-  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Alberta"
-    }
-  }, [_vm._v("Alberta")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "British Columbia"
-    }
-  }, [_vm._v("British Columbia")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Saskatchewan"
-    }
-  }, [_vm._v("Saskatchewan")])]), _vm._v(" "), (_vm.form.fields.province.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.province.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.location.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Specific Location")]), _vm._v(" "), _c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.location.val),
-      expression: "form.fields.location.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "rows": "3",
-      "placeholder": "Specific location"
-    },
-    domProps: {
-      "value": (_vm.form.fields.location.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.location.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.location.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.location.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row margin-15-top"
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.details.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Basic Details")]), _vm._v(" "), _c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.details.val),
-      expression: "form.fields.details.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "rows": "3",
-      "placeholder": "Project details"
-    },
-    domProps: {
-      "value": (_vm.form.fields.details.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.details.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.details.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.details.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('hr', {
-    staticClass: "dotted"
-  }), _vm._v(" "), _c('fieldset', {
-    staticClass: "margin-25-top"
-  }, [_vm._m(4), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.work_type.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Work Type")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.work_type.val),
-      expression: "form.fields.work_type.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.work_type.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "",
-      "selected": "",
-      "disabled": ""
-    }
-  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "HRIA"
-    }
-  }, [_vm._v("HRIA")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Archaeology"
-    }
-  }, [_vm._v("Archaeology")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "Palaeontology"
-    }
-  }, [_vm._v("Palaeontology")])]), _vm._v(" "), (_vm.form.fields.work_type.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.work_type.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.response_by.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Response By")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.response_by.val),
-      expression: "form.fields.response_by.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.response_by.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.response_by.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.response_by.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.response_by.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.estimate.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Estimate")]), _vm._v(" "), _c('div', {
-    staticClass: "input-group margin-10-top"
-  }, [_c('span', {
-    staticClass: "input-group-addon"
-  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.estimate.val),
-      expression: "form.fields.estimate.val"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      "type": "text"
-    },
-    domProps: {
-      "value": (_vm.form.fields.estimate.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.estimate.val = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), (_vm.form.fields.estimate.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.estimate.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row margin-15-top"
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.work_overview.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Work Overview")]), _vm._v(" "), _c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.work_overview.val),
-      expression: "form.fields.work_overview.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "rows": "3",
-      "placeholder": "Overview of work"
-    },
-    domProps: {
-      "value": (_vm.form.fields.work_overview.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.work_overview.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.work_overview.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.work_overview.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row margin-15-top"
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.plans.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Work Plans")]), _vm._v(" "), _c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.plans.val),
-      expression: "form.fields.plans.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "rows": "3",
-      "placeholder": "Work plans"
-    },
-    domProps: {
-      "value": (_vm.form.fields.plans.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.plans.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.plans.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.plans.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('hr', {
-    staticClass: "dotted"
-  }), _vm._v(" "), _c('fieldset', {
-    staticClass: "margin-25-top"
-  }, [_vm._m(5), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.land_ownership.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Land Ownership")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.land_ownership.val),
-      expression: "form.fields.land_ownership.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.land_ownership.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "",
-      "selected": "",
-      "disabled": ""
-    }
-  }, [_vm._v("Select...")]), _vm._v(" "), _c('option', [_vm._v("Crown")]), _vm._v(" "), _c('option', [_vm._v("Freehold")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.land_access_granted.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Land Access Granted?")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.land_access_granted.val),
-      expression: "form.fields.land_access_granted.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.land_access_granted.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "0"
-    }
-  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "1"
-    }
-  }, [_vm._v("Yes")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.land_access_granted_by.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Access Granted By")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.land_access_granted_by.val),
-      expression: "form.fields.land_access_granted_by.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Access granted by"
-    },
-    domProps: {
-      "value": (_vm.form.fields.land_access_granted_by.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.land_access_granted_by.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.land_access_granted_by.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.land_access_granted_by.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row margin-15-top"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.land_access_contact.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Contact")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.land_access_contact.val),
-      expression: "form.fields.land_access_contact.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Access contact name"
-    },
-    domProps: {
-      "value": (_vm.form.fields.land_access_contact.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.land_access_contact.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), _c('div', {
-    staticClass: "checkbox"
-  }, [_c('label', [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.accessContactChecked),
-      expression: "accessContactChecked"
-    }],
-    attrs: {
-      "type": "checkbox"
-    },
-    domProps: {
-      "checked": Array.isArray(_vm.accessContactChecked) ? _vm._i(_vm.accessContactChecked, null) > -1 : (_vm.accessContactChecked)
-    },
-    on: {
-      "__c": function($event) {
-        var $$a = _vm.accessContactChecked,
-          $$el = $event.target,
-          $$c = $$el.checked ? (true) : (false);
-        if (Array.isArray($$a)) {
-          var $$v = null,
-            $$i = _vm._i($$a, $$v);
-          if ($$c) {
-            $$i < 0 && (_vm.accessContactChecked = $$a.concat($$v))
-          } else {
-            $$i > -1 && (_vm.accessContactChecked = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
-          }
-        } else {
-          _vm.accessContactChecked = $$c
-        }
-      }
-    }
-  }), _vm._v(" \r\n\t\t\t\t\t\t\t\t\t\t\t\tSame person as land access granted by?\r\n\t\t\t\t\t\t\t\t\t\t")])]), _vm._v(" "), (_vm.form.fields.land_access_contact.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.land_access_contact.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.land_access_phone.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Contact's Phone No.")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.land_access_phone.val),
-      expression: "form.fields.land_access_phone.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text",
-      "placeholder": "Access contact phone number"
-    },
-    domProps: {
-      "value": (_vm.form.fields.land_access_phone.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.land_access_phone.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.land_access_phone.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.land_access_phone.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('hr', {
-    staticClass: "dotted"
-  }), _vm._v(" "), _c('fieldset', [_vm._m(6), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.approval_date.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Approval Date")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.approval_date.val),
-      expression: "form.fields.approval_date.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.approval_date.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.approval_date.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.approval_date.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.approval_date.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('hr', {
-    staticClass: "dotted"
-  }), _vm._v(" "), _c('fieldset', {
-    staticClass: "margin-25-top"
-  }, [_vm._m(7), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.invoiced_date.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Invoiced date")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.invoiced_date.val),
-      expression: "form.fields.invoiced_date.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.invoiced_date.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.invoiced_date.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.invoiced_date.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.invoiced_date.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.invoice_paid_date.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Invoice paid date")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.invoice_paid_date.val),
-      expression: "form.fields.invoice_paid_date.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.invoice_paid_date.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.invoice_paid_date.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.invoice_paid_date.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.invoice_paid_date.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.client_company_name.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-3 col-centered"
@@ -45079,21 +44525,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "large-center-loader"
   })])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('small', [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\t\t\t\t\t\tOnce you have started the project you can add more information.\r\n\t\t\t\t\t\t\t\t")])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('legend', [_c('h3', [_vm._v("Client and contact")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-1 margin-50-top"
   }, [_c('strong', [_vm._v("- OR -")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('legend', [_c('h3', [_vm._v("Location")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('legend', [_c('h3', [_vm._v("Work Details")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('legend', [_c('h3', [_vm._v("Land ownership")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('legend', [_c('h3', [_vm._v("Approval")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('legend', [_c('h3', [_vm._v("Invoicing")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -45858,7 +45302,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row row-padded"
-  }, [_c('h3', [_vm._v("Project Crew")])])
+  }, [_c('h3', [_vm._v("Project Crew")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\tOnly users that have been added to the project crew will be able to add timesheets to the project.\r\n\t\t")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row row-padded margin-25-top"
@@ -45892,7 +45340,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "glyphicon glyphicon-wrench"
   }), _vm._v(" Options\r\n\t\t\t")])]), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
-  }, [_c('h3', [_vm._v("Client")]), _vm._v(" "), _c('div', {
+  }, [_c('h3', {
+    staticClass: "margin-15-bottom"
+  }, [_vm._v("Client")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
@@ -46211,7 +45661,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "dotted"
   }), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
-  }, [_c('h3', [_vm._v("Location")]), _vm._v(" "), _c('div', {
+  }, [_c('h3', {
+    staticClass: "margin-15-bottom"
+  }, [_vm._v("Location")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
@@ -46464,7 +45916,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "dotted"
   }), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
-  }, [_c('h3', [_vm._v("Work Details")]), _vm._v(" "), _c('div', {
+  }, [_c('h3', {
+    staticClass: "margin-15-bottom"
+  }, [_vm._v("Work Details")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
@@ -46875,7 +46329,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "dotted"
   }), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
-  }, [_c('h3', [_vm._v("Land")]), _vm._v(" "), _c('div', {
+  }, [_c('h3', {
+    staticClass: "margin-15-bottom"
+  }, [_vm._v("Land")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
@@ -47268,7 +46724,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "dotted"
   }), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
-  }, [_c('h3', [_vm._v("Invoicing")]), _vm._v(" "), _c('div', {
+  }, [_c('h3', {
+    staticClass: "margin-15-bottom"
+  }, [_vm._v("Invoicing")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
@@ -47424,7 +46882,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "dotted"
   }), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
-  }, [_c('h3', [_vm._v("Project Approval")]), _vm._v(" "), _c('div', {
+  }, [_c('h3', {
+    staticClass: "margin-15-bottom"
+  }, [_vm._v("Project Approval")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
@@ -47534,7 +46994,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row row-padded"
-  }, [_c('h2', [_vm._v("Project Details")])])
+  }, [_c('h2', [_vm._v("Project Details")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\tThis is where you can edit and track the project you've selected.\r\n\t\t\t")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\tTo edit a field just click the gear icon next to that field.\r\n\t\t\t")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Client Company")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -47858,13 +47324,26 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [_c('div', {
-    staticClass: "col-md-10 col-centered"
+    staticClass: "col-md-12"
   }, [_c('div', {
     staticClass: "panel panel-white post panel-shadow"
   }, [_c('div', {
     staticClass: "row row-padded"
   }, [_c('div', {
-    staticClass: "col-md-6 col-centered"
+    staticClass: "pull-right margin-5-top"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.editTimesheet(_vm.timesheet.id)
+      }
+    }
+  })])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded text-center"
+  }, [_c('h3', [_vm._v(_vm._s(new Date(Date.parse(_vm.timesheet.date + 'T00:00:00')).toDateString()))])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-10-top"
+  }, [_c('div', {
+    staticClass: "col-md-5 col-centered"
   }, [_c('div', {
     staticClass: "btn-toolbar"
   }, [_c('a', {
@@ -47904,7 +47383,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-usd"
   }), _vm._v(" Add Other\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-body"
+    staticClass: "panel-body col-md-10 col-centered margin-10-top"
   }, [(_vm.tabToShow == 'List') ? _c('ul', {
     staticClass: "list-group margin-10-top"
   }, [_c('li', {
@@ -47912,16 +47391,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "row"
   }, [_c('div', {
-    staticClass: "col-md-6"
-  }, [_c('strong', [_vm._v("Date")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(_vm.timesheet.date) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-6"
+    staticClass: "col-md-12"
   }, [_c('strong', [_vm._v("Per Diem")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t$" + _vm._s(_vm.timesheet.per_diem) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c('div', {
     staticClass: "row margin-20-top"
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(_vm.timesheet.comment) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])])]), _vm._v(" "), (_vm.timesheet.travel_jobs.length > 0) ? _c('li', {
     staticClass: "list-group-item"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), _vm._l((_vm.timesheet.travel_jobs), function(travelJob) {
+  }, [_vm._m(1)]) : _vm._e(), _vm._v(" "), _vm._l((_vm.timesheet.travel_jobs), function(travelJob) {
     return (_vm.timesheet.travel_jobs.length > 0) ? _c('li', {
       staticClass: "list-group-item"
     }, [_c('div', {
@@ -47948,7 +47425,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(travelJob.comment) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]) : _vm._e()]) : _vm._e()
   }), _vm._v(" "), (_vm.timesheet.work_jobs.length > 0) ? _c('li', {
     staticClass: "list-group-item"
-  }, [_vm._m(1)]) : _vm._e(), _vm._v(" "), _vm._l((_vm.timesheet.work_jobs), function(workjob) {
+  }, [_vm._m(2)]) : _vm._e(), _vm._v(" "), _vm._l((_vm.timesheet.work_jobs), function(workjob) {
     return (_vm.timesheet.work_jobs.length > 0) ? _c('li', {
       staticClass: "list-group-item"
     }, [_c('div', {
@@ -47975,7 +47452,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(workjob.comment) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]) : _vm._e()]) : _vm._e()
   }), _vm._v(" "), (_vm.timesheet.equipment_rentals.length > 0) ? _c('li', {
     staticClass: "list-group-item"
-  }, [_vm._m(2)]) : _vm._e(), _vm._v(" "), _vm._l((_vm.timesheet.equipment_rentals), function(equipmentRental) {
+  }, [_vm._m(3)]) : _vm._e(), _vm._v(" "), _vm._l((_vm.timesheet.equipment_rentals), function(equipmentRental) {
     return (_vm.timesheet.equipment_rentals.length > 0) ? _c('li', {
       staticClass: "list-group-item"
     }, [_c('div', {
@@ -48002,7 +47479,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(equipmentRental.comment) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]) : _vm._e()]) : _vm._e()
   }), _vm._v(" "), (_vm.timesheet.other_costs.length > 0) ? _c('li', {
     staticClass: "list-group-item"
-  }, [_vm._m(3)]) : _vm._e(), _vm._v(" "), _vm._l((_vm.timesheet.other_costs), function(otherCost) {
+  }, [_vm._m(4)]) : _vm._e(), _vm._v(" "), _vm._l((_vm.timesheet.other_costs), function(otherCost) {
     return (_vm.timesheet.other_costs.length > 0) ? _c('li', {
       staticClass: "list-group-item"
     }, [_c('div', {
@@ -48027,7 +47504,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('div', {
       staticClass: "col-md-12"
     }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(otherCost.comment) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]) : _vm._e()]) : _vm._e()
-  })], 2) : _vm._e(), _vm._v(" "), (_vm.tabToShow == 'Work-job') ? _c('work-job-form', {
+  })], 2) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "col-md-8 col-centered"
+  }, [(_vm.tabToShow == 'Work-job') ? _c('work-job-form', {
     attrs: {
       "timesheet_id": _vm.timesheet.id,
       "work_job_id": _vm.currentWorkJob.id,
@@ -48041,7 +47520,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     },
     slot: "close-form"
-  }, [_vm._v("\r\n\t\t\t\t\t\t×\r\n\t\t\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.tabToShow == 'Travel-job') ? _c('travel-job-form', {
+  }, [_vm._v("\r\n\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.tabToShow == 'Travel-job') ? _c('travel-job-form', {
     attrs: {
       "timesheet_id": _vm.timesheet.id,
       "travel_job_id": _vm.currentTravelJob.id,
@@ -48055,7 +47534,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     },
     slot: "close-form"
-  }, [_vm._v("\r\n\t\t\t\t\t\t×\r\n\t\t\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.tabToShow == 'Equipment-rental') ? _c('equipment-rental-form', {
+  }, [_vm._v("\r\n\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.tabToShow == 'Equipment-rental') ? _c('equipment-rental-form', {
     attrs: {
       "timesheet_id": _vm.timesheet.id,
       "equipment_rental_id": _vm.currentEquipmentRental.id,
@@ -48069,7 +47548,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     },
     slot: "close-form"
-  }, [_vm._v("\r\n\t\t\t\t\t\t×\r\n\t\t\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.tabToShow == 'Other-cost') ? _c('other-cost-form', {
+  }, [_vm._v("\r\n\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.tabToShow == 'Other-cost') ? _c('other-cost-form', {
     attrs: {
       "timesheet_id": _vm.timesheet.id,
       "other_cost_id": _vm.currentOtherCost.id,
@@ -48083,7 +47562,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     },
     slot: "close-form"
-  }, [_vm._v("\r\n\t\t\t\t\t\t×\r\n\t\t\t\t\t")])]) : _vm._e()], 1)])]), _vm._v(" "), _c('modal', {
+  }, [_vm._v("\r\n\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t")])]) : _vm._e()], 1)])]), _vm._v(" "), _c('hr', {
+    staticClass: "margin-45-top margin-45-bottom"
+  })]), _vm._v(" "), _c('modal', {
     attrs: {
       "modalActive": _vm.modalActive
     },
@@ -48094,7 +47575,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('p', {
     slot: "body"
-  }), _vm._v(" "), _c('div', {
+  }, [(_vm.currentModel == 'Timesheet-edit') ? _c('timesheet-form', {
+    attrs: {
+      "timesheet_id": _vm.timesheet.id,
+      "timesheet": _vm.timesheet,
+      "project_id": _vm.$route.params.project_id
+    }
+  }) : _vm._e()], 1), _vm._v(" "), _c('div', {
     slot: "footer"
   }, [_c('button', {
     staticClass: "btn btn-primary margin-45-top",
@@ -48105,6 +47592,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("Cancel")])])])], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "row row-padded text-center margin-10-top"
+  }, [_c('h3', [_c('small', [_vm._v("TIMESHEET")])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h4', [_c('span', {
     staticClass: "label label-primary"
   }, [_vm._v("Travel Hours")])])
@@ -48433,8 +47924,18 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('button', {
-    staticClass: "btn btn-default",
+  return _c('div', [(_vm.fetchingModels) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [(!_vm.fullTable) ? _c('div', [_c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v("Your Projects")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\t\tThis is where you'll find all of the projects that you're a part of.\r\n\t\t\t\t")]), _vm._v(" "), _vm._m(1), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }), _c('h4', [_c('strong', [_vm._v("Number of Projects:")]), _vm._v(" "), _c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v(_vm._s(_vm.searchResults.models.length))])]), _vm._v(" "), _c('p')])]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('div', [_vm._m(2)]) : _vm._e()]) : _vm._e(), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-default margin-35-top",
     on: {
       "click": _vm.refresh
     }
@@ -48442,28 +47943,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "glyphicon glyphicon-refresh"
   }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" \r\n\t\t\tRefresh list\r\n\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
     staticClass: "left-loader"
-  })]) : _vm._e()]), _vm._v(" "), (_vm.fetchingModels) ? _c('div', {
-    staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
+  })]) : _vm._e()]), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
     staticClass: "table table-striped table-hover margin-25-top"
   }, [_c('thead', [_c('tr', {
     staticClass: "info"
-  }, [(_vm.fullTable) ? _c('th', [_vm._v("Client Company")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('th', [_vm._v("Contact Name")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('th', [_vm._v("Contact Phone")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('th', [_vm._v("Invoice Paid")]) : _vm._e(), _vm._v(" "), _c('th', [_vm._v("Actions")])])]), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(project) {
+  }, [(_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tClient Company\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tContact Name\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tContact Phone\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tInvoice Paid\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tIdentifier\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tProvince\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tLocation\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tTimesheets\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), _c('th', [_vm._v("\r\n\t\t\t\t\tActions\r\n\t\t\t\t")])])]), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(project) {
     return _c('tr', {
       attrs: {
         "project": project
       }
-    }, [(_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.client_company_name) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.client_contact_name) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('td', [_c('a', {
+    }, [(_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.client_company_name) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.client_contact_name) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('td', [(project.client_contact_phone) ? _c('a', {
       attrs: {
         "href": 'tel: +1' + project.client_contact_phone.replace(/-/g, '')
       }
-    }, [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(project.client_contact_phone) + "\r\n\t\t\t    \t")])]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('td', [(project.invoiced_date == null) ? _c('div', {
+    }, [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(project.client_contact_phone) + "\r\n\t\t\t    \t")]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('td', [(project.invoiced_date == null) ? _c('div', {
       staticClass: "text-warning"
-    }, [_vm._v("\r\n\t\t\t    \t\tNot Invoiced\r\n\t\t\t    \t")]) : _vm._e()]) : _vm._e(), _vm._v(" "), _c('td', [(_vm.fullTable) ? _c('button', {
+    }, [_c('span', {
+      staticClass: "label label-warning"
+    }, [_vm._v("Not Invoiced")])]) : _vm._e()]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.id) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.province) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.location) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.timesheets.length) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), _c('td', [(_vm.fullTable) ? _c('button', {
       staticClass: "btn btn-sm btn-success",
       on: {
         "click": function($event) {
           _vm.viewProject(project.id)
+        }
+      }
+    }, [_c('span', {
+      staticClass: "glyphicon glyphicon-screenshot"
+    }), _vm._v(" View\r\n\t\t\t    \t")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('button', {
+      staticClass: "btn btn-sm btn-success",
+      on: {
+        "click": function($event) {
+          _vm.viewTimesheets(project.id)
         }
       }
     }, [_c('span', {
@@ -48512,6 +48022,26 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "large-center-loader"
   })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\t\tUse the view button on each project row to view your timesheets for that project.\r\n\t\t\t\t")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v("Find & Add Projects")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\t\tThis is where you can find and sort all of the projects added to the system.\r\n\t\t\t\t")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\t\tUse the view button on each project row to view and edit that project.\r\n\t\t\t\t")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\t\tYou can add a new project using the 'Create Project' link above.\r\n\t\t\t\t")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -48658,7 +48188,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(!_vm.form.isLoading) ? _c('span', [_vm._v(_vm._s(_vm.form.button))]) : _vm._e(), _vm._v(" "), (_vm.form.isLoading) ? _c('span', [_c('div', {
     staticClass: "center-loader"
-  })]) : _vm._e()])])])])])])]) : _vm._e()])
+  })]) : _vm._e()])])])])]), _vm._v(" "), (_vm.timesheet_id) ? _c('fieldset', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3 col-centered"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-danger btn-block margin-25-top",
+    on: {
+      "click": _vm.deleteTimesheet
+    }
+  }, [(!_vm.isDeleting) ? _c('span', [_vm._v("Remove")]) : _vm._e(), _vm._v(" "), (_vm.isDeleting) ? _c('span', [_c('div', {
+    staticClass: "loader-center"
+  })]) : _vm._e()])])])])]) : _vm._e()])]) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-12"
@@ -48683,23 +48226,35 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row margin-85-top margin-85-bottom"
   }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [_c('div', {
     staticClass: "row row-padded"
-  }, [_c('h2', [_vm._v("Project Timesheets")]), _vm._v(" "), _c('p', {
+  }, [_c('h2', [_vm._v("Project Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.$route.params.project_id) + ")")])]), _vm._v(" "), _c('p', {
     staticClass: "margin-25-top"
-  }), _c('h4', [_c('strong', [_vm._v("Project Identifier:")]), _vm._v(" "), _c('span', {
-    staticClass: "label label-success"
-  }, [_vm._v(_vm._s(this.$route.params.project_id))])]), _vm._v(" "), _c('p'), _vm._v(" "), _c('p', {
+  }, [_vm._v("\r\n\t\t\t\tNow showing all of your timesheets for this project.\r\n\t\t\t")]), _vm._v(" "), _vm._m(1)]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-3"
+  }, [_c('p', {
     staticClass: "margin-25-top"
-  }), _c('h4', [_c('strong', [_vm._v("Total Timesheets:")]), _vm._v(" "), _c('span', {
+  }), _c('h4', [_c('strong', [_vm._v("Timesheets:")]), _vm._v(" "), _c('span', {
     staticClass: "label label-success"
-  }, [_vm._v(_vm._s(_vm.totalTimesheets))])]), _vm._v(" "), _c('p'), _vm._v(" "), _c('p', {
+  }, [_vm._v(_vm._s(_vm.totalTimesheets))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('p', {
     staticClass: "margin-25-top"
-  }), _c('h4', [_c('strong', [_vm._v("Accumulated Work Hours:")]), _vm._v(" "), _c('span', {
+  }), _c('h4', [_c('strong', [_vm._v("Work Hours:")]), _vm._v(" "), _c('span', {
     staticClass: "label label-success"
-  }, [_vm._v(_vm._s(_vm.totalWorkHours))])]), _vm._v(" "), _c('p'), _vm._v(" "), _c('p', {
+  }, [_vm._v(_vm._s(_vm.totalWorkHours))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('p', {
     staticClass: "margin-25-top"
-  }), _c('h4', [_c('strong', [_vm._v("Accumulated Travel Hours:")]), _vm._v(" "), _c('span', {
+  }), _c('h4', [_c('strong', [_vm._v("Travel Hours:")]), _vm._v(" "), _c('span', {
     staticClass: "label label-success"
-  }, [_vm._v(_vm._s())])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.totalTravelHours))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('p', {
+    staticClass: "margin-25-top"
+  }), _c('h4', [_c('strong', [_vm._v("Travel Distance:")]), _vm._v(" "), _c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v(_vm._s(_vm.totalTravelDistance) + " km")])]), _vm._v(" "), _c('p')])]), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
   }, [_c('button', {
     staticClass: "btn btn-default",
@@ -48751,6 +48306,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "large-center-loader"
   })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\tOnce you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.\r\n\t\t\t")])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -48765,8 +48326,10 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('h4', [_vm._v("Notes")]), _vm._v(" "), _vm._l((_vm.comments), function(comment) {
-    return _c('div', [_c('div', {
+  return _c('div', [_c('h3', [_vm._v("Notes")]), _vm._v(" "), _vm._l((_vm.comments), function(comment) {
+    return _c('div', {
+      staticClass: "margin-25-top"
+    }, [_c('div', {
       staticClass: "panel panel-white post panel-shadow"
     }, [_c('div', {
       staticClass: "post-heading"
@@ -48958,7 +48521,7 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [_c('div', {
-    staticClass: "row margin-75-top"
+    staticClass: "row margin-95-top"
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('div', {
@@ -48984,7 +48547,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "to": "'/dashboard/timesheets/'+$route.params.project_id"
     }
   }, [_vm._v("\r\n\t\t\t\t\t\t\t\tProject Timesheets\r\n\t\t\t\t\t\t\t")])], 1) : _vm._e()]), _vm._v(" "), _c('div', {
-    staticClass: "row margin-45-top"
+    staticClass: "row margin-25-top"
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('router-view')], 1)])])])])])])

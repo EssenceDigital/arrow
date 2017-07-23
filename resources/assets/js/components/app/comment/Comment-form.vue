@@ -47,12 +47,14 @@
 			return {
 					form: {
 						model: this.model,
-						state: 'create-child',
+						state: 'create',
 						title: 'Add Comment',
 						button: 'Add',
 						action: '/api/' + this.urlPortion + '/add-comment',
 						createAction: '/api/' + this.urlPortion + '/add-comment',
 						updateAction: '/api/' + this.urlPortion + '/update-comment',
+						createEvent: 'comment-created',
+						updateEvent: 'comment-updated',
 						isLoading: false,					
 						successMsg: 'Comment has been saved',
 						fields: {

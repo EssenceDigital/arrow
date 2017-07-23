@@ -13,28 +13,46 @@
 	<!-- Table wrapper - only shows after project is loaded -->
 	<div v-if="!fetchingModels">
 		<div class="row row-padded">
-			<h2>Project Timesheets</h2>
+			<h2>Project Timesheets <small>(Project {{ this.$route.params.project_id }})</small></h2>
 			<p class="margin-25-top">
-				<h4>
-					<strong>Project Identifier:</strong> <span class="label label-success">{{ this.$route.params.project_id }}</span>
-				</h4>
+				Now showing all of your timesheets for this project.
 			</p>
-			<p class="margin-25-top">
-				<h4>
-					<strong>Total Timesheets:</strong> <span class="label label-success">{{ totalTimesheets }}</span>
-				</h4>
+			<p class="margin-25-top text-info">
+				<span class="glyphicon glyphicon-question-sign"></span>
+				Once you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.
 			</p>
-			<p class="margin-25-top">
-				<h4>
-					<strong>Accumulated Work Hours:</strong> <span class="label label-success">{{ totalWorkHours }}</span>
-				</h4>
-			</p>
-			<p class="margin-25-top">
-				<h4>
-					<strong>Accumulated Travel Hours:</strong> <span class="label label-success">{{  }}</span>
-				</h4>
-			</p>									
 		</div>
+		<div class="row row-padded margin-15-top">
+			<div class="col-md-3">
+				<p class="margin-25-top">
+					<h4>
+						<strong>Timesheets:</strong> <span class="label label-success">{{ totalTimesheets }}</span>
+					</h4>
+				</p>				
+			</div>
+			<div class="col-md-3">
+				<p class="margin-25-top">
+					<h4>
+						<strong>Work Hours:</strong> <span class="label label-success">{{ totalWorkHours }}</span>
+					</h4>
+				</p>				
+			</div>
+			<div class="col-md-3">
+				<p class="margin-25-top">
+					<h4>
+						<strong>Travel Hours:</strong> <span class="label label-success">{{ totalTravelHours }}</span>
+					</h4>
+				</p>				
+			</div>
+			<div class="col-md-3">
+				<p class="margin-25-top">
+					<h4>
+						<strong>Travel Distance:</strong> <span class="label label-success">{{ totalTravelDistance }} km</span>
+					</h4>
+				</p>				
+			</div>			
+		</div>
+
 
 		<!-- Tool navigation -->
 		<div class="row row-padded margin-25-top">
@@ -125,22 +143,15 @@
 			},
 
 			totalWorkHours(){
-				// Cache total
-				var totalHours = parseInt(0);
-				// Iterate through each timesheet
-				this.searchResults.models.forEach(function(timesheet){
-					// If work jobs are present
-					if(timesheet.work_jobs.length > 0){
-						// Iterate through each job in timesheet
-						timesheet.work_jobs.forEach(function(workjob){
-							// Update total
-							totalHours += parseFloat(workjob.hours_worked);
-						});						
-					}
+				return this.stepAndDisectTimesheets('work_jobs', 'hours_worked');
+			},
 
-				});
+			totalTravelHours(){
+				return this.stepAndDisectTimesheets('travel_jobs', 'travel_time');
+			},
 
-				return totalHours.toFixed(2);
+			totalTravelDistance(){
+				return this.stepAndDisectTimesheets('travel_jobs', 'travel_distance');
 			}
 		},
 
@@ -148,6 +159,27 @@
 			timesheetFormModal(){
 				this.currentModal = 'Timesheet';
 				this.modalActive = true;
+			},
+
+			/* Iterates through each of the users timesheets. On each timesheet, an array of foreign relationship assets is
+			 * iterated through and the supplied field is sumed up. The final total is returned
+			 * @param assetToIterate - the foreign relationship field
+			 * @param fieldToAddUp - the field on the foreign relationship to add up 
+			*/
+			stepAndDisectTimesheets(assetToIterate, fieldToAddUp){
+				var total = parseInt(0);
+				// Iterate through each timesheet
+				this.searchResults.models.forEach(function(timesheet){
+					if(timesheet[assetToIterate].length > 0){
+						// Iterate through each travel job in timesheet
+						timesheet[assetToIterate].forEach(function(current){
+							// Update total
+							total += parseFloat(current[fieldToAddUp]);
+						})
+					}
+				});
+
+				return total.toFixed(2);				
 			}
 		},
 
@@ -156,189 +188,219 @@
 			this.getAndSetModels();
 
 			// When the form component alerts this parent of a successful create
-			this.$router.app.$on('model-created', model => {
-				this.searchResults.models.push(model);	
+			this.$router.app.$on('timesheet-created', model => {
+				model.work_jobs = [];
+				model.travel_jobs = [];
+				model.equipment_rentals = [];
+				model.other_costs = [];
+				this.searchResults.models.unshift(model);	
 				this.modalActive = false;						
 			});	
 
-			// When the form component alerts this parent a child has been created or updated
-			// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-			this.$router.app.$on('child-created', model => {
+			this.$router.app.$on('work-job-created', model => {
+				// Cache context
+				var context = this;
+				// Iterate through all cached timesheets and execute 
+				this.searchResults.models.forEach(function(timesheet){
+					// When the timesheet id matches the models id
+					if(timesheet.id == model.timesheet_id){					
+						// Flag which indicates whether the workjob has been added to cache
+						var updated = false;						
+						// Iterate through work jobs to determine if a job should be updated or a new 
+						// job should be pushed to the collection
+						timesheet.work_jobs.forEach(function(workjob){
+							// Replace existing updated work job
+							if(workjob.id == model.id){
+								// Update workjob fields
+								workjob.job_type = model.job_type;
+								workjob.hours_worked = model.hours_worked;
+								workjob.comment = model.comment
+								// Update flag
+								updated = true;
+							}
+						});
+						// Add a new work job
+						if(!updated){
+							timesheet.work_jobs.push(model);
+						}	
+					}
+				});											
+			});	
+
+			this.$router.app.$on('travel-job-created', model => {
+				// Cache context
+				var context = this;
+				// Iterate through all cached timesheets and execute 
+				this.searchResults.models.forEach(function(timesheet){
+					// When the timesheet id matches the models id
+					if(timesheet.id == model.timesheet_id){				
+						// Flag which indicates whether the travel job has been added to cache
+						var updated = false;						
+						// Iterate through travel jobs to determine if a job should be updated or a new 
+						// job should be pushed to the collection
+						timesheet.travel_jobs.forEach(function(travelJob){
+							// Replace existing updated travel job
+							if(travelJob.id == model.id){
+								// Update travel job fields
+								travelJob.travel_distance = model.travel_distance;
+								travelJob.travel_time = model.travel_time;
+								travelJob.comment = model.comment
+								// Update flag
+								updated = true;
+							}
+						});
+						// Add a new travel job
+						if(!updated){
+							timesheet.travel_jobs.push(model);
+						}	
+					}
+				});											
+			});	
+
+			this.$router.app.$on('equipment-rental-created', model => {
 				// Cache context
 				var context = this;
 				// Iterate through all cached timesheets and execute 
 				this.searchResults.models.forEach(function(timesheet){
 					// When the timesheet id matches the models id
 					if(timesheet.id == model.timesheet_id){
-
-						// If the model is a work job
-						if(model.job_type){
-							// Flag which indicates whether the workjob has been added to cache
-							var updated = false;						
-							// Iterate through work jobs to determine if a job should be updated or a new 
-							// job should be pushed to the collection
-							timesheet.work_jobs.forEach(function(workjob){
-								// Replace existing updated work job
-								if(workjob.id == model.id){
-									// Update workjob fields
-									workjob.job_type = model.job_type;
-									workjob.hours_worked = model.hours_worked;
-									workjob.comment = model.comment
-									// Update flag
-									updated = true;
-								}
-							});
-							// Add a new work job
-							if(!updated){
-								timesheet.work_jobs.push(model);
+						// Flag which indicates whether the equipment rental has been added to cache
+						var updated = false;						
+						// Iterate through equipment rentals to determine if a rental should be updated or a new 
+						// job should be pushed to the collection
+						timesheet.equipment_rentals.forEach(function(equipmentRental){
+							// Replace existing updated equipment rental
+							if(equipmentRental.id == model.id){
+								// Update equipment rental fields
+								equipmentRental.equipment_type = model.equipment_type;
+								equipmentRental.rental_fee = model.rental_fee;
+								equipmentRental.comment = model.comment
+								// Update flag
+								updated = true;
 							}
-						}
-
-						// If the model is a travel job
-						if(model.travel_distance){
-							console.log(model);
-							// Flag which indicates whether the travel job has been added to cache
-							var updated = false;						
-							// Iterate through travel jobs to determine if a job should be updated or a new 
-							// job should be pushed to the collection
-							timesheet.travel_jobs.forEach(function(travelJob){
-								// Replace existing updated travel job
-								if(travelJob.id == model.id){
-									// Update travel job fields
-									travelJob.travel_distance = model.travel_distance;
-									travelJob.travel_time = model.travel_time;
-									travelJob.comment = model.comment
-									// Update flag
-									updated = true;
-								}
-							});
-							// Add a new travel job
-							if(!updated){
-								timesheet.travel_jobs.push(model);
-							}							
-						}
-
-						// If the model is an equipment rental
-						if(model.equipment_type){
-							console.log(model);
-							// Flag which indicates whether the equipment rental has been added to cache
-							var updated = false;						
-							// Iterate through equipment rentals to determine if a rental should be updated or a new 
-							// job should be pushed to the collection
-							timesheet.equipment_rentals.forEach(function(equipmentRental){
-								// Replace existing updated equipment rental
-								if(equipmentRental.id == model.id){
-									// Update equipment rental fields
-									equipmentRental.equipment_type = model.equipment_type;
-									equipmentRental.rental_fee = model.rental_fee;
-									equipmentRental.comment = model.comment
-									// Update flag
-									updated = true;
-								}
-							});
-							// Add a new equipment rental
-							if(!updated){
-								timesheet.equipment_rentals.push(model);
-							}							
+						});
+						// Add a new equipment rental
+						if(!updated){
+							timesheet.equipment_rentals.push(model);
 						}	
-
-						// If the model is an other cost
-						if(model.cost_name){
-							console.log(model);
-							// Flag which indicates whether the other cost has been added to cache
-							var updated = false;						
-							// Iterate through other costs to determine if a cost should be updated or a new 
-							// job should be pushed to the collection
-							timesheet.other_costs.forEach(function(otherCost){
-								// Replace existing updated other cost
-								if(otherCost.id == model.id){
-									// Update other cost fields
-									otherCost.cost_name = model.cost_name;
-									otherCost.cost = model.cost;
-									otherCost.comment = model.comment
-									// Update flag
-									updated = true;
-								}
-							});
-							// Add a new other cost
-							if(!updated){
-								timesheet.other_costs.push(model);
-							}							
-						}												
-						
 					}
-				});
-									
-			});	
+				});	
+			});				
+
+			this.$router.app.$on('other-cost-created', model => {
+				// Cache context
+				var context = this;
+				// Iterate through all cached timesheets and execute 
+				this.searchResults.models.forEach(function(timesheet){
+					// When the timesheet id matches the models id
+					if(timesheet.id == model.timesheet_id){				
+						// Flag which indicates whether the other cost has been added to cache
+						var updated = false;						
+						// Iterate through other costs to determine if a cost should be updated or a new 
+						// job should be pushed to the collection
+						timesheet.other_costs.forEach(function(otherCost){
+							// Replace existing updated other cost
+							if(otherCost.id == model.id){
+								// Update other cost fields
+								otherCost.cost_name = model.cost_name;
+								otherCost.cost = model.cost;
+								otherCost.comment = model.comment
+								// Update flag
+								updated = true;
+							}
+						});
+						// Add a new other cost
+						if(!updated){
+							timesheet.other_costs.push(model);
+						}	
+					}
+				});											
+			});
 
 			// When the form component alerts this parent of a successful create
 			// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-			this.$router.app.$on('child-deleted', model => {
+			this.$router.app.$on('work-job-deleted', model => {
 				// Iterate through all cached timesheets and execute 
 				this.searchResults.models.forEach(function(timesheet){
 					// When the timesheet id matches the models id
 					if(timesheet.id == model.timesheet_id){
+						// Flag which indicates whether the workjob has been added to cache
+						var updated = false;						
+						// Iterate through work jobs to determine if a job should be updated or a new 
+						// job should be pushed to the collection
+						timesheet.work_jobs.forEach(function(workjob){
+							// Replace existing updated work job
+							if(workjob.id == model.id){
+								var index = timesheet.work_jobs.indexOf(workjob); 
+								timesheet.work_jobs.splice(index, 1);
+							}
+						});
+					}
+				});										
+			});
 
-						// If the model is a work job
-						if(model.job_type){
-							// Flag which indicates whether the workjob has been added to cache
-							var updated = false;						
-							// Iterate through work jobs to determine if a job should be updated or a new 
-							// job should be pushed to the collection
-							timesheet.work_jobs.forEach(function(workjob){
-								// Replace existing updated work job
-								if(workjob.id == model.id){
-									var index = timesheet.work_jobs.indexOf(workjob); 
-									timesheet.work_jobs.splice(index, 1);
-								}
-							});
-						}
+			// When the form component alerts this parent of a successful create
+			// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+			this.$router.app.$on('travel-job-deleted', model => {
+				// Iterate through all cached timesheets and execute 
+				this.searchResults.models.forEach(function(timesheet){
+					// When the timesheet id matches the models id
+					if(timesheet.id == model.timesheet_id){
+						// Flag which indicates whether the workjob has been added to cache
+						var updated = false;						
+						// Iterate through work jobs to determine if a job should be updated or a new 
+						// job should be pushed to the collection
+						timesheet.travel_jobs.forEach(function(travelJob){
+							// Replace existing updated travel job
+							if(travelJob.id == model.id){
+								var index = timesheet.travel_jobs.indexOf(travelJob); 
+								timesheet.travel_jobs.splice(index, 1);
+							}
+						});
+					}
+				});										
+			});
 
-						// If the model is a travel job
-						if(model.travel_distance){
-							// Flag which indicates whether the travel job has been added to cache
-							var updated = false;						
-							// Iterate through travel jobs to determine if a job should be updated or a new 
-							// job should be pushed to the collection
-							timesheet.travel_jobs.forEach(function(travelJob){
-								// Replace existing updated travel job
-								if(travelJob.id == model.id){
-									var index = timesheet.travel_jobs.indexOf(travelJob); 
-									timesheet.travel_jobs.splice(index, 1);
-								}
-							});
-						}
+			// When the form component alerts this parent of a successful create
+			// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+			this.$router.app.$on('equipment-rental-deleted', model => {
+				// Iterate through all cached timesheets and execute 
+				this.searchResults.models.forEach(function(timesheet){
+					// When the timesheet id matches the models id
+					if(timesheet.id == model.timesheet_id){
+						// Flag which indicates whether the workjob has been added to cache
+						var updated = false;						
+						// Iterate through work jobs to determine if a job should be updated or a new 
+						// job should be pushed to the collection
+						timesheet.equipment_rentals.forEach(function(equipmentRental){
+							// Replace existing updated equipment rental
+							if(equipmentRental.id == model.id){
+								var index = timesheet.equipment_rentals.indexOf(equipmentRental); 
+								timesheet.equipment_rentals.splice(index, 1);
+							}
+						});
+					}
+				});										
+			});
 
-						// If the model is an equipment rental
-						if(model.equipment_type){
-							// Flag which indicates whether the equipment rental has been added to cache
-							var updated = false;						
-							// Iterate through equipment rental to determine if a rental should be updated or a new 
-							// job should be pushed to the collection
-							timesheet.equipment_rentals.forEach(function(equipmentRental){
-								// Replace existing updated equipment rental
-								if(equipmentRental.id == model.id){
-									var index = timesheet.equipment_rentals.indexOf(equipmentRental); 
-									timesheet.equipment_rentals.splice(index, 1);
-								}
-							});
-						}
-
-						// If the model is an other cost
-						if(model.cost_name){
-							// Flag which indicates whether the other cost has been added to cache
-							var updated = false;						
-							// Iterate through other costs to determine if a cost should be updated or a new 
-							// job should be pushed to the collection
+			// When the form component alerts this parent of a successful create
+			// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+			this.$router.app.$on('other-cost-deleted', model => {
+				// Iterate through all cached timesheets and execute 
+				this.searchResults.models.forEach(function(timesheet){
+					// When the timesheet id matches the models id
+					if(timesheet.id == model.timesheet_id){
+						// Flag which indicates whether the workjob has been added to cache
+						var updated = false;						
+						// Iterate through work jobs to determine if a job should be updated or a new 
+						// job should be pushed to the collection
 							timesheet.other_costs.forEach(function(otherCost){
 								// Replace existing updated other cost
 								if(otherCost.id == model.id){
 									var index = timesheet.other_costs.indexOf(otherCost); 
 									timesheet.other_costs.splice(index, 1);
 								}
-							});
-						}																		
-						
+							})
 					}
 				});										
 			});							

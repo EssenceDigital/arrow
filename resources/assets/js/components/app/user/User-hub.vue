@@ -41,7 +41,7 @@
 			}
 
 			// When the form component alerts this parent of a successful updated
-			this.$router.app.$on('model-updated', model => {
+			this.$router.app.$on('user-updated', model => {
 				// Update cached model
 				this.user = model;			
 			});	

@@ -77,37 +77,29 @@
 				});
 			}
 
-			// When the form component alerts this parent of a successful update
-			this.$router.app.$on('model-updated', model => {
-				// Update project if the model is a project
-				if(model.province){
-					// Update cached model
-					this.project = model;
-				}
-
-				// Update timeline if the model is a timeline
-				if(model.permit_application_date){
-					this.project.timeline = model;	
-				}							
+			// When the form component alerts this parent of a project update
+			this.$router.app.$on('project-updated', model => {
+				// Update cached model
+				this.project = model;							
 			});	
 
-			// When this parent is alerted a foreign key model has been created
-			this.$router.app.$on('child-created', model => {
-				// Update model timeline
-				if(model.permit_application_date){
-					this.project.timeline = model;	
-				}
-				// Update model crew
-				if(model.first){
-					this.project.users.push(model);
-				}
-				// Update model comments
-				if(model.comment){
-					this.project.comments.push(model);
-				}						
-			});
+			/* Timeline related events
+			*/
+			this.$router.app.$on('timeline-created', model => {
+				// Update cached model
+				this.project.timeline = model;			
+			});	
+			this.$router.app.$on('timeline-updated', model => {
+				// Update cached model
+				this.project.timeline = model;			
+			});	
 
-			// When this parent is alerted a crew member has been removed
+			/* Crew related events
+			*/
+			this.$router.app.$on('crew-created', model => {
+				// Update cached model
+				this.project.users.push(model);		
+			});		
 			this.$router.app.$on('crew-removed', user_id => {
 				var context = this;
 				// Find the crew member in the model and remove it
@@ -119,7 +111,12 @@
 				});
 			});	
 
-			// When this parent is alreted a comment has been removed
+			/* Comment related events
+			*/
+			this.$router.app.$on('comment-created', model => {
+				// Update cached model
+				this.project.comments.push(model);	
+			});
 			this.$router.app.$on('comment-removed', comment_id => {
 				var context = this;
 				// Find the comment in the model and remove it

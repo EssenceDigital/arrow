@@ -99,12 +99,15 @@
 				isDeleting: false,					
 				form: {
 					model: 'OtherCost',
-					state: 'create-child',
+					state: 'create',
 					title: 'Add Other Cost',
 					button: 'Add',
 					action: '/api/other-costs/create',
 					createAction: '/api/other-costs/create',
 					updateAction: '/api/other-costs/update',
+					createEvent: 'other-cost-created',
+					updateEvent: 'other-cost-created',	
+					deleteEvent: 'other-cost-deleted',				
 					isLoading: false,					
 					successMsg: 'Other cost added',
 					fields: {
@@ -138,7 +141,7 @@
 				// Populate form
 				this.populateFormFromModel(this.other_cost);
 				// Adjust form state
-				this.formEditState('edit-child');
+				this.formEditState('edit');
 				// Hide form loader
 				this.formIsLoading = false;						
 			}

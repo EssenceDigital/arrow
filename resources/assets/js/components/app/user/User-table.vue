@@ -427,6 +427,9 @@
 					hourly_rate_one: false,
 					hourly_rate_two: false,
 					gst_number: false						
+				},
+				form: {
+					updateEvent: 'user-updated'
 				}				
 			}
 		},

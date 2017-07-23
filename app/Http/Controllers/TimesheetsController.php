@@ -76,7 +76,7 @@ class TimesheetsController extends Controller
      */
     public function update(Request $request)
     {   
-        $timesheet = Timesheet::findOrFail($request->id);
+        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->find($request->id);
 
         // Return failed response if collection empty
         if(! $timesheet){
