@@ -17,7 +17,7 @@ class CreateWorkJobsTable extends Migration
             $table->increments('id');
             // Foreign key for timesheet
             $table->integer('timesheet_id')->unsigned();
-            $table->foreign('timesheet_id')->references('id')->on('timesheets');
+            $table->foreign('timesheet_id')->references('id')->on('timesheets')->onDelete('cascade');;
             // Fields
             $table->string('job_type', 75);
             $table->decimal('hours_worked', 13, 2)->default(0);

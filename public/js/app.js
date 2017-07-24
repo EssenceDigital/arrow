@@ -17163,6 +17163,7 @@ var dropdown = __webpack_require__(3);
 	data: function data() {
 		return {
 			fullTable: false,
+			userTableIntro: true,
 			// Used by API access. Set in the created method
 			urlToFetch: '',
 			// Used by API access
@@ -17226,6 +17227,17 @@ var dropdown = __webpack_require__(3);
 			this.urlToFetch = '/api/dashboard/users-projects';
 		}
 
+		// If a param called id in the route then the component is likely mounted from the users/view/{id}/hub route
+		// so check for that
+		if (this.$route.params.id) {
+			if (this.$route.path == '/users/view/' + this.$route.params.id + '/hub') {
+				this.fullTable = false;
+				this.userTableIntro = false;
+				this.urlToFetch = '/api/users/' + this.$route.params.id + '/projects';
+			}
+		}
+
+		console.log(this.urlToFetch);
 		// Start loader
 		this.fetchingModels = true;
 		// Find projects
@@ -20217,7 +20229,9 @@ var modal = __webpack_require__(5);
 		sendForm: function sendForm() {
 			this.createOrUpdate();
 		},
-		deleteTimesheet: function deleteTimesheet() {}
+		deleteTimesheet: function deleteTimesheet() {
+			this.deleteChild(this.timesheet_id);
+		}
 	},
 
 	created: function created() {
@@ -20242,6 +20256,9 @@ var modal = __webpack_require__(5);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
 //
 //
 //
@@ -20920,6 +20937,23 @@ var timesheet_form = __webpack_require__(89);
 			model.other_costs = [];
 			_this.searchResults.models.unshift(model);
 			_this.modalActive = false;
+		});
+
+		this.$router.app.$on('timesheet-deleted', function (model) {
+			// Cache context
+			var context = _this;
+			console.log(model);
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.id) {
+					var index = context.searchResults.models.indexOf(timesheet);
+					context.searchResults.models.splice(index, 1);
+
+					context.currentModal = '';
+					context.modalActive = false;
+				}
+			});
 		});
 
 		this.$router.app.$on('work-job-created', function (model) {
@@ -22002,15 +22036,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var api_access = __webpack_require__(1);
-var dropdown = __webpack_require__(3);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		'dropdown': dropdown
-	},
 
 	mixins: [api_access],
 
@@ -22747,10 +22795,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(1);
+var project_search = __webpack_require__(82);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'project-search': project_search
+	},
+
 	props: ['user'],
 
 	mixins: [api_access],
@@ -45221,7 +45292,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
-  })]) : _vm._e()])])])])])])])])])]) : _vm._e()])
+  })]) : _vm._e()])])])])])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-45-top"
+  }, [_c('h2', [_vm._v("Projects " + _vm._s(_vm.user.first) + "'s Involved In")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\tThis is where you can keep track of " + _vm._s(_vm.user.first) + "'s timesheets.\r\n\t\t\t")]), _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\tUse the view button on each project row to view " + _vm._s(_vm.user.first) + "'s timesheets for that project.\r\n\t\t\t")]), _vm._v(" "), _c('project-search')], 1)]) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row row-padded"
@@ -45231,7 +45310,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row row-padded"
-  }, [_c('h2', [_vm._v("User Details")])])
+  }, [_c('h2', [_vm._v("User Details")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\tThis is where you can edit the user you've selected.\r\n\t\t\t")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\tTo change a users password click the options button below.\r\n\t\t\t")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("First Name")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -47392,11 +47477,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-12"
-  }, [_c('strong', [_vm._v("Per Diem")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t$" + _vm._s(_vm.timesheet.per_diem) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c('div', {
+  }, [_c('strong', [_vm._v("Per Diem")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t$" + _vm._s(_vm.timesheet.per_diem) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]), _vm._v(" "), (_vm.timesheet.comment) ? _c('div', {
     staticClass: "row margin-20-top"
   }, [_c('div', {
     staticClass: "col-md-12"
-  }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(_vm.timesheet.comment) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])])]), _vm._v(" "), (_vm.timesheet.travel_jobs.length > 0) ? _c('li', {
+  }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(_vm.timesheet.comment) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]) : _vm._e()]), _vm._v(" "), (_vm.timesheet.travel_jobs.length > 0) ? _c('li', {
     staticClass: "list-group-item"
   }, [_vm._m(1)]) : _vm._e(), _vm._v(" "), _vm._l((_vm.timesheet.travel_jobs), function(travelJob) {
     return (_vm.timesheet.travel_jobs.length > 0) ? _c('li', {
@@ -47701,7 +47786,7 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "row margin-75-top"
+    staticClass: "row margin-95-top"
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('div', {
@@ -47735,7 +47820,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       'active': _vm.$route.path == ('/users/view/' + _vm.$route.params.id + '/edit')
     }
   }, [_c('a', [_vm._v("Editing User")])]) : _vm._e()]), _vm._v(" "), _c('div', {
-    staticClass: "row margin-45-top"
+    staticClass: "row margin-25-top"
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('router-view')], 1)])])])])])
@@ -47926,7 +48011,7 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.fetchingModels) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [(!_vm.fullTable) ? _c('div', [_c('div', {
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [(!_vm.fullTable && _vm.userTableIntro) ? _c('div', [_c('div', {
     staticClass: "row row-padded"
   }, [_c('h2', [_vm._v("Your Projects")]), _vm._v(" "), _c('p', {
     staticClass: "margin-25-top"
@@ -48027,7 +48112,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "margin-25-top text-info"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-question-sign"
-  }), _vm._v("\r\n\t\t\t\t\tUse the view button on each project row to view your timesheets for that project.\r\n\t\t\t\t")])
+  }), _vm._v("\r\n\t\t\t\t\tUse the view button on each project row to view your timesheets for that project or add new ones.\r\n\t\t\t\t")])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row row-padded"
@@ -48430,8 +48515,14 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('button', {
-    staticClass: "btn btn-default",
+  return _c('div', [(_vm.fetchingModels) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v("Find & Add Users")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\tThis is where you can find and sort all of the users added to the system. All individuals who will be creating timesheets must\r\n\t\t\tbe added as a user.\r\n\t\t")]), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm._m(2)]) : _vm._e(), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-default margin-35-top",
     on: {
       "click": _vm.refresh
     }
@@ -48439,27 +48530,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "glyphicon glyphicon-refresh"
   }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" \r\n\t\t\tRefresh list\r\n\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
     staticClass: "left-loader"
-  })]) : _vm._e()]), _vm._v(" "), (_vm.fetchingModels) ? _c('div', {
-    staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
+  })]) : _vm._e()]), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
     staticClass: "table table-striped table-hover margin-25-top"
-  }, [_vm._m(1), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(user) {
+  }, [_vm._m(3), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(user) {
     return _c('tr', {
       attrs: {
         "user": user
       }
-    }, [_c('td', [_vm._v(_vm._s(user.first + ' ' + user.last))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.email))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.permissions))]), _vm._v(" "), _c('td', [_c('dropdown', {
-      attrs: {
-        "title": 'Actions'
-      }
-    }, [_c('li', [_c('a', {
+    }, [_c('td', [_vm._v(_vm._s(user.first + ' ' + user.last))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.email))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.permissions))]), _vm._v(" "), _c('td', [_c('button', {
+      staticClass: "btn btn-sm btn-success",
       on: {
         "click": function($event) {
           _vm.viewUser(user.id)
         }
       }
-    }, [_vm._v("View full")])])])], 1)])
-  }))]) : _vm._e(), _vm._v(" "), _c('div', {
+    }, [_c('span', {
+      staticClass: "glyphicon glyphicon-screenshot"
+    }), _vm._v(" View\r\n\t\t\t    \t")])])])
+  }))]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', {
     staticClass: "row text-center margin-45-top"
   }, [_c('ul', {
     staticClass: "pagination"
@@ -48495,13 +48583,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.getSpecificUsersPage(_vm.searchResults.modelsNextPageUrl)
       }
     }
-  }, [_vm._v("»")])])], 2)])])
+  }, [_vm._v("»")])])], 2)]) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-12"
   }, [_c('div', {
     staticClass: "large-center-loader"
   })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\tUse the view button on each user row to view and edit that user.\r\n\t\t")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\tYou can add a new user using the 'Create User' link above.\r\n\t\t")])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', {
     staticClass: "info"

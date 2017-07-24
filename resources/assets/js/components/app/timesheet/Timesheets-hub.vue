@@ -197,6 +197,24 @@
 				this.modalActive = false;						
 			});	
 
+
+			this.$router.app.$on('timesheet-deleted', model => {
+				// Cache context
+				var context = this;				
+				console.log(model);
+				// Iterate through all cached timesheets and execute 
+				this.searchResults.models.forEach(function(timesheet){
+					// When the timesheet id matches the models id
+					if(timesheet.id == model.id){						
+						var index = context.searchResults.models.indexOf(timesheet); 
+						context.searchResults.models.splice(index, 1);
+
+						context.currentModal = '';
+						context.modalActive = false;
+					}
+				});										
+			});
+
 			this.$router.app.$on('work-job-created', model => {
 				// Cache context
 				var context = this;

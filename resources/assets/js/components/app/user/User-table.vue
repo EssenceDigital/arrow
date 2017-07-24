@@ -12,6 +12,13 @@
 	<div v-if="!isLoading">
 		<div class="row row-padded">
 			<h2>User Details</h2>
+			<p class="margin-25-top">
+				This is where you can edit the user you've selected.
+			</p>	
+			<p class="margin-25-top text-info">
+				<span class="glyphicon glyphicon-question-sign"></span>
+				To change a users password click the options button below.
+			</p>			
 		</div>
 
 		<!-- Tool navigation -->
@@ -390,6 +397,17 @@
 			</div><!-- / Field column -->
 
 		</div><!-- / User business row -->
+
+		<div class="row row-padded margin-45-top">
+			<h2>Projects {{ user.first }}'s Involved In</h2>
+			<p class="margin-25-top">
+				This is where you can keep track of {{ user.first }}'s timesheets.
+			<p class="margin-25-top text-info">
+				<span class="glyphicon glyphicon-question-sign"></span>
+				Use the view button on each project row to view {{ user.first }}'s timesheets for that project.
+			</p>		
+			<project-search></project-search>
+		</div>
 	</div><!-- Table wrapper -->
 </div><!-- / Containing div -->
 
@@ -397,8 +415,14 @@
 
 <script>
 	let api_access = require('./../_mixins/api-access.js');
+	let project_search = require('./../project/Project-search.vue');
+
 
 	export default{
+		components: {
+			'project-search': project_search
+		},
+
 		props: ['user'],
 
 		mixins: [api_access],

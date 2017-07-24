@@ -1,7 +1,7 @@
 <template>
 
 <!-- Containing row -->
-<div class="row margin-75-top">
+<div class="row margin-95-top">
 	<div class="col-md-12">
 
 		<!-- Panel -->
@@ -35,7 +35,7 @@
 				</ul>		    	
 
 				<!-- Tabs are here -->
-				<div class="row margin-45-top">
+				<div class="row margin-25-top">
 
 					<div class="col-md-12">
 						<!-- Show tab component -->

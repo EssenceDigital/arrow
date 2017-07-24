@@ -12,7 +12,7 @@
 
 	<div v-if="!fetchingModels">
 		<!-- Show the user only intro -->
-		<div v-if="!fullTable">
+		<div v-if="!fullTable && userTableIntro">
 			<div class="row row-padded">
 				<h2>Your Projects</h2>
 				<p class="margin-25-top">
@@ -20,7 +20,7 @@
 				</p>
 				<p class="margin-25-top text-info">
 					<span class="glyphicon glyphicon-question-sign"></span>
-					Use the view button on each project row to view your timesheets for that project.
+					Use the view button on each project row to view your timesheets for that project or add new ones.
 				</p>
 				<p class="margin-25-top">
 					<h4>
@@ -205,6 +205,7 @@
 		data(){
 			return{
 				fullTable: false,
+				userTableIntro: true,
 				// Used by API access. Set in the created method
 				urlToFetch: '',
 				// Used by API access
@@ -262,8 +263,20 @@
 			} else if(this.$route.path == '/dashboard/projects'){
 				this.fullTable = false;
 				this.urlToFetch = '/api/dashboard/users-projects';
+			} 
+
+			// If a param called id in the route then the component is likely mounted from the users/view/{id}/hub route
+			// so check for that
+			if(this.$route.params.id){
+				if(this.$route.path == '/users/view/'+this.$route.params.id+'/hub'){
+					this.fullTable = false;
+					this.userTableIntro = false;
+					this.urlToFetch = '/api/users/'+this.$route.params.id+'/projects';
+				}
 			}
 
+
+			console.log(this.urlToFetch);
 			// Start loader
 			this.fetchingModels = true;
 			// Find projects

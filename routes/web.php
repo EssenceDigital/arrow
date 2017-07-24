@@ -37,6 +37,7 @@ Route::get('/api/dashboard/project-timesheets/{projectId}', 'DashboardController
 Route::post('/api/timesheets/create', 'TimesheetsController@store');
 Route::post('/api/timesheets/update', 'TimesheetsController@update');
 Route::get('/api/timesheets/{id}', 'TimesheetsController@single');
+Route::post('/api/timesheets/delete', 'TimesheetsController@delete');
 // Work Jobs
 Route::post('/api/work-jobs/create', 'WorkJobsController@store');
 Route::post('/api/work-jobs/update', 'WorkJobsController@update');
@@ -80,6 +81,7 @@ Route::get('/api/users', 'UsersController@hub');
 Route::get('/api/users/all', 'UsersController@all');
 Route::get('/api/users/all-pages', 'UsersController@allPages');
 Route::get('/api/users/{id}', 'UsersController@single');
+Route::get('/api/users/{id}/projects', 'UsersController@projects');
 Route::post('/api/users/create', 'UsersController@store');
 Route::post('/api/users/update', 'UsersController@update');
 Route::post('/api/users/update-field', 'UsersController@updateField');

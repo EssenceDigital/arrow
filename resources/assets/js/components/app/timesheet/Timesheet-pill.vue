@@ -51,7 +51,10 @@
 								${{ timesheet.per_diem }}								
 							</div>							
 						</div>
-						<div class="row margin-20-top">
+						<div 
+							v-if="timesheet.comment"
+							class="row margin-20-top"
+						>
 							<div class="col-md-12">
 								<strong>Comment</strong><br>
 								{{ timesheet.comment }}								

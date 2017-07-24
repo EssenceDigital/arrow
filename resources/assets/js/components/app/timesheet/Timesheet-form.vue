@@ -141,7 +141,7 @@
 			},
 
 			deleteTimesheet(){
-
+				this.deleteChild(this.timesheet_id)
 			}
 		},
 

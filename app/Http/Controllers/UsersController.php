@@ -107,6 +107,25 @@ class UsersController extends Controller
         ], 200);        
     }
 
+    public function projects($id){
+        // Get logged in user
+        $user = User::with('projects', 'projects.timesheets')->find($id);    
+        
+        // Return failed response if collection empty
+        if(! $user){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false,
+            ], 404);
+        }   
+        
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'models' => $user->projects
+        ], 200);         
+    }
+
     /**
      * Store a newly created resource in storage.
      *

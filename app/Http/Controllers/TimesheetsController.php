@@ -106,6 +106,35 @@ class TimesheetsController extends Controller
             'model' => $timesheet
         ], 200);
 
-    }    
+    } 
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Request $request)
+    {
+        // Find user or throw 404 :)
+        $timesheet = Timesheet::find($request->id);
+        $return = $timesheet;
+
+        // Attempt to remove 
+        $result = $timesheet->delete();
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        // Return successful response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'model' => $return
+        ], 200);
+    }       
 
 }

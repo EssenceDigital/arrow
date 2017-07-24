@@ -17,7 +17,7 @@ class CreateTravelJobsTable extends Migration
             $table->increments('id');
             // Foreign key for timesheet
             $table->integer('timesheet_id')->unsigned();
-            $table->foreign('timesheet_id')->references('id')->on('timesheets');
+            $table->foreign('timesheet_id')->references('id')->on('timesheets')->onDelete('cascade');
             // Fields
             $table->integer('travel_distance');
             $table->decimal('travel_time', 13, 1)->default(0);

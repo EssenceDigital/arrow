@@ -17,7 +17,7 @@ class CreateEquipmentRentalsTable extends Migration
             $table->increments('id');
             // Foreign key for timesheet
             $table->integer('timesheet_id')->unsigned();
-            $table->foreign('timesheet_id')->references('id')->on('timesheets');
+            $table->foreign('timesheet_id')->references('id')->on('timesheets')->onDelete('cascade');;
             // Fields
             $table->string('equipment_type', 75);
             $table->decimal('rental_fee', 13, 2)->default(0);
