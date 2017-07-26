@@ -12,7 +12,7 @@
 
 	<div v-if="!fetchingModels">
 		<!-- Show the user only intro -->
-		<div v-if="!fullTable && userTableIntro">
+		<div v-if="tableState == 'user'">
 			<div class="row row-padded">
 				<h2>Your Projects</h2>
 				<p class="margin-25-top">
@@ -31,7 +31,7 @@
 		</div>
 
 		<!-- Show the admin only intro -->
-		<div v-if="fullTable">
+		<div v-if="tableState == 'admin'">
 			<div class="row row-padded">
 				<h2>Find &amp; Add Projects</h2>
 				<p class="margin-25-top">
@@ -46,7 +46,19 @@
 					You can add a new project using the 'Create Project' link above.
 				</p>								
 			</div>			
-		</div>		
+		</div>	
+
+
+		<div v-if="tableState == 'adminUser'" class="row row-padded margin-25-top">
+			<h2>Projects {{ user.first }}'s Involved In</h2>
+			<p class="margin-25-top">
+				This is where you can keep track of {{ user.first }}'s timesheets.
+			<p class="margin-25-top text-info">
+				<span class="glyphicon glyphicon-question-sign"></span>
+				Use the view button on each project row to view {{ user.first }}'s timesheets for that project.
+			</p>
+		</div>
+
 	</div>
 
 	<!-- Refresh models from server button -->
@@ -69,30 +81,30 @@
 		<thead>
 			<tr class="info">
 				<!-- Admin viewing only headers -->
-				<th v-if="fullTable">
+				<th v-if="tableState == 'admin'">
 					Client Company
 				</th>
-				<th v-if="fullTable">
+				<th v-if="tableState == 'admin'">
 					Contact Name
 				</th>
-				<th v-if="fullTable">
+				<th v-if="tableState == 'admin'">
 					Contact Phone
 				</th>
-				<th v-if="fullTable">
+				<th v-if="tableState == 'admin'">
 					Invoice Paid
 				</th><!-- / Admin viewing only headers -->
 
 				<!-- User viewing only headers -->
-				<th v-if="!fullTable">
+				<th v-if="tableState=='user' || tableState =='adminUser'">
 					Identifier
 				</th>				
-				<th v-if="!fullTable">
+				<th v-if="tableState=='user' || tableState =='adminUser'">
 					Province
 				</th>
-				<th v-if="!fullTable">
+				<th v-if="tableState=='user' || tableState =='adminUser'">
 					Location
 				</th>
-				<th v-if="!fullTable">
+				<th v-if="tableState=='user' || tableState =='adminUser'">
 					Timesheets
 				</th>
 
@@ -108,36 +120,36 @@
 		    	:project="project"
 		    >
 		    	<!-- Admin viewing only fields -->
-			    <td v-if="fullTable">
+			    <td v-if="tableState == 'admin'">
 			    	{{ project.client_company_name }}
 			    </td>
-			    <td v-if="fullTable">
+			    <td v-if="tableState == 'admin'">
 			    	{{ project.client_contact_name }}
 			    </td>
-			    <td v-if="fullTable">
+			    <td v-if="tableState == 'admin'">
 			    	<a 
 			    		v-if="project.client_contact_phone"
 			    		:href="'tel: +1' + project.client_contact_phone.replace(/-/g, '')">
 			    		{{ project.client_contact_phone }}
 			    	</a>
 			    </td>
-			    <td v-if="fullTable">
+			    <td v-if="tableState == 'admin'">
 			    	<div v-if="project.invoiced_date == null" class="text-warning">
 			    		<span class="label label-warning">Not Invoiced</span>
 			    	</div>
 			    </td><!-- / Admin viewing only fields -->
 
 			    <!-- User viewing only fields -->
-			    <td v-if="!fullTable">
+			    <td v-if="tableState=='user' || tableState =='adminUser'">
 			    	{{ project.id }}
 			    </td>			    
-			    <td v-if="!fullTable">
+			    <td v-if="tableState=='user' || tableState =='adminUser'">
 			    	{{ project.province }}
 			    </td>
-			    <td v-if="!fullTable">
+			    <td v-if="tableState=='user' || tableState =='adminUser'">
 			    	{{ project.location }}
 			    </td>
-			    <td v-if="!fullTable">
+			    <td v-if="tableState=='user' || tableState =='adminUser'">
 			    	{{ project.timesheets.length }}
 			    </td>
 
@@ -145,7 +157,7 @@
 			    <td>
 			    	<!-- Admin viewing only button -->
 			    	<button
-			    		v-if="fullTable"
+			    		v-if="tableState == 'admin'"
 			    		@click="viewProject(project.id)" 
 			    		class="btn btn-sm btn-success"
 			    	>
@@ -154,7 +166,7 @@
 
 			    	<!-- User viewing only button -->
 			    	<button
-			    		v-if="!fullTable"
+			    		v-if="tableState=='user' || tableState =='adminUser'"
 			    		@click="viewTimesheets(project.id)" 
 			    		class="btn btn-sm btn-success"
 			    	>
@@ -200,12 +212,16 @@
 			'dropdown': dropdown
 		},
 
+		/* @param - user - Component can be mounted from the /users/view/{id}/hub route and it needs the user
+		*/
+		props: ['user'],
+
 		mixins: [api_access],		
 
 		data(){
 			return{
-				fullTable: false,
-				userTableIntro: true,
+				// The table can have three different states that alter the way it displays
+				tableState: '',
 				// Used by API access. Set in the created method
 				urlToFetch: '',
 				// Used by API access
@@ -244,7 +260,13 @@
 			 * Can only be called from the admin only button
 			*/ 
 			viewTimesheets(id){
-				this.$router.push('/dashboard/timesheets/' + id);
+				if(this.tableState == 'user'){
+					this.$router.push('/dashboard/projects/' + id + '/timesheets');
+				} else if(this.tableState == 'adminUser'){
+					if(this.user){
+						this.$router.push('/users/view/' + this.user.id + '/projects/' + id + '/timesheets');
+					}
+				}
 			}			
 		},
 
@@ -257,30 +279,41 @@
 			if(this.$route.path == '/projects/search'){
 				// Verify the current user is an admin for extra security
 				if(DASHBOARD_USER_PERMISSIONS == 'admin'){
-					this.fullTable = true;
+					this.tableState ='admin';
 					this.urlToFetch = '/api/projects/all';
+					// Start loader
+					this.fetchingModels = true;
+					// Find projects
+					this.getAndSetModels();					
 				}
 			} else if(this.$route.path == '/dashboard/projects'){
-				this.fullTable = false;
+				this.tableState = 'user';
 				this.urlToFetch = '/api/dashboard/users-projects';
+				// Start loader
+				this.fetchingModels = true;
+				// Find projects
+				this.getAndSetModels();				
 			} 
 
 			// If a param called id in the route then the component is likely mounted from the users/view/{id}/hub route
 			// so check for that
-			if(this.$route.params.id){
-				if(this.$route.path == '/users/view/'+this.$route.params.id+'/hub'){
-					this.fullTable = false;
-					this.userTableIntro = false;
-					this.urlToFetch = '/api/users/'+this.$route.params.id+'/projects';
+			if(this.user){
+				console.log(this.user)
+				if(this.$route.path == '/users/view/'+this.user.id+'/hub'){
+					console.log('route');
+					// Verify the current user is an admin for extra security
+					if(DASHBOARD_USER_PERMISSIONS == 'admin'){
+						this.tableState = 'adminUser';
+						this.urlToFetch = '/api/users/'+this.user.id+'/projects';
+						// Start loader
+						this.fetchingModels = true;
+						// Find projects
+						this.getAndSetModels();
+
+					}
 				}
 			}
 
-
-			console.log(this.urlToFetch);
-			// Start loader
-			this.fetchingModels = true;
-			// Find projects
-			this.getAndSetModels();
 		}
 	}
 </script>

@@ -787,19 +787,23 @@ module.exports = {
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
+
+/* styles */
+__webpack_require__(131)
+
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(38),
+  __webpack_require__(41),
   /* template */
-  __webpack_require__(126),
+  __webpack_require__(109),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Dropdown.vue"
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Modal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Dropdown.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -808,9 +812,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-f0b7e2bc", Component.options)
+    hotAPI.createRecord("data-v-48d780ec", Component.options)
   } else {
-    hotAPI.reload("data-v-f0b7e2bc", Component.options)
+    hotAPI.reload("data-v-48d780ec", Component.options)
   }
 })()}
 
@@ -1011,23 +1015,19 @@ process.umask = function() { return 0; };
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-
-/* styles */
-__webpack_require__(131)
-
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(39),
+  __webpack_require__(40),
   /* template */
-  __webpack_require__(109),
+  __webpack_require__(126),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Modal.vue"
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\_ui\\Dropdown.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] Dropdown.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -1036,9 +1036,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-48d780ec", Component.options)
+    hotAPI.createRecord("data-v-f0b7e2bc", Component.options)
   } else {
-    hotAPI.reload("data-v-48d780ec", Component.options)
+    hotAPI.reload("data-v-f0b7e2bc", Component.options)
   }
 })()}
 
@@ -1053,7 +1053,7 @@ module.exports = Component.exports
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(2);
-var normalizeHeaderName = __webpack_require__(34);
+var normalizeHeaderName = __webpack_require__(36);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 var DEFAULT_CONTENT_TYPE = {
@@ -1154,12 +1154,12 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(2);
-var settle = __webpack_require__(26);
-var buildURL = __webpack_require__(29);
-var parseHeaders = __webpack_require__(35);
-var isURLSameOrigin = __webpack_require__(33);
+var settle = __webpack_require__(28);
+var buildURL = __webpack_require__(31);
+var parseHeaders = __webpack_require__(37);
+var isURLSameOrigin = __webpack_require__(35);
 var createError = __webpack_require__(10);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(28);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(30);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -1255,7 +1255,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(31);
+      var cookies = __webpack_require__(33);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -1376,7 +1376,7 @@ module.exports = function isCancel(value) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(25);
+var enhanceError = __webpack_require__(27);
 
 /**
  * Create an Error with the specified message, config, error code, and response.
@@ -11729,6 +11729,74 @@ return jQuery;
 
 /***/ }),
 /* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(51),
+  /* template */
+  __webpack_require__(119),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\project\\Project-search.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-search.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-99e91df2", Component.options)
+  } else {
+    hotAPI.reload("data-v-99e91df2", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(58),
+  /* template */
+  __webpack_require__(120),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheet-form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Timesheet-form.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-a6dc0f9e", Component.options)
+  } else {
+    hotAPI.reload("data-v-a6dc0f9e", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14201,7 +14269,7 @@ if (inBrowser && window.Vue) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14422,7 +14490,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports) {
 
 var g;
@@ -14449,12 +14517,12 @@ module.exports = g;
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(16);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -14462,21 +14530,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(67);
+__webpack_require__(69);
 
 window.Vue = __webpack_require__(133);
-window.VueRouter = __webpack_require__(14);
+window.VueRouter = __webpack_require__(16);
 // Add router to vue
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["default"]);
 
 /**
  * Components
  */
-var app_hub = __webpack_require__(72);
+var app_hub = __webpack_require__(74);
 
 // Dashboard related components
-var dashboard_hub = __webpack_require__(78);
-var dashboard_projects = __webpack_require__(79);
+var dashboard_hub = __webpack_require__(80);
+var dashboard_projects = __webpack_require__(81);
 
 // Timesheet related components
 var timesheets_hub = __webpack_require__(91);
@@ -14490,22 +14558,22 @@ var user_search = __webpack_require__(96);
 var user_settings = __webpack_require__(97);
 
 // Project related components
-var projects_hub = __webpack_require__(84);
-var project_hub = __webpack_require__(81);
-var project_table = __webpack_require__(83);
-var project_form = __webpack_require__(80);
-var project_search = __webpack_require__(82);
+var projects_hub = __webpack_require__(85);
+var project_hub = __webpack_require__(83);
+var project_table = __webpack_require__(84);
+var project_form = __webpack_require__(82);
+var project_search = __webpack_require__(14);
 
 // Crew related components
-var crew_list = __webpack_require__(77);
-var crew_form = __webpack_require__(76);
+var crew_list = __webpack_require__(79);
+var crew_form = __webpack_require__(78);
 
 // Timeline related components
-var timeline_form = __webpack_require__(85);
-var timeline_table = __webpack_require__(86);
+var timeline_form = __webpack_require__(86);
+var timeline_table = __webpack_require__(87);
 
 // UI components
-var navbar = __webpack_require__(73);
+var navbar = __webpack_require__(75);
 
 Vue.component('app-hub', app_hub);
 Vue.component('navbar', navbar);
@@ -14519,8 +14587,9 @@ var routes = [{
 		path: 'projects',
 		component: project_search
 	}, {
-		path: 'timesheets/:project_id',
-		component: timesheets_hub
+		path: 'projects/:project_id/timesheets',
+		component: timesheets_hub,
+		props: true
 	}]
 },
 // Project related routes
@@ -14528,8 +14597,9 @@ var routes = [{
 	path: '/projects',
 	component: projects_hub,
 	children: [{ path: 'search', component: project_search }, {
-		path: 'view/:id',
+		path: 'view/:project_id',
 		component: project_hub,
+		props: true,
 		children: [{
 			path: 'hub',
 			components: {
@@ -14566,13 +14636,17 @@ var routes = [{
 	path: '/users',
 	component: users_hub,
 	children: [{ path: 'search', component: user_search }, {
-		path: 'view/:id',
+		path: 'view/:user_id',
 		component: user_hub,
+		props: true,
 		children: [{
 			path: 'hub',
-			components: {
-				user: user_table
-			}
+			component: user_table,
+			props: true
+		}, {
+			path: 'projects/:project_id/timesheets',
+			component: timesheets_hub,
+			props: true
 		}, {
 			path: 'options',
 			components: {
@@ -14595,19 +14669,19 @@ var app = new Vue({
 }).$mount('#app');
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(20);
+module.exports = __webpack_require__(22);
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14615,7 +14689,7 @@ module.exports = __webpack_require__(20);
 
 var utils = __webpack_require__(2);
 var bind = __webpack_require__(11);
-var Axios = __webpack_require__(22);
+var Axios = __webpack_require__(24);
 var defaults = __webpack_require__(6);
 
 /**
@@ -14650,14 +14724,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(8);
-axios.CancelToken = __webpack_require__(21);
+axios.CancelToken = __webpack_require__(23);
 axios.isCancel = __webpack_require__(9);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(36);
+axios.spread = __webpack_require__(38);
 
 module.exports = axios;
 
@@ -14666,7 +14740,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14730,7 +14804,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14738,10 +14812,10 @@ module.exports = CancelToken;
 
 var defaults = __webpack_require__(6);
 var utils = __webpack_require__(2);
-var InterceptorManager = __webpack_require__(23);
-var dispatchRequest = __webpack_require__(24);
-var isAbsoluteURL = __webpack_require__(32);
-var combineURLs = __webpack_require__(30);
+var InterceptorManager = __webpack_require__(25);
+var dispatchRequest = __webpack_require__(26);
+var isAbsoluteURL = __webpack_require__(34);
+var combineURLs = __webpack_require__(32);
 
 /**
  * Create a new instance of Axios
@@ -14822,7 +14896,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14881,14 +14955,14 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(2);
-var transformData = __webpack_require__(27);
+var transformData = __webpack_require__(29);
 var isCancel = __webpack_require__(9);
 var defaults = __webpack_require__(6);
 
@@ -14967,7 +15041,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14993,7 +15067,7 @@ module.exports = function enhanceError(error, config, code, response) {
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15025,7 +15099,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15052,7 +15126,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15095,7 +15169,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15170,7 +15244,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15189,7 +15263,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15249,7 +15323,7 @@ module.exports = (
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15270,7 +15344,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15345,7 +15419,7 @@ module.exports = (
 
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15364,7 +15438,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15408,7 +15482,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15442,7 +15516,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports) {
 
 //
@@ -15472,9 +15546,12 @@ module.exports = function spread(callback) {
 //
 //
 //
+//
+//
+//
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15506,7 +15583,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15545,7 +15622,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15598,7 +15675,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var dropdown = __webpack_require__(3);
+var dropdown = __webpack_require__(5);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
@@ -15615,7 +15692,7 @@ var dropdown = __webpack_require__(3);
 });
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15699,7 +15776,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15741,7 +15818,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var dropdown = __webpack_require__(3);
+var dropdown = __webpack_require__(5);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -15792,7 +15869,7 @@ var dropdown = __webpack_require__(3);
 });
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15945,7 +16022,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16047,7 +16124,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports) {
 
 //
@@ -16103,7 +16180,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16218,7 +16295,7 @@ var api_access = __webpack_require__(1);
 			this.getAndSetModels(link);
 		},
 		viewTimesheets: function viewTimesheets(id) {
-			this.$router.push('/dashboard/timesheets/' + id);
+			this.$router.push('/dashboard/projects/' + id + '/timesheets');
 		}
 	},
 
@@ -16228,725 +16305,6 @@ var api_access = __webpack_require__(1);
 		// Find projects
 		this.getAndSetModels();
 		console.log(this.searchResults.models);
-	}
-});
-
-/***/ }),
-/* 47 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var api_access = __webpack_require__(1);
-var modal = __webpack_require__(5);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		'modal': modal
-	},
-
-	mixins: [api_access],
-
-	data: function data() {
-		return {
-			formIsLoading: false,
-			modalActive: false,
-			urlToDelete: '/api/projects/delete',
-			isDeleting: false,
-			clients: [],
-			client_company_name: '',
-			disableClientCompanyInput: false,
-			firstContactChecked: false,
-			accessContactChecked: false,
-			form: {
-				model: 'Project',
-				state: 'create',
-				title: 'Start Project',
-				button: 'Begin',
-				action: '/api/projects/create',
-				createAction: '/api/projects/create',
-				updateAction: '/api/projects/update',
-				createEvent: 'project-created',
-				updateEvent: 'project-updated',
-				deleteEvent: 'project-deleted',
-				isLoading: false,
-				successMsg: 'Project has been saved',
-				fields: {
-					id: { val: '', err: false, dflt: '' },
-					province: { val: '', err: false, dflt: '' },
-					location: { val: '', err: false, dflt: '' },
-					details: { val: '', err: false, dflt: '' },
-					client_company_name: { val: '', err: false, dflt: '' },
-					client_contact_name: { val: '', err: false, dflt: '' },
-					client_contact_phone: { val: '', err: false, dflt: '' },
-					client_contact_email: { val: '', err: false, dflt: '' },
-					first_contact_by: { val: '', err: false, dflt: '' },
-					first_contact_date: { val: '', err: false, dflt: '' },
-					land_ownership: { val: '', err: false, dflt: '' },
-					land_access_granted: { val: 0, err: false, dflt: 0 },
-					land_access_granted_by: { val: '', err: false, dflt: '' },
-					land_access_contact: { val: '', err: false, dflt: '' },
-					land_access_phone: { val: '', err: false, dflt: '' },
-					invoiced_date: { val: '', err: false, dflt: '' },
-					invoice_paid_date: { val: '', err: false, dflt: '' },
-					// "Proposal" related fields
-					plans: { val: '', err: false, dflt: '' },
-					work_type: { val: '', err: false, dflt: '' },
-					work_overview: { val: '', err: false, dflt: '' },
-					response_by: { val: '', err: false, dflt: '' },
-					estimate: { val: '0.00', err: false, dflt: '0.00' },
-					approval_date: { val: '', err: false, dflt: '' },
-					// Timeline 
-					timeline: { val: '', err: false, dflt: '' }
-				}
-			}
-		};
-	},
-
-
-	watch: {
-		// For the dual client company input setup. If a select option is selected then
-		// set the selected value to the form property and disable the text input. 
-		client_company_name: function client_company_name(value) {
-			// If a value is present
-			if (value != '') {
-				this.form.fields.client_company_name.val = value;
-				this.disableClientCompanyInput = true;
-			} else {
-				// If empty string then enable text input again
-				this.disableClientCompanyInput = false;
-			}
-		},
-
-
-		// When the value changes (checkbox) adjust values
-		firstContactChecked: function firstContactChecked(value) {
-			if (value) {
-				this.form.fields.first_contact_by.val = this.form.fields.client_contact_name.val;
-			} else {
-				this.form.fields.first_contact_by.val = '';
-			}
-		},
-
-
-		// When the value changes (checkbox) adjust values
-		accessContactChecked: function accessContactChecked(value) {
-			if (value) {
-				this.form.fields.land_access_contact.val = this.form.fields.land_access_granted_by.val;
-			} else {
-				this.form.fields.land_access_contact.val = '';
-			}
-		}
-	},
-
-	methods: {
-		// Submits the form to server via mixin
-		sendForm: function sendForm() {
-			this.createOrUpdate();
-		},
-
-
-		// Submits a delete to server via mixin
-		deleteProject: function deleteProject() {
-			this.deleteModel();
-		},
-
-
-		// Retrieve all the unique clients from api
-		getAndSetUniqueClients: function getAndSetUniqueClients() {
-			var context = this;
-			// Send request to retrieve unique clients
-			axios.get('/api/projects/unique-clients').then(function (response) {
-				// Set the clients prop
-				context.clients = response.data.clients;
-			}).catch(function (error) {
-				console.log(error);
-			});
-		}
-	},
-
-	// If an id is in the route then retrieve the model from server
-	created: function created() {
-		console.log('Project form created');
-
-		// If an id is present then set up the form for edit
-		if (this.$route.params.id) {
-			// Show form loader
-			this.formIsLoading = true;
-			// Get the requested model
-			this.grabModel('/api/projects/' + this.$route.params.id, function (model) {
-				// Populate form
-				this.populateFormFromModel(model);
-				// Adjust form state
-				this.formEditState('edit');
-				// Hide form loader
-				this.formIsLoading = false;
-			});
-		} else {
-			// Find unique clients for a new project
-			this.getAndSetUniqueClients();
-		}
-	}
-});
-
-/***/ }),
-/* 48 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var api_access = __webpack_require__(1);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-
-	mixins: [api_access],
-
-	data: function data() {
-		return {
-			// The project. Get sets by the created() method
-			project: false
-		};
-	},
-	created: function created() {
-		var _this = this;
-
-		console.log('Project hub created');
-
-		// If the ID is present then get and set the project
-		if (this.$route.params.id) {
-			// Get a fresh version of the requested model using API access
-			this.grabModel('/api/projects/' + this.$route.params.id, function (model) {
-				// Cache retrieved model
-				this.project = model;
-			});
-		}
-
-		// When the form component alerts this parent of a project update
-		this.$router.app.$on('project-updated', function (model) {
-			// Update cached model
-			_this.project = model;
-		});
-
-		/* Timeline related events
-  */
-		this.$router.app.$on('timeline-created', function (model) {
-			// Update cached model
-			_this.project.timeline = model;
-		});
-		this.$router.app.$on('timeline-updated', function (model) {
-			// Update cached model
-			_this.project.timeline = model;
-		});
-
-		/* Crew related events
-  */
-		this.$router.app.$on('crew-created', function (model) {
-			// Update cached model
-			_this.project.users.push(model);
-		});
-		this.$router.app.$on('crew-removed', function (user_id) {
-			var context = _this;
-			// Find the crew member in the model and remove it
-			_this.project.users.forEach(function (user) {
-				if (user.id == user_id) {
-					var index = context.project.users.indexOf(user);
-					context.project.users.splice(index, 1);
-				}
-			});
-		});
-
-		/* Comment related events
-  */
-		this.$router.app.$on('comment-created', function (model) {
-			// Update cached model
-			_this.project.comments.push(model);
-		});
-		this.$router.app.$on('comment-removed', function (comment_id) {
-			var context = _this;
-			// Find the comment in the model and remove it
-			_this.project.comments.forEach(function (comment) {
-				if (comment.id == comment_id) {
-					var index = context.project.comments.indexOf(comment);
-					context.project.comments.splice(index, 1);
-				}
-			});
-		});
 	}
 });
 
@@ -17149,21 +16507,758 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(1);
-var dropdown = __webpack_require__(3);
+var modal = __webpack_require__(3);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
-		'dropdown': dropdown
+		'modal': modal
 	},
 
 	mixins: [api_access],
 
 	data: function data() {
 		return {
-			fullTable: false,
-			userTableIntro: true,
+			formIsLoading: false,
+			modalActive: false,
+			urlToDelete: '/api/projects/delete',
+			isDeleting: false,
+			clients: [],
+			client_company_name: '',
+			disableClientCompanyInput: false,
+			firstContactChecked: false,
+			accessContactChecked: false,
+			form: {
+				model: 'Project',
+				state: 'create',
+				title: 'Start Project',
+				button: 'Begin',
+				action: '/api/projects/create',
+				createAction: '/api/projects/create',
+				updateAction: '/api/projects/update',
+				createEvent: 'project-created',
+				updateEvent: 'project-updated',
+				deleteEvent: 'project-deleted',
+				isLoading: false,
+				successMsg: 'Project has been saved',
+				fields: {
+					id: { val: '', err: false, dflt: '' },
+					province: { val: '', err: false, dflt: '' },
+					location: { val: '', err: false, dflt: '' },
+					details: { val: '', err: false, dflt: '' },
+					client_company_name: { val: '', err: false, dflt: '' },
+					client_contact_name: { val: '', err: false, dflt: '' },
+					client_contact_phone: { val: '', err: false, dflt: '' },
+					client_contact_email: { val: '', err: false, dflt: '' },
+					first_contact_by: { val: '', err: false, dflt: '' },
+					first_contact_date: { val: '', err: false, dflt: '' },
+					land_ownership: { val: '', err: false, dflt: '' },
+					land_access_granted: { val: 0, err: false, dflt: 0 },
+					land_access_granted_by: { val: '', err: false, dflt: '' },
+					land_access_contact: { val: '', err: false, dflt: '' },
+					land_access_phone: { val: '', err: false, dflt: '' },
+					invoiced_date: { val: '', err: false, dflt: '' },
+					invoice_paid_date: { val: '', err: false, dflt: '' },
+					// "Proposal" related fields
+					plans: { val: '', err: false, dflt: '' },
+					work_type: { val: '', err: false, dflt: '' },
+					work_overview: { val: '', err: false, dflt: '' },
+					response_by: { val: '', err: false, dflt: '' },
+					estimate: { val: '0.00', err: false, dflt: '0.00' },
+					approval_date: { val: '', err: false, dflt: '' },
+					// Timeline 
+					timeline: { val: '', err: false, dflt: '' }
+				}
+			}
+		};
+	},
+
+
+	watch: {
+		// For the dual client company input setup. If a select option is selected then
+		// set the selected value to the form property and disable the text input. 
+		client_company_name: function client_company_name(value) {
+			// If a value is present
+			if (value != '') {
+				this.form.fields.client_company_name.val = value;
+				this.disableClientCompanyInput = true;
+			} else {
+				// If empty string then enable text input again
+				this.disableClientCompanyInput = false;
+			}
+		},
+
+
+		// When the value changes (checkbox) adjust values
+		firstContactChecked: function firstContactChecked(value) {
+			if (value) {
+				this.form.fields.first_contact_by.val = this.form.fields.client_contact_name.val;
+			} else {
+				this.form.fields.first_contact_by.val = '';
+			}
+		},
+
+
+		// When the value changes (checkbox) adjust values
+		accessContactChecked: function accessContactChecked(value) {
+			if (value) {
+				this.form.fields.land_access_contact.val = this.form.fields.land_access_granted_by.val;
+			} else {
+				this.form.fields.land_access_contact.val = '';
+			}
+		}
+	},
+
+	methods: {
+		// Submits the form to server via mixin
+		sendForm: function sendForm() {
+			this.createOrUpdate();
+		},
+
+
+		// Submits a delete to server via mixin
+		deleteProject: function deleteProject() {
+			this.deleteModel();
+		},
+
+
+		// Retrieve all the unique clients from api
+		getAndSetUniqueClients: function getAndSetUniqueClients() {
+			var context = this;
+			// Send request to retrieve unique clients
+			axios.get('/api/projects/unique-clients').then(function (response) {
+				// Set the clients prop
+				context.clients = response.data.clients;
+			}).catch(function (error) {
+				console.log(error);
+			});
+		}
+	},
+
+	// If an id is in the route then retrieve the model from server
+	created: function created() {
+		console.log('Project form created');
+
+		// If an id is present then set up the form for edit
+		if (this.$route.params.id) {
+			// Show form loader
+			this.formIsLoading = true;
+			// Get the requested model
+			this.grabModel('/api/projects/' + this.$route.params.id, function (model) {
+				// Populate form
+				this.populateFormFromModel(model);
+				// Adjust form state
+				this.formEditState('edit');
+				// Hide form loader
+				this.formIsLoading = false;
+			});
+		} else {
+			// Find unique clients for a new project
+			this.getAndSetUniqueClients();
+		}
+	}
+});
+
+/***/ }),
+/* 50 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var api_access = __webpack_require__(1);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+	mixins: [api_access],
+
+	props: ['project_id'],
+
+	data: function data() {
+		return {
+			// The project. Get sets by the created() method
+			project: false
+		};
+	},
+	created: function created() {
+		var _this = this;
+
+		console.log('Project hub created');
+
+		// If the ID is present then get and set the project
+		if (this.project_id) {
+			// Get a fresh version of the requested model using API access
+			this.grabModel('/api/projects/' + this.project_id, function (model) {
+				// Cache retrieved model
+				this.project = model;
+			});
+		}
+
+		// When the form component alerts this parent of a project update
+		this.$router.app.$on('project-updated', function (model) {
+			// Update cached model
+			_this.project = model;
+		});
+
+		/* Timeline related events
+  */
+		this.$router.app.$on('timeline-created', function (model) {
+			// Update cached model
+			_this.project.timeline = model;
+		});
+		this.$router.app.$on('timeline-updated', function (model) {
+			// Update cached model
+			_this.project.timeline = model;
+		});
+
+		/* Crew related events
+  */
+		this.$router.app.$on('crew-created', function (model) {
+			// Update cached model
+			_this.project.users.push(model);
+		});
+		this.$router.app.$on('crew-removed', function (user_id) {
+			var context = _this;
+			// Find the crew member in the model and remove it
+			_this.project.users.forEach(function (user) {
+				if (user.id == user_id) {
+					var index = context.project.users.indexOf(user);
+					context.project.users.splice(index, 1);
+				}
+			});
+		});
+
+		/* Comment related events
+  */
+		this.$router.app.$on('comment-created', function (model) {
+			// Update cached model
+			_this.project.comments.push(model);
+		});
+		this.$router.app.$on('comment-removed', function (comment_id) {
+			var context = _this;
+			// Find the comment in the model and remove it
+			_this.project.comments.forEach(function (comment) {
+				if (comment.id == comment_id) {
+					var index = context.project.comments.indexOf(comment);
+					context.project.comments.splice(index, 1);
+				}
+			});
+		});
+	}
+});
+
+/***/ }),
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var api_access = __webpack_require__(1);
+var dropdown = __webpack_require__(5);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'dropdown': dropdown
+	},
+
+	/* @param - user - Component can be mounted from the /users/view/{id}/hub route and it needs the user
+ */
+	props: ['user'],
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			// The table can have three different states that alter the way it displays
+			tableState: '',
 			// Used by API access. Set in the created method
 			urlToFetch: '',
 			// Used by API access
@@ -17206,7 +17301,13 @@ var dropdown = __webpack_require__(3);
    * Can only be called from the admin only button
   */
 		viewTimesheets: function viewTimesheets(id) {
-			this.$router.push('/dashboard/timesheets/' + id);
+			if (this.tableState == 'user') {
+				this.$router.push('/dashboard/projects/' + id + '/timesheets');
+			} else if (this.tableState == 'adminUser') {
+				if (this.user) {
+					this.$router.push('/users/view/' + this.user.id + '/projects/' + id + '/timesheets');
+				}
+			}
 		}
 	},
 
@@ -17219,34 +17320,44 @@ var dropdown = __webpack_require__(3);
 		if (this.$route.path == '/projects/search') {
 			// Verify the current user is an admin for extra security
 			if (DASHBOARD_USER_PERMISSIONS == 'admin') {
-				this.fullTable = true;
+				this.tableState = 'admin';
 				this.urlToFetch = '/api/projects/all';
+				// Start loader
+				this.fetchingModels = true;
+				// Find projects
+				this.getAndSetModels();
 			}
 		} else if (this.$route.path == '/dashboard/projects') {
-			this.fullTable = false;
+			this.tableState = 'user';
 			this.urlToFetch = '/api/dashboard/users-projects';
+			// Start loader
+			this.fetchingModels = true;
+			// Find projects
+			this.getAndSetModels();
 		}
 
 		// If a param called id in the route then the component is likely mounted from the users/view/{id}/hub route
 		// so check for that
-		if (this.$route.params.id) {
-			if (this.$route.path == '/users/view/' + this.$route.params.id + '/hub') {
-				this.fullTable = false;
-				this.userTableIntro = false;
-				this.urlToFetch = '/api/users/' + this.$route.params.id + '/projects';
+		if (this.user) {
+			console.log(this.user);
+			if (this.$route.path == '/users/view/' + this.user.id + '/hub') {
+				console.log('route');
+				// Verify the current user is an admin for extra security
+				if (DASHBOARD_USER_PERMISSIONS == 'admin') {
+					this.tableState = 'adminUser';
+					this.urlToFetch = '/api/users/' + this.user.id + '/projects';
+					// Start loader
+					this.fetchingModels = true;
+					// Find projects
+					this.getAndSetModels();
+				}
 			}
 		}
-
-		console.log(this.urlToFetch);
-		// Start loader
-		this.fetchingModels = true;
-		// Find projects
-		this.getAndSetModels();
 	}
 });
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18259,8 +18370,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var comment_form = __webpack_require__(74);
-var comment_list = __webpack_require__(75);
+var comment_form = __webpack_require__(76);
+var comment_list = __webpack_require__(77);
 var api_access = __webpack_require__(1);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -18379,7 +18490,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18466,7 +18577,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18790,7 +18901,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19766,7 +19877,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19924,7 +20035,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20082,658 +20193,6 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 56 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var api_access = __webpack_require__(1);
-var modal = __webpack_require__(5);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		'modal': modal
-	},
-
-	props: ['timesheet_id', 'timesheet', 'project_id'],
-
-	mixins: [api_access],
-
-	data: function data() {
-		return {
-			formIsLoading: false,
-			urlToDelete: '/api/timesheets/delete',
-			isDeleting: false,
-			form: {
-				model: 'Timesheet',
-				state: 'create',
-				title: 'Add Tmesheet',
-				button: 'Add',
-				action: '/api/timesheets/create',
-				createAction: '/api/timesheets/create',
-				updateAction: '/api/timesheets/update',
-				createEvent: 'timesheet-created',
-				updateEvent: 'timesheet-created',
-				deleteEvent: 'timesheet-deleted',
-				isLoading: false,
-				successMsg: 'Your timesheet has been added to the project',
-				fields: {
-					id: { val: '', err: false, dflt: '' },
-					project_id: { val: this.project_id, err: false, dflt: '' },
-					date: { val: '', err: false, dflt: '' },
-					per_diem: { val: '0.00', err: false, dflt: '0.00' },
-					comment: { val: '', err: false, dflt: '' }
-				}
-			}
-		};
-	},
-
-
-	methods: {
-		// Submits the form to server via API access
-		sendForm: function sendForm() {
-			this.createOrUpdate();
-		},
-		deleteTimesheet: function deleteTimesheet() {
-			this.deleteChild(this.timesheet_id);
-		}
-	},
-
-	created: function created() {
-
-		// If an id is present then set up the form for edit
-		if (this.timesheet_id) {
-			// Show form loader
-			this.formIsLoading = true;
-			// Populate form
-			this.populateFormFromModel(this.timesheet);
-			// Adjust form state
-			this.formEditState('edit');
-			// Hide form loader
-			this.formIsLoading = false;
-		}
-	}
-});
-
-/***/ }),
-/* 57 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var dropdown = __webpack_require__(3);
-var modal = __webpack_require__(5);
-var timesheet_form = __webpack_require__(89);
-var work_job_form = __webpack_require__(93);
-var travel_job_form = __webpack_require__(92);
-var equipment_rental_form = __webpack_require__(87);
-var other_cost_form = __webpack_require__(88);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		'dropdown': dropdown,
-		'modal': modal,
-		'timesheet-form': timesheet_form,
-		'work-job-form': work_job_form,
-		'travel-job-form': travel_job_form,
-		'equipment-rental-form': equipment_rental_form,
-		'other-cost-form': other_cost_form
-	},
-
-	props: ['timesheet'],
-
-	data: function data() {
-		return {
-			// Toggles which form to show in the modal
-			tabToShow: 'List',
-			currentModel: '',
-			// Show modal or not
-			modalActive: false,
-			// Holds currently selected child models. Set by the edit methods
-			currentWorkJob: '',
-			currentTravelJob: '',
-			currentEquipmentRental: '',
-			currentOtherCost: ''
-		};
-	},
-
-
-	methods: {
-		editTimesheet: function editTimesheet(id) {
-			this.currentModel = 'Timesheet-edit';
-			this.modalActive = true;
-		},
-
-
-		// Shows the travel job form or shows an alert indicating a travel job is already present
-		addTravel: function addTravel(id) {
-			if (this.timesheet.travel_jobs.length >= 1) {
-				noty({
-					text: '<h4>Travel hours exist!</h4>',
-					theme: 'defaultTheme',
-					layout: 'center',
-					timeout: 2000,
-					closeWith: ['click', 'hover'],
-					type: 'warning'
-				});
-			} else {
-				this.currentTravelJob = '';
-				this.tabToShow = 'Travel-job';
-			}
-		},
-
-
-		// Show the travel job form and sets the current travel job
-		editTravel: function editTravel(travelJob) {
-			this.currentTravelJob = travelJob;
-			this.tabToShow = 'Travel-job';
-		},
-
-
-		// Shows the work job form
-		addWorkHours: function addWorkHours(id) {
-			this.currentWorkJob = '';
-			this.tabToShow = 'Work-job';
-		},
-
-
-		// Shows the work job form and sets the current work job
-		editWorkHours: function editWorkHours(workJob) {
-			this.currentWorkJob = workJob;
-			this.tabToShow = 'Work-job';
-		},
-
-
-		// Shows the equipment rental form
-		addEquipmentRental: function addEquipmentRental(id) {
-			this.currentEquipmentRental = '';
-			this.tabToShow = 'Equipment-rental';
-		},
-
-
-		// Shows the equipment rental form and sets the current equipment rental
-		editEquipmentRental: function editEquipmentRental(equipmentRental) {
-			this.currentEquipmentRental = equipmentRental;
-			this.tabToShow = 'Equipment-rental';
-		},
-
-
-		// Shows the other costs form
-		addOtherCost: function addOtherCost(id) {
-			this.currentOtherCost = '';
-			this.tabToShow = 'Other-cost';
-		},
-
-
-		// Shows the other costs form and sets the current other cost
-		editOtherCost: function editOtherCost(otherCost) {
-			this.currentOtherCost = otherCost;
-			this.tabToShow = 'Other-cost';
-		}
-	},
-
-	created: function created() {
-		var _this = this;
-
-		this.$router.app.$on('timesheet-created', function (model) {
-			_this.currentModel = '';
-			_this.modalActive = false;
-		});
-
-		// When the form component alerts this parent of a successful create
-		this.$router.app.$on('work-job-created', function (model) {
-			_this.tabToShow = 'List';
-		});
-		this.$router.app.$on('travel-job-created', function (model) {
-			_this.tabToShow = 'List';
-		});
-		this.$router.app.$on('equipment-rental-created', function (model) {
-			_this.tabToShow = 'List';
-		});
-		this.$router.app.$on('other-cost-created', function (model) {
-			_this.tabToShow = 'List';
-		});
-
-		// When the form component alerts a child was deleted
-		this.$router.app.$on('work-job-deleted', function (model) {
-			_this.tabToShow = 'List';
-		});
-		this.$router.app.$on('travel-job-deleted', function (model) {
-			_this.tabToShow = 'List';
-		});
-		this.$router.app.$on('equipment-rental-deleted', function (model) {
-			_this.tabToShow = 'List';
-		});
-		this.$router.app.$on('other-cost-deleted', function (model) {
-			_this.tabToShow = 'List';
-		});
-	}
-});
-
-/***/ }),
 /* 58 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -20833,6 +20292,675 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+var api_access = __webpack_require__(1);
+var modal = __webpack_require__(3);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'modal': modal
+	},
+
+	props: ['timesheet_id', 'timesheet', 'project_id'],
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			formIsLoading: false,
+			urlToDelete: '/api/timesheets/delete',
+			isDeleting: false,
+			form: {
+				model: 'Timesheet',
+				state: 'create',
+				title: 'Add Tmesheet',
+				button: 'Add',
+				action: '/api/timesheets/create',
+				createAction: '/api/timesheets/create',
+				updateAction: '/api/timesheets/update',
+				createEvent: 'timesheet-created',
+				updateEvent: 'timesheet-created',
+				deleteEvent: 'timesheet-deleted',
+				isLoading: false,
+				successMsg: 'Your timesheet has been added to the project',
+				fields: {
+					id: { val: '', err: false, dflt: '' },
+					project_id: { val: this.project_id, err: false, dflt: '' },
+					date: { val: '', err: false, dflt: '' },
+					per_diem: { val: '0.00', err: false, dflt: '0.00' },
+					comment: { val: '', err: false, dflt: '' }
+				}
+			}
+		};
+	},
+
+
+	methods: {
+		// Submits the form to server via API access
+		sendForm: function sendForm() {
+			this.createOrUpdate();
+		},
+		deleteTimesheet: function deleteTimesheet() {
+			this.deleteChild(this.timesheet_id);
+		}
+	},
+
+	created: function created() {
+
+		// If an id is present then set up the form for edit
+		if (this.timesheet_id) {
+			// Show form loader
+			this.formIsLoading = true;
+			// Populate form
+			this.populateFormFromModel(this.timesheet);
+			// Adjust form state
+			this.formEditState('edit');
+			// Hide form loader
+			this.formIsLoading = false;
+		}
+	}
+});
+
+/***/ }),
+/* 59 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var dropdown = __webpack_require__(5);
+var modal = __webpack_require__(3);
+var timesheet_form = __webpack_require__(15);
+var work_job_form = __webpack_require__(93);
+var travel_job_form = __webpack_require__(92);
+var equipment_rental_form = __webpack_require__(88);
+var other_cost_form = __webpack_require__(89);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'dropdown': dropdown,
+		'modal': modal,
+		'timesheet-form': timesheet_form,
+		'work-job-form': work_job_form,
+		'travel-job-form': travel_job_form,
+		'equipment-rental-form': equipment_rental_form,
+		'other-cost-form': other_cost_form
+	},
+
+	props: ['timesheet', 'user'],
+
+	data: function data() {
+		return {
+			adminState: false,
+			// Toggles which form to show in the modal
+			tabToShow: 'List',
+			currentModel: '',
+			// Show modal or not
+			modalActive: false,
+			// Holds currently selected child models. Set by the edit methods
+			currentWorkJob: '',
+			currentTravelJob: '',
+			currentEquipmentRental: '',
+			currentOtherCost: ''
+		};
+	},
+
+
+	methods: {
+		editTimesheet: function editTimesheet(id) {
+			this.currentModel = 'Timesheet-edit';
+			this.modalActive = true;
+		},
+
+
+		// Shows the travel job form or shows an alert indicating a travel job is already present
+		addTravel: function addTravel(id) {
+			if (this.timesheet.travel_jobs.length >= 1) {
+				noty({
+					text: '<h4>Travel hours exist!</h4>',
+					theme: 'defaultTheme',
+					layout: 'center',
+					timeout: 2000,
+					closeWith: ['click', 'hover'],
+					type: 'warning'
+				});
+			} else {
+				this.currentTravelJob = '';
+				this.tabToShow = 'Travel-job';
+			}
+		},
+
+
+		// Show the travel job form and sets the current travel job
+		editTravel: function editTravel(travelJob) {
+			this.currentTravelJob = travelJob;
+			this.tabToShow = 'Travel-job';
+		},
+
+
+		// Shows the work job form
+		addWorkHours: function addWorkHours(id) {
+			this.currentWorkJob = '';
+			this.tabToShow = 'Work-job';
+		},
+
+
+		// Shows the work job form and sets the current work job
+		editWorkHours: function editWorkHours(workJob) {
+			this.currentWorkJob = workJob;
+			this.tabToShow = 'Work-job';
+		},
+
+
+		// Shows the equipment rental form
+		addEquipmentRental: function addEquipmentRental(id) {
+			this.currentEquipmentRental = '';
+			this.tabToShow = 'Equipment-rental';
+		},
+
+
+		// Shows the equipment rental form and sets the current equipment rental
+		editEquipmentRental: function editEquipmentRental(equipmentRental) {
+			this.currentEquipmentRental = equipmentRental;
+			this.tabToShow = 'Equipment-rental';
+		},
+
+
+		// Shows the other costs form
+		addOtherCost: function addOtherCost(id) {
+			this.currentOtherCost = '';
+			this.tabToShow = 'Other-cost';
+		},
+
+
+		// Shows the other costs form and sets the current other cost
+		editOtherCost: function editOtherCost(otherCost) {
+			this.currentOtherCost = otherCost;
+			this.tabToShow = 'Other-cost';
+		}
+	},
+
+	created: function created() {
+		var _this = this;
+
+		// When a timesheet has been created
+		this.$router.app.$on('timesheet-created', function (model) {
+			_this.currentModel = '';
+			_this.modalActive = false;
+		});
+
+		// When the form component alerts this parent of a successful create
+		this.$router.app.$on('work-job-created', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('travel-job-created', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('equipment-rental-created', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('other-cost-created', function (model) {
+			_this.tabToShow = 'List';
+		});
+
+		// When the form component alerts a child was deleted
+		this.$router.app.$on('work-job-deleted', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('travel-job-deleted', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('equipment-rental-deleted', function (model) {
+			_this.tabToShow = 'List';
+		});
+		this.$router.app.$on('other-cost-deleted', function (model) {
+			_this.tabToShow = 'List';
+		});
+	}
+});
+
+/***/ }),
+/* 60 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -20849,9 +20977,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 var api_access = __webpack_require__(1);
-var modal = __webpack_require__(5);
+var modal = __webpack_require__(3);
 var timesheet_pill = __webpack_require__(90);
-var timesheet_form = __webpack_require__(89);
+var timesheet_form = __webpack_require__(15);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -20860,15 +20988,18 @@ var timesheet_form = __webpack_require__(89);
 		'timesheet-form': timesheet_form
 	},
 
+	props: ['project_id', 'user'],
+
 	mixins: [api_access],
 
 	data: function data() {
 		return {
+			adminState: false,
 			currentModal: '',
 			// For the form modal
 			modalActive: false,
 			// Used by API access
-			urlToFetch: '/api/dashboard/project-timesheets/' + this.$route.params.project_id,
+			urlToFetch: '',
 			// Used by API access
 			fetchingModels: false,
 			// Results from Laravel pagination json. Used by API access.
@@ -20926,8 +21057,17 @@ var timesheet_form = __webpack_require__(89);
 	created: function created() {
 		var _this = this;
 
-		// Retrieve model through API access
-		this.getAndSetModels();
+		if (this.project_id) {
+
+			if (!this.user) {
+				this.urlToFetch = '/api/dashboard/project-timesheets/' + this.project_id;
+			} else {
+				this.urlToFetch = '/api/users/' + this.user.id + '/projects/' + this.project_id + '/timesheets';
+			}
+
+			// Retrieve model through API access
+			this.getAndSetModels();
+		}
 
 		// When the form component alerts this parent of a successful create
 		this.$router.app.$on('timesheet-created', function (model) {
@@ -21167,7 +21307,7 @@ var timesheet_form = __webpack_require__(89);
 });
 
 /***/ }),
-/* 59 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21342,7 +21482,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21521,7 +21661,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21786,7 +21926,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 var api_access = __webpack_require__(1);
-var modal = __webpack_require__(5);
+var modal = __webpack_require__(3);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -21901,11 +22041,13 @@ var modal = __webpack_require__(5);
 });
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
 //
 //
 //
@@ -21926,9 +22068,11 @@ var api_access = __webpack_require__(1);
 
 	mixins: [api_access],
 
+	props: ['user_id'],
+
 	data: function data() {
 		return {
-			user: {}
+			user: false
 		};
 	},
 
@@ -21941,9 +22085,9 @@ var api_access = __webpack_require__(1);
 
 		console.log('User hub created');
 
-		if (this.$route.params.id) {
+		if (this.user_id) {
 			// Get a fresh version of the requested model
-			this.grabModel('/api/users/' + this.$route.params.id, function (model) {
+			this.grabModel('/api/users/' + this.user_id, function (model) {
 				// Cache retrieved model
 				this.user = model;
 			});
@@ -21958,7 +22102,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22108,7 +22252,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22393,11 +22537,14 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
 //
 //
 //
@@ -22815,11 +22962,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 var api_access = __webpack_require__(1);
-var project_search = __webpack_require__(82);
+var project_search = __webpack_require__(14);
+var timesheets_hub = __webpack_require__(91);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
-		'project-search': project_search
+		'project-search': project_search,
+		'timesheets-hub': timesheets_hub
 	},
 
 	props: ['user'],
@@ -22853,7 +23002,8 @@ var project_search = __webpack_require__(82);
 			},
 			form: {
 				updateEvent: 'user-updated'
-			}
+			},
+			selectedProjectId: false
 		};
 	},
 
@@ -22888,16 +23038,28 @@ var project_search = __webpack_require__(82);
 	},
 
 	created: function created() {
+		var _this = this;
+
 		console.log('User table created');
 		// Show loader if no user cached
 		if (this.user.id == null) {
 			this.isLoading = true;
 		}
+
+		this.$router.app.$on('view-user-timesheets', function (id) {
+			_this.selectedProjectId = id;
+		});
+
+		this.$router.app.$on('close-timesheets-hub', function () {
+			console.log("on timesheets close");
+			this.selectedProjectId = false;
+			console.log(this.selectedProjectId);
+		});
 	}
 });
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22981,13 +23143,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(70);
+window._ = __webpack_require__(72);
 
-window.noty = __webpack_require__(71);
+window.noty = __webpack_require__(73);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -23005,7 +23167,7 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(19);
+window.axios = __webpack_require__(21);
 
 window.axios.defaults.headers.common['X-CSRF-TOKEN'] = window.Laravel.csrfToken;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -23026,21 +23188,21 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // });
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)();
 exports.push([module.i, "\n.log-out{\n    margin-left: 10px;\n}\n\n", ""]);
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)();
 exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n.modal {\n\tbackground-color: rgba(0,0,0,0.7);\n}\n\n", ""]);
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -40129,10 +40291,10 @@ exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n.modal {\n\tbackgrou
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16), __webpack_require__(134)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18), __webpack_require__(134)(module)))
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!function(root, factory) {
@@ -42016,12 +42178,12 @@ return window.noty;
 });
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(37),
+  __webpack_require__(39),
   /* template */
   __webpack_require__(105),
   /* scopeId */
@@ -42050,7 +42212,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -42059,7 +42221,7 @@ __webpack_require__(130)
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(40),
+  __webpack_require__(42),
   /* template */
   __webpack_require__(103),
   /* scopeId */
@@ -42088,12 +42250,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(41),
+  __webpack_require__(43),
   /* template */
   __webpack_require__(116),
   /* scopeId */
@@ -42122,12 +42284,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(42),
+  __webpack_require__(44),
   /* template */
   __webpack_require__(122),
   /* scopeId */
@@ -42156,12 +42318,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(43),
+  __webpack_require__(45),
   /* template */
   __webpack_require__(102),
   /* scopeId */
@@ -42190,12 +42352,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(44),
+  __webpack_require__(46),
   /* template */
   __webpack_require__(111),
   /* scopeId */
@@ -42224,12 +42386,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(45),
+  __webpack_require__(47),
   /* template */
   __webpack_require__(125),
   /* scopeId */
@@ -42258,12 +42420,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(46),
+  __webpack_require__(48),
   /* template */
   __webpack_require__(114),
   /* scopeId */
@@ -42292,12 +42454,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(47),
+  __webpack_require__(49),
   /* template */
   __webpack_require__(108),
   /* scopeId */
@@ -42326,12 +42488,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(48),
+  __webpack_require__(50),
   /* template */
   __webpack_require__(123),
   /* scopeId */
@@ -42360,46 +42522,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(49),
-  /* template */
-  __webpack_require__(119),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\project\\Project-search.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Project-search.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-99e91df2", Component.options)
-  } else {
-    hotAPI.reload("data-v-99e91df2", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 83 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(50),
+  __webpack_require__(52),
   /* template */
   __webpack_require__(112),
   /* scopeId */
@@ -42428,12 +42556,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(51),
+  __webpack_require__(53),
   /* template */
   __webpack_require__(107),
   /* scopeId */
@@ -42462,12 +42590,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(52),
+  __webpack_require__(54),
   /* template */
   __webpack_require__(104),
   /* scopeId */
@@ -42496,12 +42624,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(53),
+  __webpack_require__(55),
   /* template */
   __webpack_require__(128),
   /* scopeId */
@@ -42530,12 +42658,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(54),
+  __webpack_require__(56),
   /* template */
   __webpack_require__(127),
   /* scopeId */
@@ -42564,12 +42692,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(55),
+  __webpack_require__(57),
   /* template */
   __webpack_require__(118),
   /* scopeId */
@@ -42598,46 +42726,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 89 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(56),
-  /* template */
-  __webpack_require__(120),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheet-form.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Timesheet-form.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-a6dc0f9e", Component.options)
-  } else {
-    hotAPI.reload("data-v-a6dc0f9e", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
 /* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(57),
+  __webpack_require__(59),
   /* template */
   __webpack_require__(115),
   /* scopeId */
@@ -42671,7 +42765,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(58),
+  __webpack_require__(60),
   /* template */
   __webpack_require__(121),
   /* scopeId */
@@ -42705,7 +42799,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(59),
+  __webpack_require__(61),
   /* template */
   __webpack_require__(100),
   /* scopeId */
@@ -42739,7 +42833,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(60),
+  __webpack_require__(62),
   /* template */
   __webpack_require__(113),
   /* scopeId */
@@ -42773,7 +42867,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(61),
+  __webpack_require__(63),
   /* template */
   __webpack_require__(129),
   /* scopeId */
@@ -42807,7 +42901,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(62),
+  __webpack_require__(64),
   /* template */
   __webpack_require__(101),
   /* scopeId */
@@ -42841,7 +42935,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(63),
+  __webpack_require__(65),
   /* template */
   __webpack_require__(124),
   /* scopeId */
@@ -42875,7 +42969,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(64),
+  __webpack_require__(66),
   /* template */
   __webpack_require__(106),
   /* scopeId */
@@ -42909,7 +43003,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(65),
+  __webpack_require__(67),
   /* template */
   __webpack_require__(110),
   /* scopeId */
@@ -42943,7 +43037,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(66),
+  __webpack_require__(68),
   /* template */
   __webpack_require__(117),
   /* scopeId */
@@ -43171,7 +43265,6 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [_c('router-view', {
     attrs: {
-      "name": "user",
       "user": _vm.user
     }
   })], 1)
@@ -44662,7 +44755,11 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.isLoading) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.isLoading) ? _c('div', [_vm._m(1), _vm._v(" "), _c('div', {
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.isLoading) ? _c('div', [_c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v(_vm._s(_vm.user.first) + "'s' Details")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\tThis is where you can edit " + _vm._s(_vm.user.first) + "'s details and view their timesheets.\r\n\t\t\t")]), _vm._v(" "), _vm._m(1)]), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
   }, [_c('button', {
     staticClass: "btn btn-default",
@@ -45292,15 +45389,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
-  })]) : _vm._e()])])])])])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded margin-45-top"
-  }, [_c('h2', [_vm._v("Projects " + _vm._s(_vm.user.first) + "'s Involved In")]), _vm._v(" "), _c('p', {
-    staticClass: "margin-25-top"
-  }, [_vm._v("\r\n\t\t\t\tThis is where you can keep track of " + _vm._s(_vm.user.first) + "'s timesheets.\r\n\t\t\t")]), _c('p', {
-    staticClass: "margin-25-top text-info"
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-question-sign"
-  }), _vm._v("\r\n\t\t\t\tUse the view button on each project row to view " + _vm._s(_vm.user.first) + "'s timesheets for that project.\r\n\t\t\t")]), _vm._v(" "), _c('project-search')], 1)]) : _vm._e()])
+  })]) : _vm._e()])])])])])])])])]), _vm._v(" "), _c('hr', {
+    staticClass: "margin-45-top"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('project-search', {
+    attrs: {
+      "user": _vm.user
+    }
+  })], 1)]) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row row-padded"
@@ -45308,15 +45405,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "large-center-loader"
   })])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "row row-padded"
-  }, [_c('h2', [_vm._v("User Details")]), _vm._v(" "), _c('p', {
-    staticClass: "margin-25-top"
-  }, [_vm._v("\r\n\t\t\t\tThis is where you can edit the user you've selected.\r\n\t\t\t")]), _vm._v(" "), _c('p', {
+  return _c('p', {
     staticClass: "margin-25-top text-info"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-question-sign"
-  }), _vm._v("\r\n\t\t\t\tTo change a users password click the options button below.\r\n\t\t\t")])])
+  }), _vm._v("\r\n\t\t\t\tTo change a users password click the options button below.\r\n\t\t\t")])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("First Name")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -47414,7 +47507,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-white post panel-shadow"
   }, [_c('div', {
     staticClass: "row row-padded"
-  }, [_c('div', {
+  }, [(!_vm.user) ? _c('div', {
     staticClass: "pull-right margin-5-top"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -47423,9 +47516,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.editTimesheet(_vm.timesheet.id)
       }
     }
-  })])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('div', {
+  })]) : _vm._e()]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "row row-padded text-center"
-  }, [_c('h3', [_vm._v(_vm._s(new Date(Date.parse(_vm.timesheet.date + 'T00:00:00')).toDateString()))])]), _vm._v(" "), _c('div', {
+  }, [_c('h3', [_vm._v(_vm._s(new Date(Date.parse(_vm.timesheet.date + 'T00:00:00')).toDateString()))])]), _vm._v(" "), (!_vm.user) ? _c('div', {
     staticClass: "row row-padded margin-10-top"
   }, [_c('div', {
     staticClass: "col-md-5 col-centered"
@@ -47467,7 +47560,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-usd"
-  }), _vm._v(" Add Other\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
+  }), _vm._v(" Add Other\r\n\t\t\t\t\t\t")])])])]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "panel-body col-md-10 col-centered margin-10-top"
   }, [(_vm.tabToShow == 'List') ? _c('ul', {
     staticClass: "list-group margin-10-top"
@@ -47494,7 +47587,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "col-md-5"
     }, [_c('strong', [_vm._v("Travel Hours")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(parseFloat(travelJob.travel_time)) + "\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
       staticClass: "col-md-2"
-    }, [_c('div', {
+    }, [(!_vm.user) ? _c('div', {
       staticClass: "pull-right"
     }, [_c('span', {
       staticClass: "glyphicon glyphicon-cog hover",
@@ -47503,7 +47596,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.editTravel(travelJob)
         }
       }
-    })])])]), _vm._v(" "), (travelJob.comment) ? _c('div', {
+    })]) : _vm._e()])]), _vm._v(" "), (travelJob.comment) ? _c('div', {
       staticClass: "row margin-20-top"
     }, [_c('div', {
       staticClass: "col-md-12"
@@ -47519,7 +47612,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "col-md-5"
     }, [_c('strong', [_vm._v("Job Type")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(workjob.job_type) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
       staticClass: "col-md-5"
-    }, [_c('strong', [_vm._v("Hours")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(parseFloat(workjob.hours_worked)) + "\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
+    }, [_c('strong', [_vm._v("Hours")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(parseFloat(workjob.hours_worked)) + "\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), (!_vm.user) ? _c('div', {
       staticClass: "col-md-2"
     }, [_c('div', {
       staticClass: "pull-right"
@@ -47530,7 +47623,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.editWorkHours(workjob)
         }
       }
-    })])])]), _vm._v(" "), (workjob.comment) ? _c('div', {
+    })])]) : _vm._e()]), _vm._v(" "), (workjob.comment) ? _c('div', {
       staticClass: "row margin-20-top"
     }, [_c('div', {
       staticClass: "col-md-12"
@@ -47546,7 +47639,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "col-md-5"
     }, [_c('strong', [_vm._v("Equipment Type")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(equipmentRental.equipment_type) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
       staticClass: "col-md-5"
-    }, [_c('strong', [_vm._v("Rental Fee")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t$" + _vm._s(equipmentRental.rental_fee) + "\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
+    }, [_c('strong', [_vm._v("Rental Fee")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t$" + _vm._s(equipmentRental.rental_fee) + "\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), (!_vm.user) ? _c('div', {
       staticClass: "col-md-2"
     }, [_c('div', {
       staticClass: "pull-right"
@@ -47557,7 +47650,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.editEquipmentRental(equipmentRental)
         }
       }
-    })])])]), _vm._v(" "), (equipmentRental.comment) ? _c('div', {
+    })])]) : _vm._e()]), _vm._v(" "), (equipmentRental.comment) ? _c('div', {
       staticClass: "row margin-20-top"
     }, [_c('div', {
       staticClass: "col-md-12"
@@ -47573,7 +47666,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "col-md-5"
     }, [_c('strong', [_vm._v("Cost Name")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(otherCost.cost_name) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
       staticClass: "col-md-5"
-    }, [_c('strong', [_vm._v("Cost")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t$" + _vm._s(otherCost.cost) + "\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c('div', {
+    }, [_c('strong', [_vm._v("Cost")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t$" + _vm._s(otherCost.cost) + "\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")]), _vm._v(" "), (!_vm.user) ? _c('div', {
       staticClass: "col-md-2"
     }, [_c('div', {
       staticClass: "pull-right"
@@ -47584,12 +47677,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.editOtherCost(otherCost)
         }
       }
-    })])])]), _vm._v(" "), (otherCost.comment) ? _c('div', {
+    })])]) : _vm._e()]), _vm._v(" "), (otherCost.comment) ? _c('div', {
       staticClass: "row margin-20-top"
     }, [_c('div', {
       staticClass: "col-md-12"
     }, [_c('strong', [_vm._v("Comment")]), _c('br'), _vm._v("\r\n\t\t\t\t\t\t\t\t" + _vm._s(otherCost.comment) + "\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t")])]) : _vm._e()]) : _vm._e()
-  })], 2) : _vm._e(), _vm._v(" "), _c('div', {
+  })], 2) : _vm._e(), _vm._v(" "), (!_vm.user) ? _c('div', {
     staticClass: "col-md-8 col-centered"
   }, [(_vm.tabToShow == 'Work-job') ? _c('work-job-form', {
     attrs: {
@@ -47647,9 +47740,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     },
     slot: "close-form"
-  }, [_vm._v("\r\n\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t")])]) : _vm._e()], 1)])]), _vm._v(" "), _c('hr', {
+  }, [_vm._v("\r\n\t\t\t\t\t\t\t×\r\n\t\t\t\t\t\t")])]) : _vm._e()], 1) : _vm._e()])]), _vm._v(" "), _c('hr', {
     staticClass: "margin-45-top margin-45-bottom"
-  })]), _vm._v(" "), _c('modal', {
+  })]), _vm._v(" "), (!_vm.user) ? _c('modal', {
     attrs: {
       "modalActive": _vm.modalActive
     },
@@ -47675,7 +47768,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.modalActive = false
       }
     }
-  }, [_vm._v("Cancel")])])])], 1)
+  }, [_vm._v("Cancel")])])]) : _vm._e()], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row row-padded text-center margin-10-top"
@@ -48011,7 +48104,7 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.fetchingModels) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [(!_vm.fullTable && _vm.userTableIntro) ? _c('div', [_c('div', {
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [(_vm.tableState == 'user') ? _c('div', [_c('div', {
     staticClass: "row row-padded"
   }, [_c('h2', [_vm._v("Your Projects")]), _vm._v(" "), _c('p', {
     staticClass: "margin-25-top"
@@ -48019,7 +48112,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "margin-25-top"
   }), _c('h4', [_c('strong', [_vm._v("Number of Projects:")]), _vm._v(" "), _c('span', {
     staticClass: "label label-success"
-  }, [_vm._v(_vm._s(_vm.searchResults.models.length))])]), _vm._v(" "), _c('p')])]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('div', [_vm._m(2)]) : _vm._e()]) : _vm._e(), _vm._v(" "), _c('button', {
+  }, [_vm._v(_vm._s(_vm.searchResults.models.length))])]), _vm._v(" "), _c('p')])]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('div', [_vm._m(2)]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'adminUser') ? _c('div', {
+    staticClass: "row row-padded margin-25-top"
+  }, [_c('h2', [_vm._v("Projects " + _vm._s(_vm.user.first) + "'s Involved In")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\tThis is where you can keep track of " + _vm._s(_vm.user.first) + "'s timesheets.\r\n\t\t\t")]), _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\tUse the view button on each project row to view " + _vm._s(_vm.user.first) + "'s timesheets for that project.\r\n\t\t\t")])]) : _vm._e()]) : _vm._e(), _vm._v(" "), _c('button', {
     staticClass: "btn btn-default margin-35-top",
     on: {
       "click": _vm.refresh
@@ -48032,20 +48133,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "table table-striped table-hover margin-25-top"
   }, [_c('thead', [_c('tr', {
     staticClass: "info"
-  }, [(_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tClient Company\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tContact Name\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tContact Phone\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tInvoice Paid\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tIdentifier\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tProvince\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tLocation\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('th', [_vm._v("\r\n\t\t\t\t\tTimesheets\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), _c('th', [_vm._v("\r\n\t\t\t\t\tActions\r\n\t\t\t\t")])])]), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(project) {
+  }, [(_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tClient Company\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tContact Name\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tContact Phone\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tInvoice Paid\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('th', [_vm._v("\r\n\t\t\t\t\tIdentifier\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('th', [_vm._v("\r\n\t\t\t\t\tProvince\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('th', [_vm._v("\r\n\t\t\t\t\tLocation\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('th', [_vm._v("\r\n\t\t\t\t\tTimesheets\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), _c('th', [_vm._v("\r\n\t\t\t\t\tActions\r\n\t\t\t\t")])])]), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(project) {
     return _c('tr', {
       attrs: {
         "project": project
       }
-    }, [(_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.client_company_name) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.client_contact_name) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('td', [(project.client_contact_phone) ? _c('a', {
+    }, [(_vm.tableState == 'admin') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.client_company_name) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.client_contact_name) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('td', [(project.client_contact_phone) ? _c('a', {
       attrs: {
         "href": 'tel: +1' + project.client_contact_phone.replace(/-/g, '')
       }
-    }, [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(project.client_contact_phone) + "\r\n\t\t\t    \t")]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.fullTable) ? _c('td', [(project.invoiced_date == null) ? _c('div', {
+    }, [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(project.client_contact_phone) + "\r\n\t\t\t    \t")]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('td', [(project.invoiced_date == null) ? _c('div', {
       staticClass: "text-warning"
     }, [_c('span', {
       staticClass: "label label-warning"
-    }, [_vm._v("Not Invoiced")])]) : _vm._e()]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.id) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.province) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.location) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.timesheets.length) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), _c('td', [(_vm.fullTable) ? _c('button', {
+    }, [_vm._v("Not Invoiced")])]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.id) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.province) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.location) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.timesheets.length) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), _c('td', [(_vm.tableState == 'admin') ? _c('button', {
       staticClass: "btn btn-sm btn-success",
       on: {
         "click": function($event) {
@@ -48054,7 +48155,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('span', {
       staticClass: "glyphicon glyphicon-screenshot"
-    }), _vm._v(" View\r\n\t\t\t    \t")]) : _vm._e(), _vm._v(" "), (!_vm.fullTable) ? _c('button', {
+    }), _vm._v(" View\r\n\t\t\t    \t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('button', {
       staticClass: "btn btn-sm btn-success",
       on: {
         "click": function($event) {
@@ -48309,11 +48410,15 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.fetchingModels) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [_c('div', {
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [(!_vm.user) ? _c('div', {
     staticClass: "row row-padded"
-  }, [_c('h2', [_vm._v("Project Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.$route.params.project_id) + ")")])]), _vm._v(" "), _c('p', {
+  }, [_c('h2', [_vm._v("Project Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.project_id) + ")")])]), _vm._v(" "), _c('p', {
     staticClass: "margin-25-top"
-  }, [_vm._v("\r\n\t\t\t\tNow showing all of your timesheets for this project.\r\n\t\t\t")]), _vm._v(" "), _vm._m(1)]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\r\n\t\t\t\tNow showing all of your timesheets for this project.\r\n\t\t\t")]), _vm._v(" "), _vm._m(1)]) : _vm._e(), _vm._v(" "), (_vm.user) ? _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v(_vm._s(_vm.user.first) + "'s' Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.project_id) + ")")])]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\tBelow are all of " + _vm._s(_vm.user.first) + "'s timesheets for this project.\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-15-top"
   }, [_c('div', {
     staticClass: "col-md-3"
@@ -48339,7 +48444,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "margin-25-top"
   }), _c('h4', [_c('strong', [_vm._v("Travel Distance:")]), _vm._v(" "), _c('span', {
     staticClass: "label label-success"
-  }, [_vm._v(_vm._s(_vm.totalTravelDistance) + " km")])]), _vm._v(" "), _c('p')])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.totalTravelDistance) + " km")])]), _vm._v(" "), _c('p')])]), _vm._v(" "), (!_vm.user) ? _c('div', {
     staticClass: "row row-padded margin-25-top"
   }, [_c('button', {
     staticClass: "btn btn-default",
@@ -48348,19 +48453,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-list-alt"
-  }), _vm._v(" Add Timesheet\r\n\t\t\t")])]), _vm._v(" "), (_vm.searchResults.models.length > 0) ? _c('div', [_c('div', {
+  }), _vm._v(" Add Timesheet\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.searchResults.models.length > 0) ? _c('div', [_c('div', {
     staticClass: "row row-padded margin-35-top"
   }, _vm._l((_vm.searchResults.models), function(timesheet) {
     return _c('timesheet-pill', {
       attrs: {
-        "timesheet": timesheet
+        "timesheet": timesheet,
+        "user": _vm.user
       }
     })
   }))]) : _c('div', [_c('div', {
     staticClass: "row row-padded margin-35-top"
   }, [_c('div', {
     staticClass: "alert alert-warning text-center"
-  }, [_c('big', [_c('strong', [_vm._v("Heads up!")]), _vm._v(" You havn't added any timesheets to this project yet")])], 1)])]), _vm._v(" "), _c('modal', {
+  }, [_c('big', [_c('strong', [_vm._v("Heads up!")]), _vm._v(" You havn't added any timesheets to this project yet")])], 1)])]), _vm._v(" "), (!_vm.user) ? _c('modal', {
     attrs: {
       "modalActive": _vm.modalActive
     },
@@ -48384,7 +48490,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.modalActive = false
       }
     }
-  }, [_vm._v("Cancel")])])])], 1) : _vm._e()])
+  }, [_vm._v("Cancel")])])]) : _vm._e()], 1) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-12"
@@ -50801,11 +50907,11 @@ if (false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(68);
+var content = __webpack_require__(70);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(15)("36949f0c", content, false);
+var update = __webpack_require__(17)("36949f0c", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -50827,11 +50933,11 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(69);
+var content = __webpack_require__(71);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(15)("69e5f6de", content, false);
+var update = __webpack_require__(17)("69e5f6de", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -60575,7 +60681,7 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(16)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(18)))
 
 /***/ }),
 /* 134 */
@@ -60609,8 +60715,8 @@ module.exports = function(module) {
 /* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(17);
-module.exports = __webpack_require__(18);
+__webpack_require__(19);
+module.exports = __webpack_require__(20);
 
 
 /***/ })

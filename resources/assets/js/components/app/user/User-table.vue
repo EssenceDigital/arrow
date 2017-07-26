@@ -11,9 +11,9 @@
 
 	<div v-if="!isLoading">
 		<div class="row row-padded">
-			<h2>User Details</h2>
+			<h2>{{ user.first }}'s' Details</h2>
 			<p class="margin-25-top">
-				This is where you can edit the user you've selected.
+				This is where you can edit {{ user.first }}'s details and view their timesheets.
 			</p>	
 			<p class="margin-25-top text-info">
 				<span class="glyphicon glyphicon-question-sign"></span>
@@ -396,18 +396,21 @@
 				</div>
 			</div><!-- / Field column -->
 
+
 		</div><!-- / User business row -->
 
-		<div class="row row-padded margin-45-top">
-			<h2>Projects {{ user.first }}'s Involved In</h2>
-			<p class="margin-25-top">
-				This is where you can keep track of {{ user.first }}'s timesheets.
-			<p class="margin-25-top text-info">
-				<span class="glyphicon glyphicon-question-sign"></span>
-				Use the view button on each project row to view {{ user.first }}'s timesheets for that project.
-			</p>		
-			<project-search></project-search>
+		<hr class="margin-45-top">
+
+
+		<div class="row row-padded">
+
+			<project-search
+				:user="user"
+			>	
+			</project-search>			
+
 		</div>
+
 	</div><!-- Table wrapper -->
 </div><!-- / Containing div -->
 
@@ -416,11 +419,13 @@
 <script>
 	let api_access = require('./../_mixins/api-access.js');
 	let project_search = require('./../project/Project-search.vue');
+	let timesheets_hub = require('./../timesheet/Timesheets-hub.vue');
 
 
 	export default{
 		components: {
-			'project-search': project_search
+			'project-search': project_search,
+			'timesheets-hub': timesheets_hub
 		},
 
 		props: ['user'],
@@ -454,7 +459,8 @@
 				},
 				form: {
 					updateEvent: 'user-updated'
-				}				
+				},
+				selectedProjectId: false				
 			}
 		},
 
@@ -491,6 +497,16 @@
 			if(this.user.id == null){
 				this.isLoading = true;
 			}
+
+			this.$router.app.$on('view-user-timesheets', id => {
+				this.selectedProjectId = id;
+			});
+
+			this.$router.app.$on('close-timesheets-hub', function() {
+				console.log("on timesheets close");
+				this.selectedProjectId = false;
+				console.log(this.selectedProjectId);
+			});			
 		}		
 	}
 

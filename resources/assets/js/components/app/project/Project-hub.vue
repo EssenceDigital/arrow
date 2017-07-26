@@ -58,6 +58,8 @@
 
 		mixins: [api_access],
 
+		props: ['project_id'],
+
 		data(){
 			return{
 				// The project. Get sets by the created() method
@@ -69,9 +71,9 @@
 			console.log('Project hub created');
 
 			// If the ID is present then get and set the project
-			if(this.$route.params.id){
+			if(this.project_id){
 				// Get a fresh version of the requested model using API access
-				this.grabModel('/api/projects/' + this.$route.params.id, function(model){
+				this.grabModel('/api/projects/' + this.project_id, function(model){
 					// Cache retrieved model
 					this.project = model;
 				});

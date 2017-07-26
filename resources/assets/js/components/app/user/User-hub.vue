@@ -2,9 +2,11 @@
 
 <!-- Containing div -->
 <div>
+
 	<!-- Mount for user table and form -->
-	<router-view name="user"
-		:user="user">			
+	<router-view
+		:user="user"
+	>			
 	</router-view>
 										
 </div><!-- / containing div -->
@@ -18,9 +20,11 @@
 
 		mixins: [api_access],
 
+		props: ['user_id'],
+
 		data(){
 			return{
-				user: { },
+				user: false,
 			}
 		},
 
@@ -32,9 +36,9 @@
 		created(){
 			console.log('User hub created');
 
-			if(this.$route.params.id){
+			if(this.user_id){
 				// Get a fresh version of the requested model
-				this.grabModel('/api/users/' + this.$route.params.id, function(model){
+				this.grabModel('/api/users/' + this.user_id, function(model){
 					// Cache retrieved model
 					this.user = model;
 				});

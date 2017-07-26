@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\User;
+use App\Project;
+use App\Timesheet;
 
 class UsersController extends Controller
 {
@@ -107,12 +109,18 @@ class UsersController extends Controller
         ], 200);        
     }
 
-    public function projects($id){
-        // Get logged in user
-        $user = User::with('projects', 'projects.timesheets')->find($id);    
-        
+    public function projects($userId){
+
+        // Construct query to find all projects user is a part of
+        $projects = Project::whereHas('users', function ($q) use ($userId) {
+            $q->where('user_id', $userId);
+        // Now, only select the timesheets that belongs to this user
+        })->with(['timesheets' => function($q) use ($userId)  {
+            $q->where('user_id', $userId);
+        }])->get();
+
         // Return failed response if collection empty
-        if(! $user){
+        if(! $projects){
             // Return response for ajax call
             return response()->json([
                 'result' => false,
@@ -122,8 +130,30 @@ class UsersController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'models' => $user->projects
-        ], 200);         
+            'models' => $projects
+        ], 200);          
+    }
+
+    public function projectTimesheets($userId, $projectId){
+        // Get the users timesheets for the requested project
+        $timesheets = Timesheet::where([
+            ['user_id', '=', $userId],
+            ['project_id', '=', $projectId],
+        ])->with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->get();
+
+        // Return failed response if collection empty
+        if(! $timesheets){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false,
+            ], 404);
+        }   
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'models' => $timesheets
+        ], 200);          
     }
 
     /**

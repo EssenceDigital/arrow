@@ -12,8 +12,9 @@
 
 	<!-- Table wrapper - only shows after project is loaded -->
 	<div v-if="!fetchingModels">
-		<div class="row row-padded">
-			<h2>Project Timesheets <small>(Project {{ this.$route.params.project_id }})</small></h2>
+
+		<div v-if="!user" class="row row-padded">
+			<h2>Project Timesheets <small>(Project {{ this.project_id }})</small></h2>
 			<p class="margin-25-top">
 				Now showing all of your timesheets for this project.
 			</p>
@@ -22,6 +23,17 @@
 				Once you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.
 			</p>
 		</div>
+
+
+
+		<div v-if="user" class="row row-padded">
+			<h2>{{ user.first }}'s' Timesheets <small>(Project {{ this.project_id }})</small></h2>
+			<p class="margin-25-top">
+				Below are all of {{ user.first }}'s timesheets for this project.
+			</p>
+			
+		</div>
+
 		<div class="row row-padded margin-15-top">
 			<div class="col-md-3">
 				<p class="margin-25-top">
@@ -55,7 +67,7 @@
 
 
 		<!-- Tool navigation -->
-		<div class="row row-padded margin-25-top">
+		<div v-if="!user" class="row row-padded margin-25-top">
 			<button @click="timesheetFormModal" class="btn btn-default">
 				<span class="glyphicon glyphicon-list-alt"></span>&nbsp;Add Timesheet
 			</button>	
@@ -69,6 +81,7 @@
 				<timesheet-pill
 					v-for="timesheet in searchResults.models"
 					:timesheet="timesheet"
+					:user="user"
 				>					
 				</timesheet-pill>
 			</div>
@@ -85,6 +98,7 @@
 
 		<!-- Modal to hold new timesheet form -->
 		<modal 
+			v-if="!user"
 			:modalActive="modalActive" 
 			@modal-close="modalActive = false"
 		>
@@ -119,15 +133,18 @@
 			'timesheet-form': timesheet_form
 		},
 
+		props: ['project_id', 'user'],
+
 		mixins: [api_access],
 
 		data(){
 			return {
+				adminState: false,
 				currentModal: '',
 				// For the form modal
 				modalActive: false,
 				// Used by API access
-				urlToFetch: '/api/dashboard/project-timesheets/'+this.$route.params.project_id,
+				urlToFetch: '',
 				// Used by API access
 				fetchingModels: false,
 				// Results from Laravel pagination json. Used by API access.
@@ -184,8 +201,19 @@
 		},
 
 		created(){
-			// Retrieve model through API access
-			this.getAndSetModels();
+
+			if(this.project_id){
+
+				if(!this.user){
+					this.urlToFetch = '/api/dashboard/project-timesheets/'+this.project_id;
+				} else {
+					this.urlToFetch = '/api/users/'+this.user.id+'/projects/'+this.project_id+'/timesheets';
+				}
+
+				// Retrieve model through API access
+				this.getAndSetModels();
+			}
+
 
 			// When the form component alerts this parent of a successful create
 			this.$router.app.$on('timesheet-created', model => {

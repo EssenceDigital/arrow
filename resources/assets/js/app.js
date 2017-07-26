@@ -65,8 +65,9 @@ const routes = [
 				component: project_search
 			},
 			{
-				path: 'timesheets/:project_id',
-				component: timesheets_hub
+				path: 'projects/:project_id/timesheets',
+				component: timesheets_hub,
+				props: true
 			}
 		]
 	},
@@ -77,8 +78,9 @@ const routes = [
 		children: [
 			{ path: 'search', component: project_search },
 			{ 
-				path: 'view/:id', 
+				path: 'view/:project_id', 
 				component: project_hub,
+				props: true,
 				children: [
 					{ 
 						path: 'hub',
@@ -124,14 +126,19 @@ const routes = [
 		children: [
 			{ path: 'search', component: user_search },
 			{ 
-				path: 'view/:id', 
+				path: 'view/:user_id', 
 				component: user_hub,
+				props: true,
 				children: [
 					{ 
 						path: 'hub',
-						components: {
-							user: user_table,
-						}
+						component: user_table,
+						props: true
+					},
+					{
+						path: 'projects/:project_id/timesheets',
+						component: timesheets_hub,
+						props: true
 					},
 					{
 						path: 'options',

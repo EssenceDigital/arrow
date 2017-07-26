@@ -12,4 +12,14 @@ class ProjectUser extends Model
      * @var string
      */
     protected $table = 'project_user';
+
+    /*public function project()
+    {
+        return $this->hasOne('App\Project');
+    }    
+
+    public function user()
+    {
+        return $this->hasOne('App\User');
+    } */   
 }

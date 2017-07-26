@@ -107,7 +107,7 @@
 			},
 
 			viewTimesheets(id){
-				this.$router.push('/dashboard/timesheets/' + id);
+				this.$router.push('/dashboard/projects/' + id + '/timesheets');
 			}
 		},
 

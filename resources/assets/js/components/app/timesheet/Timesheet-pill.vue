@@ -6,7 +6,7 @@
 	<div class="col-md-12">
 		<div class="panel panel-white post panel-shadow">
 			<div class="row row-padded">
-		    	<div class="pull-right margin-5-top">
+		    	<div v-if="!user" class="pull-right margin-5-top">
 		    		<span @click="editTimesheet(timesheet.id)" class="glyphicon glyphicon-cog hover"></span>
 		    	</div>
 			</div>
@@ -18,7 +18,7 @@
 				<h3>{{ new Date(Date.parse(timesheet.date + 'T00:00:00')).toDateString() }}</h3>
 			</div>
 			<!-- Row for timesheet asset buttons -->
-			<div class="row row-padded margin-10-top">
+			<div v-if="!user" class="row row-padded margin-10-top">
 				<div class="col-md-5 col-centered">
 					<div class="btn-toolbar">						
 						<a @click="addWorkHours(timesheet.id)" class="btn btn-info btn-sm margin-10-top">
@@ -87,7 +87,7 @@
 								{{ parseFloat(travelJob.travel_time) }}									
 							</div>
 							<div class="col-md-2">
-						    	<div class="pull-right">
+						    	<div v-if="!user" class="pull-right">
 						    		<span @click="editTravel(travelJob)" class="glyphicon glyphicon-cog hover"></span>
 						    	</div>								
 							</div>							
@@ -127,7 +127,7 @@
 								<strong>Hours</strong><br>
 								{{ parseFloat(workjob.hours_worked) }}									
 							</div>
-							<div class="col-md-2">
+							<div v-if="!user" class="col-md-2">
 						    	<div class="pull-right">
 						    		<span @click="editWorkHours(workjob)" class="glyphicon glyphicon-cog hover"></span>
 						    	</div>								
@@ -168,7 +168,7 @@
 								<strong>Rental Fee</strong><br>
 								${{ equipmentRental.rental_fee }}									
 							</div>
-							<div class="col-md-2">
+							<div v-if="!user" class="col-md-2">
 						    	<div class="pull-right">
 						    		<span @click="editEquipmentRental(equipmentRental)" class="glyphicon glyphicon-cog hover"></span>
 						    	</div>								
@@ -209,7 +209,7 @@
 								<strong>Cost</strong><br>
 								${{ otherCost.cost }}									
 							</div>
-							<div class="col-md-2">
+							<div v-if="!user" class="col-md-2">
 						    	<div class="pull-right">
 						    		<span @click="editOtherCost(otherCost)" class="glyphicon glyphicon-cog hover"></span>
 						    	</div>								
@@ -229,7 +229,7 @@
 				</ul><!-- / The timesheet table tab -->	
 
 				<!-- Timesheet asset forms -->
-				<div class="col-md-8 col-centered">
+				<div v-if="!user" class="col-md-8 col-centered">
 					<!-- Work job form tab -->
 					<work-job-form
 						v-if="tabToShow == 'Work-job'"
@@ -303,6 +303,7 @@
 
 	<!-- Modal to hold timesheet form -->
 	<modal 
+		v-if="!user"
 		:modalActive="modalActive" 
 		@modal-close="modalActive = false"
 	>
@@ -345,10 +346,11 @@
 			'other-cost-form': other_cost_form
 		},
 
-		props: ['timesheet'],
+		props: ['timesheet', 'user'],
 
 		data(){
 			return{
+				adminState: false,
 				// Toggles which form to show in the modal
 				tabToShow: 'List',
 				currentModel: '',
@@ -430,6 +432,9 @@
 		},
 
 		created(){
+			
+			
+			// When a timesheet has been created
 			this.$router.app.$on('timesheet-created', model => {
 				this.currentModel = '';
 				this.modalActive = false;				

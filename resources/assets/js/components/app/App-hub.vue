@@ -19,7 +19,10 @@
     </navbar>
 
     <!-- Primary router mount (Where primary routes are rendered) -->
-   <router-view></router-view>
+
+    <router-view></router-view>
+
+   
 
 </div> <!-- / App container -->
 
