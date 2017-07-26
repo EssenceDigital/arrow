@@ -30,19 +30,24 @@
 		</div>
 
 		<div class="row row-padded">
-			<div class="col-md-4 margin-25-top"
+			<div class="col-md-6 margin-25-top"
 				v-for="user in crew"
 			>
 				<div class="bs-component">
 					<ul class="list-group">
 						<li class="list-group-item">
-					
 							<button class="btn btn-xs btn-danger pull-right"
 								@click="removeCrewFromProject(user.id)"
 							>
-								<span class="glyphicon glyphicon-minus"></span>
+								&times; Remove</span>
 							</button>
-		
+							
+							<button class="btn btn-xs btn-info pull-right margin-20-right"
+								@click="$router.push('/users/view/' + user.id + '/projects/' + project_id + '/timesheets')"
+							>
+								Timesheets</span>
+							</button>
+
 							{{ user.first + " " + user.last }}
 						</li>
 					</ul>
@@ -59,34 +64,59 @@
 	export default{
 		// The crew members to populate the list with
 		// The parent project id
-		props: ['crew', 'project_id'],
+		props: ['crew', 'project_id', 'timesheets'],
 
 		methods: {
 			removeCrewFromProject(user_id){
-				// Cache context and post object
-				var context = this,
-					postData = { 
-						project_id: this.project_id, 
-						user_id: user_id, 
-						_token: window.Laravel.csrfToken  
-					};
-				// Send request to server
-				axios.post('/api/projects/remove-crew', postData)
-					.then(function(response){
-						context.$router.app.$emit('crew-removed', user_id);
-						// Clear form, notify, and reset loader
-		                 noty({
-		                     text: 'Crew member removed from project',
-		                     theme: 'defaultTheme',
-		                     layout: 'center',
-		                     timeout: 650,
-		                     closeWith: ['click', 'hover'],
-		                     type: 'success'
-		                });						
-					})
-					.catch(function(response){
-						console.log(response);
-					});
+				// Flag preventing removal
+				var doNotRemove = false;
+				// Check if requested crew member has any timesheets on this project
+				for(let timesheet of this.timesheets){
+					if(timesheet.user_id == user_id){
+						doNotRemove = true;
+						break;
+					}
+				}
+
+				// If the crew member doesn't have any timesheets on the project then it can be removed
+				if(!doNotRemove){
+					// Cache context and post object
+					var context = this,
+						postData = { 
+							project_id: this.project_id, 
+							user_id: user_id, 
+							_token: window.Laravel.csrfToken  
+						};
+					// Send request to server
+					axios.post('/api/projects/remove-crew', postData)
+						.then(function(response){
+							context.$router.app.$emit('crew-removed', user_id);
+							// Clear form, notify, and reset loader
+			                 noty({
+			                     text: 'Crew member removed from project',
+			                     theme: 'defaultTheme',
+			                     layout: 'center',
+			                     timeout: 650,
+			                     closeWith: ['click', 'hover'],
+			                     type: 'success'
+			                });						
+						})
+						.catch(function(response){
+							console.log(response);
+						});					
+				} else {
+					// If the crew member has at least one timesheet on this project they may not be removed from it
+	                 noty({
+	                     text: '<h4>Timesheets present! Cannot remove</h4>',
+	                     theme: 'defaultTheme',
+	                     layout: 'center',
+	                     timeout: 1200,
+	                     closeWith: ['click', 'hover'],
+	                     type: 'warning'
+	                });	
+				}
+
+
 			}
 		},
 

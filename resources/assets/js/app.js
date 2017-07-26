@@ -88,15 +88,15 @@ const routes = [
 							project: project_table,
 							crew: crew_list,
 							timeline: timeline_table
-						}
+						},
+						props: true
 					},
 					{
 						path: 'options',
 						components: {
-							project: project_form,
-							crew: crew_list,
-							timeline: timeline_table
-						}
+							project: project_form
+						},
+						props: true
 					},
 					{
 						path: 'crew-form',

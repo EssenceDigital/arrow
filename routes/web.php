@@ -56,8 +56,11 @@ Route::post('/api/other-costs/update', 'OtherCostsController@update');
 
 // Projects
 Route::get('/api/projects/all', 'ProjectsController@all');
+Route::post('/api/projects/filter', 'ProjectsController@filter');
 Route::get('/api/projects/unique-clients', 'ProjectsController@uniqueClients');
+// This must be below above routes
 Route::get('/api/projects/{id}', 'ProjectsController@single');
+//
 Route::post('/api/projects/create', 'ProjectsController@store');
 Route::post('/api/projects/update', 'ProjectsController@update');
 Route::post('/api/projects/update-field', 'ProjectsController@updateField');

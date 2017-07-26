@@ -10,6 +10,14 @@
 	</div>
 
 	<div v-if="!isLoading">
+		<div class="row row-padded margin-15-bottom">
+			<button 
+				@click="$router.go(-1)" 
+				class="pull-left btn btn-info"
+			>
+				<span class="glyphicon glyphicon-arrow-left"></span> Go back
+			</button>			
+		</div>	
 		<div class="row row-padded">
 			<h2>{{ user.first }}'s' Details</h2>
 			<p class="margin-25-top">

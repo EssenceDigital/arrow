@@ -94,16 +94,7 @@ module.exports =  {
 		},
 
 		/* Executes a GET request to the supplied URL or from the urlToFetch variable in the calling components data() method.
-		 * The URL should return a Laravel Eloquent pagination result because this method disects that response into
-		 * an object in the calling components data() method. That object in the calling component should look like:
-		 	searchResults: {	
-				models: [],	
-				modelsPageTotal: 0,
-				modelsCurrentPage: 0,
-				modelsPageLinks: { },
-				modelsNextPageUrl: '',
-				modelsPrevPageUrl: ''					
-			}
+		 * The URL should return a Laravel Eloquent pagination result or some models in the response.data.models attribute.
 		 * @param url - String - Optional URL to send GET request too. Overides the urLToFetch variable in the calling component.
 		 *				Usually available when the pagination buttons are clicked 
 		 * @return sets the searchResults object in the calling components data() method. See above.
@@ -125,47 +116,96 @@ module.exports =  {
 			axios.get(urlToFetch)
 				// Success
 				.then(function(response){
-					// If the response returned a result we can use
-					if(response.data.data){
-						// Total amount of pages
-						var totalPages = response.data.last_page;
-
-						// If there is more than one page
-						if(totalPages > 1){
-							// Cache the results from the response
-							var nextPageUrl = response.data.next_page_url,
-								prevPageUrl = response.data.prev_page_url;
-							// Cache and create the URLs for the next and prev page buttons
-							if(nextPageUrl != null){
-								baseUrl = nextPageUrl.substring(0, nextPageUrl.length - 1);
-							} else if(prevPageUrl != null){
-								baseUrl = prevPageUrl.substring(0, prevPageUrl.length - 1);
-							}
-							// Cache and create the direct page links
-							for(var i = 1; i <= totalPages; i++){
-								context.searchResults.modelsPageurls[i] = baseUrl + i;
-							}								
-						}
-						// Cache the pagination in the calling component
-						context.searchResults.modelsNextPageUrl = nextPageUrl;
-						context.searchResults.modelsPrevPageUrl = prevPageUrl;
-						context.searchResults.modelsCurrentPage = response.data.current_page;
-						context.searchResults.modelsPageTotal = totalPages;
-						// Cache actual result models
-						context.searchResults.models = response.data.data;						
-					} else{
-						console.log(response.data.models);
-						// If the response is not a Laravel pagination then only cache the returned array
-						context.searchResults.models = response.data.models;
-					}
-					
-					// Hide loader
-					context.fetchingModels = false;
+					// Handle the response with helper method found below this method
+					context.handleGetAndSetResponse(response, context);
 				})
 				// Error
 				.catch(function(response){
 					console.log(response);
 				});					
+		},
+
+		/* See getAndSetModels comments above
+		 * This method disects the above methods response into an object in the calling components data() method. 
+		 * The object in the calling component should look like:
+		 	searchResults: {	
+				models: [],	
+				modelsPageTotal: 0,
+				modelsCurrentPage: 0,
+				modelsPageLinks: { },
+				modelsNextPageUrl: '',
+				modelsPrevPageUrl: ''					
+			}
+		*/
+		handleGetAndSetResponse(response, context){
+
+			// If the response returned a result we can use
+			if(response.data.data){
+				// Total amount of pages
+				var totalPages = response.data.last_page;
+
+				// If there is more than one page
+				if(totalPages > 1){
+					// Cache the results from the response
+					var nextPageUrl = response.data.next_page_url,
+						prevPageUrl = response.data.prev_page_url;
+					// Cache and create the URLs for the next and prev page buttons
+					if(nextPageUrl != null){
+						baseUrl = nextPageUrl.substring(0, nextPageUrl.length - 1);
+					} else if(prevPageUrl != null){
+						baseUrl = prevPageUrl.substring(0, prevPageUrl.length - 1);
+					}
+					// Cache and create the direct page links
+					for(var i = 1; i <= totalPages; i++){
+						context.searchResults.modelsPageurls[i] = baseUrl + i;
+					}								
+				}
+				// Cache the pagination in the calling component
+				context.searchResults.modelsNextPageUrl = nextPageUrl;
+				context.searchResults.modelsPrevPageUrl = prevPageUrl;
+				context.searchResults.modelsCurrentPage = response.data.current_page;
+				context.searchResults.modelsPageTotal = totalPages;
+				// Cache actual result models
+				context.searchResults.models = response.data.data;						
+			} else{
+				console.log(response.data.models);
+				// If the response is not a Laravel pagination then only cache the returned array
+				context.searchResults.models = response.data.models;
+			}
+			
+			// Hide loader
+			context.fetchingModels = false;
+
+		},
+
+		filterAndSetModels(url, data){
+			// Cache
+			var context = this;
+			// Show loader
+			this.fetchingModels = true;
+
+			// Use callers variable or provided url variable for the GET
+			if(url){
+				var urlToFetch = url;
+			} else {
+				var urlToFetch = this.urlToFetch;
+			}
+
+			// Add CSRF token. Requires Laravel layout to set the token
+			data._token = window.Laravel.csrfToken;
+
+			// Send POST request to retrieve pagination results
+			axios.post(urlToFetch, data)
+				// Success
+				.then(function(response){
+					// Handle the response with helper method found below this method
+					context.handleGetAndSetResponse(response, context);
+				})
+				// Error
+				.catch(function(response){
+					console.log(response);
+				});	
+
 		},
 
 		/* Sends a POST request to create or update a resource in storage. Uses a properly set up 'hub' form. See top most comment.

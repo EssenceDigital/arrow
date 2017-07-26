@@ -224,16 +224,7 @@ module.exports = {
 
 
 		/* Executes a GET request to the supplied URL or from the urlToFetch variable in the calling components data() method.
-   * The URL should return a Laravel Eloquent pagination result because this method disects that response into
-   * an object in the calling components data() method. That object in the calling component should look like:
-   	searchResults: {	
-  		models: [],	
-  		modelsPageTotal: 0,
-  		modelsCurrentPage: 0,
-  		modelsPageLinks: { },
-  		modelsNextPageUrl: '',
-  		modelsPrevPageUrl: ''					
-  	}
+   * The URL should return a Laravel Eloquent pagination result or some models in the response.data.models attribute.
    * @param url - String - Optional URL to send GET request too. Overides the urLToFetch variable in the calling component.
    *				Usually available when the pagination buttons are clicked 
    * @return sets the searchResults object in the calling components data() method. See above.
@@ -255,42 +246,89 @@ module.exports = {
 			axios.get(urlToFetch)
 			// Success
 			.then(function (response) {
-				// If the response returned a result we can use
-				if (response.data.data) {
-					// Total amount of pages
-					var totalPages = response.data.last_page;
+				// Handle the response with helper method found below this method
+				context.handleGetAndSetResponse(response, context);
+			})
+			// Error
+			.catch(function (response) {
+				console.log(response);
+			});
+		},
 
-					// If there is more than one page
-					if (totalPages > 1) {
-						// Cache the results from the response
-						var nextPageUrl = response.data.next_page_url,
-						    prevPageUrl = response.data.prev_page_url;
-						// Cache and create the URLs for the next and prev page buttons
-						if (nextPageUrl != null) {
-							baseUrl = nextPageUrl.substring(0, nextPageUrl.length - 1);
-						} else if (prevPageUrl != null) {
-							baseUrl = prevPageUrl.substring(0, prevPageUrl.length - 1);
-						}
-						// Cache and create the direct page links
-						for (var i = 1; i <= totalPages; i++) {
-							context.searchResults.modelsPageurls[i] = baseUrl + i;
-						}
+
+		/* See getAndSetModels comments above
+   * This method disects the above methods response into an object in the calling components data() method. 
+   * The object in the calling component should look like:
+   	searchResults: {	
+  		models: [],	
+  		modelsPageTotal: 0,
+  		modelsCurrentPage: 0,
+  		modelsPageLinks: { },
+  		modelsNextPageUrl: '',
+  		modelsPrevPageUrl: ''					
+  	}
+  */
+		handleGetAndSetResponse: function handleGetAndSetResponse(response, context) {
+
+			// If the response returned a result we can use
+			if (response.data.data) {
+				// Total amount of pages
+				var totalPages = response.data.last_page;
+
+				// If there is more than one page
+				if (totalPages > 1) {
+					// Cache the results from the response
+					var nextPageUrl = response.data.next_page_url,
+					    prevPageUrl = response.data.prev_page_url;
+					// Cache and create the URLs for the next and prev page buttons
+					if (nextPageUrl != null) {
+						baseUrl = nextPageUrl.substring(0, nextPageUrl.length - 1);
+					} else if (prevPageUrl != null) {
+						baseUrl = prevPageUrl.substring(0, prevPageUrl.length - 1);
 					}
-					// Cache the pagination in the calling component
-					context.searchResults.modelsNextPageUrl = nextPageUrl;
-					context.searchResults.modelsPrevPageUrl = prevPageUrl;
-					context.searchResults.modelsCurrentPage = response.data.current_page;
-					context.searchResults.modelsPageTotal = totalPages;
-					// Cache actual result models
-					context.searchResults.models = response.data.data;
-				} else {
-					console.log(response.data.models);
-					// If the response is not a Laravel pagination then only cache the returned array
-					context.searchResults.models = response.data.models;
+					// Cache and create the direct page links
+					for (var i = 1; i <= totalPages; i++) {
+						context.searchResults.modelsPageurls[i] = baseUrl + i;
+					}
 				}
+				// Cache the pagination in the calling component
+				context.searchResults.modelsNextPageUrl = nextPageUrl;
+				context.searchResults.modelsPrevPageUrl = prevPageUrl;
+				context.searchResults.modelsCurrentPage = response.data.current_page;
+				context.searchResults.modelsPageTotal = totalPages;
+				// Cache actual result models
+				context.searchResults.models = response.data.data;
+			} else {
+				console.log(response.data.models);
+				// If the response is not a Laravel pagination then only cache the returned array
+				context.searchResults.models = response.data.models;
+			}
 
-				// Hide loader
-				context.fetchingModels = false;
+			// Hide loader
+			context.fetchingModels = false;
+		},
+		filterAndSetModels: function filterAndSetModels(url, data) {
+			// Cache
+			var context = this;
+			// Show loader
+			this.fetchingModels = true;
+
+			// Use callers variable or provided url variable for the GET
+			if (url) {
+				var urlToFetch = url;
+			} else {
+				var urlToFetch = this.urlToFetch;
+			}
+
+			// Add CSRF token. Requires Laravel layout to set the token
+			data._token = window.Laravel.csrfToken;
+
+			// Send POST request to retrieve pagination results
+			axios.post(urlToFetch, data)
+			// Success
+			.then(function (response) {
+				// Handle the response with helper method found below this method
+				context.handleGetAndSetResponse(response, context);
 			})
 			// Error
 			.catch(function (response) {
@@ -793,7 +831,7 @@ __webpack_require__(131)
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(41),
+  __webpack_require__(42),
   /* template */
   __webpack_require__(109),
   /* scopeId */
@@ -1017,7 +1055,7 @@ process.umask = function() { return 0; };
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(40),
+  __webpack_require__(41),
   /* template */
   __webpack_require__(126),
   /* scopeId */
@@ -1053,7 +1091,7 @@ module.exports = Component.exports
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(2);
-var normalizeHeaderName = __webpack_require__(36);
+var normalizeHeaderName = __webpack_require__(37);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 var DEFAULT_CONTENT_TYPE = {
@@ -1154,12 +1192,12 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(2);
-var settle = __webpack_require__(28);
-var buildURL = __webpack_require__(31);
-var parseHeaders = __webpack_require__(37);
-var isURLSameOrigin = __webpack_require__(35);
+var settle = __webpack_require__(29);
+var buildURL = __webpack_require__(32);
+var parseHeaders = __webpack_require__(38);
+var isURLSameOrigin = __webpack_require__(36);
 var createError = __webpack_require__(10);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(30);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(31);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -1255,7 +1293,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(33);
+      var cookies = __webpack_require__(34);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -1376,7 +1414,7 @@ module.exports = function isCancel(value) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(27);
+var enhanceError = __webpack_require__(28);
 
 /**
  * Create an Error with the specified message, config, error code, and response.
@@ -11733,7 +11771,7 @@ return jQuery;
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(51),
+  __webpack_require__(52),
   /* template */
   __webpack_require__(119),
   /* scopeId */
@@ -11767,7 +11805,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(58),
+  __webpack_require__(59),
   /* template */
   __webpack_require__(120),
   /* scopeId */
@@ -11797,6 +11835,40 @@ module.exports = Component.exports
 
 /***/ }),
 /* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(61),
+  /* template */
+  __webpack_require__(121),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheets-hub.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Timesheets-hub.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-af45854a", Component.options)
+  } else {
+    hotAPI.reload("data-v-af45854a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14269,7 +14341,7 @@ if (inBrowser && window.Vue) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14490,7 +14562,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 var g;
@@ -14517,12 +14589,12 @@ module.exports = g;
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(17);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -14530,24 +14602,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(69);
+__webpack_require__(70);
 
 window.Vue = __webpack_require__(133);
-window.VueRouter = __webpack_require__(16);
+window.VueRouter = __webpack_require__(17);
 // Add router to vue
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["default"]);
 
 /**
  * Components
  */
-var app_hub = __webpack_require__(74);
+var app_hub = __webpack_require__(75);
 
 // Dashboard related components
-var dashboard_hub = __webpack_require__(80);
-var dashboard_projects = __webpack_require__(81);
+var dashboard_hub = __webpack_require__(81);
+var dashboard_projects = __webpack_require__(82);
 
 // Timesheet related components
-var timesheets_hub = __webpack_require__(91);
+var timesheets_hub = __webpack_require__(16);
 
 // User related components
 var users_hub = __webpack_require__(99);
@@ -14558,22 +14630,22 @@ var user_search = __webpack_require__(96);
 var user_settings = __webpack_require__(97);
 
 // Project related components
-var projects_hub = __webpack_require__(85);
-var project_hub = __webpack_require__(83);
-var project_table = __webpack_require__(84);
-var project_form = __webpack_require__(82);
+var projects_hub = __webpack_require__(86);
+var project_hub = __webpack_require__(84);
+var project_table = __webpack_require__(85);
+var project_form = __webpack_require__(83);
 var project_search = __webpack_require__(14);
 
 // Crew related components
-var crew_list = __webpack_require__(79);
-var crew_form = __webpack_require__(78);
+var crew_list = __webpack_require__(80);
+var crew_form = __webpack_require__(79);
 
 // Timeline related components
-var timeline_form = __webpack_require__(86);
-var timeline_table = __webpack_require__(87);
+var timeline_form = __webpack_require__(87);
+var timeline_table = __webpack_require__(88);
 
 // UI components
-var navbar = __webpack_require__(75);
+var navbar = __webpack_require__(76);
 
 Vue.component('app-hub', app_hub);
 Vue.component('navbar', navbar);
@@ -14606,14 +14678,14 @@ var routes = [{
 				project: project_table,
 				crew: crew_list,
 				timeline: timeline_table
-			}
+			},
+			props: true
 		}, {
 			path: 'options',
 			components: {
-				project: project_form,
-				crew: crew_list,
-				timeline: timeline_table
-			}
+				project: project_form
+			},
+			props: true
 		}, {
 			path: 'crew-form',
 			components: {
@@ -14669,19 +14741,19 @@ var app = new Vue({
 }).$mount('#app');
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(22);
+module.exports = __webpack_require__(23);
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14689,7 +14761,7 @@ module.exports = __webpack_require__(22);
 
 var utils = __webpack_require__(2);
 var bind = __webpack_require__(11);
-var Axios = __webpack_require__(24);
+var Axios = __webpack_require__(25);
 var defaults = __webpack_require__(6);
 
 /**
@@ -14724,14 +14796,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(8);
-axios.CancelToken = __webpack_require__(23);
+axios.CancelToken = __webpack_require__(24);
 axios.isCancel = __webpack_require__(9);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(38);
+axios.spread = __webpack_require__(39);
 
 module.exports = axios;
 
@@ -14740,7 +14812,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14804,7 +14876,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14812,10 +14884,10 @@ module.exports = CancelToken;
 
 var defaults = __webpack_require__(6);
 var utils = __webpack_require__(2);
-var InterceptorManager = __webpack_require__(25);
-var dispatchRequest = __webpack_require__(26);
-var isAbsoluteURL = __webpack_require__(34);
-var combineURLs = __webpack_require__(32);
+var InterceptorManager = __webpack_require__(26);
+var dispatchRequest = __webpack_require__(27);
+var isAbsoluteURL = __webpack_require__(35);
+var combineURLs = __webpack_require__(33);
 
 /**
  * Create a new instance of Axios
@@ -14896,7 +14968,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14955,14 +15027,14 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(2);
-var transformData = __webpack_require__(29);
+var transformData = __webpack_require__(30);
 var isCancel = __webpack_require__(9);
 var defaults = __webpack_require__(6);
 
@@ -15041,7 +15113,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15067,7 +15139,7 @@ module.exports = function enhanceError(error, config, code, response) {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15099,7 +15171,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15126,7 +15198,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15169,7 +15241,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15244,7 +15316,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15263,7 +15335,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15323,7 +15395,7 @@ module.exports = (
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15344,7 +15416,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15419,7 +15491,7 @@ module.exports = (
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15438,7 +15510,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15482,7 +15554,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15516,7 +15588,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports) {
 
 //
@@ -15551,7 +15623,7 @@ module.exports = function spread(callback) {
 //
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15583,7 +15655,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15622,7 +15694,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15692,7 +15764,7 @@ var dropdown = __webpack_require__(5);
 });
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15776,7 +15848,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15869,7 +15941,7 @@ var dropdown = __webpack_require__(5);
 });
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16022,7 +16094,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16084,36 +16156,86 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// The crew members to populate the list with
 	// The parent project id
-	props: ['crew', 'project_id'],
+	props: ['crew', 'project_id', 'timesheets'],
 
 	methods: {
 		removeCrewFromProject: function removeCrewFromProject(user_id) {
-			// Cache context and post object
-			var context = this,
-			    postData = {
-				project_id: this.project_id,
-				user_id: user_id,
-				_token: window.Laravel.csrfToken
-			};
-			// Send request to server
-			axios.post('/api/projects/remove-crew', postData).then(function (response) {
-				context.$router.app.$emit('crew-removed', user_id);
-				// Clear form, notify, and reset loader
+			// Flag preventing removal
+			var doNotRemove = false;
+			// Check if requested crew member has any timesheets on this project
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
+			try {
+				for (var _iterator = this.timesheets[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var timesheet = _step.value;
+
+					if (timesheet.user_id == user_id) {
+						doNotRemove = true;
+						break;
+					}
+				}
+
+				// If the crew member doesn't have any timesheets on the project then it can be removed
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+
+			if (!doNotRemove) {
+				// Cache context and post object
+				var context = this,
+				    postData = {
+					project_id: this.project_id,
+					user_id: user_id,
+					_token: window.Laravel.csrfToken
+				};
+				// Send request to server
+				axios.post('/api/projects/remove-crew', postData).then(function (response) {
+					context.$router.app.$emit('crew-removed', user_id);
+					// Clear form, notify, and reset loader
+					noty({
+						text: 'Crew member removed from project',
+						theme: 'defaultTheme',
+						layout: 'center',
+						timeout: 650,
+						closeWith: ['click', 'hover'],
+						type: 'success'
+					});
+				}).catch(function (response) {
+					console.log(response);
+				});
+			} else {
+				// If the crew member has at least one timesheet on this project they may not be removed from it
 				noty({
-					text: 'Crew member removed from project',
+					text: '<h4>Timesheets present! Cannot remove</h4>',
 					theme: 'defaultTheme',
 					layout: 'center',
-					timeout: 650,
+					timeout: 1200,
 					closeWith: ['click', 'hover'],
-					type: 'success'
+					type: 'warning'
 				});
-			}).catch(function (response) {
-				console.log(response);
-			});
+			}
 		}
 	},
 
@@ -16124,7 +16246,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports) {
 
 //
@@ -16180,7 +16302,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16309,7 +16431,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16744,6 +16866,8 @@ var modal = __webpack_require__(3);
 		'modal': modal
 	},
 
+	props: ['project_id'],
+
 	mixins: [api_access],
 
 	data: function data() {
@@ -16866,21 +16990,15 @@ var modal = __webpack_require__(3);
 
 	// If an id is in the route then retrieve the model from server
 	created: function created() {
-		console.log('Project form created');
+		console.log('Project form created ');
 
 		// If an id is present then set up the form for edit
-		if (this.$route.params.id) {
-			// Show form loader
-			this.formIsLoading = true;
-			// Get the requested model
-			this.grabModel('/api/projects/' + this.$route.params.id, function (model) {
-				// Populate form
-				this.populateFormFromModel(model);
-				// Adjust form state
-				this.formEditState('edit');
-				// Hide form loader
-				this.formIsLoading = false;
-			});
+		if (this.project_id) {
+
+			// Adjust form state
+			this.formEditState('edit');
+
+			console.log(this.form.state);
 		} else {
 			// Find unique clients for a new project
 			this.getAndSetUniqueClients();
@@ -16889,11 +17007,13 @@ var modal = __webpack_require__(3);
 });
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
 //
 //
 //
@@ -17026,333 +17146,6 @@ var api_access = __webpack_require__(1);
 				}
 			});
 		});
-	}
-});
-
-/***/ }),
-/* 51 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var api_access = __webpack_require__(1);
-var dropdown = __webpack_require__(5);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		'dropdown': dropdown
-	},
-
-	/* @param - user - Component can be mounted from the /users/view/{id}/hub route and it needs the user
- */
-	props: ['user'],
-
-	mixins: [api_access],
-
-	data: function data() {
-		return {
-			// The table can have three different states that alter the way it displays
-			tableState: '',
-			// Used by API access. Set in the created method
-			urlToFetch: '',
-			// Used by API access
-			fetchingModels: false,
-			// Results from Laravel pagination json. Used by API access.
-			searchResults: {
-				models: [],
-				modelsPageTotal: 0,
-				modelsCurrentPage: 0,
-				modelsPageLinks: {},
-				modelsNextPageUrl: '',
-				modelsPrevPageUrl: ''
-			}
-		};
-	},
-
-
-	methods: {
-		// Refreshes the models cache from server. Uses API access
-		refresh: function refresh() {
-			this.getAndSetModels();
-		},
-
-
-		// Used by the pagination buttons. Uses API access
-		getSpecificProjectsPage: function getSpecificProjectsPage(link) {
-			this.getAndSetModels(link);
-		},
-
-
-		/* Routes to the full view of the project
-   * Can only be called from the admin only button
-  */
-		viewProject: function viewProject(id) {
-			this.$router.push('/projects/view/' + id + '/hub');
-		},
-
-
-		/* Routes to the users dashboard view showing their timesheets for the selected project
-   * Can only be called from the admin only button
-  */
-		viewTimesheets: function viewTimesheets(id) {
-			if (this.tableState == 'user') {
-				this.$router.push('/dashboard/projects/' + id + '/timesheets');
-			} else if (this.tableState == 'adminUser') {
-				if (this.user) {
-					this.$router.push('/users/view/' + this.user.id + '/projects/' + id + '/timesheets');
-				}
-			}
-		}
-	},
-
-	// Retrieves models from server
-	created: function created() {
-		console.log('Project search created');
-
-		// Determine what route is mounting this component to determine if the full table (admin only) 
-		// should be shown
-		if (this.$route.path == '/projects/search') {
-			// Verify the current user is an admin for extra security
-			if (DASHBOARD_USER_PERMISSIONS == 'admin') {
-				this.tableState = 'admin';
-				this.urlToFetch = '/api/projects/all';
-				// Start loader
-				this.fetchingModels = true;
-				// Find projects
-				this.getAndSetModels();
-			}
-		} else if (this.$route.path == '/dashboard/projects') {
-			this.tableState = 'user';
-			this.urlToFetch = '/api/dashboard/users-projects';
-			// Start loader
-			this.fetchingModels = true;
-			// Find projects
-			this.getAndSetModels();
-		}
-
-		// If a param called id in the route then the component is likely mounted from the users/view/{id}/hub route
-		// so check for that
-		if (this.user) {
-			console.log(this.user);
-			if (this.$route.path == '/users/view/' + this.user.id + '/hub') {
-				console.log('route');
-				// Verify the current user is an admin for extra security
-				if (DASHBOARD_USER_PERMISSIONS == 'admin') {
-					this.tableState = 'adminUser';
-					this.urlToFetch = '/api/users/' + this.user.id + '/projects';
-					// Start loader
-					this.fetchingModels = true;
-					// Find projects
-					this.getAndSetModels();
-				}
-			}
-		}
 	}
 });
 
@@ -17616,6 +17409,430 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+var api_access = __webpack_require__(1);
+var dropdown = __webpack_require__(5);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'dropdown': dropdown
+	},
+
+	/* @param - user - Component can be mounted from the /users/view/{id}/hub route and it needs the user
+ */
+	props: ['user'],
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			// The table can have three different states that alter the way it displays
+			tableState: '',
+			// Used by API access. Set in the created method
+			urlToFetch: '',
+			// Used by API access
+			fetchingModels: false,
+			// Results from Laravel pagination json. Used by API access.
+			searchResults: {
+				models: [],
+				modelsPageTotal: 0,
+				modelsCurrentPage: 0,
+				modelsPageLinks: {},
+				modelsNextPageUrl: '',
+				modelsPrevPageUrl: ''
+			},
+			// Unique project clients
+			clients: [],
+			clientCompanyFilter: '',
+			projectProvinceFilter: '',
+			invoiceStatusFilter: ''
+		};
+	},
+
+
+	methods: {
+		// Refreshes the models cache from server. Uses API access
+		refresh: function refresh() {
+			this.getAndSetModels();
+		},
+		filter: function filter() {
+			this.filterAndSetModels('/api/projects/filter', {
+				client_company_name: this.clientCompanyFilter,
+				province: this.projectProvinceFilter,
+				invoice_paid_date: this.invoiceStatusFilter
+			});
+		},
+
+
+		// Used by the pagination buttons. Uses API access
+		getSpecificProjectsPage: function getSpecificProjectsPage(link) {
+			this.getAndSetModels(link);
+		},
+
+
+		/* Routes to the full view of the project
+   * Can only be called from the admin only button
+  */
+		viewProject: function viewProject(id) {
+			this.$router.push('/projects/view/' + id + '/hub');
+		},
+
+
+		/* Routes to the users dashboard view showing their timesheets for the selected project
+   * Can only be called from the admin only button
+  */
+		viewTimesheets: function viewTimesheets(id, timesheets) {
+			if (this.tableState == 'user') {
+				this.$router.push('/dashboard/projects/' + id + '/timesheets');
+			} else if (this.tableState == 'adminUser') {
+				// If there is timesheets then proceed
+				if (timesheets > 0) {
+					if (this.user) {
+						this.$router.push('/users/view/' + this.user.id + '/projects/' + id + '/timesheets');
+					}
+				} else {
+					// If no timesheets then don't bother proceeding
+					noty({
+						text: '<h4>No timesheets on this project</h4>',
+						theme: 'defaultTheme',
+						layout: 'center',
+						timeout: 1200,
+						closeWith: ['click', 'hover'],
+						type: 'warning'
+					});
+				}
+			}
+		},
+
+
+		// Retrieve all the unique clients from api
+		getAndSetUniqueClients: function getAndSetUniqueClients() {
+			var context = this;
+			// Send request to retrieve unique clients
+			axios.get('/api/projects/unique-clients').then(function (response) {
+				// Set the clients prop
+				context.clients = response.data.clients;
+			}).catch(function (error) {
+				console.log(error);
+			});
+		}
+	},
+
+	// Retrieves models from server
+	created: function created() {
+		console.log('Project search created');
+
+		// Determine what route is mounting this component to determine if the full table (admin only) 
+		// should be shown
+		if (this.$route.path == '/projects/search') {
+			// Verify the current user is an admin for extra security
+			if (DASHBOARD_USER_PERMISSIONS == 'admin') {
+				this.tableState = 'admin';
+				this.urlToFetch = '/api/projects/all';
+				// Start loader
+				this.fetchingModels = true;
+				// Find projects
+				this.getAndSetModels();
+				// Get unique clients
+				this.getAndSetUniqueClients();
+			}
+		} else if (this.$route.path == '/dashboard/projects') {
+			this.tableState = 'user';
+			this.urlToFetch = '/api/dashboard/users-projects';
+			// Start loader
+			this.fetchingModels = true;
+			// Find projects
+			this.getAndSetModels();
+		}
+
+		// If a param called id in the route then the component is likely mounted from the users/view/{id}/hub route
+		// so check for that
+		if (this.user) {
+			console.log(this.user);
+			if (this.$route.path == '/users/view/' + this.user.id + '/hub') {
+				console.log('route');
+				// Verify the current user is an admin for extra security
+				if (DASHBOARD_USER_PERMISSIONS == 'admin') {
+					this.tableState = 'adminUser';
+					this.urlToFetch = '/api/users/' + this.user.id + '/projects';
+					// Start loader
+					this.fetchingModels = true;
+					// Find projects
+					this.getAndSetModels();
+				}
+			}
+		}
+	}
+});
+
+/***/ }),
+/* 53 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -18370,8 +18587,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var comment_form = __webpack_require__(76);
-var comment_list = __webpack_require__(77);
+var comment_form = __webpack_require__(77);
+var comment_list = __webpack_require__(78);
 var api_access = __webpack_require__(1);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -18382,7 +18599,7 @@ var api_access = __webpack_require__(1);
 	},
 
 	// The data to populated 'table' with
-	props: ['project'],
+	props: ['project', 'project_id'],
 
 	mixins: [api_access],
 
@@ -18490,7 +18707,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18577,7 +18794,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18901,14 +19118,11 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
 //
 //
 //
@@ -19877,7 +20091,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20035,7 +20249,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20193,7 +20407,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20362,7 +20576,7 @@ var modal = __webpack_require__(3);
 });
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20701,8 +20915,8 @@ var modal = __webpack_require__(3);
 var timesheet_form = __webpack_require__(15);
 var work_job_form = __webpack_require__(93);
 var travel_job_form = __webpack_require__(92);
-var equipment_rental_form = __webpack_require__(88);
-var other_cost_form = __webpack_require__(89);
+var equipment_rental_form = __webpack_require__(89);
+var other_cost_form = __webpack_require__(90);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -20848,7 +21062,7 @@ var other_cost_form = __webpack_require__(89);
 });
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20975,10 +21189,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(1);
 var modal = __webpack_require__(3);
-var timesheet_pill = __webpack_require__(90);
+var timesheet_pill = __webpack_require__(91);
 var timesheet_form = __webpack_require__(15);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -21014,8 +21254,20 @@ var timesheet_form = __webpack_require__(15);
 		totalTimesheets: function totalTimesheets() {
 			return this.searchResults.models.length;
 		},
+		totalPerDiem: function totalPerDiem() {
+			return this.stepAndDisectTimesheets('', 'per_diem');
+		},
 		totalWorkHours: function totalWorkHours() {
 			return this.stepAndDisectTimesheets('work_jobs', 'hours_worked');
+		},
+		totalWorkPay: function totalWorkPay() {
+			if (this.user) {
+				var pay = this.totalWorkHours * this.user.hourly_rate_one;
+			} else {
+				var pay = this.totalWorkHours * DASHBOARD_USER_HOURLY;
+			}
+
+			return parseFloat(pay);
 		},
 		totalTravelHours: function totalTravelHours() {
 			return this.stepAndDisectTimesheets('travel_jobs', 'travel_time');
@@ -21041,12 +21293,18 @@ var timesheet_form = __webpack_require__(15);
 			var total = parseInt(0);
 			// Iterate through each timesheet
 			this.searchResults.models.forEach(function (timesheet) {
-				if (timesheet[assetToIterate].length > 0) {
-					// Iterate through each travel job in timesheet
-					timesheet[assetToIterate].forEach(function (current) {
-						// Update total
-						total += parseFloat(current[fieldToAddUp]);
-					});
+				// If the asset field is an array
+				if (assetToIterate != '') {
+					if (timesheet[assetToIterate].length > 0) {
+						// Iterate through each travel job in timesheet
+						timesheet[assetToIterate].forEach(function (current) {
+							// Update total
+							total += parseFloat(current[fieldToAddUp]);
+						});
+					}
+				} else {
+					// If the asset field is not an array then just do a tally
+					total += parseFloat(timesheet[fieldToAddUp]);
 				}
 			});
 
@@ -21307,7 +21565,7 @@ var timesheet_form = __webpack_require__(15);
 });
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21482,7 +21740,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21661,7 +21919,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22041,7 +22299,7 @@ var modal = __webpack_require__(3);
 });
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22102,7 +22360,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22252,7 +22510,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22537,11 +22795,19 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -22963,7 +23229,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var api_access = __webpack_require__(1);
 var project_search = __webpack_require__(14);
-var timesheets_hub = __webpack_require__(91);
+var timesheets_hub = __webpack_require__(16);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -23059,7 +23325,7 @@ var timesheets_hub = __webpack_require__(91);
 });
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23143,13 +23409,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(72);
+window._ = __webpack_require__(73);
 
-window.noty = __webpack_require__(73);
+window.noty = __webpack_require__(74);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -23167,7 +23433,7 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(21);
+window.axios = __webpack_require__(22);
 
 window.axios.defaults.headers.common['X-CSRF-TOKEN'] = window.Laravel.csrfToken;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -23188,21 +23454,21 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // });
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)();
 exports.push([module.i, "\n.log-out{\n    margin-left: 10px;\n}\n\n", ""]);
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)();
 exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n.modal {\n\tbackground-color: rgba(0,0,0,0.7);\n}\n\n", ""]);
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -40291,10 +40557,10 @@ exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n.modal {\n\tbackgrou
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18), __webpack_require__(134)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19), __webpack_require__(134)(module)))
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!function(root, factory) {
@@ -42178,12 +42444,12 @@ return window.noty;
 });
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(39),
+  __webpack_require__(40),
   /* template */
   __webpack_require__(105),
   /* scopeId */
@@ -42212,7 +42478,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -42221,7 +42487,7 @@ __webpack_require__(130)
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(42),
+  __webpack_require__(43),
   /* template */
   __webpack_require__(103),
   /* scopeId */
@@ -42250,12 +42516,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(43),
+  __webpack_require__(44),
   /* template */
   __webpack_require__(116),
   /* scopeId */
@@ -42284,12 +42550,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(44),
+  __webpack_require__(45),
   /* template */
   __webpack_require__(122),
   /* scopeId */
@@ -42318,12 +42584,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(45),
+  __webpack_require__(46),
   /* template */
   __webpack_require__(102),
   /* scopeId */
@@ -42352,12 +42618,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(46),
+  __webpack_require__(47),
   /* template */
   __webpack_require__(111),
   /* scopeId */
@@ -42386,12 +42652,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(47),
+  __webpack_require__(48),
   /* template */
   __webpack_require__(125),
   /* scopeId */
@@ -42420,12 +42686,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(48),
+  __webpack_require__(49),
   /* template */
   __webpack_require__(114),
   /* scopeId */
@@ -42454,12 +42720,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(49),
+  __webpack_require__(50),
   /* template */
   __webpack_require__(108),
   /* scopeId */
@@ -42488,12 +42754,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(50),
+  __webpack_require__(51),
   /* template */
   __webpack_require__(123),
   /* scopeId */
@@ -42522,12 +42788,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(52),
+  __webpack_require__(53),
   /* template */
   __webpack_require__(112),
   /* scopeId */
@@ -42556,12 +42822,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(53),
+  __webpack_require__(54),
   /* template */
   __webpack_require__(107),
   /* scopeId */
@@ -42590,12 +42856,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(54),
+  __webpack_require__(55),
   /* template */
   __webpack_require__(104),
   /* scopeId */
@@ -42624,12 +42890,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(55),
+  __webpack_require__(56),
   /* template */
   __webpack_require__(128),
   /* scopeId */
@@ -42658,12 +42924,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(56),
+  __webpack_require__(57),
   /* template */
   __webpack_require__(127),
   /* scopeId */
@@ -42692,12 +42958,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(57),
+  __webpack_require__(58),
   /* template */
   __webpack_require__(118),
   /* scopeId */
@@ -42726,12 +42992,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(59),
+  __webpack_require__(60),
   /* template */
   __webpack_require__(115),
   /* scopeId */
@@ -42760,46 +43026,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 91 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(60),
-  /* template */
-  __webpack_require__(121),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheets-hub.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Timesheets-hub.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-af45854a", Component.options)
-  } else {
-    hotAPI.reload("data-v-af45854a", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
 /* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(61),
+  __webpack_require__(62),
   /* template */
   __webpack_require__(100),
   /* scopeId */
@@ -42833,7 +43065,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(62),
+  __webpack_require__(63),
   /* template */
   __webpack_require__(113),
   /* scopeId */
@@ -42867,7 +43099,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(63),
+  __webpack_require__(64),
   /* template */
   __webpack_require__(129),
   /* scopeId */
@@ -42901,7 +43133,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(64),
+  __webpack_require__(65),
   /* template */
   __webpack_require__(101),
   /* scopeId */
@@ -42935,7 +43167,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(65),
+  __webpack_require__(66),
   /* template */
   __webpack_require__(124),
   /* scopeId */
@@ -42969,7 +43201,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(66),
+  __webpack_require__(67),
   /* template */
   __webpack_require__(106),
   /* scopeId */
@@ -43003,7 +43235,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(67),
+  __webpack_require__(68),
   /* template */
   __webpack_require__(110),
   /* scopeId */
@@ -43037,7 +43269,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(68),
+  __webpack_require__(69),
   /* template */
   __webpack_require__(117),
   /* scopeId */
@@ -44756,6 +44988,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', [(_vm.isLoading) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
   }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.isLoading) ? _c('div', [_c('div', {
+    staticClass: "row row-padded margin-15-bottom"
+  }, [_c('button', {
+    staticClass: "pull-left btn btn-info",
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-arrow-left"
+  }), _vm._v(" Go back\r\n\t\t\t")])]), _vm._v(" "), _c('div', {
     staticClass: "row row-padded"
   }, [_c('h2', [_vm._v(_vm._s(_vm.user.first) + "'s' Details")]), _vm._v(" "), _c('p', {
     staticClass: "margin-25-top"
@@ -45459,7 +45702,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row row-padded"
   }, _vm._l((_vm.crew), function(user) {
     return _c('div', {
-      staticClass: "col-md-4 margin-25-top"
+      staticClass: "col-md-6 margin-25-top"
     }, [_c('div', {
       staticClass: "bs-component"
     }, [_c('ul', {
@@ -45473,9 +45716,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.removeCrewFromProject(user.id)
         }
       }
-    }, [_c('span', {
-      staticClass: "glyphicon glyphicon-minus"
-    })]), _vm._v("\r\n\t\t\r\n\t\t\t\t\t\t\t" + _vm._s(user.first + " " + user.last) + "\r\n\t\t\t\t\t\t")])])])])
+    }, [_vm._v("\r\n\t\t\t\t\t\t\t\t× Remove")]), _vm._v(" "), _c('button', {
+      staticClass: "btn btn-xs btn-info pull-right margin-20-right",
+      on: {
+        "click": function($event) {
+          _vm.$router.push('/users/view/' + user.id + '/projects/' + _vm.project_id + '/timesheets')
+        }
+      }
+    }, [_vm._v("\r\n\t\t\t\t\t\t\t\tTimesheets")]), _vm._v("\r\n\r\n\t\t\t\t\t\t\t" + _vm._s(user.first + " " + user.last) + "\r\n\t\t\t\t\t\t")])])])])
   }))]) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
@@ -45505,7 +45753,18 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.isLoading) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.isLoading) ? _c('div', [_vm._m(1), _vm._v(" "), _c('div', {
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.isLoading) ? _c('div', [_c('div', {
+    staticClass: "row row-padded margin-15-bottom"
+  }, [_c('button', {
+    staticClass: "pull-left btn btn-info",
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-arrow-left"
+  }), _vm._v(" Go back\r\n\t\t\t")])]), _vm._v(" "), _vm._m(1), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
   }, [_c('button', {
     staticClass: "btn btn-default",
@@ -48120,33 +48379,151 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "margin-25-top text-info"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-question-sign"
-  }), _vm._v("\r\n\t\t\t\tUse the view button on each project row to view " + _vm._s(_vm.user.first) + "'s timesheets for that project.\r\n\t\t\t")])]) : _vm._e()]) : _vm._e(), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-default margin-35-top",
+  }), _vm._v("\r\n\t\t\t\tUse the view button on each project row to view " + _vm._s(_vm.user.first) + "'s timesheets for that project.\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded  margin-35-top"
+  }, [_c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Filter by Company")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.clientCompanyFilter),
+      expression: "clientCompanyFilter"
+    }],
+    staticClass: "form-control margin-10-top",
     on: {
-      "click": _vm.refresh
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.clientCompanyFilter = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": ""
+    }
+  }, [_vm._v("Select company...")]), _vm._v(" "), _vm._l((_vm.clients), function(client) {
+    return _c('option', {
+      domProps: {
+        "value": client
+      }
+    }, [_vm._v("\r\n\t\t\t\t\t\t\t" + _vm._s(client) + "\r\n\t\t\t\t\t\t")])
+  })], 2)])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Filter by Province")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.projectProvinceFilter),
+      expression: "projectProvinceFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.projectProvinceFilter = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": ""
+    }
+  }, [_vm._v("Select province...")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Alberta"
+    }
+  }, [_vm._v("Alberta")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "British Columbia"
+    }
+  }, [_vm._v("British Columbia")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "Saskatchewan"
+    }
+  }, [_vm._v("Saskatchewan")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Filter Invoice Status")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.invoiceStatusFilter),
+      expression: "invoiceStatusFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.invoiceStatusFilter = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": ""
+    }
+  }, [_vm._v("Select status...")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("Not Paid")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Paid")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('button', {
+    staticClass: "btn btn-default btn-block margin-35-top",
+    on: {
+      "click": _vm.filter
     }
   }, [_c('span', {
-    staticClass: "glyphicon glyphicon-refresh"
-  }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" \r\n\t\t\tRefresh list\r\n\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
+    staticClass: "glyphicon glyphicon-search"
+  }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" \r\n\t\t\t\t\t\tFilter Projects\r\n\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
     staticClass: "left-loader"
-  })]) : _vm._e()]), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
+  })]) : _vm._e()])])])]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
     staticClass: "table table-striped table-hover margin-25-top"
   }, [_c('thead', [_c('tr', {
     staticClass: "info"
-  }, [(_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tClient Company\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tContact Name\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tContact Phone\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tInvoice Paid\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('th', [_vm._v("\r\n\t\t\t\t\tIdentifier\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('th', [_vm._v("\r\n\t\t\t\t\tProvince\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('th', [_vm._v("\r\n\t\t\t\t\tLocation\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('th', [_vm._v("\r\n\t\t\t\t\tTimesheets\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), _c('th', [_vm._v("\r\n\t\t\t\t\tActions\r\n\t\t\t\t")])])]), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(project) {
+  }, [_c('th', [_vm._v("\r\n\t\t\t\t\tIdentifier\r\n\t\t\t\t")]), _vm._v(" "), (_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tClient Company\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tProvince\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tLocation\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('th', [_vm._v("\r\n\t\t\t\t\tInvoice Status\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('th', [_vm._v("\r\n\t\t\t\t\tProvince\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('th', [_vm._v("\r\n\t\t\t\t\tLocation\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('th', [_vm._v("\r\n\t\t\t\t\tTimesheets\r\n\t\t\t\t")]) : _vm._e(), _vm._v(" "), _c('th', [_vm._v("\r\n\t\t\t\t\tActions\r\n\t\t\t\t")])])]), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(project) {
     return _c('tr', {
       attrs: {
         "project": project
       }
-    }, [(_vm.tableState == 'admin') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.client_company_name) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.client_contact_name) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('td', [(project.client_contact_phone) ? _c('a', {
-      attrs: {
-        "href": 'tel: +1' + project.client_contact_phone.replace(/-/g, '')
-      }
-    }, [_vm._v("\r\n\t\t\t    \t\t" + _vm._s(project.client_contact_phone) + "\r\n\t\t\t    \t")]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('td', [(project.invoiced_date == null) ? _c('div', {
-      staticClass: "text-warning"
-    }, [_c('span', {
+    }, [_c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.id) + "\r\n\t\t\t    ")]), _vm._v(" "), (_vm.tableState == 'admin') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.client_company_name) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.province) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.location) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('td', [(project.invoice_paid_date == null) ? _c('div', [(project.invoiced_date == null) ? _c('span', {
       staticClass: "label label-warning"
-    }, [_vm._v("Not Invoiced")])]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.id) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.province) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.location) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.timesheets.length) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), _c('td', [(_vm.tableState == 'admin') ? _c('button', {
+    }, [_vm._v("Not Invoiced")]) : _c('span', {
+      staticClass: "label label-danger"
+    }, [_vm._v("Not Paid (invoiced)")])]) : _c('div', [_c('span', {
+      staticClass: "label label-success"
+    }, [_vm._v("Paid")])])]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.province) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.location) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'user' || _vm.tableState == 'adminUser') ? _c('td', [_vm._v("\r\n\t\t\t    \t" + _vm._s(project.timesheets.length) + "\r\n\t\t\t    ")]) : _vm._e(), _vm._v(" "), _c('td', [(_vm.tableState == 'admin') ? _c('button', {
       staticClass: "btn btn-sm btn-success",
       on: {
         "click": function($event) {
@@ -48159,7 +48536,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "btn btn-sm btn-success",
       on: {
         "click": function($event) {
-          _vm.viewTimesheets(project.id)
+          _vm.viewTimesheets(project.id, project.timesheets.length)
         }
       }
     }, [_c('span', {
@@ -48171,7 +48548,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "pagination"
   }, [_c('li', {
     class: {
-      'disabled': _vm.searchResults.modelsCurrentPage == 1
+      'disabled': _vm.searchResults.modelsCurrentPage == 0
     }
   }, [_c('a', {
     on: {
@@ -48410,7 +48787,18 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.fetchingModels) ? _c('div', {
     staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [(!_vm.user) ? _c('div', {
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [_c('div', {
+    staticClass: "row row-padded margin-15-bottom"
+  }, [_c('button', {
+    staticClass: "pull-left btn btn-info",
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-arrow-left"
+  }), _vm._v(" Go back\r\n\t\t\t")])]), _vm._v(" "), (!_vm.user) ? _c('div', {
     staticClass: "row row-padded"
   }, [_c('h2', [_vm._v("Project Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.project_id) + ")")])]), _vm._v(" "), _c('p', {
     staticClass: "margin-25-top"
@@ -48421,30 +48809,44 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("\r\n\t\t\t\tBelow are all of " + _vm._s(_vm.user.first) + "'s timesheets for this project.\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-15-top"
   }, [_c('div', {
-    staticClass: "col-md-3"
+    staticClass: "col-md-4"
   }, [_c('p', {
     staticClass: "margin-25-top"
   }), _c('h4', [_c('strong', [_vm._v("Timesheets:")]), _vm._v(" "), _c('span', {
     staticClass: "label label-success"
   }, [_vm._v(_vm._s(_vm.totalTimesheets))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
-  }, [_c('p', {
-    staticClass: "margin-25-top"
-  }), _c('h4', [_c('strong', [_vm._v("Work Hours:")]), _vm._v(" "), _c('span', {
-    staticClass: "label label-success"
-  }, [_vm._v(_vm._s(_vm.totalWorkHours))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
+    staticClass: "col-md-4"
   }, [_c('p', {
     staticClass: "margin-25-top"
   }), _c('h4', [_c('strong', [_vm._v("Travel Hours:")]), _vm._v(" "), _c('span', {
     staticClass: "label label-success"
   }, [_vm._v(_vm._s(_vm.totalTravelHours))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
+    staticClass: "col-md-4"
   }, [_c('p', {
     staticClass: "margin-25-top"
   }), _c('h4', [_c('strong', [_vm._v("Travel Distance:")]), _vm._v(" "), _c('span', {
     staticClass: "label label-success"
-  }, [_vm._v(_vm._s(_vm.totalTravelDistance) + " km")])]), _vm._v(" "), _c('p')])]), _vm._v(" "), (!_vm.user) ? _c('div', {
+  }, [_vm._v(_vm._s(_vm.totalTravelDistance) + " km")])]), _vm._v(" "), _c('p')])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('p', {
+    staticClass: "margin-25-top"
+  }), _c('h4', [_c('strong', [_vm._v("Work Hours:")]), _vm._v(" "), _c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v(_vm._s(_vm.totalWorkHours))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('p', {
+    staticClass: "margin-25-top"
+  }), _c('h4', [_c('strong', [_vm._v("Gross Total:")]), _vm._v(" "), _c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v("$" + _vm._s(_vm.totalWorkPay))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('p', {
+    staticClass: "margin-25-top"
+  }), _c('h4', [_c('strong', [_vm._v("Per Diem Total:")]), _vm._v(" "), _c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v("$" + _vm._s(_vm.totalPerDiem))])]), _vm._v(" "), _c('p')])]), _vm._v(" "), (!_vm.user) ? _c('div', {
     staticClass: "row row-padded margin-25-top"
   }, [_c('button', {
     staticClass: "btn btn-default",
@@ -48582,13 +48984,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('router-view', {
     attrs: {
       "name": "project",
-      "project": _vm.project
+      "project": _vm.project,
+      "project_id": _vm.project.id
     }
   }), _vm._v(" "), _c('hr'), _vm._v(" "), (_vm.project.approval_date) ? _c('div', [_c('router-view', {
     attrs: {
       "name": "crew",
       "crew": _vm.project.users,
-      "project_id": _vm.project.id
+      "project_id": _vm.project.id,
+      "timesheets": _vm.project.timesheets
     }
   }), _vm._v(" "), _c('hr'), _vm._v(" "), _c('router-view', {
     attrs: {
@@ -48978,16 +49382,7 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [_vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "row row-padded margin-25-top"
-  }, [(_vm.timeline) ? _c('button', {
-    staticClass: "btn btn-default",
-    on: {
-      "click": function($event) {
-        _vm.$router.push('timeline-form')
-      }
-    }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-hourglass"
-  }), _vm._v(" Edit Timeline\r\n\t\t")]) : _vm._e(), _vm._v(" "), (!_vm.timeline) ? _c('button', {
+  }, [(!_vm.timeline) ? _c('button', {
     staticClass: "btn btn-default",
     on: {
       "click": function($event) {
@@ -49012,7 +49407,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-info"
   }, [_vm._m(1), _vm._v(" "), _vm._m(2), _vm._v(" "), (!_vm.fieldIsEditing.permit_application_date) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._v("\r\n\t\t                " + _vm._s(_vm.timeline.permit_application_date) + "\r\n\t\t\t\t    \t"), _c('div', {
+  }, [_vm._v("\r\n\t\t            \t" + _vm._s(new Date(Date.parse(_vm.timeline.permit_application_date + 'T00:00:00')).toDateString()) + "\r\n\t\t\t\t    \t"), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49077,9 +49472,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-info"
   }, [_vm._m(3), _vm._v(" "), _vm._m(4), _vm._v(" "), (!_vm.fieldIsEditing.permit_recieved_date) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.permit_recieved_date == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.permit_recieved_date == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.permit_recieved_date) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(new Date(Date.parse(_vm.timeline.permit_recieved_date + 'T00:00:00')).toDateString()) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49144,9 +49543,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-info"
   }, [_vm._m(5), _vm._v(" "), _vm._m(6), _vm._v(" "), (!_vm.fieldIsEditing.permit_number) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.permit_number == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.permit_number == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t" + _vm._s(_vm.timeline.permit_number) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t\t\t\t" + _vm._s(_vm.timeline.permit_number) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49210,9 +49613,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-primary"
   }, [_vm._m(7), _vm._v(" "), _vm._m(8), _vm._v(" "), (!_vm.fieldIsEditing.site_number_application_date) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.site_number_application_date == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.site_number_application_date == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.site_number_application_date) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(new Date(Date.parse(_vm.timeline.site_number_application_date + 'T00:00:00')).toDateString()) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49277,9 +49684,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-primary"
   }, [_vm._m(9), _vm._v(" "), _vm._m(10), _vm._v(" "), (!_vm.fieldIsEditing.site_number_recieved_date) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.site_number_recieved_date == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.site_number_recieved_date == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.site_number_recieved_date) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(new Date(Date.parse(_vm.timeline.site_number_recieved_date + 'T00:00:00')).toDateString()) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49344,9 +49755,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-primary"
   }, [_vm._m(11), _vm._v(" "), _vm._m(12), _vm._v(" "), (!_vm.fieldIsEditing.site_number) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.site_number == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.site_number == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t\t\t" + _vm._s(_vm.timeline.permit_number) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.permit_number) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49410,9 +49825,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-success"
   }, [_vm._m(13), _vm._v(" "), _vm._m(14), _vm._v(" "), (!_vm.fieldIsEditing.completion_target) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.completion_target == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.completion_target == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.completion_target) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(new Date(Date.parse(_vm.timeline.completion_target + 'T00:00:00')).toDateString()) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49477,9 +49896,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-success"
   }, [_vm._m(15), _vm._v(" "), _vm._m(16), _vm._v(" "), (!_vm.fieldIsEditing.field_completion_target) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.field_completion_target == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.field_completion_target == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.field_completion_target) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(new Date(Date.parse(_vm.timeline.field_completion_target + 'T00:00:00')).toDateString()) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49544,9 +49967,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-success"
   }, [_vm._m(17), _vm._v(" "), _vm._m(18), _vm._v(" "), (!_vm.fieldIsEditing.report_completion_target) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.report_completion_target == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.report_completion_target == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.timeline.report_completion_target) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(new Date(Date.parse(_vm.timeline.report_completion_target + 'T00:00:00')).toDateString()) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49611,11 +50038,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-default"
   }, [_vm._m(19), _vm._v(" "), _vm._m(20), _vm._v(" "), (!_vm.fieldIsEditing.fieldwork_scheduled) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.fieldwork_scheduled == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.fieldwork_scheduled == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.fieldwork_scheduled == false) ? _c('div', [_c('span', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [(_vm.timeline.fieldwork_scheduled == false) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("NO")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49685,11 +50118,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-default"
   }, [_vm._m(21), _vm._v(" "), _vm._m(22), _vm._v(" "), (!_vm.fieldIsEditing.artifact_analysis) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.artifact_analysis == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.artifact_analysis == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.artifact_analysis == false) ? _c('div', [_c('span', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [(_vm.timeline.artifact_analysis == false) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("NO")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49759,11 +50198,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-default"
   }, [_vm._m(23), _vm._v(" "), _vm._m(24), _vm._v(" "), (!_vm.fieldIsEditing.mapping) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.mapping == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.mapping == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.mapping == false) ? _c('div', [_c('span', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [(_vm.timeline.mapping == false) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("NO")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49833,11 +50278,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-default"
   }, [_vm._m(25), _vm._v(" "), _vm._m(26), _vm._v(" "), (!_vm.fieldIsEditing.writing) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.writing == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.writing == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.writing == false) ? _c('div', [_c('span', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [(_vm.timeline.writing == false) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("NO")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49907,11 +50358,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-danger"
   }, [_vm._m(27), _vm._v(" "), _vm._m(28), _vm._v(" "), (!_vm.fieldIsEditing.draft_submitted) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.draft_submitted == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.draft_submitted == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.draft_submitted == false) ? _c('div', [_c('span', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [(_vm.timeline.draft_submitted == false) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("NO")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -49981,11 +50438,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-danger"
   }, [_vm._m(29), _vm._v(" "), _vm._m(30), _vm._v(" "), (!_vm.fieldIsEditing.draft_accepted) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.draft_accepted == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.draft_accepted == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.draft_accepted == false) ? _c('div', [_c('span', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [(_vm.timeline.draft_accepted == false) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("NO")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -50055,11 +50518,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-danger"
   }, [_vm._m(31), _vm._v(" "), _vm._m(32), _vm._v(" "), (!_vm.fieldIsEditing.final_approval) ? _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.timeline.final_approval == null) ? _c('div', [_c('span', {
+  }, [(_vm.timeline.final_approval == null) ? _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', [(_vm.timeline.final_approval == false) ? _c('div', [_c('span', {
+  }, [_vm._v("MILESTONE NOT COMPLETE")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [(_vm.timeline.final_approval == false) ? _c('div', [_c('span', {
     staticClass: "label label-warning"
-  }, [_vm._v("NO")])]) : _c('div', [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("NO")])]) : _c('div', {
+    staticClass: "col-md-6"
+  }, [_vm._v("\r\n\t\t\t\t\t    \t\tYES\r\n\t\t\t\t\t    \t")])]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -50907,11 +51376,11 @@ if (false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(70);
+var content = __webpack_require__(71);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(17)("36949f0c", content, false);
+var update = __webpack_require__(18)("36949f0c", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -50933,11 +51402,11 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(71);
+var content = __webpack_require__(72);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(17)("69e5f6de", content, false);
+var update = __webpack_require__(18)("69e5f6de", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -60681,7 +61150,7 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(18)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(19)))
 
 /***/ }),
 /* 134 */
@@ -60715,8 +61184,8 @@ module.exports = function(module) {
 /* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(19);
-module.exports = __webpack_require__(20);
+__webpack_require__(20);
+module.exports = __webpack_require__(21);
 
 
 /***/ })

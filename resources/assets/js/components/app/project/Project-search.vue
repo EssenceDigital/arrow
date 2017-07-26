@@ -59,18 +59,63 @@
 			</p>
 		</div>
 
+		<div class="row row-padded  margin-35-top">
+
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">Filter by Company</label>
+					<select v-model="clientCompanyFilter" class="form-control margin-10-top">
+						<option value="" selected>Select company...</option>
+						<option v-for="client in clients" 
+							:value="client"
+						>
+							{{ client }}
+						</option>
+                    </select>
+				</div>				
+			</div>
+
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">Filter by Province</label>
+					<select v-model="projectProvinceFilter" class="form-control margin-10-top">
+						<option value="" selected>Select province...</option>
+                    	<option value="Alberta">Alberta</option>
+                        <option value="British Columbia">British Columbia</option>
+                        <option value="Saskatchewan">Saskatchewan</option>
+                    </select>
+				</div>				
+			</div>	
+
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">Filter Invoice Status</label>
+					<select v-model="invoiceStatusFilter" class="form-control margin-10-top">
+						<option value="" selected>Select status...</option>
+                        <option value="0">Not Paid</option>
+                        <option value="1">Paid</option>
+                    </select>
+				</div>				
+			</div>
+
+			<div class="col-md-3">
+				<!-- Refresh models from server button -->
+				<button @click="filter" class="btn btn-default btn-block margin-35-top">
+					<span class="glyphicon glyphicon-search"></span>
+					<span v-if="!fetchingModels"> 
+						Filter Projects
+					</span>
+					<span v-if="fetchingModels">
+						<div class="left-loader"></div>
+					</span>
+				</button>				
+			</div>					
+			
+		</div>
+
 	</div>
 
-	<!-- Refresh models from server button -->
-	<button @click="refresh" class="btn btn-default margin-35-top">
-		<span class="glyphicon glyphicon-refresh"></span>
-		<span v-if="!fetchingModels"> 
-			Refresh list
-		</span>
-		<span v-if="fetchingModels">
-			<div class="left-loader"></div>
-		</span>
-	</button>
+
 
 	<!-- Table to show projects - only shows once api call has finished 
 	**** The table fields change depending on whether it's being viewed from and admin
@@ -80,24 +125,26 @@
 		<!-- Table header -->
 		<thead>
 			<tr class="info">
+				<!-- Universal headers -->
+				<th>
+					Identifier
+				</th>
+
 				<!-- Admin viewing only headers -->
 				<th v-if="tableState == 'admin'">
 					Client Company
 				</th>
 				<th v-if="tableState == 'admin'">
-					Contact Name
+					Province
 				</th>
 				<th v-if="tableState == 'admin'">
-					Contact Phone
-				</th>
+					Location
+				</th>				
 				<th v-if="tableState == 'admin'">
-					Invoice Paid
+					Invoice Status
 				</th><!-- / Admin viewing only headers -->
 
-				<!-- User viewing only headers -->
-				<th v-if="tableState=='user' || tableState =='adminUser'">
-					Identifier
-				</th>				
+				<!-- User viewing only headers -->				
 				<th v-if="tableState=='user' || tableState =='adminUser'">
 					Province
 				</th>
@@ -119,30 +166,32 @@
 		    <tr v-for="project in searchResults.models"
 		    	:project="project"
 		    >
+		    	<!-- Universal fields -->
+			    <td>
+			    	{{ project.id }}
+			    </td>
+
 		    	<!-- Admin viewing only fields -->
 			    <td v-if="tableState == 'admin'">
 			    	{{ project.client_company_name }}
 			    </td>
 			    <td v-if="tableState == 'admin'">
-			    	{{ project.client_contact_name }}
+			    	{{ project.province }}
 			    </td>
 			    <td v-if="tableState == 'admin'">
-			    	<a 
-			    		v-if="project.client_contact_phone"
-			    		:href="'tel: +1' + project.client_contact_phone.replace(/-/g, '')">
-			    		{{ project.client_contact_phone }}
-			    	</a>
+			    	{{ project.location }}
 			    </td>
 			    <td v-if="tableState == 'admin'">
-			    	<div v-if="project.invoiced_date == null" class="text-warning">
-			    		<span class="label label-warning">Not Invoiced</span>
+			    	<div v-if="project.invoice_paid_date == null">
+			    		<span v-if="project.invoiced_date == null" class="label label-warning">Not Invoiced</span>
+			    		<span v-else class="label label-danger">Not Paid (invoiced)</span>
+			    	</div>
+			    	<div v-else>
+			    		<span class="label label-success">Paid</span>
 			    	</div>
 			    </td><!-- / Admin viewing only fields -->
 
-			    <!-- User viewing only fields -->
-			    <td v-if="tableState=='user' || tableState =='adminUser'">
-			    	{{ project.id }}
-			    </td>			    
+			    <!-- User viewing only fields -->			    
 			    <td v-if="tableState=='user' || tableState =='adminUser'">
 			    	{{ project.province }}
 			    </td>
@@ -167,7 +216,7 @@
 			    	<!-- User viewing only button -->
 			    	<button
 			    		v-if="tableState=='user' || tableState =='adminUser'"
-			    		@click="viewTimesheets(project.id)" 
+			    		@click="viewTimesheets(project.id, project.timesheets.length)" 
 			    		class="btn btn-sm btn-success"
 			    	>
 			    		<span class="glyphicon glyphicon-screenshot"></span> View
@@ -181,7 +230,7 @@
 	<div v-if="!fetchingModels" class="row text-center margin-45-top">
 		<ul class="pagination">
 			<!-- Page back button -->
-			<li :class="{ 'disabled': searchResults.modelsCurrentPage == 1 }">
+			<li :class="{ 'disabled': searchResults.modelsCurrentPage == 0 }">
 				<a @click="getSpecificProjectsPage(searchResults.modelsPrevPageUrl)">«</a>
 			</li>
 			<!-- Page button -->
@@ -234,7 +283,12 @@
 					modelsPageLinks: { },
 					modelsNextPageUrl: '',
 					modelsPrevPageUrl: ''					
-				}
+				},
+				// Unique project clients
+				clients: [],
+				clientCompanyFilter: '',
+				projectProvinceFilter: '',
+				invoiceStatusFilter: ''
 			}
 		},
 
@@ -242,6 +296,14 @@
 			// Refreshes the models cache from server. Uses API access
 			refresh(){
 				this.getAndSetModels();
+			},
+
+			filter(){
+				this.filterAndSetModels('/api/projects/filter', {
+					client_company_name: this.clientCompanyFilter,
+					province: this.projectProvinceFilter,
+					invoice_paid_date: this.invoiceStatusFilter
+				});
 			},
 
 			// Used by the pagination buttons. Uses API access
@@ -259,15 +321,42 @@
 			/* Routes to the users dashboard view showing their timesheets for the selected project
 			 * Can only be called from the admin only button
 			*/ 
-			viewTimesheets(id){
+			viewTimesheets(id, timesheets){
 				if(this.tableState == 'user'){
 					this.$router.push('/dashboard/projects/' + id + '/timesheets');
 				} else if(this.tableState == 'adminUser'){
-					if(this.user){
-						this.$router.push('/users/view/' + this.user.id + '/projects/' + id + '/timesheets');
+					// If there is timesheets then proceed
+					if(timesheets > 0){
+						if(this.user){
+							this.$router.push('/users/view/' + this.user.id + '/projects/' + id + '/timesheets');
+						}
+					} else {
+						// If no timesheets then don't bother proceeding
+		                 noty({
+		                     text: '<h4>No timesheets on this project</h4>',
+		                     theme: 'defaultTheme',
+		                     layout: 'center',
+		                     timeout: 1200,
+		                     closeWith: ['click', 'hover'],
+		                     type: 'warning'
+		                });								
 					}
-				}
-			}			
+				}			
+			},
+
+			// Retrieve all the unique clients from api
+			getAndSetUniqueClients(){
+				var context = this;
+				// Send request to retrieve unique clients
+				axios.get('/api/projects/unique-clients')
+					.then(function(response){
+						// Set the clients prop
+						context.clients = response.data.clients;
+					})
+					.catch(function(error){
+						console.log(error);
+					});
+			}						
 		},
 
 		// Retrieves models from server
@@ -284,7 +373,9 @@
 					// Start loader
 					this.fetchingModels = true;
 					// Find projects
-					this.getAndSetModels();					
+					this.getAndSetModels();	
+					// Get unique clients
+					this.getAndSetUniqueClients();				
 				}
 			} else if(this.$route.path == '/dashboard/projects'){
 				this.tableState = 'user';

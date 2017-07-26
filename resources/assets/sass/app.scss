@@ -7,6 +7,19 @@
   opacity: 0;
 }
 
+.no-horz-padding{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.no-left-padding{
+  padding-left: 0;
+}
+
+.no-right-padding{
+  padding-right: 0;
+}
+
 // Top margin helpers
 .margin-5-top{
     margin-top: 5px;

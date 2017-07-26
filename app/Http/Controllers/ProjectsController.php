@@ -49,6 +49,39 @@ class ProjectsController extends Controller
         return Project::paginate(15);      
     }
 
+    public function filter(Request $request){
+        // Validate or stop proccessing :)
+        $this->validate($request, [
+            'client_company_name' => 'max:25',
+            'province' => 'max:25'
+            //'invoice_paid_date' => 'required|boolean'
+        ]);
+
+        // Not null = paid
+        // Construct where array for query
+        $queryArray = [];
+        // Add company field or not
+        if($request->client_company_name != ''){
+            // Push array clause
+            array_push($queryArray, ['client_company_name', '=', $request->client_company_name]);
+        }
+        // Add province field or not
+        if($request->province != ''){
+            // Push array clause
+            array_push($queryArray, ['province', '=', $request->province]);
+        }
+        // Add invoiced date or not
+        if($request->invoice_paid_date != ''){
+            if($request->invoice_paid_date == 0){
+                array_push($queryArray, ['invoice_paid_date', '=', null]);
+            } else if($request->invoice_paid_date ==  1){
+                array_push($queryArray, ['invoice_paid_date', '<>', null]);
+            }
+        }
+
+        return Project::where($queryArray)->paginate(15);      
+    }
+
     /**
      * Find a project
      *
@@ -58,7 +91,7 @@ class ProjectsController extends Controller
     public function single($id)
     {
         // With all foreign keys / children
-        $project = Project::with(['comments', 'comments.user', 'timeline', 'users'])->find($id);
+        $project = Project::with(['comments', 'comments.user', 'timeline', 'users', 'timesheets'])->find($id);
 
         // Return response for ajax call
         return response()->json([

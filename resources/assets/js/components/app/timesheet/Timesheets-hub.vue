@@ -12,7 +12,14 @@
 
 	<!-- Table wrapper - only shows after project is loaded -->
 	<div v-if="!fetchingModels">
-
+		<div class="row row-padded margin-15-bottom">
+			<button 
+				@click="$router.go(-1)" 
+				class="pull-left btn btn-info"
+			>
+				<span class="glyphicon glyphicon-arrow-left"></span> Go back
+			</button>			
+		</div>
 		<div v-if="!user" class="row row-padded">
 			<h2>Project Timesheets <small>(Project {{ this.project_id }})</small></h2>
 			<p class="margin-25-top">
@@ -35,35 +42,54 @@
 		</div>
 
 		<div class="row row-padded margin-15-top">
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<p class="margin-25-top">
 					<h4>
 						<strong>Timesheets:</strong> <span class="label label-success">{{ totalTimesheets }}</span>
 					</h4>
-				</p>				
+				</p>								
 			</div>
-			<div class="col-md-3">
-				<p class="margin-25-top">
-					<h4>
-						<strong>Work Hours:</strong> <span class="label label-success">{{ totalWorkHours }}</span>
-					</h4>
-				</p>				
-			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<p class="margin-25-top">
 					<h4>
 						<strong>Travel Hours:</strong> <span class="label label-success">{{ totalTravelHours }}</span>
 					</h4>
 				</p>				
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<p class="margin-25-top">
 					<h4>
 						<strong>Travel Distance:</strong> <span class="label label-success">{{ totalTravelDistance }} km</span>
 					</h4>
 				</p>				
+			</div>						
+		</div>
+
+		<div class="row row-padded margin-15-top">
+			<div class="col-md-4">
+				<p class="margin-25-top">
+					<h4>
+						<strong>Work Hours:</strong> <span class="label label-success">{{ totalWorkHours }}</span>
+					</h4>
+				</p>								
+			</div>		
+			<div class="col-md-4">
+				<p class="margin-25-top">
+					<h4>
+						<strong>Gross Total:</strong> <span class="label label-success">${{ totalWorkPay }}</span>
+					</h4>
+				</p>				
+			</div>
+			<div class="col-md-4">
+				<p class="margin-25-top">
+					<h4>
+						<strong>Per Diem Total:</strong> <span class="label label-success">${{ totalPerDiem }}</span>
+					</h4>
+				</p>				
 			</div>			
 		</div>
+
+
 
 
 		<!-- Tool navigation -->
@@ -155,12 +181,27 @@
 		},
 
 		computed: {
+
 			totalTimesheets(){
 				return this.searchResults.models.length;
 			},
 
+			totalPerDiem(){
+				return this.stepAndDisectTimesheets('', 'per_diem');
+			},
+
 			totalWorkHours(){
 				return this.stepAndDisectTimesheets('work_jobs', 'hours_worked');
+			},
+
+			totalWorkPay(){
+				if(this.user){
+					var pay = this.totalWorkHours * this.user.hourly_rate_one;
+				} else {
+					var pay = this.totalWorkHours * DASHBOARD_USER_HOURLY;
+				}
+
+				return parseFloat(pay);
 			},
 
 			totalTravelHours(){
@@ -187,13 +228,20 @@
 				var total = parseInt(0);
 				// Iterate through each timesheet
 				this.searchResults.models.forEach(function(timesheet){
-					if(timesheet[assetToIterate].length > 0){
-						// Iterate through each travel job in timesheet
-						timesheet[assetToIterate].forEach(function(current){
-							// Update total
-							total += parseFloat(current[fieldToAddUp]);
-						})
+					// If the asset field is an array
+					if(assetToIterate != ''){
+						if(timesheet[assetToIterate].length > 0){
+							// Iterate through each travel job in timesheet
+							timesheet[assetToIterate].forEach(function(current){
+								// Update total
+								total += parseFloat(current[fieldToAddUp]);
+							})
+						}						
+					} else {
+						// If the asset field is not an array then just do a tally
+						total += parseFloat(timesheet[fieldToAddUp]);
 					}
+
 				});
 
 				return total.toFixed(2);				

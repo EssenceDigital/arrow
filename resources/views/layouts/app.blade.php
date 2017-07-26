@@ -32,6 +32,7 @@
                 const DASHBOARD_USER_EMAIL = '{{ Auth::user()->email }}';
                 const DASHBOARD_USER_COMPANY = '{{ Auth::user()->company_name }}';
                 const DASHBOARD_USER_GST = '{{ Auth::user()->gst_number }}';
+                const DASHBOARD_USER_HOURLY = '{{ Auth::user()->hourly_rate_one }}';
 
         </script>
     </head>

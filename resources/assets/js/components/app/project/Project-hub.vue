@@ -14,6 +14,7 @@
 		<!-- Mount for project table and form -->
 		<router-view name="project"
 			:project="project"
+			:project_id="project.id"
 		>			
 		</router-view>
 
@@ -25,6 +26,7 @@
 			<router-view name="crew"
 				:crew="project.users"
 				:project_id="project.id"
+				:timesheets="project.timesheets"
 			>		
 			</router-view>
 

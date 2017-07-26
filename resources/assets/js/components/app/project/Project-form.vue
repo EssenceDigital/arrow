@@ -428,6 +428,8 @@
 			'modal': modal
 		},
 
+		props: ['project_id'],
+
 		mixins: [api_access],
 
 		data(){
@@ -547,21 +549,16 @@
 
 		// If an id is in the route then retrieve the model from server
 		created(){
-			console.log('Project form created');			
+			console.log('Project form created ');			
 
 			// If an id is present then set up the form for edit
-			if(this.$route.params.id){
-				// Show form loader
-				this.formIsLoading = true;
-				// Get the requested model
-				this.grabModel('/api/projects/' + this.$route.params.id, function(model){
-					// Populate form
-					this.populateFormFromModel(model);
-					// Adjust form state
-					this.formEditState('edit');
-					// Hide form loader
-					this.formIsLoading = false;
-				});								
+			if(this.project_id){
+
+				// Adjust form state
+				this.formEditState('edit');
+
+				console.log(this.form.state);
+							
 			} else{
 				// Find unique clients for a new project
 				this.getAndSetUniqueClients();

@@ -6,10 +6,7 @@
 		<h3>Project Timeline / Milestones</h3>
 	</div>
 	<!-- Tool navigation -->
-	<div class="row row-padded margin-25-top">
-		<button v-if="timeline" @click="$router.push('timeline-form')" class="btn btn-default">
-			<span class="glyphicon glyphicon-hourglass"></span> Edit Timeline
-		</button>	
+	<div class="row row-padded margin-25-top">	
 		<!-- Show the add timeline button if no timeline is yet present -->
 		<button v-if="!timeline" @click="$router.push('timeline-form')" class="btn btn-default">
 			<span class="glyphicon glyphicon-hourglass"></span> Start Timeline
@@ -44,7 +41,7 @@
 		            </div>
 		            <!-- Show field table as default -->
 		            <div v-if="!fieldIsEditing.permit_application_date" class="panel-body">
-		                {{ timeline.permit_application_date }}
+		            	{{ new Date(Date.parse(timeline.permit_application_date + 'T00:00:00')).toDateString() }}
 				    	<div class="pull-right">
 				    		<span @click="showEditField('permit_application_date')" class="glyphicon glyphicon-cog hover"></span>
 				    	</div>		                
@@ -90,11 +87,11 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.permit_recieved_date" class="panel-body">
-				    	<div v-if="timeline.permit_recieved_date == null">
+				    	<div v-if="timeline.permit_recieved_date == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
-				    		{{ timeline.permit_recieved_date }}
+				    	<div v-else class="col-md-6">
+				    		{{ new Date(Date.parse(timeline.permit_recieved_date + 'T00:00:00')).toDateString() }}
 				    	</div>
 				    	<div class="pull-right">
 				    		<span @click="showEditField('permit_recieved_date')" class="glyphicon glyphicon-cog hover"></span>
@@ -140,10 +137,10 @@
 		            </div><!-- /Heading -->		    
 					<!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.permit_number" class="panel-body">
-				    	<div v-if="timeline.permit_number == null">
+				    	<div v-if="timeline.permit_number == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
+				    	<div v-else class="col-md-6">
 							{{ timeline.permit_number }}
 				    	</div>
 				    	<div class="pull-right">
@@ -190,11 +187,11 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.site_number_application_date" class="panel-body">
-				    	<div v-if="timeline.site_number_application_date == null">
+				    	<div v-if="timeline.site_number_application_date == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
-				    		{{ timeline.site_number_application_date }}
+				    	<div v-else class="col-md-6">
+				    		{{ new Date(Date.parse(timeline.site_number_application_date + 'T00:00:00')).toDateString() }}
 				    	</div>
 				    	<div class="pull-right">
 				    		<span @click="showEditField('site_number_application_date')" class="glyphicon glyphicon-cog hover"></span>
@@ -241,11 +238,11 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.site_number_recieved_date" class="panel-body">
-				    	<div v-if="timeline.site_number_recieved_date == null">
+				    	<div v-if="timeline.site_number_recieved_date == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
-				    		{{ timeline.site_number_recieved_date }}
+				    	<div v-else class="col-md-6">
+				    		{{ new Date(Date.parse(timeline.site_number_recieved_date + 'T00:00:00')).toDateString() }}
 				    	</div>
 				    	<div class="pull-right">
 				    		<span @click="showEditField('site_number_recieved_date')" class="glyphicon glyphicon-cog hover"></span>
@@ -292,11 +289,11 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.site_number" class="panel-body">
-				    	<div v-if="timeline.site_number == null">
+				    	<div v-if="timeline.site_number == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
-							{{ timeline.permit_number }}
+				    	<div v-else class="col-md-6">
+				    		{{ timeline.permit_number }}
 				    	</div>
 				    	<div class="pull-right">
 				    		<span @click="showEditField('site_number')" class="glyphicon glyphicon-cog hover"></span>
@@ -342,11 +339,11 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.completion_target" class="panel-body">
-				    	<div v-if="timeline.completion_target == null">
+				    	<div v-if="timeline.completion_target == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
-				    		{{ timeline.completion_target }}
+				    	<div v-else class="col-md-6">
+				    		{{ new Date(Date.parse(timeline.completion_target + 'T00:00:00')).toDateString() }}
 				    	</div>
 				    	<div class="pull-right">
 				    		<span @click="showEditField('completion_target')" class="glyphicon glyphicon-cog hover"></span>
@@ -393,11 +390,11 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.field_completion_target" class="panel-body">
-				    	<div v-if="timeline.field_completion_target == null">
+				    	<div v-if="timeline.field_completion_target == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
-				    		{{ timeline.field_completion_target }}
+				    	<div v-else class="col-md-6">
+				    		{{ new Date(Date.parse(timeline.field_completion_target + 'T00:00:00')).toDateString() }}
 				    	</div>
 				    	<div class="pull-right">
 				    		<span @click="showEditField('field_completion_target')" class="glyphicon glyphicon-cog hover"></span>
@@ -444,11 +441,11 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.report_completion_target" class="panel-body">
-				    	<div v-if="timeline.report_completion_target == null">
+				    	<div v-if="timeline.report_completion_target == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
-				    		{{ timeline.report_completion_target }}
+				    	<div v-else class="col-md-6">
+				    		{{ new Date(Date.parse(timeline.report_completion_target + 'T00:00:00')).toDateString() }}
 				    	</div>
 				    	<div class="pull-right">
 				    		<span @click="showEditField('report_completion_target')" class="glyphicon glyphicon-cog hover"></span>
@@ -495,14 +492,14 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.fieldwork_scheduled" class="panel-body">
-				    	<div v-if="timeline.fieldwork_scheduled == null">
+				    	<div v-if="timeline.fieldwork_scheduled == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
+				    	<div v-else class="col-md-6">
 					    	<div v-if="timeline.fieldwork_scheduled == false">
 					    		<span class="label label-warning">NO</span>
 					    	</div>
-					    	<div v-else>
+					    	<div v-else class="col-md-6">
 					    		YES
 					    	</div>
 				    	</div>
@@ -553,14 +550,14 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.artifact_analysis" class="panel-body">
-				    	<div v-if="timeline.artifact_analysis == null">
+				    	<div v-if="timeline.artifact_analysis == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
+				    	<div v-else class="col-md-6">
 					    	<div v-if="timeline.artifact_analysis == false">
 					    		<span class="label label-warning">NO</span>
 					    	</div>
-					    	<div v-else>
+					    	<div v-else class="col-md-6">
 					    		YES
 					    	</div>
 				    	</div>
@@ -611,14 +608,14 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.mapping" class="panel-body">
-				    	<div v-if="timeline.mapping == null">
+				    	<div v-if="timeline.mapping == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
+				    	<div v-else class="col-md-6">
 					    	<div v-if="timeline.mapping == false">
 					    		<span class="label label-warning">NO</span>
 					    	</div>
-					    	<div v-else>
+					    	<div v-else class="col-md-6">
 					    		YES
 					    	</div>
 				    	</div>
@@ -669,14 +666,14 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.writing" class="panel-body">
-				    	<div v-if="timeline.writing == null">
+				    	<div v-if="timeline.writing == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
+				    	<div v-else class="col-md-6">
 					    	<div v-if="timeline.writing == false">
 					    		<span class="label label-warning">NO</span>
 					    	</div>
-					    	<div v-else>
+					    	<div v-else class="col-md-6">
 					    		YES
 					    	</div>
 				    	</div>
@@ -727,14 +724,14 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.draft_submitted" class="panel-body">
-				    	<div v-if="timeline.draft_submitted == null">
+				    	<div v-if="timeline.draft_submitted == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
+				    	<div v-else class="col-md-6">
 					    	<div v-if="timeline.draft_submitted == false">
 					    		<span class="label label-warning">NO</span>
 					    	</div>
-					    	<div v-else>
+					    	<div v-else class="col-md-6">
 					    		YES
 					    	</div>
 				    	</div>
@@ -785,14 +782,14 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.draft_accepted" class="panel-body">
-				    	<div v-if="timeline.draft_accepted == null">
+				    	<div v-if="timeline.draft_accepted == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
+				    	<div v-else class="col-md-6">
 					    	<div v-if="timeline.draft_accepted == false">
 					    		<span class="label label-warning">NO</span>
 					    	</div>
-					    	<div v-else>
+					    	<div v-else class="col-md-6">
 					    		YES
 					    	</div>
 				    	</div>
@@ -843,14 +840,14 @@
 
 				    <!-- Show field table as default -->
 				    <div v-if="!fieldIsEditing.final_approval" class="panel-body">
-				    	<div v-if="timeline.final_approval == null">
+				    	<div v-if="timeline.final_approval == null" class="col-md-6">
 				    		<span class="label label-warning">MILESTONE NOT COMPLETE</span>
 				    	</div>
-				    	<div v-else>
+				    	<div v-else class="col-md-6">
 					    	<div v-if="timeline.final_approval == false">
 					    		<span class="label label-warning">NO</span>
 					    	</div>
-					    	<div v-else>
+					    	<div v-else class="col-md-6">
 					    		YES
 					    	</div>
 				    	</div>
