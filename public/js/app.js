@@ -15582,8 +15582,10 @@ module.exports = function spread(callback) {
 
 /***/ }),
 /* 40 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
@@ -15614,6 +15616,28 @@ module.exports = function spread(callback) {
 //
 //
 //
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  computed: {
+    DASHBOARD_AUTH: function (_DASHBOARD_AUTH) {
+      function DASHBOARD_AUTH() {
+        return _DASHBOARD_AUTH.apply(this, arguments);
+      }
+
+      DASHBOARD_AUTH.toString = function () {
+        return _DASHBOARD_AUTH.toString();
+      };
+
+      return DASHBOARD_AUTH;
+    }(function () {
+      return DASHBOARD_AUTH;
+    })
+  }
+});
 
 /***/ }),
 /* 41 */
@@ -21078,6 +21102,11 @@ var other_cost_form = __webpack_require__(90);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -44442,15 +44471,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/dashboard/projects"
     }
-  }, [_vm._v("Dashboard")])], 1), _vm._v(" "), _c('li', {
-    class: {
-      'active': _vm.$route.path.substring(0, 6) == '/users'
-    }
+  }, [_vm._v("Dashboard")])], 1), _vm._v(" "), (_vm.DASHBOARD_AUTH == 'admin') ? _c('li', {
+    staticClass: "{ 'active': $route.path.substring(0,6) == '/users' }"
   }, [_c('router-link', {
     attrs: {
       "to": "/users/search"
     }
-  }, [_vm._v("Users")])], 1), _vm._v(" "), _c('li', {
+  }, [_vm._v("Users")])], 1) : _vm._e(), _vm._v(" "), (_vm.DASHBOARD_AUTH == 'admin') ? _c('li', {
     class: {
       'active': _vm.$route.path.substring(0, 9) == '/projects'
     }
@@ -44458,7 +44485,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/projects/search"
     }
-  }, [_vm._v("Projects")])], 1)]), _vm._v(" "), _c('router-view')], 1)
+  }, [_vm._v("Projects")])], 1) : _vm._e()]), _vm._v(" "), _c('router-view')], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -48978,7 +49005,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "list-group-item"
   }, [_c('span', {
     staticClass: "badge"
-  }, [_vm._v("$" + _vm._s(_vm.totalWorkPay))]), _vm._v("\r\n\t\t\t\t\t\t  Net Pay\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("$" + _vm._s(_vm.totalWorkPay))]), _vm._v("\r\n\t\t\t\t\t\t  Net Pay\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalPerDiem))]), _vm._v("\r\n\t\t\t\t\t\t  Total Per Diem\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
   }, [_c('div', {
     staticClass: "bs-component"
@@ -49006,7 +49037,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "margin-10-top"
   }, [_c('span', {
     staticClass: "label label-success"
-  }, [_vm._v("$" + _vm._s(parseFloat(_vm.totalWorkPay) + parseFloat(_vm.totalEquipmentRentalCost) + parseFloat(_vm.totalOtherCosts)))])])])])])])]), _vm._v(" "), (!_vm.user) ? _c('div', {
+  }, [_vm._v("$" + _vm._s(parseFloat(_vm.totalWorkPay) + parseFloat(_vm.totalEquipmentRentalCost) + parseFloat(_vm.totalOtherCosts) + parseFloat(_vm.totalPerDiem)))])])])])])])]), _vm._v(" "), (!_vm.user) ? _c('div', {
     staticClass: "row row-padded margin-25-top"
   }, [_c('button', {
     staticClass: "btn btn-default",

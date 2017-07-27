@@ -9,6 +9,12 @@ use App\Timesheet;
 
 class TimesheetsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // Fields and their respective validation rules
     private $validationFields = [
         'project_id' => 'required|numeric',

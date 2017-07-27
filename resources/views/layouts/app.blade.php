@@ -30,6 +30,7 @@
                 const DASHBOARD_USER_FIRST = '{{ Auth::user()->first }}';
                 const DASHBOARD_USERS_NAME = '{{ Auth::user()->first . ' ' . Auth::user()->last }}';
                 const DASHBOARD_USER_PERMISSIONS = '{{ Auth::user()->permissions }}';
+                const DASHBOARD_AUTH = '{{ Auth::user()->permissions }}';
                 const DASHBOARD_USER_EMAIL = '{{ Auth::user()->email }}';
                 const DASHBOARD_USER_COMPANY = '{{ Auth::user()->company_name }}';
                 const DASHBOARD_USER_GST = '{{ Auth::user()->gst_number }}';

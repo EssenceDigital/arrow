@@ -71,6 +71,10 @@
 						  <span class="badge">${{ totalWorkPay }}</span>
 						  Net Pay
 						</li>
+						<li class="list-group-item">
+						  <span class="badge">${{ totalPerDiem }}</span>
+						  Total Per Diem
+						</li>						
 					</ul>
 				</div>
 			</div>	
@@ -88,6 +92,7 @@
 						  <span class="badge">${{ totalOtherCosts }}</span>
 						  Total Other Costs
 						</li>
+
 					</ul>
 				</div>
 			</div>								
@@ -102,7 +107,7 @@
 						 		<strong>Invoice Total</strong>
 						 	</p>
 						 	<p class="margin-10-top">
-						 		<span class="label label-success">${{ parseFloat(totalWorkPay) + parseFloat(totalEquipmentRentalCost) + parseFloat(totalOtherCosts) }}</span>
+						 		<span class="label label-success">${{ parseFloat(totalWorkPay) + parseFloat(totalEquipmentRentalCost) + parseFloat(totalOtherCosts) + parseFloat(totalPerDiem) }}</span>
 						 	</p>
 						 	
 						</li>
@@ -340,7 +345,6 @@
 				// Retrieve model through API access
 				this.getAndSetModels();
 			}
-
 
 			// When the form component alerts this parent of a successful create
 			this.$router.app.$on('timesheet-created', model => {

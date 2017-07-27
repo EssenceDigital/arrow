@@ -9,6 +9,12 @@ use App\Timesheet;
 
 class UsersController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     // Fields and their respective validation rules
     private $validationFields = [
         'first' => 'required|string|max:25',
@@ -139,7 +145,7 @@ class UsersController extends Controller
         $timesheets = Timesheet::where([
             ['user_id', '=', $userId],
             ['project_id', '=', $projectId],
-        ])->with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->get();
+        ])->with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->orderBy('date', 'desc')->get();
 
         // Return failed response if collection empty
         if(! $timesheets){

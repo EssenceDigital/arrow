@@ -13,6 +13,12 @@ use Session;
 
 class ProjectsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     // Fields and their respective validation rules
     private $validationFields = [
         'province' => 'max:20',

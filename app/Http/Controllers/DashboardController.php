@@ -12,6 +12,11 @@ use Hash;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     // Returns the associated view
     public function index(){
         return view('app.dashboard');
@@ -76,7 +81,7 @@ class DashboardController extends Controller
         $timesheets = Timesheet::where([
             ['user_id', '=', Auth::id()],
             ['project_id', '=', $projectId],
-        ])->with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->get();
+        ])->with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->orderBy('date', 'desc')->get();
 
         // Return failed response if collection empty
         if(! $timesheets){
