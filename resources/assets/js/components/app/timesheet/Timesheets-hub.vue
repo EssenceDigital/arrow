@@ -31,8 +31,6 @@
 			</p>
 		</div>
 
-
-
 		<div v-if="user" class="row row-padded">
 			<h2>{{ user.first }}'s' Timesheets <small>(Project {{ this.project_id }})</small></h2>
 			<p class="margin-25-top">
@@ -42,6 +40,79 @@
 		</div>
 
 		<div class="row row-padded margin-15-top">
+			<div class="col-md-4">
+				<div class="bs-component">
+					<ul class="list-group">
+						<li class="list-group-item">
+						  <strong>Travel Totals</strong>
+						</li>
+						<li class="list-group-item">
+						  <span class="badge">{{ totalTravelDistance }} km</span>
+						  Total Distance
+						</li>
+						<li class="list-group-item">
+						  <span class="badge">{{ totalTravelHours }} hrs</span>
+						  Total Time
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="bs-component">
+					<ul class="list-group">
+						<li class="list-group-item">
+						  <strong>Hour Totals</strong>
+						</li>
+						<li class="list-group-item">
+						  <span class="badge">{{ totalWorkHours }} hrs</span>
+						  Total Hours
+						</li>
+						<li class="list-group-item">
+						  <span class="badge">${{ totalWorkPay }}</span>
+						  Net Pay
+						</li>
+					</ul>
+				</div>
+			</div>	
+			<div class="col-md-4">
+				<div class="bs-component">
+					<ul class="list-group">
+						<li class="list-group-item">
+						  <strong>Other Totals</strong>
+						</li>
+						<li class="list-group-item">
+						  <span class="badge">${{ totalEquipmentRentalCost }}</span>
+						  Equipment Cost Total
+						</li>
+						<li class="list-group-item">
+						  <span class="badge">${{ totalOtherCosts }}</span>
+						  Total Other Costs
+						</li>
+					</ul>
+				</div>
+			</div>								
+		</div>
+
+		<div class="row row-padded">
+			<div class="col-md-12 text-center">
+				<div class="bs-component">
+					<ul class="list-group">
+						<li class="list-group-item">
+							<p class="margin-25-top">							
+						 		<strong>Invoice Total</strong>
+						 	</p>
+						 	<p class="margin-10-top">
+						 		<span class="label label-success">${{ parseFloat(totalWorkPay) + parseFloat(totalEquipmentRentalCost) + parseFloat(totalOtherCosts) }}</span>
+						 	</p>
+						 	
+						</li>
+					</ul>
+				</div>
+			</div>				
+		</div>
+
+
+		<!--<div class="row row-padded margin-15-top">
 			<div class="col-md-4">
 				<p class="margin-25-top">
 					<h4>
@@ -76,7 +147,7 @@
 			<div class="col-md-4">
 				<p class="margin-25-top">
 					<h4>
-						<strong>Gross Total:</strong> <span class="label label-success">${{ totalWorkPay }}</span>
+						<strong>Net Total:</strong> <span class="label label-success">${{ totalWorkPay }}</span>
 					</h4>
 				</p>				
 			</div>
@@ -87,7 +158,7 @@
 					</h4>
 				</p>				
 			</div>			
-		</div>
+		</div>-->
 
 
 
@@ -210,6 +281,14 @@
 
 			totalTravelDistance(){
 				return this.stepAndDisectTimesheets('travel_jobs', 'travel_distance');
+			},
+
+			totalEquipmentRentalCost() {
+				return this.stepAndDisectTimesheets('equipment_rentals', 'rental_fee');
+			},
+
+			totalOtherCosts(){
+				return this.stepAndDisectTimesheets('other_costs', 'cost');
 			}
 		},
 

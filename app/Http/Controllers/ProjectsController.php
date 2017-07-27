@@ -79,7 +79,14 @@ class ProjectsController extends Controller
             }
         }
 
-        return Project::where($queryArray)->paginate(15);      
+        // Set default per page amount
+        $perPage = 15;
+        // Change per page amount based on request
+        if(is_int($request->per_page)){
+            $perPage = $request->per_page;
+        }
+
+        return Project::where($queryArray)->paginate($perPage);      
     }
 
     /**

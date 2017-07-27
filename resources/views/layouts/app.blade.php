@@ -27,6 +27,7 @@
                     'csrfToken' => csrf_token(),
                 ]); ?>;
                 const DASHBOARD_USER_ID = '{{ Auth::user()->id }}';
+                const DASHBOARD_USER_FIRST = '{{ Auth::user()->first }}';
                 const DASHBOARD_USERS_NAME = '{{ Auth::user()->first . ' ' . Auth::user()->last }}';
                 const DASHBOARD_USER_PERMISSIONS = '{{ Auth::user()->permissions }}';
                 const DASHBOARD_USER_EMAIL = '{{ Auth::user()->email }}';

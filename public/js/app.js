@@ -313,18 +313,11 @@ module.exports = {
 			// Show loader
 			this.fetchingModels = true;
 
-			// Use callers variable or provided url variable for the GET
-			if (url) {
-				var urlToFetch = url;
-			} else {
-				var urlToFetch = this.urlToFetch;
-			}
-
 			// Add CSRF token. Requires Laravel layout to set the token
 			data._token = window.Laravel.csrfToken;
 
 			// Send POST request to retrieve pagination results
-			axios.post(urlToFetch, data)
+			axios.post(url, data)
 			// Success
 			.then(function (response) {
 				// Handle the response with helper method found below this method
@@ -15758,7 +15751,7 @@ var dropdown = __webpack_require__(5);
         return {
             collapsed: true,
             csrfToken: window.Laravel.csrfToken,
-            user_name: DASHBOARD_USERS_NAME
+            user_name: DASHBOARD_USER_FIRST
         };
     }
 });
@@ -17409,6 +17402,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(1);
 var dropdown = __webpack_require__(5);
@@ -17445,7 +17454,8 @@ var dropdown = __webpack_require__(5);
 			clients: [],
 			clientCompanyFilter: '',
 			projectProvinceFilter: '',
-			invoiceStatusFilter: ''
+			invoiceStatusFilter: '',
+			perPageFilter: 15
 		};
 	},
 
@@ -17459,7 +17469,8 @@ var dropdown = __webpack_require__(5);
 			this.filterAndSetModels('/api/projects/filter', {
 				client_company_name: this.clientCompanyFilter,
 				province: this.projectProvinceFilter,
-				invoice_paid_date: this.invoiceStatusFilter
+				invoice_paid_date: this.invoiceStatusFilter,
+				per_page: this.perPageFilter
 			});
 		},
 
@@ -21215,6 +21226,77 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(1);
 var modal = __webpack_require__(3);
@@ -21274,6 +21356,12 @@ var timesheet_form = __webpack_require__(15);
 		},
 		totalTravelDistance: function totalTravelDistance() {
 			return this.stepAndDisectTimesheets('travel_jobs', 'travel_distance');
+		},
+		totalEquipmentRentalCost: function totalEquipmentRentalCost() {
+			return this.stepAndDisectTimesheets('equipment_rentals', 'rental_fee');
+		},
+		totalOtherCosts: function totalOtherCosts() {
+			return this.stepAndDisectTimesheets('other_costs', 'cost');
 		}
 	},
 
@@ -48379,7 +48467,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "margin-25-top text-info"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-question-sign"
-  }), _vm._v("\r\n\t\t\t\tUse the view button on each project row to view " + _vm._s(_vm.user.first) + "'s timesheets for that project.\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), _c('div', {
+  }), _vm._v("\r\n\t\t\t\tUse the view button on each project row to view " + _vm._s(_vm.user.first) + "'s timesheets for that project.\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.tableState == 'admin') ? _c('div', {
     staticClass: "row row-padded  margin-35-top"
   }, [_c('div', {
     staticClass: "col-md-3"
@@ -48498,7 +48586,57 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "value": "1"
     }
   }, [_vm._v("Paid")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
+    staticClass: "col-md-1"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Per Page")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.perPageFilter),
+      expression: "perPageFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.perPageFilter = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "15",
+      "selected": ""
+    }
+  }, [_vm._v("15")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "20"
+    }
+  }, [_vm._v("20")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "30"
+    }
+  }, [_vm._v("30")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "40"
+    }
+  }, [_vm._v("40")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "50"
+    }
+  }, [_vm._v("50")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "10000"
+    }
+  }, [_vm._v("*All")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-2"
   }, [_c('button', {
     staticClass: "btn btn-default btn-block margin-35-top",
     on: {
@@ -48508,7 +48646,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "glyphicon glyphicon-search"
   }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" \r\n\t\t\t\t\t\tFilter Projects\r\n\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
     staticClass: "left-loader"
-  })]) : _vm._e()])])])]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
+  })]) : _vm._e()])])]) : _vm._e()]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
     staticClass: "table table-striped table-hover margin-25-top"
   }, [_c('thead', [_c('tr', {
     staticClass: "info"
@@ -48548,7 +48686,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "pagination"
   }, [_c('li', {
     class: {
-      'disabled': _vm.searchResults.modelsCurrentPage == 0
+      'disabled': _vm.searchResults.modelsCurrentPage == 1
     }
   }, [_c('a', {
     on: {
@@ -48600,11 +48738,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "margin-25-top text-info"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\t\tYou can add a new project using the 'Create Project' link above.\r\n\t\t\t\t")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
   }), _vm._v("\r\n\t\t\t\t\tUse the view button on each project row to view and edit that project.\r\n\t\t\t\t")]), _vm._v(" "), _c('p', {
     staticClass: "margin-25-top text-info"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-question-sign"
-  }), _vm._v("\r\n\t\t\t\t\tYou can add a new project using the 'Create Project' link above.\r\n\t\t\t\t")])])
+  }), _vm._v("\r\n\t\t\t\t\tYou can filter the projects using the form below. You can leave fields blank.\r\n\t\t\t\t")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -48810,43 +48952,61 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row row-padded margin-15-top"
   }, [_c('div', {
     staticClass: "col-md-4"
-  }, [_c('p', {
-    staticClass: "margin-25-top"
-  }), _c('h4', [_c('strong', [_vm._v("Timesheets:")]), _vm._v(" "), _c('span', {
-    staticClass: "label label-success"
-  }, [_vm._v(_vm._s(_vm.totalTimesheets))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('p', {
-    staticClass: "margin-25-top"
-  }), _c('h4', [_c('strong', [_vm._v("Travel Hours:")]), _vm._v(" "), _c('span', {
-    staticClass: "label label-success"
-  }, [_vm._v(_vm._s(_vm.totalTravelHours))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('p', {
-    staticClass: "margin-25-top"
-  }), _c('h4', [_c('strong', [_vm._v("Travel Distance:")]), _vm._v(" "), _c('span', {
-    staticClass: "label label-success"
-  }, [_vm._v(_vm._s(_vm.totalTravelDistance) + " km")])]), _vm._v(" "), _c('p')])]), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded margin-15-top"
   }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_vm._m(2), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v(_vm._s(_vm.totalTravelDistance) + " km")]), _vm._v("\r\n\t\t\t\t\t\t  Total Distance\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v(_vm._s(_vm.totalTravelHours) + " hrs")]), _vm._v("\r\n\t\t\t\t\t\t  Total Time\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
-  }, [_c('p', {
-    staticClass: "margin-25-top"
-  }), _c('h4', [_c('strong', [_vm._v("Work Hours:")]), _vm._v(" "), _c('span', {
-    staticClass: "label label-success"
-  }, [_vm._v(_vm._s(_vm.totalWorkHours))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
+  }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_vm._m(3), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v(_vm._s(_vm.totalWorkHours) + " hrs")]), _vm._v("\r\n\t\t\t\t\t\t  Total Hours\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalWorkPay))]), _vm._v("\r\n\t\t\t\t\t\t  Net Pay\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-4"
-  }, [_c('p', {
-    staticClass: "margin-25-top"
-  }), _c('h4', [_c('strong', [_vm._v("Gross Total:")]), _vm._v(" "), _c('span', {
+  }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_vm._m(4), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalEquipmentRentalCost))]), _vm._v("\r\n\t\t\t\t\t\t  Equipment Cost Total\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalOtherCosts))]), _vm._v("\r\n\t\t\t\t\t\t  Total Other Costs\r\n\t\t\t\t\t\t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-12 text-center"
+  }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_c('li', {
+    staticClass: "list-group-item"
+  }, [_vm._m(5), _vm._v(" "), _c('p', {
+    staticClass: "margin-10-top"
+  }, [_c('span', {
     staticClass: "label label-success"
-  }, [_vm._v("$" + _vm._s(_vm.totalWorkPay))])]), _vm._v(" "), _c('p')]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('p', {
-    staticClass: "margin-25-top"
-  }), _c('h4', [_c('strong', [_vm._v("Per Diem Total:")]), _vm._v(" "), _c('span', {
-    staticClass: "label label-success"
-  }, [_vm._v("$" + _vm._s(_vm.totalPerDiem))])]), _vm._v(" "), _c('p')])]), _vm._v(" "), (!_vm.user) ? _c('div', {
+  }, [_vm._v("$" + _vm._s(parseFloat(_vm.totalWorkPay) + parseFloat(_vm.totalEquipmentRentalCost) + parseFloat(_vm.totalOtherCosts)))])])])])])])]), _vm._v(" "), (!_vm.user) ? _c('div', {
     staticClass: "row row-padded margin-25-top"
   }, [_c('button', {
     staticClass: "btn btn-default",
@@ -48905,6 +49065,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-question-sign"
   }), _vm._v("\r\n\t\t\t\tOnce you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.\r\n\t\t\t")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('strong', [_vm._v("Travel Totals")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('strong', [_vm._v("Hour Totals")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('strong', [_vm._v("Other Totals")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top"
+  }, [_c('strong', [_vm._v("Invoice Total")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {

@@ -39,11 +39,15 @@
 				</p>
 				<p class="margin-25-top text-info">
 					<span class="glyphicon glyphicon-question-sign"></span>
+					You can add a new project using the 'Create Project' link above.
+				</p>				
+				<p class="margin-25-top text-info">
+					<span class="glyphicon glyphicon-question-sign"></span>
 					Use the view button on each project row to view and edit that project.
 				</p>
 				<p class="margin-25-top text-info">
 					<span class="glyphicon glyphicon-question-sign"></span>
-					You can add a new project using the 'Create Project' link above.
+					You can filter the projects using the form below. You can leave fields blank.
 				</p>								
 			</div>			
 		</div>	
@@ -59,7 +63,7 @@
 			</p>
 		</div>
 
-		<div class="row row-padded  margin-35-top">
+		<div v-if="tableState == 'admin'" class="row row-padded  margin-35-top">
 
 			<div class="col-md-3">
 				<div class="form-group">
@@ -97,8 +101,20 @@
                     </select>
 				</div>				
 			</div>
-
-			<div class="col-md-3">
+			<div class="col-md-1">
+				<div class="form-group">
+					<label class="control-label">Per Page</label>
+					<select v-model="perPageFilter" class="form-control margin-10-top">
+						<option value="15" selected>15</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                        <option value="10000">*All</option>
+                    </select>
+				</div>				
+			</div>
+			<div class="col-md-2">
 				<!-- Refresh models from server button -->
 				<button @click="filter" class="btn btn-default btn-block margin-35-top">
 					<span class="glyphicon glyphicon-search"></span>
@@ -230,7 +246,7 @@
 	<div v-if="!fetchingModels" class="row text-center margin-45-top">
 		<ul class="pagination">
 			<!-- Page back button -->
-			<li :class="{ 'disabled': searchResults.modelsCurrentPage == 0 }">
+			<li :class="{ 'disabled': searchResults.modelsCurrentPage == 1 }">
 				<a @click="getSpecificProjectsPage(searchResults.modelsPrevPageUrl)">«</a>
 			</li>
 			<!-- Page button -->
@@ -288,7 +304,8 @@
 				clients: [],
 				clientCompanyFilter: '',
 				projectProvinceFilter: '',
-				invoiceStatusFilter: ''
+				invoiceStatusFilter: '',
+				perPageFilter: 15
 			}
 		},
 
@@ -302,7 +319,8 @@
 				this.filterAndSetModels('/api/projects/filter', {
 					client_company_name: this.clientCompanyFilter,
 					province: this.projectProvinceFilter,
-					invoice_paid_date: this.invoiceStatusFilter
+					invoice_paid_date: this.invoiceStatusFilter,
+					per_page: this.perPageFilter
 				});
 			},
 

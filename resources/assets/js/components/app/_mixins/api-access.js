@@ -184,18 +184,11 @@ module.exports =  {
 			// Show loader
 			this.fetchingModels = true;
 
-			// Use callers variable or provided url variable for the GET
-			if(url){
-				var urlToFetch = url;
-			} else {
-				var urlToFetch = this.urlToFetch;
-			}
-
 			// Add CSRF token. Requires Laravel layout to set the token
 			data._token = window.Laravel.csrfToken;
 
 			// Send POST request to retrieve pagination results
-			axios.post(urlToFetch, data)
+			axios.post(url, data)
 				// Success
 				.then(function(response){
 					// Handle the response with helper method found below this method

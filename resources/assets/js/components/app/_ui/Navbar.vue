@@ -57,7 +57,7 @@
             return {
                 collapsed: true,
                 csrfToken: window.Laravel.csrfToken,
-                user_name: DASHBOARD_USERS_NAME
+                user_name: DASHBOARD_USER_FIRST
             }
         }
     }
