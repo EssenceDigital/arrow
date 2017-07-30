@@ -480,7 +480,7 @@ module.exports = {
 		/* Sends a POST request to delete the specified row from storage. Uses a properly set up 'hub' from. See top most comment.
    * @return emits an event letting the caller know if the request was successfull
   */
-		deleteModel: function deleteModel() {
+		deleteModel: function deleteModel(cbFailure) {
 			// Show loader
 			this.isDeleting = true;
 			// Assemble object for POST
@@ -506,9 +506,14 @@ module.exports = {
 				// Hide loader
 				context.isDeleting = false;
 				// Emit even
-				context.$router.app.$emit(context.deleteEvent);
-			}).catch(function (response) {
-				console.log(response);
+				context.$router.app.$emit(context.form.deleteEvent);
+			}).catch(function (error) {
+				console.log(error);
+				if (error.response) {
+					if (cbFailure instanceof Function) {
+						cbFailure.call(context, error.response.data);
+					}
+				}
 			});
 		}
 	}
@@ -16074,12 +16079,13 @@ var api_access = __webpack_require__(1);
 			var context = this;
 			// Ensure project id is set
 			this.form.fields.project_id.val = this.project_id;
-			// Send API call
+			// Send API call with callback
 			this.createOrUpdate(function (model) {
-				// Find the crew member in the model and remove it
+				// Remove user that was just added from the users[] select list
 				this.users.forEach(function (user) {
-					// Remove user that was just added from the users[] select list
+					// Find user we need
 					if (user.id == model.id) {
+						// Get index and remove from array
 						var index = context.users.indexOf(user);
 						context.users.splice(index, 1);
 					}
@@ -17006,7 +17012,26 @@ var modal = __webpack_require__(3);
 
 		// Submits a delete to server via mixin
 		deleteProject: function deleteProject() {
-			this.deleteModel();
+			if (this.project_id) {
+				// Ensure the project id is set
+				this.form.fields.id.val = this.project_id;
+				// Attempt to delete project
+				this.deleteModel(function (failureResponse) {
+					// If the project could not be deleted for specific reasons
+					if (!failureResponse.result) {
+						noty({
+							text: failureResponse.message,
+							theme: 'defaultTheme',
+							layout: 'center',
+							timeout: 1750,
+							closeWith: ['click', 'hover'],
+							type: 'error'
+						});
+					}
+					console.log(failureResponse.data);
+					this.$router.go(-1);
+				});
+			}
 		},
 
 
@@ -17131,6 +17156,11 @@ var api_access = __webpack_require__(1);
 			});
 		}
 
+		// When the form component alerts this parent of a successful creation
+		this.$router.app.$on('project-deleted', function () {
+			// Redirect
+			this.$router.push('/projects/search');
+		});
 		// When the form component alerts this parent of a project update
 		this.$router.app.$on('project-updated', function (model) {
 			// Update cached model
@@ -18888,12 +18918,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		this.$router.app.$on('project-created', function (model) {
 			// Redirect
 			_this.$router.push('/projects/view/' + model.id + '/hub');
-		});
-
-		// When the form component alerts this parent of a successful creation
-		this.$router.app.$on('project-deleted', function () {
-			// Redirect
-			this.$router.push('/projects/search');
 		});
 	}
 });
@@ -44985,7 +45009,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": client
       }
     }, [_vm._v("\r\n\t\t\t\t\t\t\t\t\t\t\t" + _vm._s(client) + "\r\n\t\t\t\t\t\t\t\t\t\t")])
-  })], 2), _vm._v(" "), (_vm.client_company_name.err) ? _c('span', {
+  })], 2), _vm._v(" "), (_vm.form.fields.client_company_name.err) ? _c('span', {
     staticClass: "text-danger"
   }, [_vm._v(_vm._s(_vm.form.fields.client_company_name.err))]) : _vm._e()])])]) : _vm._e(), _vm._v(" "), _vm._m(3), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
@@ -45078,7 +45102,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("\r\n\t\t\t\tDelete this project until the age that gave it birth comes again?\r\n\t\t\t")]), _vm._v(" "), _c('div', {
     slot: "footer"
   }, [_c('button', {
-    staticClass: "btn btn-primary margin-45-top",
+    staticClass: "btn btn-info margin-45-top",
     on: {
       "click": function($event) {
         _vm.modalActive = false

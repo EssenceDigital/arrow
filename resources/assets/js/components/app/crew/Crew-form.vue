@@ -104,12 +104,13 @@
 				var context = this;
 				// Ensure project id is set
 				this.form.fields.project_id.val = this.project_id;
-				// Send API call
+				// Send API call with callback
 				this.createOrUpdate(function(model){
-					// Find the crew member in the model and remove it
+					// Remove user that was just added from the users[] select list
 					this.users.forEach(function(user){
-						// Remove user that was just added from the users[] select list
+						// Find user we need
 						if(user.id == model.id){
+							// Get index and remove from array
 							var index = context.users.indexOf(user); 
 							context.users.splice(index, 1);
 						}

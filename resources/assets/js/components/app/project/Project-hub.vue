@@ -81,6 +81,12 @@
 				});
 			}
 
+
+			// When the form component alerts this parent of a successful creation
+			this.$router.app.$on('project-deleted', function() {
+				// Redirect
+				this.$router.push('/projects/search');				
+			});	
 			// When the form component alerts this parent of a project update
 			this.$router.app.$on('project-updated', model => {
 				// Update cached model

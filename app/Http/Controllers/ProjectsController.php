@@ -21,10 +21,10 @@ class ProjectsController extends Controller
 
     // Fields and their respective validation rules
     private $validationFields = [
+        'client_company_name' => 'required|max:30',
         'province' => 'max:20',
         'location' => 'max:100',
         'details' => 'max:150',
-        'client_company_name' => 'max:30',
         'client_contact_name' => 'max:30',
         'client_contact_phone' => 'max:14',
         'client_contact_email' => 'email|nullable',
@@ -362,23 +362,34 @@ class ProjectsController extends Controller
      */
     public function delete(Request $request)
     {
-        // Find user or throw 404 :)
-        $project = Project::findOrFail($request->id);
+        // With all foreign keys / children
+        $project = Project::with(['comments', 'comments.user', 'timeline', 'users', 'timesheets'])->find($request->id);
 
-        // Attempt to remove 
-        $result = $project->delete();
-        // Verify success on store
-        if(! $result){
+        if(count($project->users) > 0 || count($project->timesheets) > 0){
             // Return response for ajax call
             return response()->json([
-                'result' => false
-            ], 404);
+                'result' => false,
+                'message' => 'Project has crew assigned or timesheets present. Cannot remove!',
+                'data' => $project->users
+            ], 404);  
+
+        } else {
+            // Attempt to remove 
+            $result = $project->delete();
+            // Verify success on store
+            if(! $result){
+                // Return response for ajax call
+                return response()->json([
+                    'result' => false
+                ], 404);
+            }
+
+            // Return successful response for ajax call
+            return response()->json([
+                'result' => 'success'
+            ], 200);
         }
 
-        // Return successful response for ajax call
-        return response()->json([
-            'result' => 'success'
-        ], 200);
     }
 
 }

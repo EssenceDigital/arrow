@@ -67,13 +67,7 @@
 			this.$router.app.$on('project-created', model => {
 				// Redirect
 				this.$router.push('/projects/view/'+model.id+'/hub');				
-			});
-
-			// When the form component alerts this parent of a successful creation
-			this.$router.app.$on('project-deleted', function() {
-				// Redirect
-				this.$router.push('/projects/search');				
-			});			
+			});		
 
 		}
 

@@ -51,7 +51,7 @@
 											{{ client }}
 										</option>
 				                    </select>
-				                    <span v-if="client_company_name.err" class="text-danger" >{{ form.fields.client_company_name.err }}</span>
+				                    <span class="text-danger" v-if="form.fields.client_company_name.err">{{ form.fields.client_company_name.err }}</span>
 								</div>
 							</div>					
 						</div>
@@ -403,7 +403,7 @@
 				Delete this project until the age that gave it birth comes again?
 			</p>
 			<div slot="footer">
-				<button @click="modalActive = false" class="btn btn-primary margin-45-top">
+				<button @click="modalActive = false" class="btn btn-info margin-45-top">
 					Cancel
 				</button>
 				<button @click="deleteProject" class="btn btn-danger margin-45-top">
@@ -530,7 +530,26 @@
 
 			// Submits a delete to server via mixin
 			deleteProject(){
-				this.deleteModel();
+				if(this.project_id){
+					// Ensure the project id is set
+					this.form.fields.id.val = this.project_id;
+					// Attempt to delete project
+					this.deleteModel(function(failureResponse){
+						// If the project could not be deleted for specific reasons
+						if(!failureResponse.result){
+			                 noty({
+			                     text: failureResponse.message,
+			                     theme: 'defaultTheme',
+			                     layout: 'center',
+			                     timeout: 1750,
+			                     closeWith: ['click', 'hover'],
+			                     type: 'error'
+			                });							
+						}
+						console.log(failureResponse.data);
+						this.$router.go(-1);
+					});
+				}
 			},
 
 			// Retrieve all the unique clients from api

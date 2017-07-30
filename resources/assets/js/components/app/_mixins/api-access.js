@@ -355,7 +355,7 @@ module.exports =  {
 		/* Sends a POST request to delete the specified row from storage. Uses a properly set up 'hub' from. See top most comment.
 		 * @return emits an event letting the caller know if the request was successfull
 		*/
-		deleteModel(){
+		deleteModel(cbFailure){
 			// Show loader
 			this.isDeleting = true;
 			// Assemble object for POST
@@ -382,10 +382,16 @@ module.exports =  {
 					// Hide loader
 					context.isDeleting = false;	
 					// Emit even
-					context.$router.app.$emit(context.deleteEvent);				
+					context.$router.app.$emit(context.form.deleteEvent);				
 				})
-				.catch(function(response){
-					console.log(response);
+				.catch(function(error){
+					console.log(error);
+					if(error.response){
+		                if(cbFailure instanceof Function){
+		                	cbFailure.call(context, error.response.data);
+		                }						
+					}
+					
 				});				
 		}
 
