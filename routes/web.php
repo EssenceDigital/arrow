@@ -81,7 +81,6 @@ Route::post('/api/timelines/update-field', 'TimelinesController@updateField');
 
 // Users
 Route::get('/api/users', 'UsersController@hub');
-Route::get('/api/users/all', 'UsersController@all');
 Route::get('/api/users/all-pages', 'UsersController@allPages');
 Route::get('/api/users/{id}', 'UsersController@single');
 Route::get('/api/users/{user_id}/projects', 'UsersController@projects');

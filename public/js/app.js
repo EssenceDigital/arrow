@@ -429,7 +429,9 @@ module.exports = {
 			}).catch(function (error) {
 				if (error.response) {
 					// If the server responded with error data then cache the error in the callers editingField object
-					this.editingField.err = error.response.data[key][0];
+					context.editingField.err = error.response.data[context.editingField.field][0];
+					// Hide loader
+					context.fieldIsUpdating = false;
 				}
 			});
 		},
@@ -14709,15 +14711,13 @@ var routes = [{
 			component: user_table,
 			props: true
 		}, {
+			path: 'options',
+			component: user_form,
+			props: true
+		}, {
 			path: 'projects/:project_id/timesheets',
 			component: timesheets_hub,
 			props: true
-		}, {
-			path: 'options',
-			components: {
-				user: user_form
-
-			}
 		}]
 	}, { path: 'create', component: user_form }]
 }, {
@@ -16936,6 +16936,7 @@ var modal = __webpack_require__(3);
 					response_by: { val: '', err: false, dflt: '' },
 					estimate: { val: '0.00', err: false, dflt: '0.00' },
 					approval_date: { val: '', err: false, dflt: '' },
+					invoice_amount: { val: '0.00', err: false, dflt: '0.00' },
 					// Timeline 
 					timeline: { val: '', err: false, dflt: '' }
 				}
@@ -18621,6 +18622,52 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var comment_form = __webpack_require__(77);
 var comment_list = __webpack_require__(78);
@@ -18668,15 +18715,16 @@ var api_access = __webpack_require__(1);
 				land_access_granted_by: false,
 				land_access_contact: false,
 				land_access_phone: false,
-				invoiced_date: false,
-				invoice_paid_date: false,
-				// "Proposal" related fields
 				plans: false,
 				work_type: false,
 				work_overview: false,
 				response_by: false,
 				estimate: false,
-				approval_date: false
+				approval_date: false,
+				invoiced_date: false,
+				invoice_paid_date: false,
+				invoice_amount: false
+
 			},
 			form: {
 				updateEvent: 'project-updated'
@@ -18704,7 +18752,12 @@ var api_access = __webpack_require__(1);
 
 		// Shows the field table and hides the field input
 		closeEditingField: function closeEditingField(field) {
+			// Turn off flag to close
 			this.fieldIsEditing[field] = false;
+			// Reset current field values
+			this.editingField.field = '';
+			this.editingField.val = '';
+			this.editingField.err = false;
 		},
 
 
@@ -22297,8 +22350,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 var api_access = __webpack_require__(1);
 var modal = __webpack_require__(3);
@@ -22307,6 +22358,8 @@ var modal = __webpack_require__(3);
 	components: {
 		'modal': modal
 	},
+
+	props: ['user_id'],
 
 	mixins: [api_access],
 
@@ -22389,6 +22442,7 @@ var modal = __webpack_require__(3);
 				context.form.fields.password = '';
 				context.form.fields.password_confirmation = '';
 				context.passwordIsChanging = false;
+				context.$router.push('/users/view/' + context.user_id + '/hub');
 			}).catch(function (response) {
 				console.log(response);
 			});
@@ -22399,18 +22453,10 @@ var modal = __webpack_require__(3);
 	created: function created() {
 		console.log('User form created');
 
-		if (this.$route.params.id) {
-			// Show form loader
-			this.formIsLoading = true;
-			// Get the requested model
-			this.grabModel('/api/users/' + this.$route.params.id, function (model) {
-				// Populate form
-				this.populateFormFromModel(model);
-				// Adjust form state
-				this.formEditState('edit');
-				// Hide form loader
-				this.formIsLoading = false;
-			});
+		if (this.user_id) {
+			this.form.fields.id.val = this.user_id;
+			// Adjust form state
+			this.formEditState('edit');
 		}
 	}
 });
@@ -22472,6 +22518,12 @@ var api_access = __webpack_require__(1);
 		this.$router.app.$on('user-updated', function (model) {
 			// Update cached model
 			_this.user = model;
+		});
+
+		// When the form component alerts this parent of a successful creation
+		this.$router.app.$on('user-deleted', function () {
+			// Redirect
+			this.$router.push('/users/search');
 		});
 	}
 });
@@ -23354,7 +23406,7 @@ var timesheets_hub = __webpack_require__(16);
 		'timesheets-hub': timesheets_hub
 	},
 
-	props: ['user'],
+	props: ['user', 'user_id'],
 
 	mixins: [api_access],
 
@@ -23515,12 +23567,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		this.$router.app.$on('user-created', function (model) {
 			// Redirect
 			_this.$router.push('/users/view/' + model.id + '/hub');
-		});
-
-		// When the form component alerts this parent of a successful creation
-		this.$router.app.$on('user-deleted', function () {
-			// Redirect
-			this.$router.push('/users/search');
 		});
 	}
 });
@@ -47430,6 +47476,86 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
     staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.invoice_amount) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(21), _vm._v(" "), (_vm.project.invoice_amount == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("N/A")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t$" + _vm._s(_vm.project.invoice_amount) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('invoice_amount')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Invoice Amount")]), _vm._v(" "), _c('div', {
+    staticClass: "input-group margin-10-top"
+  }, [_c('span', {
+    staticClass: "input-group-addon"
+  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('invoice_amount')
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-primary btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
   })]) : _vm._e()])])])])])])])])]), _vm._v(" "), _c('hr', {
     staticClass: "dotted"
   }), _vm._v(" "), _c('div', {
@@ -47442,7 +47568,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-white post panel-shadow"
   }, [(!_vm.fieldIsEditing.approval_date) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(21), _vm._v(" "), (_vm.project.approval_date == null) ? _c('div', {
+  }, [_vm._m(22), _vm._v(" "), (_vm.project.approval_date == null) ? _c('div', {
     staticClass: "col-md-11"
   }, [_c('span', {
     staticClass: "label label-danger"
@@ -47591,6 +47717,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('h5', [_c('strong', [_vm._v("Invoiced Date")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Invoice Paid On")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Invoice Amount")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Project Approved On")])])
 }]}
@@ -51507,60 +51635,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-45-top",
+    staticClass: "btn btn-info btn-block margin-45-top",
     on: {
       "click": _vm.changePassword
     }
   }, [(!_vm.passwordIsChanging) ? _c('span', [_vm._v("Change")]) : _vm._e(), _vm._v(" "), (_vm.passwordIsChanging) ? _c('span', [_c('div', {
     staticClass: "center-loader"
-  })]) : _vm._e()])])])])])])]) : _vm._e(), _vm._v(" "), (_vm.form.state == 'edit') ? _c('div', {
-    staticClass: "well bs-component"
-  }, [_c('legend', {
-    staticClass: "danger"
-  }, [_vm._v("\r\n\t\t\t\tDelete User\t\t\t\t\t\t\t\r\n\t\t\t")]), _vm._v(" "), _c('fieldset', [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-3 col-centered"
-  }, [_c('div', {
-    staticClass: "form-group"
-  }, [_c('button', {
-    staticClass: "btn btn-danger btn-block margin-45-top",
-    on: {
-      "click": function($event) {
-        _vm.modalActive = true
-      }
-    }
-  }, [_vm._v("Delete")])])])])])]) : _vm._e(), _vm._v(" "), _c('modal', {
-    attrs: {
-      "modalActive": _vm.modalActive
-    },
-    on: {
-      "modal-close": function($event) {
-        _vm.modalActive = false
-      }
-    }
-  }, [_c('h4', {
-    staticClass: "danger",
-    slot: "title"
-  }, [_vm._v("\r\n\t\t\t\tDelete this user?\r\n\t\t\t")]), _vm._v(" "), _c('p', {
-    slot: "body"
-  }, [_vm._v("\r\n\t\t\t\tDelete this user until the age that gave it birth comes again?\r\n\t\t\t")]), _vm._v(" "), _c('div', {
-    slot: "footer"
-  }, [_c('button', {
-    staticClass: "btn btn-primary margin-45-top",
-    on: {
-      "click": function($event) {
-        _vm.modalActive = false
-      }
-    }
-  }, [_vm._v("Cancel")]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-danger margin-45-top",
-    on: {
-      "click": _vm.deleteUser
-    }
-  }, [(!_vm.isDeleting) ? _c('span', [_vm._v("Delete")]) : _vm._e(), _vm._v(" "), (_vm.isDeleting) ? _c('span', [_c('div', {
-    staticClass: "loader-center"
-  })]) : _vm._e()])])])], 1) : _vm._e()])
+  })]) : _vm._e()])])])])])])]) : _vm._e()]) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-12"

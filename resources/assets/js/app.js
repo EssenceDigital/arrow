@@ -136,17 +136,16 @@ const routes = [
 						props: true
 					},
 					{
+						path: 'options',
+						component: user_form,
+						props: true
+					},					
+					{
 						path: 'projects/:project_id/timesheets',
 						component: timesheets_hub,
 						props: true
-					},
-					{
-						path: 'options',
-						components: {
-							user: user_form,
-
-						}
-					}				]
+					}
+				]
 			},
 			{ path: 'create', component: user_form }			
 		]

@@ -198,7 +198,7 @@
 					<div class="row">
 						<div class="col-md-3 col-centered">
 							<div class="form-group">
-								<button v-on:click="changePassword" class="btn btn-primary btn-block margin-45-top">
+								<button v-on:click="changePassword" class="btn btn-info btn-block margin-45-top">
 									<span v-if="!passwordIsChanging">Change</span>
 									<span v-if="passwordIsChanging">
 										<div class="center-loader"></div>
@@ -212,7 +212,7 @@
 			</form><!-- / The form -->
 		</div><!-- / Change password form container -->
 
-		<!-- Container for delete button (triggers the modal below to confirm) -->	
+		<!-- Container for delete button (triggers the modal below to confirm)
 		<div v-if="form.state == 'edit'" class="well bs-component">
 			<legend class="danger">
 				Delete User							
@@ -226,9 +226,7 @@
 					</div>
 				</div>			
 			</fieldset>								
-		</div><!-- / Container for delete button -->
-
-		<!-- Modal to confirm deletion -->
+		</div>
 		<modal 
 			:modalActive="modalActive" 
 			@modal-close="modalActive = false"
@@ -240,7 +238,7 @@
 				Delete this user until the age that gave it birth comes again?
 			</p>
 			<div slot="footer">
-				<button @click="modalActive = false" class="btn btn-primary margin-45-top">Cancel</button>
+				<button @click="modalActive = false" class="btn btn-info margin-45-top">Cancel</button>
 				<button @click="deleteUser" class="btn btn-danger margin-45-top">
 					<span v-if="!isDeleting">Delete</span>
 					<span v-if="isDeleting">
@@ -248,7 +246,7 @@
 					</span>
 				</button>
 			</div>
-		</modal><!-- / Modal to confirm deletion -->	
+		</modal>/ Modal to confirm deletion -->	
 
 	</div><!-- / Form wrapper -->
 
@@ -264,6 +262,8 @@
 		components: {
 			'modal': modal
 		},
+
+		props: ['user_id'],
 
 		mixins: [api_access],
 
@@ -344,6 +344,7 @@
 						context.form.fields.password = '';
 						context.form.fields.password_confirmation = '';
 						context.passwordIsChanging = false;
+						context.$router.push('/users/view/'+context.user_id+'/hub');
 					})
 					.catch(function(response){
 						console.log(response);
@@ -355,18 +356,10 @@
 		created(){
 			console.log('User form created');
 
-			if(this.$route.params.id){
-				// Show form loader
-				this.formIsLoading = true;				
-				// Get the requested model
-				this.grabModel('/api/users/' + this.$route.params.id, function(model){
-					// Populate form
-					this.populateFormFromModel(model);
-					// Adjust form state
-					this.formEditState('edit');
-					// Hide form loader
-					this.formIsLoading = false;					
-				});								
+			if(this.user_id){
+				this.form.fields.id.val = this.user_id;
+				// Adjust form state
+				this.formEditState('edit');			
 			}
 		}		
 	}

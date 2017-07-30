@@ -49,6 +49,12 @@
 				// Update cached model
 				this.user = model;			
 			});	
+
+			// When the form component alerts this parent of a successful creation
+			this.$router.app.$on('user-deleted', function() {
+				// Redirect
+				this.$router.push('/users/search');				
+			});				
 										
 		}
 	}

@@ -436,7 +436,7 @@
 			'timesheets-hub': timesheets_hub
 		},
 
-		props: ['user'],
+		props: ['user', 'user_id'],
 
 		mixins: [api_access],
 

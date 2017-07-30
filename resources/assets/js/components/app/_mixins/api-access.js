@@ -300,7 +300,9 @@ module.exports =  {
 				.catch(function(error){
                     if (error.response) {
                         // If the server responded with error data then cache the error in the callers editingField object
-                        this.editingField.err = error.response.data[key][0];                              
+                        context.editingField.err = error.response.data[context.editingField.field][0];  
+                        // Hide loader
+                        context.fieldIsUpdating = false;                            
                     }
 				});
 

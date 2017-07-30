@@ -481,6 +481,7 @@
 						response_by: {val: '', err: false, dflt: ''},
 						estimate: {val: '0.00', err: false, dflt: '0.00'},
 						approval_date: {val: '', err: false, dflt: ''},
+						invoice_amount: {val: '0.00', err: false, dflt: '0.00'},
 						// Timeline 
 						timeline: {val: '', err: false, dflt: ''}			
 					}

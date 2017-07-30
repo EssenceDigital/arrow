@@ -926,7 +926,53 @@
 						</div>					
 					</div><!-- / Input form toggle panel -->					
 				</div>
-			</div><!-- / Field column -->								
+			</div><!-- / Field column -->
+			<!-- Field column -->																		
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
+					<div v-if="!fieldIsEditing.invoice_amount" class="panel-body">
+						<h5><strong>Invoice Amount</strong></h5>
+				    	<div v-if="project.invoice_amount == null" class="col-md-11">
+				    		<span class="label label-danger">N/A</span>
+				    	</div>
+				    	<div v-else class="col-md-11">
+				    		${{ project.invoice_amount }}
+				    	</div>
+				    	<div class="pull-right">
+				    		<span @click="showEditField('invoice_amount')" class="glyphicon glyphicon-cog hover"></span>
+				    	</div>				    										
+					</div>
+					<!-- Show input form if edit mode is toggled -->
+					<div v-else class="panel-body">
+						<div class="form-group" :class="{'has-error': editingField.err}">
+		                    <div class="col-md-11">
+		                    	<label class="control-label">Invoice Amount</label>
+		                    	<div class="input-group margin-10-top">
+		                    		<span class="input-group-addon">$</span>
+		                    		<input v-model="editingField.val" type="text" class="form-control">
+		                    	</div>	                    	
+		                    	<span class="text-danger" v-if="editingField.err">{{ editingField.err }}</span>
+		                    </div>
+					    	<div class="pull-right">
+					    		<span @click="closeEditingField('invoice_amount')" class="glyphicon glyphicon-remove hover"></span>
+					    	</div>	
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    		                    
+	                  	</div>					
+					</div><!-- / Input form toggle panel -->					
+				</div>
+			</div><!-- / Field column -->											
 		</div><!-- / Invoicing row -->
 
 		<hr class="dotted"><!-- Divider -->
@@ -1061,15 +1107,16 @@
 					land_access_granted_by: false,
 					land_access_contact: false,
 					land_access_phone: false,
-					invoiced_date: false,
-					invoice_paid_date: false,
-					// "Proposal" related fields
 					plans: false,
 					work_type: false,
 					work_overview: false,
 					response_by: false,
 					estimate: false,
-					approval_date: false					
+					approval_date: false,
+					invoiced_date: false,
+					invoice_paid_date: false,
+					invoice_amount: false
+
 				},
 				form: {
 					updateEvent: 'project-updated'
@@ -1095,7 +1142,13 @@
 			},
 			// Shows the field table and hides the field input
 			closeEditingField(field){
+				// Turn off flag to close
 				this.fieldIsEditing[field] = false;
+				// Reset current field values
+				this.editingField.field = '';
+				this.editingField.val = '';
+				this.editingField.err = false;
+
 			},
 
 			// Update the field

@@ -27,22 +27,24 @@ class ProjectsController extends Controller
         'client_company_name' => 'max:30',
         'client_contact_name' => 'max:30',
         'client_contact_phone' => 'max:14',
-        'client_contact_email' => 'max:45',
+        'client_contact_email' => 'email|nullable',
         'first_contact_by' => 'max:30',
-        'first_contact_date' => 'date',
+        'first_contact_date' => 'date|nullable',
         'land_ownership' => 'max:20',
         'land_access_granted' => 'boolean',
         'land_access_granted_by' => 'max:30',
         'land_access_contact' => 'max:30',
         'land_access_phone' => 'max:14',
-        'invoiced_date' => 'date',
-        'invoice_paid_date' => 'date',
         'plans' => 'max:30',
         'work_type' => 'max:30',
         'work_overview' => 'max:150',
-        'response_by' => 'date',
+        'response_by' => 'date|nullable',
         'estimate' => 'numeric|between:0,1000000000000.99',
-        'approval_date' => 'date'
+        'approval_date' => 'date|nullable',
+        'invoiced_date' => 'date|nullable',
+        'invoice_paid_date' => 'date|nullable',        
+        'invoice_amount' => 'numeric|between:0,1000000000000.99'
+
     ];
 
     /**

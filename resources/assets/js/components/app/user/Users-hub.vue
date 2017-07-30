@@ -66,11 +66,7 @@
 				this.$router.push('/users/view/'+model.id+'/hub');				
 			});
 
-			// When the form component alerts this parent of a successful creation
-			this.$router.app.$on('user-deleted', function() {
-				// Redirect
-				this.$router.push('/users/search');				
-			});			
+		
 
 		}
 

@@ -22,19 +22,8 @@ class Controller extends BaseController
      */
     protected function validateAndPopulate(Request $request, Model $model, Array $validationFields)
     {
-        // Ends up looking like validationFields
-        $rules = [];
-
-        // Populate rules[], but skip any dates that are an empty string in the request
-        // Bypasses validation allowing an empty 'date' to be inserted in the db. (So it's optional not required)
-        foreach($validationFields as $key => $val){
-            // If a date rule and an empty string do not add to rules[]
-            if($val == 'date' && $request->$key == '') continue;
-            // If not a date field then add current field and its rule to the rules[]
-            $rules[$key] = $val;
-        }
         // Validate or stop proccessing :)
-        $this->validate($request, $rules);
+        $this->validate($request, $validationFields);
 
         // Add request data to model
         foreach($validationFields as $key => $val){
