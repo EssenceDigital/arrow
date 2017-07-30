@@ -19,7 +19,7 @@ class CreateProjectCommentsTable extends Migration
             $table->foreign('project_id')->references('id')->on('projects');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('comment', 255);
+            $table->string('comment', 750);
             $table->boolean('is_issue')->default(false);
             $table->timestamps();
         });

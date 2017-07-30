@@ -77,7 +77,7 @@
 						<div class="row row-padded">
 							<div class="col-md-11">
 								<div class="form-group">
-									<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+									<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 										<span v-if="!fieldIsUpdating">Save</span>
 										<span v-if="fieldIsUpdating">
 											<div class="center-loader"></div>
@@ -123,7 +123,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -166,7 +166,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -209,7 +209,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -264,7 +264,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -307,7 +307,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -354,7 +354,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -409,7 +409,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -452,7 +452,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -498,7 +498,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -545,7 +545,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -592,7 +592,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -645,7 +645,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -688,7 +688,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -735,7 +735,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -778,7 +778,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -821,7 +821,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -835,6 +835,56 @@
 				</div>
 			</div><!-- / Field column -->			
 		</div><!-- Land row 2 -->
+
+		<hr class="dotted"><!-- Divider -->
+
+		<!-- Approval row -->
+		<div class="row row-padded margin-25-top">
+			<h3 class="margin-15-bottom">Project Approval</h3>
+			<!-- Field column -->
+			<div class="col-md-4">
+				<div class="panel panel-white post panel-shadow">
+					<!-- Show field table as default -->
+					<div v-if="!fieldIsEditing.approval_date" class="panel-body">
+						<h5><strong>Project Approved On</strong></h5>
+				    	<div v-if="project.approval_date == null" class="col-md-11">
+				    		<span class="label label-danger">Not yet approved</span>
+				    	</div>
+				    	<div v-else class="col-md-11">
+				    		{{ new Date(Date.parse(project.approval_date + 'T00:00:00')).toDateString() }}
+				    	</div>
+				    	<div class="pull-right">
+				    		<span @click="showEditField('approval_date')" class="glyphicon glyphicon-cog hover"></span>
+				    	</div>				    										
+					</div>
+					<!-- Show input form if edit mode is toggled -->
+					<div v-else class="panel-body">
+						<div class="form-group" :class="{'has-error': editingField.err}">
+							<div class="col-md-11">
+								<label class="control-label">Project Approved On</label>
+		                    	<input v-model="editingField.val" type="date" class="form-control margin-10-top">
+		                    	<span class="text-danger" v-if="editingField.err">{{ editingField.err }}</span>
+							</div>
+					    	<div class="pull-right">
+					    		<span @click="closeEditingField('approval_date')" class="glyphicon glyphicon-remove hover"></span>
+					    	</div>
+							<div class="row row-padded">
+								<div class="col-md-11">
+									<div class="form-group">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
+											<span v-if="!fieldIsUpdating">Save</span>
+											<span v-if="fieldIsUpdating">
+												<div class="center-loader"></div>
+											</span>
+										</button>												
+									</div>					
+								</div>
+							</div>					    								
+						</div>					
+					</div><!-- / Input form toggle panel -->					
+				</div>
+			</div><!-- / Field column -->																	
+		</div><!-- / Approval row -->
 
 		<hr class="dotted"><!-- Divider -->
 
@@ -871,7 +921,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -914,7 +964,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -960,7 +1010,7 @@
 							<div class="row row-padded">
 								<div class="col-md-11">
 									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
+										<button @click="sendFieldUpdate" class="btn btn-info btn-block margin-10-top">
 											<span v-if="!fieldIsUpdating">Save</span>
 											<span v-if="fieldIsUpdating">
 												<div class="center-loader"></div>
@@ -974,56 +1024,6 @@
 				</div>
 			</div><!-- / Field column -->											
 		</div><!-- / Invoicing row -->
-
-		<hr class="dotted"><!-- Divider -->
-
-		<!-- Approval row -->
-		<div class="row row-padded margin-25-top">
-			<h3 class="margin-15-bottom">Project Approval</h3>
-			<!-- Field column -->
-			<div class="col-md-4">
-				<div class="panel panel-white post panel-shadow">
-					<!-- Show field table as default -->
-					<div v-if="!fieldIsEditing.approval_date" class="panel-body">
-						<h5><strong>Project Approved On</strong></h5>
-				    	<div v-if="project.approval_date == null" class="col-md-11">
-				    		<span class="label label-danger">Not yet approved</span>
-				    	</div>
-				    	<div v-else class="col-md-11">
-				    		{{ project.approval_date }}
-				    	</div>
-				    	<div class="pull-right">
-				    		<span @click="showEditField('approval_date')" class="glyphicon glyphicon-cog hover"></span>
-				    	</div>				    										
-					</div>
-					<!-- Show input form if edit mode is toggled -->
-					<div v-else class="panel-body">
-						<div class="form-group" :class="{'has-error': editingField.err}">
-							<div class="col-md-11">
-								<label class="control-label">Project Approved On</label>
-		                    	<input v-model="editingField.val" type="date" class="form-control margin-10-top">
-		                    	<span class="text-danger" v-if="editingField.err">{{ editingField.err }}</span>
-							</div>
-					    	<div class="pull-right">
-					    		<span @click="closeEditingField('approval_date')" class="glyphicon glyphicon-remove hover"></span>
-					    	</div>
-							<div class="row row-padded">
-								<div class="col-md-11">
-									<div class="form-group">
-										<button @click="sendFieldUpdate" class="btn btn-primary btn-block margin-10-top">
-											<span v-if="!fieldIsUpdating">Save</span>
-											<span v-if="fieldIsUpdating">
-												<div class="center-loader"></div>
-											</span>
-										</button>												
-									</div>					
-								</div>
-							</div>					    								
-						</div>					
-					</div><!-- / Input form toggle panel -->					
-				</div>
-			</div><!-- / Field column -->																	
-		</div><!-- / Approval row -->
 
 		<hr class="dotted"><!-- Divider -->
 

@@ -21,7 +21,7 @@
 				</legend>
 
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-5 col-centered">
 						<div class="form-group" :class="{'has-error': form.fields.permit_application_date.err}">
 		                    <div class="col-md-12">
 		                    	<label class="control-label">Permit Application Date</label>
@@ -30,7 +30,7 @@
 		                    </div>
 	                  	</div>					
 					</div>						
-					<div class="col-md-4">
+					<!--<div class="col-md-4">
 						<div class="form-group" :class="{'has-error': form.fields.permit_recieved_date.err}">
 		                    <div class="col-md-12">
 		                    	<label class="control-label">Permit Recieved Date</label>
@@ -47,12 +47,12 @@
 		                    	<span class="text-danger" v-if="form.fields.permit_number.err">{{ form.fields.permit_number.err }}</span>
 		                    </div>
 	                  	</div>					
-					</div>
+					</div>-->
 				</div>
 			</fieldset>
 	
 	
-			<fieldset class="margin-25-top">
+			<!--<fieldset class="margin-25-top">
 				<legend>Site Number Details</legend>
 				<div class="row">
 					<div class="col-md-4">
@@ -216,7 +216,7 @@
 						</div>						
 					</div>
 				</div>																						
-			</fieldset>
+			</fieldset>-->
 			<!-- Button -->
 			<fieldset>
 				<div class="row">
@@ -253,7 +253,7 @@
 					model: 'Timeline',
 					state: 'create',
 					title: 'Add Timeline',
-					button: 'Save',
+					button: 'Begin',
 					action: '/api/timelines/create',
 					createAction: '/api/timelines/create',
 					updateAction: '/api/timelines/update',

@@ -17,7 +17,7 @@ class TimelinesController extends Controller
     // Fields and their respective validation rules
     private $validationFields = [
         'project_id' => 'numeric',
-        'permit_application_date' => 'date|nullable',
+        'permit_application_date' => 'required|date|nullable',
         'permit_recieved_date' => 'date|nullable',
         'permit_number' => 'max:50',
         'site_number_application_date' => 'date|nullable',

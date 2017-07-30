@@ -33,7 +33,7 @@
 			<div class="col-md-6 margin-25-top"
 				v-for="user in crew"
 			>
-				<div class="bs-component">
+				<div class="panel panel-white post panel-shadow">
 					<ul class="list-group">
 						<li class="list-group-item">
 							<button class="btn btn-xs btn-danger pull-right"

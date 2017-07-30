@@ -19183,7 +19183,7 @@ var api_access = __webpack_require__(1);
 				model: 'Timeline',
 				state: 'create',
 				title: 'Add Timeline',
-				button: 'Save',
+				button: 'Begin',
 				action: '/api/timelines/create',
 				createAction: '/api/timelines/create',
 				updateAction: '/api/timelines/update',
@@ -43920,7 +43920,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("×")])]), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
-    staticClass: "col-md-4"
+    staticClass: "col-md-5 col-centered"
   }, [_c('div', {
     staticClass: "form-group",
     class: {
@@ -43952,569 +43952,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), (_vm.form.fields.permit_application_date.err) ? _c('span', {
     staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.permit_application_date.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.permit_recieved_date.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Permit Recieved Date")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.permit_recieved_date.val),
-      expression: "form.fields.permit_recieved_date.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.permit_recieved_date.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.permit_recieved_date.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.permit_recieved_date.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.permit_application_date.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.permit_number.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Permit Number")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.permit_number.val),
-      expression: "form.fields.permit_number.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text"
-    },
-    domProps: {
-      "value": (_vm.form.fields.permit_number.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.permit_number.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.permit_number.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.permit_number.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
-    staticClass: "margin-25-top"
-  }, [_c('legend', [_vm._v("Site Number Details")]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.site_number_application_date.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Site Number Application Date")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.site_number_application_date.val),
-      expression: "form.fields.site_number_application_date.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.site_number_application_date.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.site_number_application_date.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.site_number_application_date.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.site_number_application_date.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.site_number_recieved_date.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Site Number Recieved Date")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.site_number_recieved_date.val),
-      expression: "form.fields.site_number_recieved_date.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.site_number_recieved_date.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.site_number_recieved_date.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.site_number_recieved_date.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.site_number_recieved_date.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.site_number.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Site Number")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.site_number.val),
-      expression: "form.fields.site_number.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "text"
-    },
-    domProps: {
-      "value": (_vm.form.fields.site_number.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.site_number.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.site_number.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.site_number.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
-    staticClass: "margin-25-top"
-  }, [_c('legend', [_vm._v("Completion Targets")]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.completion_target.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Completion Target")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.completion_target.val),
-      expression: "form.fields.completion_target.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.completion_target.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.completion_target.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.completion_target.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.completion_target.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.field_completion_target.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Fieldwork Completion Target")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.field_completion_target.val),
-      expression: "form.fields.field_completion_target.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.field_completion_target.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.field_completion_target.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.field_completion_target.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.field_completion_target.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.report_completion_target.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Report Completion Target")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.report_completion_target.val),
-      expression: "form.fields.report_completion_target.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.form.fields.report_completion_target.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.form.fields.report_completion_target.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.form.fields.report_completion_target.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.report_completion_target.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
-    staticClass: "margin-25-top"
-  }, [_c('legend', [_vm._v("Project Milestones")]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.fieldwork_scheduled.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Fieldwork Scheduled")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.fieldwork_scheduled.val),
-      expression: "form.fields.fieldwork_scheduled.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.fieldwork_scheduled.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "0"
-    }
-  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "1"
-    }
-  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.form.fields.fieldwork_scheduled.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.fieldwork_scheduled.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.artifact_analysis.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Artifact Analysis Complete")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.artifact_analysis.val),
-      expression: "form.fields.artifact_analysis.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.artifact_analysis.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "0"
-    }
-  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "1"
-    }
-  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.form.fields.artifact_analysis.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.artifact_analysis.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.mapping.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Mapping Complete")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.mapping.val),
-      expression: "form.fields.mapping.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.mapping.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "0"
-    }
-  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "1"
-    }
-  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.form.fields.mapping.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.mapping.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', {
-    staticClass: "margin-25-top"
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.writing.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Writing Complete")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.writing.val),
-      expression: "form.fields.writing.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.writing.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "0"
-    }
-  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "1"
-    }
-  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.form.fields.writing.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.writing.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.draft_submitted.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Draft Submitted")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.draft_submitted.val),
-      expression: "form.fields.draft_submitted.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.draft_submitted.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "0"
-    }
-  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "1"
-    }
-  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.form.fields.draft_submitted.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.draft_submitted.err))]) : _vm._e()])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.draft_accepted.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Draft Accepted")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.draft_accepted.val),
-      expression: "form.fields.draft_accepted.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.draft_accepted.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "0"
-    }
-  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "1"
-    }
-  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.form.fields.draft_accepted.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.draft_accepted.err))]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.form.fields.final_approval.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Final Approval")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.form.fields.final_approval.val),
-      expression: "form.fields.final_approval.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.form.fields.final_approval.val = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "0"
-    }
-  }, [_vm._v("No")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "1"
-    }
-  }, [_vm._v("Yes")])]), _vm._v(" "), (_vm.form.fields.final_approval.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.form.fields.final_approval.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
+  }, [_vm._v(_vm._s(_vm.form.fields.permit_application_date.err))]) : _vm._e()])])])])]), _vm._v(" "), _c('fieldset', [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-3 col-centered"
@@ -45906,7 +45344,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     return _c('div', {
       staticClass: "col-md-6 margin-25-top"
     }, [_c('div', {
-      staticClass: "bs-component"
+      staticClass: "panel panel-white post panel-shadow"
     }, [_c('ul', {
       staticClass: "list-group"
     }, [_c('li', {
@@ -46056,7 +45494,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -46132,7 +45570,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -46213,7 +45651,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -46290,7 +45728,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -46389,7 +45827,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -46466,7 +45904,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -46545,7 +45983,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -46644,7 +46082,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -46720,7 +46158,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -46800,7 +46238,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -46879,7 +46317,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -46958,7 +46396,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -47043,7 +46481,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -47120,7 +46558,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -47199,7 +46637,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -47276,7 +46714,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -47353,7 +46791,89 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
+    on: {
+      "click": _vm.sendFieldUpdate
+    }
+  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
+    staticClass: "center-loader"
+  })]) : _vm._e()])])])])])])])])]), _vm._v(" "), _c('hr', {
+    staticClass: "dotted"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-25-top"
+  }, [_c('h3', {
+    staticClass: "margin-15-bottom"
+  }, [_vm._v("Project Approval")]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "panel panel-white post panel-shadow"
+  }, [(!_vm.fieldIsEditing.approval_date) ? _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(19), _vm._v(" "), (_vm.project.approval_date == null) ? _c('div', {
+    staticClass: "col-md-11"
+  }, [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v("Not yet approved")])]) : _c('div', {
+    staticClass: "col-md-11"
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(new Date(Date.parse(_vm.project.approval_date + 'T00:00:00')).toDateString()) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-cog hover",
+    on: {
+      "click": function($event) {
+        _vm.showEditField('approval_date')
+      }
+    }
+  })])]) : _c('div', {
+    staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group",
+    class: {
+      'has-error': _vm.editingField.err
+    }
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Project Approved On")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.editingField.val),
+      expression: "editingField.val"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.editingField.val)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.editingField.val = $event.target.value
+      }
+    }
+  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-remove hover",
+    on: {
+      "click": function($event) {
+        _vm.closeEditingField('approval_date')
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-11"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -47371,7 +46891,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-white post panel-shadow"
   }, [(!_vm.fieldIsEditing.invoiced_date) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(19), _vm._v(" "), (_vm.project.invoiced_date == null) ? _c('div', {
+  }, [_vm._m(20), _vm._v(" "), (_vm.project.invoiced_date == null) ? _c('div', {
     staticClass: "col-md-11"
   }, [_c('span', {
     staticClass: "label label-danger"
@@ -47435,7 +46955,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -47447,7 +46967,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-white post panel-shadow"
   }, [(!_vm.fieldIsEditing.invoice_paid_date) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(20), _vm._v(" "), (_vm.project.invoice_paid_date == null) ? _c('div', {
+  }, [_vm._m(21), _vm._v(" "), (_vm.project.invoice_paid_date == null) ? _c('div', {
     staticClass: "col-md-11"
   }, [_c('span', {
     staticClass: "label label-danger"
@@ -47511,7 +47031,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -47523,7 +47043,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel panel-white post panel-shadow"
   }, [(!_vm.fieldIsEditing.invoice_amount) ? _c('div', {
     staticClass: "panel-body"
-  }, [_vm._m(21), _vm._v(" "), (_vm.project.invoice_amount == null) ? _c('div', {
+  }, [_vm._m(22), _vm._v(" "), (_vm.project.invoice_amount == null) ? _c('div', {
     staticClass: "col-md-11"
   }, [_c('span', {
     staticClass: "label label-danger"
@@ -47591,89 +47111,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
-    on: {
-      "click": _vm.sendFieldUpdate
-    }
-  }, [(!_vm.fieldIsUpdating) ? _c('span', [_vm._v("Save")]) : _vm._e(), _vm._v(" "), (_vm.fieldIsUpdating) ? _c('span', [_c('div', {
-    staticClass: "center-loader"
-  })]) : _vm._e()])])])])])])])])]), _vm._v(" "), _c('hr', {
-    staticClass: "dotted"
-  }), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded margin-25-top"
-  }, [_c('h3', {
-    staticClass: "margin-15-bottom"
-  }, [_vm._v("Project Approval")]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "panel panel-white post panel-shadow"
-  }, [(!_vm.fieldIsEditing.approval_date) ? _c('div', {
-    staticClass: "panel-body"
-  }, [_vm._m(22), _vm._v(" "), (_vm.project.approval_date == null) ? _c('div', {
-    staticClass: "col-md-11"
-  }, [_c('span', {
-    staticClass: "label label-danger"
-  }, [_vm._v("Not yet approved")])]) : _c('div', {
-    staticClass: "col-md-11"
-  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.approval_date) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
-    staticClass: "pull-right"
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-cog hover",
-    on: {
-      "click": function($event) {
-        _vm.showEditField('approval_date')
-      }
-    }
-  })])]) : _c('div', {
-    staticClass: "panel-body"
-  }, [_c('div', {
-    staticClass: "form-group",
-    class: {
-      'has-error': _vm.editingField.err
-    }
-  }, [_c('div', {
-    staticClass: "col-md-11"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Project Approved On")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.editingField.val),
-      expression: "editingField.val"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.editingField.val)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.editingField.val = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.editingField.err) ? _c('span', {
-    staticClass: "text-danger"
-  }, [_vm._v(_vm._s(_vm.editingField.err))]) : _vm._e()]), _vm._v(" "), _c('div', {
-    staticClass: "pull-right"
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-remove hover",
-    on: {
-      "click": function($event) {
-        _vm.closeEditingField('approval_date')
-      }
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded"
-  }, [_c('div', {
-    staticClass: "col-md-11"
-  }, [_c('div', {
-    staticClass: "form-group"
-  }, [_c('button', {
-    staticClass: "btn btn-primary btn-block margin-10-top",
+    staticClass: "btn btn-info btn-block margin-10-top",
     on: {
       "click": _vm.sendFieldUpdate
     }
@@ -47755,13 +47193,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Contact's Phone")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h5', [_c('strong', [_vm._v("Project Approved On")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Invoiced Date")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Invoice Paid On")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h5', [_c('strong', [_vm._v("Invoice Amount")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h5', [_c('strong', [_vm._v("Project Approved On")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -48394,7 +47832,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "form-group"
   }, [_c('button', {
-    staticClass: "btn btn-primary btn-block",
+    staticClass: "btn btn-info btn-block",
     on: {
       "click": _vm.sendForm
     }

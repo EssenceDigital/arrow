@@ -20,7 +20,7 @@
 				<div class="row">
 					<div class="col-md-3 col-centered">
 						<div class="form-group">
-							<button v-on:click="sendForm" class="btn btn-primary btn-block">
+							<button v-on:click="sendForm" class="btn btn-info btn-block">
 								<span v-if="!form.isLoading">{{ form.button }}</span>
 								<span v-if="form.isLoading">
 									<div class="center-loader"></div>
