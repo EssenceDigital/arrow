@@ -100,8 +100,21 @@
 		},
 
 		methods: {
-			sendForm(){				
-				this.createOrUpdate();
+			sendForm(){		
+				var context = this;
+				// Ensure project id is set
+				this.form.fields.project_id.val = this.project_id;
+				// Send API call
+				this.createOrUpdate(function(model){
+					// Find the crew member in the model and remove it
+					this.users.forEach(function(user){
+						// Remove user that was just added from the users[] select list
+						if(user.id == model.id){
+							var index = context.users.indexOf(user); 
+							context.users.splice(index, 1);
+						}
+					});			
+				});
 			}
 		},
 
@@ -143,7 +156,7 @@
 					.catch(function(response){
 						console.log(response);
 					});
-			}			
+			}							
 		}
 	}
 </script>

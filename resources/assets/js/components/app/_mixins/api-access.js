@@ -204,7 +204,7 @@ module.exports =  {
 		/* Sends a POST request to create or update a resource in storage. Uses a properly set up 'hub' form. See top most comment.
 		 * @return emits an event to let the calling component know how to handle the response
 		*/
-		createOrUpdate(){
+		createOrUpdate(cb){
 			// Show loader
 			this.form.isLoading = true;
 			// Assemble the POST data
@@ -238,11 +238,16 @@ module.exports =  {
 					}
 
 					// Clear any form errors
-	                context.clearFormErrors();										
+	                context.clearFormErrors();	
+
+	                if(cb instanceof Function){
+	                	cb.call(context, response.data.model);
+	                }
+
 				})
 				// Error
 				.catch(function(error){
-					console.log(error.response);
+					console.log(error);
                     if (error.response) {
                         // If the server responded with an error then disect the response and cache the error message in the
                         // properly set up 'hub' form. See top most comment

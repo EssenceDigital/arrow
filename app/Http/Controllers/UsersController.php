@@ -75,6 +75,22 @@ class UsersController extends Controller
     }
 
     /**
+     * Find a user
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function all()
+    {
+        $users = User::all();
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'users' => $users
+        ], 200);        
+    }
+
+    /**
      * Find all users and paginates
      *
      * @return \Illuminate\Http\JsonResponse

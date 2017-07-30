@@ -333,7 +333,7 @@ module.exports = {
 		/* Sends a POST request to create or update a resource in storage. Uses a properly set up 'hub' form. See top most comment.
    * @return emits an event to let the calling component know how to handle the response
   */
-		createOrUpdate: function createOrUpdate() {
+		createOrUpdate: function createOrUpdate(cb) {
 			// Show loader
 			this.form.isLoading = true;
 			// Assemble the POST data
@@ -369,10 +369,14 @@ module.exports = {
 
 				// Clear any form errors
 				context.clearFormErrors();
+
+				if (cb instanceof Function) {
+					cb.call(context, response.data.model);
+				}
 			})
 			// Error
 			.catch(function (error) {
-				console.log(error.response);
+				console.log(error);
 				if (error.response) {
 					// If the server responded with an error then disect the response and cache the error message in the
 					// properly set up 'hub' form. See top most comment
@@ -16067,7 +16071,20 @@ var api_access = __webpack_require__(1);
 
 	methods: {
 		sendForm: function sendForm() {
-			this.createOrUpdate();
+			var context = this;
+			// Ensure project id is set
+			this.form.fields.project_id.val = this.project_id;
+			// Send API call
+			this.createOrUpdate(function (model) {
+				// Find the crew member in the model and remove it
+				this.users.forEach(function (user) {
+					// Remove user that was just added from the users[] select list
+					if (user.id == model.id) {
+						var index = context.users.indexOf(user);
+						context.users.splice(index, 1);
+					}
+				});
+			});
 		}
 	},
 
