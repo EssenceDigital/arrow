@@ -40,6 +40,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the comments by the user.
+     */
+    public function timesheets()
+    {
+        return $this->hasMany('App\Timesheet');
+    }
+
+    /**
      * The projects that this user is assigned to
      */
     public function projects()

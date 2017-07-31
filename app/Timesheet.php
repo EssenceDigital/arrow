@@ -15,6 +15,14 @@ class Timesheet extends Model
     }
 
     /**
+     * Get the user.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    /**
      * Get the work jobs for the timesheet.
      */
     public function workJobs()

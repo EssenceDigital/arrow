@@ -34,6 +34,8 @@ Route::get('/api/dashboard/users-projects', 'DashboardController@usersProjects')
 Route::get('/api/dashboard/project-timesheets/{projectId}', 'DashboardController@projectTimesheets');
 
 // Timesheets
+Route::get('/api/timesheets/all', 'TimesheetsController@all');
+Route::post('/api/timesheets/filter', 'TimesheetsController@filter');
 Route::post('/api/timesheets/create', 'TimesheetsController@store');
 Route::post('/api/timesheets/update', 'TimesheetsController@update');
 Route::get('/api/timesheets/{id}', 'TimesheetsController@single');

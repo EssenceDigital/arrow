@@ -22,9 +22,11 @@ const dashboard_hub = require('./components/app/dashboard/Dashboard-hub.vue');
 const dashboard_projects = require('./components/app/dashboard/Dashboard-projects.vue');
 
 // Timesheet related components
+const project_timesheets = require('./components/app/timesheet/Project-timesheets.vue');
 const timesheets_hub = require('./components/app/timesheet/Timesheets-hub.vue');
+const timesheet_search = require('./components/app/timesheet/Timesheet-search.vue');
 
-// User related components
+// User related components 
 const users_hub = require('./components/app/user/Users-hub.vue');
 const user_hub = require('./components/app/user/User-hub.vue');
 const user_table = require('./components/app/user/User-table.vue');
@@ -66,7 +68,7 @@ const routes = [
 			},
 			{
 				path: 'projects/:project_id/timesheets',
-				component: timesheets_hub,
+				component: project_timesheets,
 				props: true
 			}
 		]
@@ -119,6 +121,14 @@ const routes = [
 			{ path: 'create', component: project_form }
 		]
 	},
+	// Timesheets related routes
+	{ 
+		path: '/timesheets', 
+		component: timesheets_hub,
+		children: [
+			{ path: 'search', component: timesheet_search }
+		]
+	},
 	// User related routes
 	{
 		path: '/users',
@@ -142,7 +152,7 @@ const routes = [
 					},					
 					{
 						path: 'projects/:project_id/timesheets',
-						component: timesheets_hub,
+						component: project_timesheets,
 						props: true
 					}
 				]

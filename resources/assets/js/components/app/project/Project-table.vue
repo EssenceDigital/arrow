@@ -432,7 +432,7 @@
 				    		<span class="label label-danger">N/A</span>
 				    	</div>
 				    	<div v-else class="col-md-11">
-				    		{{ project.response_by }}
+				    		{{ new Date(Date.parse(project.response_by + 'T00:00:00')).toDateString() }}
 				    	</div>
 				    	<div class="pull-right">
 				    		<span @click="showEditField('response_by')" class="glyphicon glyphicon-cog hover"></span>

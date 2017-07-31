@@ -427,13 +427,13 @@
 <script>
 	let api_access = require('./../_mixins/api-access.js');
 	let project_search = require('./../project/Project-search.vue');
-	let timesheets_hub = require('./../timesheet/Timesheets-hub.vue');
+	let project_timesheets = require('./../timesheet/Project-timesheets.vue');
 
 
 	export default{
 		components: {
 			'project-search': project_search,
-			'timesheets-hub': timesheets_hub
+			'timesheets-hub': project_timesheets
 		},
 
 		props: ['user', 'user_id'],

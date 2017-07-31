@@ -370,7 +370,9 @@ module.exports = {
 				// Clear any form errors
 				context.clearFormErrors();
 
+				// If a callback is present and a function
 				if (cb instanceof Function) {
+					// Run callback
 					cb.call(context, response.data.model);
 				}
 			})
@@ -14623,9 +14625,11 @@ var dashboard_hub = __webpack_require__(81);
 var dashboard_projects = __webpack_require__(82);
 
 // Timesheet related components
+var project_timesheets = __webpack_require__(139);
 var timesheets_hub = __webpack_require__(16);
+var timesheet_search = __webpack_require__(142);
 
-// User related components
+// User related components 
 var users_hub = __webpack_require__(99);
 var user_hub = __webpack_require__(95);
 var user_table = __webpack_require__(98);
@@ -14664,7 +14668,7 @@ var routes = [{
 		component: project_search
 	}, {
 		path: 'projects/:project_id/timesheets',
-		component: timesheets_hub,
+		component: project_timesheets,
 		props: true
 	}]
 },
@@ -14707,6 +14711,12 @@ var routes = [{
 		}]
 	}, { path: 'create', component: project_form }]
 },
+// Timesheets related routes
+{
+	path: '/timesheets',
+	component: timesheets_hub,
+	children: [{ path: 'search', component: timesheet_search }]
+},
 // User related routes
 {
 	path: '/users',
@@ -14725,7 +14735,7 @@ var routes = [{
 			props: true
 		}, {
 			path: 'projects/:project_id/timesheets',
-			component: timesheets_hub,
+			component: project_timesheets,
 			props: true
 		}]
 	}, { path: 'create', component: user_form }]
@@ -15595,6 +15605,11 @@ module.exports = function spread(callback) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -21192,10 +21207,8 @@ var other_cost_form = __webpack_require__(90);
 
 /***/ }),
 /* 61 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
@@ -21235,545 +21248,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var api_access = __webpack_require__(1);
-var modal = __webpack_require__(3);
-var timesheet_pill = __webpack_require__(91);
-var timesheet_form = __webpack_require__(15);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		'modal': modal,
-		'timesheet-pill': timesheet_pill,
-		'timesheet-form': timesheet_form
-	},
-
-	props: ['project_id', 'user'],
-
-	mixins: [api_access],
-
-	data: function data() {
-		return {
-			adminState: false,
-			currentModal: '',
-			// For the form modal
-			modalActive: false,
-			// Used by API access
-			urlToFetch: '',
-			// Used by API access
-			fetchingModels: false,
-			// Results from Laravel pagination json. Used by API access.
-			searchResults: {
-				models: []
-			}
-		};
-	},
-
-
-	computed: {
-		totalTimesheets: function totalTimesheets() {
-			return this.searchResults.models.length;
-		},
-		totalPerDiem: function totalPerDiem() {
-			return this.stepAndDisectTimesheets('', 'per_diem');
-		},
-		totalWorkHours: function totalWorkHours() {
-			return this.stepAndDisectTimesheets('work_jobs', 'hours_worked');
-		},
-		totalWorkPay: function totalWorkPay() {
-			if (this.user) {
-				var pay = this.totalWorkHours * this.user.hourly_rate_one;
-			} else {
-				var pay = this.totalWorkHours * DASHBOARD_USER_HOURLY;
-			}
-
-			return parseFloat(pay);
-		},
-		totalTravelHours: function totalTravelHours() {
-			return this.stepAndDisectTimesheets('travel_jobs', 'travel_time');
-		},
-		totalTravelDistance: function totalTravelDistance() {
-			return this.stepAndDisectTimesheets('travel_jobs', 'travel_distance');
-		},
-		totalEquipmentRentalCost: function totalEquipmentRentalCost() {
-			return this.stepAndDisectTimesheets('equipment_rentals', 'rental_fee');
-		},
-		totalOtherCosts: function totalOtherCosts() {
-			return this.stepAndDisectTimesheets('other_costs', 'cost');
-		}
-	},
-
-	methods: {
-		timesheetFormModal: function timesheetFormModal() {
-			this.currentModal = 'Timesheet';
-			this.modalActive = true;
-		},
-
-
-		/* Iterates through each of the users timesheets. On each timesheet, an array of foreign relationship assets is
-   * iterated through and the supplied field is sumed up. The final total is returned
-   * @param assetToIterate - the foreign relationship field
-   * @param fieldToAddUp - the field on the foreign relationship to add up 
-  */
-		stepAndDisectTimesheets: function stepAndDisectTimesheets(assetToIterate, fieldToAddUp) {
-			var total = parseInt(0);
-			// Iterate through each timesheet
-			this.searchResults.models.forEach(function (timesheet) {
-				// If the asset field is an array
-				if (assetToIterate != '') {
-					if (timesheet[assetToIterate].length > 0) {
-						// Iterate through each travel job in timesheet
-						timesheet[assetToIterate].forEach(function (current) {
-							// Update total
-							total += parseFloat(current[fieldToAddUp]);
-						});
-					}
-				} else {
-					// If the asset field is not an array then just do a tally
-					total += parseFloat(timesheet[fieldToAddUp]);
-				}
-			});
-
-			return total.toFixed(2);
-		}
-	},
-
-	created: function created() {
-		var _this = this;
-
-		if (this.project_id) {
-
-			if (!this.user) {
-				this.urlToFetch = '/api/dashboard/project-timesheets/' + this.project_id;
-			} else {
-				this.urlToFetch = '/api/users/' + this.user.id + '/projects/' + this.project_id + '/timesheets';
-			}
-
-			// Retrieve model through API access
-			this.getAndSetModels();
-		}
-
-		// When the form component alerts this parent of a successful create
-		this.$router.app.$on('timesheet-created', function (model) {
-			model.work_jobs = [];
-			model.travel_jobs = [];
-			model.equipment_rentals = [];
-			model.other_costs = [];
-			_this.searchResults.models.unshift(model);
-			_this.modalActive = false;
-		});
-
-		this.$router.app.$on('timesheet-deleted', function (model) {
-			// Cache context
-			var context = _this;
-			console.log(model);
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.id) {
-					var index = context.searchResults.models.indexOf(timesheet);
-					context.searchResults.models.splice(index, 1);
-
-					context.currentModal = '';
-					context.modalActive = false;
-				}
-			});
-		});
-
-		this.$router.app.$on('work-job-created', function (model) {
-			// Cache context
-			var context = _this;
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the workjob has been added to cache
-					var updated = false;
-					// Iterate through work jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.work_jobs.forEach(function (workjob) {
-						// Replace existing updated work job
-						if (workjob.id == model.id) {
-							// Update workjob fields
-							workjob.job_type = model.job_type;
-							workjob.hours_worked = model.hours_worked;
-							workjob.comment = model.comment;
-							// Update flag
-							updated = true;
-						}
-					});
-					// Add a new work job
-					if (!updated) {
-						timesheet.work_jobs.push(model);
-					}
-				}
-			});
-		});
-
-		this.$router.app.$on('travel-job-created', function (model) {
-			// Cache context
-			var context = _this;
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the travel job has been added to cache
-					var updated = false;
-					// Iterate through travel jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.travel_jobs.forEach(function (travelJob) {
-						// Replace existing updated travel job
-						if (travelJob.id == model.id) {
-							// Update travel job fields
-							travelJob.travel_distance = model.travel_distance;
-							travelJob.travel_time = model.travel_time;
-							travelJob.comment = model.comment;
-							// Update flag
-							updated = true;
-						}
-					});
-					// Add a new travel job
-					if (!updated) {
-						timesheet.travel_jobs.push(model);
-					}
-				}
-			});
-		});
-
-		this.$router.app.$on('equipment-rental-created', function (model) {
-			// Cache context
-			var context = _this;
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the equipment rental has been added to cache
-					var updated = false;
-					// Iterate through equipment rentals to determine if a rental should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.equipment_rentals.forEach(function (equipmentRental) {
-						// Replace existing updated equipment rental
-						if (equipmentRental.id == model.id) {
-							// Update equipment rental fields
-							equipmentRental.equipment_type = model.equipment_type;
-							equipmentRental.rental_fee = model.rental_fee;
-							equipmentRental.comment = model.comment;
-							// Update flag
-							updated = true;
-						}
-					});
-					// Add a new equipment rental
-					if (!updated) {
-						timesheet.equipment_rentals.push(model);
-					}
-				}
-			});
-		});
-
-		this.$router.app.$on('other-cost-created', function (model) {
-			// Cache context
-			var context = _this;
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the other cost has been added to cache
-					var updated = false;
-					// Iterate through other costs to determine if a cost should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.other_costs.forEach(function (otherCost) {
-						// Replace existing updated other cost
-						if (otherCost.id == model.id) {
-							// Update other cost fields
-							otherCost.cost_name = model.cost_name;
-							otherCost.cost = model.cost;
-							otherCost.comment = model.comment;
-							// Update flag
-							updated = true;
-						}
-					});
-					// Add a new other cost
-					if (!updated) {
-						timesheet.other_costs.push(model);
-					}
-				}
-			});
-		});
-
-		// When the form component alerts this parent of a successful create
-		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-		this.$router.app.$on('work-job-deleted', function (model) {
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the workjob has been added to cache
-					var updated = false;
-					// Iterate through work jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.work_jobs.forEach(function (workjob) {
-						// Replace existing updated work job
-						if (workjob.id == model.id) {
-							var index = timesheet.work_jobs.indexOf(workjob);
-							timesheet.work_jobs.splice(index, 1);
-						}
-					});
-				}
-			});
-		});
-
-		// When the form component alerts this parent of a successful create
-		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-		this.$router.app.$on('travel-job-deleted', function (model) {
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the workjob has been added to cache
-					var updated = false;
-					// Iterate through work jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.travel_jobs.forEach(function (travelJob) {
-						// Replace existing updated travel job
-						if (travelJob.id == model.id) {
-							var index = timesheet.travel_jobs.indexOf(travelJob);
-							timesheet.travel_jobs.splice(index, 1);
-						}
-					});
-				}
-			});
-		});
-
-		// When the form component alerts this parent of a successful create
-		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-		this.$router.app.$on('equipment-rental-deleted', function (model) {
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the workjob has been added to cache
-					var updated = false;
-					// Iterate through work jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.equipment_rentals.forEach(function (equipmentRental) {
-						// Replace existing updated equipment rental
-						if (equipmentRental.id == model.id) {
-							var index = timesheet.equipment_rentals.indexOf(equipmentRental);
-							timesheet.equipment_rentals.splice(index, 1);
-						}
-					});
-				}
-			});
-		});
-
-		// When the form component alerts this parent of a successful create
-		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-		this.$router.app.$on('other-cost-deleted', function (model) {
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the workjob has been added to cache
-					var updated = false;
-					// Iterate through work jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.other_costs.forEach(function (otherCost) {
-						// Replace existing updated other cost
-						if (otherCost.id == model.id) {
-							var index = timesheet.other_costs.indexOf(otherCost);
-							timesheet.other_costs.splice(index, 1);
-						}
-					});
-				}
-			});
-		});
-	}
-});
 
 /***/ }),
 /* 62 */
@@ -23439,12 +22913,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var api_access = __webpack_require__(1);
 var project_search = __webpack_require__(14);
-var timesheets_hub = __webpack_require__(16);
+var project_timesheets = __webpack_require__(139);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
 		'project-search': project_search,
-		'timesheets-hub': timesheets_hub
+		'timesheets-hub': project_timesheets
 	},
 
 	props: ['user', 'user_id'],
@@ -44003,6 +43477,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "to": "/users/search"
     }
   }, [_vm._v("Users")])], 1) : _vm._e(), _vm._v(" "), (_vm.DASHBOARD_AUTH == 'admin') ? _c('li', {
+    staticClass: "{ 'active': $route.path.substring(0,11) == '/timesheets' }"
+  }, [_c('router-link', {
+    attrs: {
+      "to": "/timesheets/search"
+    }
+  }, [_vm._v("Timesheets")])], 1) : _vm._e(), _vm._v(" "), (_vm.DASHBOARD_AUTH == 'admin') ? _c('li', {
     class: {
       'active': _vm.$route.path.substring(0, 9) == '/projects'
     }
@@ -46100,7 +45580,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "label label-danger"
   }, [_vm._v("N/A")])]) : _c('div', {
     staticClass: "col-md-11"
-  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(_vm.project.response_by) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\r\n\t\t\t\t    \t\t" + _vm._s(new Date(Date.parse(_vm.project.response_by + 'T00:00:00')).toDateString()) + "\r\n\t\t\t\t    \t")]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-cog hover",
@@ -48561,164 +48041,35 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [(_vm.fetchingModels) ? _c('div', {
-    staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [_c('div', {
-    staticClass: "row row-padded margin-15-bottom"
-  }, [_c('button', {
-    staticClass: "pull-left btn btn-info",
-    on: {
-      "click": function($event) {
-        _vm.$router.go(-1)
-      }
-    }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-arrow-left"
-  }), _vm._v(" Go back\r\n\t\t\t")])]), _vm._v(" "), (!_vm.user) ? _c('div', {
-    staticClass: "row row-padded"
-  }, [_c('h2', [_vm._v("Project Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.project_id) + ")")])]), _vm._v(" "), _c('p', {
-    staticClass: "margin-25-top"
-  }, [_vm._v("\r\n\t\t\t\tNow showing all of your timesheets for this project.\r\n\t\t\t")]), _vm._v(" "), _vm._m(1)]) : _vm._e(), _vm._v(" "), (_vm.user) ? _c('div', {
-    staticClass: "row row-padded"
-  }, [_c('h2', [_vm._v(_vm._s(_vm.user.first) + "'s' Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.project_id) + ")")])]), _vm._v(" "), _c('p', {
-    staticClass: "margin-25-top"
-  }, [_vm._v("\r\n\t\t\t\tBelow are all of " + _vm._s(_vm.user.first) + "'s timesheets for this project.\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded margin-15-top"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "bs-component"
-  }, [_c('ul', {
-    staticClass: "list-group"
-  }, [_vm._m(2), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v(_vm._s(_vm.totalTravelDistance) + " km")]), _vm._v("\r\n\t\t\t\t\t\t  Total Distance\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v(_vm._s(_vm.totalTravelHours) + " hrs")]), _vm._v("\r\n\t\t\t\t\t\t  Total Time\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "bs-component"
-  }, [_c('ul', {
-    staticClass: "list-group"
-  }, [_vm._m(3), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v(_vm._s(_vm.totalWorkHours) + " hrs")]), _vm._v("\r\n\t\t\t\t\t\t  Total Hours\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v("$" + _vm._s(_vm.totalWorkPay))]), _vm._v("\r\n\t\t\t\t\t\t  Net Pay\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v("$" + _vm._s(_vm.totalPerDiem))]), _vm._v("\r\n\t\t\t\t\t\t  Total Per Diem\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "bs-component"
-  }, [_c('ul', {
-    staticClass: "list-group"
-  }, [_vm._m(4), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v("$" + _vm._s(_vm.totalEquipmentRentalCost))]), _vm._v("\r\n\t\t\t\t\t\t  Equipment Cost Total\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v("$" + _vm._s(_vm.totalOtherCosts))]), _vm._v("\r\n\t\t\t\t\t\t  Total Other Costs\r\n\t\t\t\t\t\t")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded"
-  }, [_c('div', {
-    staticClass: "col-md-12 text-center"
-  }, [_c('div', {
-    staticClass: "bs-component"
-  }, [_c('ul', {
-    staticClass: "list-group"
-  }, [_c('li', {
-    staticClass: "list-group-item"
-  }, [_vm._m(5), _vm._v(" "), _c('p', {
-    staticClass: "margin-10-top"
-  }, [_c('span', {
-    staticClass: "label label-success"
-  }, [_vm._v("$" + _vm._s(parseFloat(_vm.totalWorkPay) + parseFloat(_vm.totalEquipmentRentalCost) + parseFloat(_vm.totalOtherCosts) + parseFloat(_vm.totalPerDiem)))])])])])])])]), _vm._v(" "), (!_vm.user) ? _c('div', {
-    staticClass: "row row-padded margin-25-top"
-  }, [_c('button', {
-    staticClass: "btn btn-default",
-    on: {
-      "click": _vm.timesheetFormModal
-    }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-list-alt"
-  }), _vm._v(" Add Timesheet\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.searchResults.models.length > 0) ? _c('div', [_c('div', {
-    staticClass: "row row-padded margin-35-top"
-  }, _vm._l((_vm.searchResults.models), function(timesheet) {
-    return _c('timesheet-pill', {
-      attrs: {
-        "timesheet": timesheet,
-        "user": _vm.user
-      }
-    })
-  }))]) : _c('div', [_c('div', {
-    staticClass: "row row-padded margin-35-top"
-  }, [_c('div', {
-    staticClass: "alert alert-warning text-center"
-  }, [_c('big', [_c('strong', [_vm._v("Heads up!")]), _vm._v(" You havn't added any timesheets to this project yet")])], 1)])]), _vm._v(" "), (!_vm.user) ? _c('modal', {
-    attrs: {
-      "modalActive": _vm.modalActive
-    },
-    on: {
-      "modal-close": function($event) {
-        _vm.modalActive = false
-      }
-    }
-  }, [_c('p', {
-    slot: "body"
-  }, [(_vm.currentModal == 'Timesheet') ? _c('timesheet-form', {
-    attrs: {
-      "project_id": _vm.$route.params.project_id
-    }
-  }) : _vm._e()], 1), _vm._v(" "), _c('div', {
-    slot: "footer"
-  }, [_c('button', {
-    staticClass: "btn btn-primary margin-45-top",
-    on: {
-      "click": function($event) {
-        _vm.modalActive = false
-      }
-    }
-  }, [_vm._v("Cancel")])])]) : _vm._e()], 1) : _vm._e()])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
+    staticClass: "row margin-95-top"
+  }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('div', {
-    staticClass: "large-center-loader"
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('p', {
-    staticClass: "margin-25-top text-info"
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-question-sign"
-  }), _vm._v("\r\n\t\t\t\tOnce you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.\r\n\t\t\t")])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('strong', [_vm._v("Travel Totals")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('strong', [_vm._v("Hour Totals")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('strong', [_vm._v("Other Totals")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('p', {
-    staticClass: "margin-25-top"
-  }, [_c('strong', [_vm._v("Invoice Total")])])
+    staticClass: "panel panel-primary"
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [_c('ul', {
+    staticClass: "nav nav-pills"
+  }, [_c('li', {
+    class: {
+      'active': _vm.$route.path == '/timesheets/search'
+    }
+  }, [_c('router-link', {
+    attrs: {
+      "to": "/timesheets/search"
+    }
+  }, [_vm._v("\r\n\t\t\t\t\t\t\tView all\r\n\t\t\t\t\t\t")])], 1)]), _vm._v(" "), _c('div', {
+    staticClass: "row margin-25-top"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('router-view')], 1)])])])])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "panel-heading"
+  }, [_c('h3', {
+    staticClass: "panel-title"
+  }, [_vm._v("Timesheets Hub")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -60954,6 +60305,1285 @@ module.exports = function(module) {
 __webpack_require__(20);
 module.exports = __webpack_require__(21);
 
+
+/***/ }),
+/* 136 */,
+/* 137 */,
+/* 138 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var api_access = __webpack_require__(1);
+var modal = __webpack_require__(3);
+var timesheet_pill = __webpack_require__(91);
+var timesheet_form = __webpack_require__(15);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'modal': modal,
+		'timesheet-pill': timesheet_pill,
+		'timesheet-form': timesheet_form
+	},
+
+	props: ['project_id', 'user'],
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			adminState: false,
+			currentModal: '',
+			// For the form modal
+			modalActive: false,
+			// Used by API access
+			urlToFetch: '',
+			// Used by API access
+			fetchingModels: false,
+			// Results from Laravel pagination json. Used by API access.
+			searchResults: {
+				models: []
+			}
+		};
+	},
+
+
+	computed: {
+		totalTimesheets: function totalTimesheets() {
+			return this.searchResults.models.length;
+		},
+		totalPerDiem: function totalPerDiem() {
+			return this.stepAndDisectTimesheets('', 'per_diem');
+		},
+		totalWorkHours: function totalWorkHours() {
+			return this.stepAndDisectTimesheets('work_jobs', 'hours_worked');
+		},
+		totalWorkPay: function totalWorkPay() {
+			if (this.user) {
+				var pay = this.totalWorkHours * this.user.hourly_rate_one;
+			} else {
+				var pay = this.totalWorkHours * DASHBOARD_USER_HOURLY;
+			}
+
+			return parseFloat(pay);
+		},
+		totalTravelHours: function totalTravelHours() {
+			return this.stepAndDisectTimesheets('travel_jobs', 'travel_time');
+		},
+		totalTravelDistance: function totalTravelDistance() {
+			return this.stepAndDisectTimesheets('travel_jobs', 'travel_distance');
+		},
+		totalEquipmentRentalCost: function totalEquipmentRentalCost() {
+			return this.stepAndDisectTimesheets('equipment_rentals', 'rental_fee');
+		},
+		totalOtherCosts: function totalOtherCosts() {
+			return this.stepAndDisectTimesheets('other_costs', 'cost');
+		}
+	},
+
+	methods: {
+		timesheetFormModal: function timesheetFormModal() {
+			this.currentModal = 'Timesheet';
+			this.modalActive = true;
+		},
+
+
+		/* Iterates through each of the users timesheets. On each timesheet, an array of foreign relationship assets is
+   * iterated through and the supplied field is sumed up. The final total is returned
+   * @param assetToIterate - the foreign relationship field
+   * @param fieldToAddUp - the field on the foreign relationship to add up 
+  */
+		stepAndDisectTimesheets: function stepAndDisectTimesheets(assetToIterate, fieldToAddUp) {
+			var total = parseInt(0);
+			// Iterate through each timesheet
+			this.searchResults.models.forEach(function (timesheet) {
+				// If the asset field is an array
+				if (assetToIterate != '') {
+					if (timesheet[assetToIterate].length > 0) {
+						// Iterate through each travel job in timesheet
+						timesheet[assetToIterate].forEach(function (current) {
+							// Update total
+							total += parseFloat(current[fieldToAddUp]);
+						});
+					}
+				} else {
+					// If the asset field is not an array then just do a tally
+					total += parseFloat(timesheet[fieldToAddUp]);
+				}
+			});
+
+			return total.toFixed(2);
+		}
+	},
+
+	created: function created() {
+		var _this = this;
+
+		if (this.project_id) {
+
+			if (!this.user) {
+				this.urlToFetch = '/api/dashboard/project-timesheets/' + this.project_id;
+			} else {
+				this.urlToFetch = '/api/users/' + this.user.id + '/projects/' + this.project_id + '/timesheets';
+			}
+
+			// Retrieve model through API access
+			this.getAndSetModels();
+		}
+
+		// When the form component alerts this parent of a successful create
+		this.$router.app.$on('timesheet-created', function (model) {
+			model.work_jobs = [];
+			model.travel_jobs = [];
+			model.equipment_rentals = [];
+			model.other_costs = [];
+			_this.searchResults.models.unshift(model);
+			_this.modalActive = false;
+		});
+
+		this.$router.app.$on('timesheet-deleted', function (model) {
+			// Cache context
+			var context = _this;
+			console.log(model);
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.id) {
+					var index = context.searchResults.models.indexOf(timesheet);
+					context.searchResults.models.splice(index, 1);
+
+					context.currentModal = '';
+					context.modalActive = false;
+				}
+			});
+		});
+
+		this.$router.app.$on('work-job-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.work_jobs.forEach(function (workjob) {
+						// Replace existing updated work job
+						if (workjob.id == model.id) {
+							// Update workjob fields
+							workjob.job_type = model.job_type;
+							workjob.hours_worked = model.hours_worked;
+							workjob.comment = model.comment;
+							// Update flag
+							updated = true;
+						}
+					});
+					// Add a new work job
+					if (!updated) {
+						timesheet.work_jobs.push(model);
+					}
+				}
+			});
+		});
+
+		this.$router.app.$on('travel-job-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the travel job has been added to cache
+					var updated = false;
+					// Iterate through travel jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.travel_jobs.forEach(function (travelJob) {
+						// Replace existing updated travel job
+						if (travelJob.id == model.id) {
+							// Update travel job fields
+							travelJob.travel_distance = model.travel_distance;
+							travelJob.travel_time = model.travel_time;
+							travelJob.comment = model.comment;
+							// Update flag
+							updated = true;
+						}
+					});
+					// Add a new travel job
+					if (!updated) {
+						timesheet.travel_jobs.push(model);
+					}
+				}
+			});
+		});
+
+		this.$router.app.$on('equipment-rental-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the equipment rental has been added to cache
+					var updated = false;
+					// Iterate through equipment rentals to determine if a rental should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.equipment_rentals.forEach(function (equipmentRental) {
+						// Replace existing updated equipment rental
+						if (equipmentRental.id == model.id) {
+							// Update equipment rental fields
+							equipmentRental.equipment_type = model.equipment_type;
+							equipmentRental.rental_fee = model.rental_fee;
+							equipmentRental.comment = model.comment;
+							// Update flag
+							updated = true;
+						}
+					});
+					// Add a new equipment rental
+					if (!updated) {
+						timesheet.equipment_rentals.push(model);
+					}
+				}
+			});
+		});
+
+		this.$router.app.$on('other-cost-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the other cost has been added to cache
+					var updated = false;
+					// Iterate through other costs to determine if a cost should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.other_costs.forEach(function (otherCost) {
+						// Replace existing updated other cost
+						if (otherCost.id == model.id) {
+							// Update other cost fields
+							otherCost.cost_name = model.cost_name;
+							otherCost.cost = model.cost;
+							otherCost.comment = model.comment;
+							// Update flag
+							updated = true;
+						}
+					});
+					// Add a new other cost
+					if (!updated) {
+						timesheet.other_costs.push(model);
+					}
+				}
+			});
+		});
+
+		// When the form component alerts this parent of a successful create
+		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+		this.$router.app.$on('work-job-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.work_jobs.forEach(function (workjob) {
+						// Replace existing updated work job
+						if (workjob.id == model.id) {
+							var index = timesheet.work_jobs.indexOf(workjob);
+							timesheet.work_jobs.splice(index, 1);
+						}
+					});
+				}
+			});
+		});
+
+		// When the form component alerts this parent of a successful create
+		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+		this.$router.app.$on('travel-job-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.travel_jobs.forEach(function (travelJob) {
+						// Replace existing updated travel job
+						if (travelJob.id == model.id) {
+							var index = timesheet.travel_jobs.indexOf(travelJob);
+							timesheet.travel_jobs.splice(index, 1);
+						}
+					});
+				}
+			});
+		});
+
+		// When the form component alerts this parent of a successful create
+		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+		this.$router.app.$on('equipment-rental-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.equipment_rentals.forEach(function (equipmentRental) {
+						// Replace existing updated equipment rental
+						if (equipmentRental.id == model.id) {
+							var index = timesheet.equipment_rentals.indexOf(equipmentRental);
+							timesheet.equipment_rentals.splice(index, 1);
+						}
+					});
+				}
+			});
+		});
+
+		// When the form component alerts this parent of a successful create
+		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+		this.$router.app.$on('other-cost-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.other_costs.forEach(function (otherCost) {
+						// Replace existing updated other cost
+						if (otherCost.id == model.id) {
+							var index = timesheet.other_costs.indexOf(otherCost);
+							timesheet.other_costs.splice(index, 1);
+						}
+					});
+				}
+			});
+		});
+	}
+});
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(138),
+  /* template */
+  __webpack_require__(140),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Project-timesheets.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-timesheets.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-347e0067", Component.options)
+  } else {
+    hotAPI.reload("data-v-347e0067", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [(_vm.fetchingModels) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [_c('div', {
+    staticClass: "row row-padded margin-15-bottom"
+  }, [_c('button', {
+    staticClass: "pull-left btn btn-info",
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-arrow-left"
+  }), _vm._v(" Go back\r\n\t\t\t")])]), _vm._v(" "), (!_vm.user) ? _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v("Project Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.project_id) + ")")])]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\tNow showing all of your timesheets for this project.\r\n\t\t\t")]), _vm._v(" "), _vm._m(1)]) : _vm._e(), _vm._v(" "), (_vm.user) ? _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v(_vm._s(_vm.user.first) + "'s' Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.project_id) + ")")])]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\tBelow are all of " + _vm._s(_vm.user.first) + "'s timesheets for this project.\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_vm._m(2), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v(_vm._s(_vm.totalTravelDistance) + " km")]), _vm._v("\r\n\t\t\t\t\t\t  Total Distance\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v(_vm._s(_vm.totalTravelHours) + " hrs")]), _vm._v("\r\n\t\t\t\t\t\t  Total Time\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_vm._m(3), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v(_vm._s(_vm.totalWorkHours) + " hrs")]), _vm._v("\r\n\t\t\t\t\t\t  Total Hours\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalWorkPay))]), _vm._v("\r\n\t\t\t\t\t\t  Net Pay\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalPerDiem))]), _vm._v("\r\n\t\t\t\t\t\t  Total Per Diem\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_vm._m(4), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalEquipmentRentalCost))]), _vm._v("\r\n\t\t\t\t\t\t  Equipment Cost Total\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalOtherCosts))]), _vm._v("\r\n\t\t\t\t\t\t  Total Other Costs\r\n\t\t\t\t\t\t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-12 text-center"
+  }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_c('li', {
+    staticClass: "list-group-item"
+  }, [_vm._m(5), _vm._v(" "), _c('p', {
+    staticClass: "margin-10-top"
+  }, [_c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v("$" + _vm._s(parseFloat(_vm.totalWorkPay) + parseFloat(_vm.totalEquipmentRentalCost) + parseFloat(_vm.totalOtherCosts) + parseFloat(_vm.totalPerDiem)))])])])])])])]), _vm._v(" "), (!_vm.user) ? _c('div', {
+    staticClass: "row row-padded margin-25-top"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    on: {
+      "click": _vm.timesheetFormModal
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-list-alt"
+  }), _vm._v(" Add Timesheet\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.searchResults.models.length > 0) ? _c('div', [_c('div', {
+    staticClass: "row row-padded margin-35-top"
+  }, _vm._l((_vm.searchResults.models), function(timesheet) {
+    return _c('timesheet-pill', {
+      attrs: {
+        "timesheet": timesheet,
+        "user": _vm.user
+      }
+    })
+  }))]) : _c('div', [_c('div', {
+    staticClass: "row row-padded margin-35-top"
+  }, [_c('div', {
+    staticClass: "alert alert-warning text-center"
+  }, [_c('big', [_c('strong', [_vm._v("Heads up!")]), _vm._v(" You havn't added any timesheets to this project yet")])], 1)])]), _vm._v(" "), (!_vm.user) ? _c('modal', {
+    attrs: {
+      "modalActive": _vm.modalActive
+    },
+    on: {
+      "modal-close": function($event) {
+        _vm.modalActive = false
+      }
+    }
+  }, [_c('p', {
+    slot: "body"
+  }, [(_vm.currentModal == 'Timesheet') ? _c('timesheet-form', {
+    attrs: {
+      "project_id": _vm.$route.params.project_id
+    }
+  }) : _vm._e()], 1), _vm._v(" "), _c('div', {
+    slot: "footer"
+  }, [_c('button', {
+    staticClass: "btn btn-primary margin-45-top",
+    on: {
+      "click": function($event) {
+        _vm.modalActive = false
+      }
+    }
+  }, [_vm._v("Cancel")])])]) : _vm._e()], 1) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "large-center-loader"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\tOnce you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.\r\n\t\t\t")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('strong', [_vm._v("Travel Totals")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('strong', [_vm._v("Hour Totals")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('strong', [_vm._v("Other Totals")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top"
+  }, [_c('strong', [_vm._v("Invoice Total")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-347e0067", module.exports)
+  }
+}
+
+/***/ }),
+/* 141 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+var api_access = __webpack_require__(1);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			urlToFetch: '/api/timesheets/all',
+			fetchingModels: false,
+			searchResults: {
+				models: [],
+				modelsPageTotal: 0,
+				modelsCurrentPage: 0,
+				modelsPageLinks: {},
+				modelsNextPageUrl: '',
+				modelsPrevPageUrl: ''
+			},
+			fromDateFilter: '',
+			toDateFilter: '',
+			projectIdFilter: '',
+			perPageFilter: 15
+		};
+	},
+
+
+	methods: {
+		// Refreshes the models cache from server
+		filter: function filter() {
+			this.filterAndSetModels('/api/timesheets/filter', {
+				to_date: this.toDateFilter,
+				from_date: this.fromDateFilter,
+				project_id: this.projectIdFilter,
+				per_page: this.perPageFilter
+			});
+		},
+
+
+		// Used by the pagination buttons
+		getSpecificUsersPage: function getSpecificUsersPage(link) {
+			this.getAndSetModels(link);
+		},
+		tallyATimesheetsTotal: function tallyATimesheetsTotal(timesheet) {
+			var hours = this.countATimesheetsHours(timesheet),
+			    equipmentCost = this.countATimesheetsEquipment(timesheet),
+			    otherCosts = this.countATimesheetsOtherCosts(timesheet),
+			    hourPay = parseFloat(hours) * parseFloat(DASHBOARD_USER_HOURLY),
+
+			// Total
+			timesheetTotal = equipmentCost + otherCosts + hourPay;
+
+			return parseFloat(timesheetTotal);
+		},
+		countATimesheetsHours: function countATimesheetsHours(timesheet) {
+			var hours = 0;
+			timesheet.work_jobs.forEach(function (workJob) {
+				hours += parseFloat(workJob.hours_worked);
+			});
+			return hours;
+		},
+		countATimesheetsEquipment: function countATimesheetsEquipment(timesheet) {
+			var total = 0;
+			timesheet.equipment_rentals.forEach(function (rental) {
+				total += parseFloat(rental.rental_fee);
+			});
+			return total;
+		},
+		countATimesheetsOtherCosts: function countATimesheetsOtherCosts(timesheet) {
+			var total = 0;
+			timesheet.other_costs.forEach(function (cost) {
+				total += parseFloat(cost.cost);
+			});
+			return total;
+		}
+	},
+
+	// Retrieves models from server
+	created: function created() {
+		console.log('Timesheet search created');
+		// Start loader
+		this.fetchingModels = true;
+		// Find projects
+		this.getAndSetModels();
+	}
+});
+
+/***/ }),
+/* 142 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(141),
+  /* template */
+  __webpack_require__(143),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheet-search.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Timesheet-search.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2dcc4456", Component.options)
+  } else {
+    hotAPI.reload("data-v-2dcc4456", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 143 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [(_vm.fetchingModels) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v("Find & Search Timesheets")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\tThis is where you can find and sort all timesheets within the system. Use the filter form below to narrow down your search.\r\n\t\t")]), _vm._v(" "), _vm._m(1)]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded  margin-35-top"
+  }, [_c('div', {
+    staticClass: "col-md-2"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("From")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.fromDateFilter),
+      expression: "fromDateFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.fromDateFilter)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.fromDateFilter = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-2"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("To")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.toDateFilter),
+      expression: "toDateFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.toDateFilter)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.toDateFilter = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-2"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Project Identifier")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.projectIdFilter),
+      expression: "projectIdFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "number",
+      "min": "1"
+    },
+    domProps: {
+      "value": (_vm.projectIdFilter)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.projectIdFilter = $event.target.value
+      },
+      "blur": function($event) {
+        _vm.$forceUpdate()
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-1"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Per Page")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.perPageFilter),
+      expression: "perPageFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.perPageFilter = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "15",
+      "selected": ""
+    }
+  }, [_vm._v("15")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "20"
+    }
+  }, [_vm._v("20")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "30"
+    }
+  }, [_vm._v("30")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "40"
+    }
+  }, [_vm._v("40")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "50"
+    }
+  }, [_vm._v("50")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "10000"
+    }
+  }, [_vm._v("*All")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-2"
+  }, [_c('button', {
+    staticClass: "btn btn-default btn-block margin-35-top",
+    on: {
+      "click": _vm.filter
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-search"
+  }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" \r\n\t\t\t\t\t\tFilter Projects\r\n\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
+    staticClass: "left-loader"
+  })]) : _vm._e()])])]), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
+    staticClass: "table table-striped table-hover margin-25-top"
+  }, [_vm._m(2), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(timesheet) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(new Date(Date.parse(timesheet.date + 'T00:00:00')).toDateString()))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(timesheet.project_id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(timesheet.user.first + ' ' + timesheet.user.last))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(_vm.tallyATimesheetsTotal(timesheet)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.countATimesheetsHours(timesheet)))]), _vm._v(" "), _c('td', [_c('button', {
+      staticClass: "btn btn-sm btn-success",
+      on: {
+        "click": function($event) {}
+      }
+    }, [_c('span', {
+      staticClass: "glyphicon glyphicon-screenshot"
+    }), _vm._v(" More\r\n\t\t\t    \t")])])])
+  }))]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', {
+    staticClass: "row text-center margin-45-top"
+  }, [_c('ul', {
+    staticClass: "pagination"
+  }, [_c('li', {
+    class: {
+      'disabled': _vm.searchResults.modelsCurrentPage == 1
+    }
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        _vm.getSpecificProjectsPage(_vm.searchResults.modelsPrevPageUrl)
+      }
+    }
+  }, [_vm._v("«")])]), _vm._v(" "), _vm._l((_vm.searchResults.modelsPageLinks), function(page, key) {
+    return _c('li', {
+      class: {
+        'active': _vm.searchResults.modelsCurrentPage == key
+      }
+    }, [_c('a', {
+      on: {
+        "click": function($event) {
+          _vm.getSpecificProjectsPage(page)
+        }
+      }
+    }, [_vm._v("\r\n\t\t\t\t\t" + _vm._s(key) + "\r\n\t\t\t\t")])])
+  }), _vm._v(" "), _c('li', {
+    class: {
+      'disabled': _vm.searchResults.modelsCurrentPage == _vm.searchResults.modelsPageTotal
+    }
+  }, [_c('a', {
+    on: {
+      ":click": function($event) {
+        _vm.getSpecificUsersPage(_vm.searchResults.modelsNextPageUrl)
+      }
+    }
+  }, [_vm._v("»")])])], 2)]) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "large-center-loader"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\tYou can also view timesheets for a specific user in their user profile page.\r\n\t\t")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', [_c('tr', {
+    staticClass: "info"
+  }, [_c('th', [_vm._v("Date")]), _vm._v(" "), _c('th', [_vm._v("Project")]), _vm._v(" "), _c('th', [_vm._v("User")]), _vm._v(" "), _c('th', [_vm._v("Invoice Total")]), _vm._v(" "), _c('th', [_vm._v("Work Hours")]), _vm._v(" "), _c('th', [_vm._v("Actions")])])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2dcc4456", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

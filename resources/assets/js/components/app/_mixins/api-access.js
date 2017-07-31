@@ -240,10 +240,11 @@ module.exports =  {
 					// Clear any form errors
 	                context.clearFormErrors();	
 
+	                // If a callback is present and a function
 	                if(cb instanceof Function){
+	                	// Run callback
 	                	cb.call(context, response.data.model);
 	                }
-
 				})
 				// Error
 				.catch(function(error){

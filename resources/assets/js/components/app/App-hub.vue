@@ -14,7 +14,12 @@
             v-if="DASHBOARD_AUTH == 'admin'"
             class="{ 'active': $route.path.substring(0,6) == '/users' }">
            	    <router-link to="/users/search">Users</router-link>
-        </li>     
+        </li> 
+        <li 
+            v-if="DASHBOARD_AUTH == 'admin'"
+            class="{ 'active': $route.path.substring(0,11) == '/timesheets' }">
+                <router-link to="/timesheets/search">Timesheets</router-link>
+        </li>            
         <li 
             v-if="DASHBOARD_AUTH == 'admin'"
             :class="{ 'active': $route.path.substring(0,9) == '/projects' }">
