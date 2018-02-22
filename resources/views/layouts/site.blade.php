@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Arrow provides a full range of archaeological, palaeontological, and cultural resource management services." />
     <meta name="author" content="Codename Digital" />
-
+    <meta name="google-site-verification" content="lNs9b0VreHmW_5jZArPVkR4ps_h6CQh3unmMajlxdYo" />
+    
     <!-- Styles -->
     <link rel="stylesheet" type="text/css" href="{{ url('css/site/bootstrap.min.css') }}" /><!-- Bootstrap -->
     <link rel="stylesheet" type="text/css" href="{{ url('css/site/icons.css') }}" /><!-- Font Awesome -->

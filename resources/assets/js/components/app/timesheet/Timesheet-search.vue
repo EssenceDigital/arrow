@@ -18,7 +18,11 @@
 		<p class="margin-25-top text-info">
 			<span class="glyphicon glyphicon-question-sign"></span>
 			You can also view timesheets for a specific user in their user profile page.
-		</p>								
+		</p>	
+		<p class="margin-25-top text-info">
+			<span class="glyphicon glyphicon-question-sign"></span>
+			You can filter the timesheets using the form below. You can leave fields blank.
+		</p>									
 	</div>
 
 		<div class="row row-padded  margin-35-top">
@@ -36,10 +40,20 @@
                 	<input v-model="toDateFilter" type="date" class="form-control margin-10-top">
               	</div>				
 			</div>
-
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">User</label>
+					<select v-model="userIdFilter" class="form-control margin-10-top">
+						<option value="" selected>Select user...</option>
+                    	<option v-for="user in users" :value="user.id">
+                    		{{ user.first + ' ' + user.last }}
+                    	</option>
+                    </select>
+				</div>				
+			</div>
 			<div class="col-md-2">
 				<div class="form-group">
-                	<label class="control-label">Project Identifier</label>
+                	<label class="control-label">Project (ID)</label>
                 	<input v-model="projectIdFilter" type="number" min="1" class="form-control margin-10-top">
               	</div>				
 			</div>
@@ -62,7 +76,7 @@
 				<button @click="filter" class="btn btn-default btn-block margin-35-top">
 					<span class="glyphicon glyphicon-search"></span>
 					<span v-if="!fetchingModels"> 
-						Filter Projects
+						Filter
 					</span>
 					<span v-if="fetchingModels">
 						<div class="left-loader"></div>
@@ -150,7 +164,10 @@
 				fromDateFilter: '',
 				toDateFilter: '',
 				projectIdFilter: '',
-				perPageFilter: 15
+				userIdFilter: '',
+				perPageFilter: 15,
+				// For user select input
+				users: []
 			}
 		},
 
@@ -161,6 +178,7 @@
 					to_date: this.toDateFilter,
 					from_date: this.fromDateFilter,
 					project_id: this.projectIdFilter,
+					user_id: this.userIdFilter,
 					per_page: this.perPageFilter
 				});				
 			},
@@ -210,10 +228,29 @@
 		// Retrieves models from server
 		created(){
 			console.log('Timesheet search created');
+
 			// Start loader
 			this.fetchingModels = true;
-			// Find projects
+
+			// Cache
+			var context = this;
+
+			/* Send GET request to find users to populate select input with
+			*/
+			axios.get('/api/users/all')
+				// Success
+				.then(function(response){
+					// Handle the response with helper method found below this method
+					context.users = response.data.users;
+				})
+				// Error
+				.catch(function(response){
+					console.log(response);
+				});
+
+			// Find timesheets via API access
 			this.getAndSetModels();
+
 		}
 	}
 	

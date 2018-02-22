@@ -7,17 +7,17 @@
 <div class="container">
     <navbar>
         <!-- Nav links -->
-        <li v-bind:class="{ 'active': $route.path.substring(0,10) == '/dashboard' }">
+        <li :class="{ 'active': $route.path.substring(0,10) == '/dashboard' }">
             <router-link to="/dashboard/projects">Dashboard</router-link>
         </li>         
         <li 
             v-if="DASHBOARD_AUTH == 'admin'"
-            class="{ 'active': $route.path.substring(0,6) == '/users' }">
+            :class="{ 'active': $route.path.substring(0,6) == '/users' }">
            	    <router-link to="/users/search">Users</router-link>
         </li> 
         <li 
             v-if="DASHBOARD_AUTH == 'admin'"
-            class="{ 'active': $route.path.substring(0,11) == '/timesheets' }">
+            :class="{ 'active': $route.path.substring(0,11) == '/timesheets' }">
                 <router-link to="/timesheets/search">Timesheets</router-link>
         </li>            
         <li 

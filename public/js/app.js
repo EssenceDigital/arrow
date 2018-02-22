@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 135);
+/******/ 	return __webpack_require__(__webpack_require__.s = 141);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -288,7 +288,7 @@ module.exports = {
 					}
 					// Cache and create the direct page links
 					for (var i = 1; i <= totalPages; i++) {
-						context.searchResults.modelsPageurls[i] = baseUrl + i;
+						context.searchResults.modelsPageLinks[i] = baseUrl + i;
 					}
 				}
 				// Cache the pagination in the calling component
@@ -833,13 +833,13 @@ module.exports = {
 
 
 /* styles */
-__webpack_require__(131)
+__webpack_require__(137)
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(42),
   /* template */
-  __webpack_require__(109),
+  __webpack_require__(115),
   /* scopeId */
   null,
   /* cssModules */
@@ -1063,7 +1063,7 @@ var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(41),
   /* template */
-  __webpack_require__(126),
+  __webpack_require__(132),
   /* scopeId */
   null,
   /* cssModules */
@@ -11779,7 +11779,7 @@ var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(52),
   /* template */
-  __webpack_require__(119),
+  __webpack_require__(125),
   /* scopeId */
   null,
   /* cssModules */
@@ -11813,7 +11813,41 @@ var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(59),
   /* template */
-  __webpack_require__(120),
+  __webpack_require__(111),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Project-timesheets.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-timesheets.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-347e0067", Component.options)
+  } else {
+    hotAPI.reload("data-v-347e0067", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(60),
+  /* template */
+  __webpack_require__(126),
   /* scopeId */
   null,
   /* cssModules */
@@ -11833,40 +11867,6 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-a6dc0f9e", Component.options)
   } else {
     hotAPI.reload("data-v-a6dc0f9e", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(61),
-  /* template */
-  __webpack_require__(121),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheets-hub.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Timesheets-hub.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-af45854a", Component.options)
-  } else {
-    hotAPI.reload("data-v-af45854a", Component.options)
   }
 })()}
 
@@ -14366,7 +14366,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(132)
+var listToStyles = __webpack_require__(138)
 
 /*
 type StyleObject = {
@@ -14608,9 +14608,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(70);
+__webpack_require__(72);
 
-window.Vue = __webpack_require__(133);
+window.Vue = __webpack_require__(139);
 window.VueRouter = __webpack_require__(17);
 // Add router to vue
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["default"]);
@@ -14618,42 +14618,42 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["default"]);
 /**
  * Components
  */
-var app_hub = __webpack_require__(75);
+var app_hub = __webpack_require__(77);
 
 // Dashboard related components
-var dashboard_hub = __webpack_require__(81);
-var dashboard_projects = __webpack_require__(82);
+var dashboard_hub = __webpack_require__(83);
+var dashboard_projects = __webpack_require__(84);
 
 // Timesheet related components
-var project_timesheets = __webpack_require__(139);
-var timesheets_hub = __webpack_require__(16);
-var timesheet_search = __webpack_require__(142);
+var project_timesheets = __webpack_require__(15);
+var timesheets_hub = __webpack_require__(95);
+var timesheet_search = __webpack_require__(94);
 
 // User related components 
-var users_hub = __webpack_require__(99);
-var user_hub = __webpack_require__(95);
-var user_table = __webpack_require__(98);
-var user_form = __webpack_require__(94);
-var user_search = __webpack_require__(96);
-var user_settings = __webpack_require__(97);
+var users_hub = __webpack_require__(103);
+var user_hub = __webpack_require__(99);
+var user_table = __webpack_require__(102);
+var user_form = __webpack_require__(98);
+var user_search = __webpack_require__(100);
+var user_settings = __webpack_require__(101);
 
 // Project related components
-var projects_hub = __webpack_require__(86);
-var project_hub = __webpack_require__(84);
-var project_table = __webpack_require__(85);
-var project_form = __webpack_require__(83);
+var projects_hub = __webpack_require__(88);
+var project_hub = __webpack_require__(86);
+var project_table = __webpack_require__(87);
+var project_form = __webpack_require__(85);
 var project_search = __webpack_require__(14);
 
 // Crew related components
-var crew_list = __webpack_require__(80);
-var crew_form = __webpack_require__(79);
+var crew_list = __webpack_require__(82);
+var crew_form = __webpack_require__(81);
 
 // Timeline related components
-var timeline_form = __webpack_require__(87);
-var timeline_table = __webpack_require__(88);
+var timeline_form = __webpack_require__(89);
+var timeline_table = __webpack_require__(90);
 
 // UI components
-var navbar = __webpack_require__(76);
+var navbar = __webpack_require__(78);
 
 Vue.component('app-hub', app_hub);
 Vue.component('navbar', navbar);
@@ -18731,8 +18731,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-var comment_form = __webpack_require__(77);
-var comment_list = __webpack_require__(78);
+var comment_form = __webpack_require__(79);
+var comment_list = __webpack_require__(80);
 var api_access = __webpack_require__(1);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -20650,6 +20650,591 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var api_access = __webpack_require__(1);
+var modal = __webpack_require__(3);
+var timesheet_pill = __webpack_require__(93);
+var timesheet_form = __webpack_require__(16);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'modal': modal,
+		'timesheet-pill': timesheet_pill,
+		'timesheet-form': timesheet_form
+	},
+
+	props: ['project_id', 'user'],
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			adminState: false,
+			currentModal: '',
+			// For the form modal
+			modalActive: false,
+			// Used by API access
+			urlToFetch: '',
+			// Used by API access
+			fetchingModels: false,
+			// Results from Laravel pagination json. Used by API access.
+			searchResults: {
+				models: []
+			}
+		};
+	},
+
+
+	computed: {
+		totalTimesheets: function totalTimesheets() {
+			return this.searchResults.models.length;
+		},
+		totalPerDiem: function totalPerDiem() {
+			return this.stepAndDisectTimesheets('', 'per_diem');
+		},
+		totalWorkHours: function totalWorkHours() {
+			return this.stepAndDisectTimesheets('work_jobs', 'hours_worked');
+		},
+		totalWorkPay: function totalWorkPay() {
+			if (this.user) {
+				var pay = this.totalWorkHours * this.user.hourly_rate_one;
+			} else {
+				var pay = this.totalWorkHours * DASHBOARD_USER_HOURLY;
+			}
+
+			return parseFloat(pay);
+		},
+		totalTravelHours: function totalTravelHours() {
+			return this.stepAndDisectTimesheets('travel_jobs', 'travel_time');
+		},
+		totalTravelDistance: function totalTravelDistance() {
+			return this.stepAndDisectTimesheets('travel_jobs', 'travel_distance');
+		},
+		totalEquipmentRentalCost: function totalEquipmentRentalCost() {
+			return this.stepAndDisectTimesheets('equipment_rentals', 'rental_fee');
+		},
+		totalOtherCosts: function totalOtherCosts() {
+			return this.stepAndDisectTimesheets('other_costs', 'cost');
+		}
+	},
+
+	methods: {
+		timesheetFormModal: function timesheetFormModal() {
+			this.currentModal = 'Timesheet';
+			this.modalActive = true;
+		},
+
+
+		/* Iterates through each of the users timesheets. On each timesheet, an array of foreign relationship assets is
+   * iterated through and the supplied field is sumed up. The final total is returned
+   * @param assetToIterate - the foreign relationship field
+   * @param fieldToAddUp - the field on the foreign relationship to add up 
+  */
+		stepAndDisectTimesheets: function stepAndDisectTimesheets(assetToIterate, fieldToAddUp) {
+			var total = parseInt(0);
+			// Iterate through each timesheet
+			this.searchResults.models.forEach(function (timesheet) {
+				// If the asset field is an array
+				if (assetToIterate != '') {
+					if (timesheet[assetToIterate].length > 0) {
+						// Iterate through each travel job in timesheet
+						timesheet[assetToIterate].forEach(function (current) {
+							// Update total
+							total += parseFloat(current[fieldToAddUp]);
+						});
+					}
+				} else {
+					// If the asset field is not an array then just do a tally
+					total += parseFloat(timesheet[fieldToAddUp]);
+				}
+			});
+
+			return total.toFixed(2);
+		}
+	},
+
+	created: function created() {
+		var _this = this;
+
+		if (this.project_id) {
+
+			if (!this.user) {
+				this.urlToFetch = '/api/dashboard/project-timesheets/' + this.project_id;
+			} else {
+				this.urlToFetch = '/api/users/' + this.user.id + '/projects/' + this.project_id + '/timesheets';
+			}
+
+			// Retrieve model through API access
+			this.getAndSetModels();
+		}
+
+		// When the form component alerts this parent of a successful create
+		this.$router.app.$on('timesheet-created', function (model) {
+			model.work_jobs = [];
+			model.travel_jobs = [];
+			model.equipment_rentals = [];
+			model.other_costs = [];
+			_this.searchResults.models.unshift(model);
+			_this.modalActive = false;
+		});
+
+		this.$router.app.$on('timesheet-deleted', function (model) {
+			// Cache context
+			var context = _this;
+			console.log(model);
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.id) {
+					var index = context.searchResults.models.indexOf(timesheet);
+					context.searchResults.models.splice(index, 1);
+
+					context.currentModal = '';
+					context.modalActive = false;
+				}
+			});
+		});
+
+		this.$router.app.$on('work-job-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.work_jobs.forEach(function (workjob) {
+						// Replace existing updated work job
+						if (workjob.id == model.id) {
+							// Update workjob fields
+							workjob.job_type = model.job_type;
+							workjob.hours_worked = model.hours_worked;
+							workjob.comment = model.comment;
+							// Update flag
+							updated = true;
+						}
+					});
+					// Add a new work job
+					if (!updated) {
+						timesheet.work_jobs.push(model);
+					}
+				}
+			});
+		});
+
+		this.$router.app.$on('travel-job-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the travel job has been added to cache
+					var updated = false;
+					// Iterate through travel jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.travel_jobs.forEach(function (travelJob) {
+						// Replace existing updated travel job
+						if (travelJob.id == model.id) {
+							// Update travel job fields
+							travelJob.travel_distance = model.travel_distance;
+							travelJob.travel_time = model.travel_time;
+							travelJob.comment = model.comment;
+							// Update flag
+							updated = true;
+						}
+					});
+					// Add a new travel job
+					if (!updated) {
+						timesheet.travel_jobs.push(model);
+					}
+				}
+			});
+		});
+
+		this.$router.app.$on('equipment-rental-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the equipment rental has been added to cache
+					var updated = false;
+					// Iterate through equipment rentals to determine if a rental should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.equipment_rentals.forEach(function (equipmentRental) {
+						// Replace existing updated equipment rental
+						if (equipmentRental.id == model.id) {
+							// Update equipment rental fields
+							equipmentRental.equipment_type = model.equipment_type;
+							equipmentRental.rental_fee = model.rental_fee;
+							equipmentRental.comment = model.comment;
+							// Update flag
+							updated = true;
+						}
+					});
+					// Add a new equipment rental
+					if (!updated) {
+						timesheet.equipment_rentals.push(model);
+					}
+				}
+			});
+		});
+
+		this.$router.app.$on('other-cost-created', function (model) {
+			// Cache context
+			var context = _this;
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the other cost has been added to cache
+					var updated = false;
+					// Iterate through other costs to determine if a cost should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.other_costs.forEach(function (otherCost) {
+						// Replace existing updated other cost
+						if (otherCost.id == model.id) {
+							// Update other cost fields
+							otherCost.cost_name = model.cost_name;
+							otherCost.cost = model.cost;
+							otherCost.comment = model.comment;
+							// Update flag
+							updated = true;
+						}
+					});
+					// Add a new other cost
+					if (!updated) {
+						timesheet.other_costs.push(model);
+					}
+				}
+			});
+		});
+
+		// When the form component alerts this parent of a successful create
+		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+		this.$router.app.$on('work-job-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.work_jobs.forEach(function (workjob) {
+						// Replace existing updated work job
+						if (workjob.id == model.id) {
+							var index = timesheet.work_jobs.indexOf(workjob);
+							timesheet.work_jobs.splice(index, 1);
+						}
+					});
+				}
+			});
+		});
+
+		// When the form component alerts this parent of a successful create
+		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+		this.$router.app.$on('travel-job-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.travel_jobs.forEach(function (travelJob) {
+						// Replace existing updated travel job
+						if (travelJob.id == model.id) {
+							var index = timesheet.travel_jobs.indexOf(travelJob);
+							timesheet.travel_jobs.splice(index, 1);
+						}
+					});
+				}
+			});
+		});
+
+		// When the form component alerts this parent of a successful create
+		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+		this.$router.app.$on('equipment-rental-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.equipment_rentals.forEach(function (equipmentRental) {
+						// Replace existing updated equipment rental
+						if (equipmentRental.id == model.id) {
+							var index = timesheet.equipment_rentals.indexOf(equipmentRental);
+							timesheet.equipment_rentals.splice(index, 1);
+						}
+					});
+				}
+			});
+		});
+
+		// When the form component alerts this parent of a successful create
+		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
+		this.$router.app.$on('other-cost-deleted', function (model) {
+			// Iterate through all cached timesheets and execute 
+			_this.searchResults.models.forEach(function (timesheet) {
+				// When the timesheet id matches the models id
+				if (timesheet.id == model.timesheet_id) {
+					// Flag which indicates whether the workjob has been added to cache
+					var updated = false;
+					// Iterate through work jobs to determine if a job should be updated or a new 
+					// job should be pushed to the collection
+					timesheet.other_costs.forEach(function (otherCost) {
+						// Replace existing updated other cost
+						if (otherCost.id == model.id) {
+							var index = timesheet.other_costs.indexOf(otherCost);
+							timesheet.other_costs.splice(index, 1);
+						}
+					});
+				}
+			});
+		});
+	}
+});
+
+/***/ }),
+/* 60 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var api_access = __webpack_require__(1);
 var modal = __webpack_require__(3);
@@ -20720,7 +21305,7 @@ var modal = __webpack_require__(3);
 });
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21056,11 +21641,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var dropdown = __webpack_require__(5);
 var modal = __webpack_require__(3);
-var timesheet_form = __webpack_require__(15);
-var work_job_form = __webpack_require__(93);
-var travel_job_form = __webpack_require__(92);
-var equipment_rental_form = __webpack_require__(89);
-var other_cost_form = __webpack_require__(90);
+var timesheet_form = __webpack_require__(16);
+var work_job_form = __webpack_require__(97);
+var travel_job_form = __webpack_require__(96);
+var equipment_rental_form = __webpack_require__(91);
+var other_cost_form = __webpack_require__(92);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -21206,7 +21791,266 @@ var other_cost_form = __webpack_require__(90);
 });
 
 /***/ }),
-/* 61 */
+/* 62 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+var api_access = __webpack_require__(1);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+	mixins: [api_access],
+
+	data: function data() {
+		return {
+			urlToFetch: '/api/timesheets/all',
+			fetchingModels: false,
+			searchResults: {
+				models: [],
+				modelsPageTotal: 0,
+				modelsCurrentPage: 0,
+				modelsPageLinks: {},
+				modelsNextPageUrl: '',
+				modelsPrevPageUrl: ''
+			},
+			fromDateFilter: '',
+			toDateFilter: '',
+			projectIdFilter: '',
+			userIdFilter: '',
+			perPageFilter: 15,
+			// For user select input
+			users: []
+		};
+	},
+
+
+	methods: {
+		// Refreshes the models cache from server
+		filter: function filter() {
+			this.filterAndSetModels('/api/timesheets/filter', {
+				to_date: this.toDateFilter,
+				from_date: this.fromDateFilter,
+				project_id: this.projectIdFilter,
+				user_id: this.userIdFilter,
+				per_page: this.perPageFilter
+			});
+		},
+
+
+		// Used by the pagination buttons
+		getSpecificUsersPage: function getSpecificUsersPage(link) {
+			this.getAndSetModels(link);
+		},
+		tallyATimesheetsTotal: function tallyATimesheetsTotal(timesheet) {
+			var hours = this.countATimesheetsHours(timesheet),
+			    equipmentCost = this.countATimesheetsEquipment(timesheet),
+			    otherCosts = this.countATimesheetsOtherCosts(timesheet),
+			    hourPay = parseFloat(hours) * parseFloat(DASHBOARD_USER_HOURLY),
+
+			// Total
+			timesheetTotal = equipmentCost + otherCosts + hourPay;
+
+			return parseFloat(timesheetTotal);
+		},
+		countATimesheetsHours: function countATimesheetsHours(timesheet) {
+			var hours = 0;
+			timesheet.work_jobs.forEach(function (workJob) {
+				hours += parseFloat(workJob.hours_worked);
+			});
+			return hours;
+		},
+		countATimesheetsEquipment: function countATimesheetsEquipment(timesheet) {
+			var total = 0;
+			timesheet.equipment_rentals.forEach(function (rental) {
+				total += parseFloat(rental.rental_fee);
+			});
+			return total;
+		},
+		countATimesheetsOtherCosts: function countATimesheetsOtherCosts(timesheet) {
+			var total = 0;
+			timesheet.other_costs.forEach(function (cost) {
+				total += parseFloat(cost.cost);
+			});
+			return total;
+		}
+	},
+
+	// Retrieves models from server
+	created: function created() {
+		console.log('Timesheet search created');
+
+		// Start loader
+		this.fetchingModels = true;
+
+		// Cache
+		var context = this;
+
+		/* Send GET request to find users to populate select input with
+  */
+		axios.get('/api/users/all')
+		// Success
+		.then(function (response) {
+			// Handle the response with helper method found below this method
+			context.users = response.data.users;
+		})
+		// Error
+		.catch(function (response) {
+			console.log(response);
+		});
+
+		// Find timesheets via API access
+		this.getAndSetModels();
+	}
+});
+
+/***/ }),
+/* 63 */
 /***/ (function(module, exports) {
 
 //
@@ -21250,7 +22094,7 @@ var other_cost_form = __webpack_require__(90);
 //
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21425,7 +22269,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21604,7 +22448,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21977,7 +22821,7 @@ var modal = __webpack_require__(3);
 });
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22044,7 +22888,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22194,7 +23038,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22479,7 +23323,7 @@ var api_access = __webpack_require__(1);
 });
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22913,7 +23757,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var api_access = __webpack_require__(1);
 var project_search = __webpack_require__(14);
-var project_timesheets = __webpack_require__(139);
+var project_timesheets = __webpack_require__(15);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	components: {
@@ -23009,7 +23853,7 @@ var project_timesheets = __webpack_require__(139);
 });
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23087,13 +23931,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(73);
+window._ = __webpack_require__(75);
 
-window.noty = __webpack_require__(74);
+window.noty = __webpack_require__(76);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -23132,21 +23976,21 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // });
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)();
 exports.push([module.i, "\n.log-out{\n    margin-left: 10px;\n}\n\n", ""]);
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)();
 exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n.modal {\n\tbackground-color: rgba(0,0,0,0.7);\n}\n\n", ""]);
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -40235,10 +41079,10 @@ exports.push([module.i, "\n.active {\n\tdisplay: block;\n}\n.modal {\n\tbackgrou
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19), __webpack_require__(134)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19), __webpack_require__(140)(module)))
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!function(root, factory) {
@@ -42122,14 +42966,14 @@ return window.noty;
 });
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(40),
   /* template */
-  __webpack_require__(105),
+  __webpack_require__(109),
   /* scopeId */
   null,
   /* cssModules */
@@ -42156,18 +43000,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(130)
+__webpack_require__(136)
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(43),
   /* template */
-  __webpack_require__(103),
+  __webpack_require__(107),
   /* scopeId */
   null,
   /* cssModules */
@@ -42194,14 +43038,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(44),
   /* template */
-  __webpack_require__(116),
+  __webpack_require__(122),
   /* scopeId */
   null,
   /* cssModules */
@@ -42228,14 +43072,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(45),
   /* template */
-  __webpack_require__(122),
+  __webpack_require__(128),
   /* scopeId */
   null,
   /* cssModules */
@@ -42262,14 +43106,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(46),
   /* template */
-  __webpack_require__(102),
+  __webpack_require__(106),
   /* scopeId */
   null,
   /* cssModules */
@@ -42296,14 +43140,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(47),
   /* template */
-  __webpack_require__(111),
+  __webpack_require__(117),
   /* scopeId */
   null,
   /* cssModules */
@@ -42330,14 +43174,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(48),
   /* template */
-  __webpack_require__(125),
+  __webpack_require__(131),
   /* scopeId */
   null,
   /* cssModules */
@@ -42364,14 +43208,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(49),
   /* template */
-  __webpack_require__(114),
+  __webpack_require__(120),
   /* scopeId */
   null,
   /* cssModules */
@@ -42398,14 +43242,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 83 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(50),
   /* template */
-  __webpack_require__(108),
+  __webpack_require__(114),
   /* scopeId */
   null,
   /* cssModules */
@@ -42432,14 +43276,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 84 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(51),
   /* template */
-  __webpack_require__(123),
+  __webpack_require__(129),
   /* scopeId */
   null,
   /* cssModules */
@@ -42466,14 +43310,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 85 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(53),
   /* template */
-  __webpack_require__(112),
+  __webpack_require__(118),
   /* scopeId */
   null,
   /* cssModules */
@@ -42500,14 +43344,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 86 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(54),
   /* template */
-  __webpack_require__(107),
+  __webpack_require__(113),
   /* scopeId */
   null,
   /* cssModules */
@@ -42534,14 +43378,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 87 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(55),
   /* template */
-  __webpack_require__(104),
+  __webpack_require__(108),
   /* scopeId */
   null,
   /* cssModules */
@@ -42568,14 +43412,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 88 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(56),
   /* template */
-  __webpack_require__(128),
+  __webpack_require__(134),
   /* scopeId */
   null,
   /* cssModules */
@@ -42602,14 +43446,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 89 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(57),
   /* template */
-  __webpack_require__(127),
+  __webpack_require__(133),
   /* scopeId */
   null,
   /* cssModules */
@@ -42636,14 +43480,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 90 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(58),
   /* template */
-  __webpack_require__(118),
+  __webpack_require__(124),
   /* scopeId */
   null,
   /* cssModules */
@@ -42670,14 +43514,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 91 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(60),
+  __webpack_require__(61),
   /* template */
-  __webpack_require__(115),
+  __webpack_require__(121),
   /* scopeId */
   null,
   /* cssModules */
@@ -42704,14 +43548,82 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 92 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(62),
   /* template */
-  __webpack_require__(100),
+  __webpack_require__(110),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheet-search.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Timesheet-search.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2dcc4456", Component.options)
+  } else {
+    hotAPI.reload("data-v-2dcc4456", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(63),
+  /* template */
+  __webpack_require__(127),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheets-hub.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Timesheets-hub.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-af45854a", Component.options)
+  } else {
+    hotAPI.reload("data-v-af45854a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(64),
+  /* template */
+  __webpack_require__(104),
   /* scopeId */
   null,
   /* cssModules */
@@ -42738,14 +43650,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 93 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(63),
+  __webpack_require__(65),
   /* template */
-  __webpack_require__(113),
+  __webpack_require__(119),
   /* scopeId */
   null,
   /* cssModules */
@@ -42772,14 +43684,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 94 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(64),
+  __webpack_require__(66),
   /* template */
-  __webpack_require__(129),
+  __webpack_require__(135),
   /* scopeId */
   null,
   /* cssModules */
@@ -42806,14 +43718,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 95 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(65),
+  __webpack_require__(67),
   /* template */
-  __webpack_require__(101),
+  __webpack_require__(105),
   /* scopeId */
   null,
   /* cssModules */
@@ -42840,14 +43752,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 96 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(66),
+  __webpack_require__(68),
   /* template */
-  __webpack_require__(124),
+  __webpack_require__(130),
   /* scopeId */
   null,
   /* cssModules */
@@ -42874,14 +43786,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 97 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(67),
+  __webpack_require__(69),
   /* template */
-  __webpack_require__(106),
+  __webpack_require__(112),
   /* scopeId */
   null,
   /* cssModules */
@@ -42908,14 +43820,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 98 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(68),
+  __webpack_require__(70),
   /* template */
-  __webpack_require__(110),
+  __webpack_require__(116),
   /* scopeId */
   null,
   /* cssModules */
@@ -42942,14 +43854,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 99 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(69),
+  __webpack_require__(71),
   /* template */
-  __webpack_require__(117),
+  __webpack_require__(123),
   /* scopeId */
   null,
   /* cssModules */
@@ -42976,7 +43888,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 100 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43169,7 +44081,7 @@ if (false) {
 }
 
 /***/ }),
-/* 101 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43188,7 +44100,7 @@ if (false) {
 }
 
 /***/ }),
-/* 102 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43287,7 +44199,7 @@ if (false) {
 }
 
 /***/ }),
-/* 103 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43368,7 +44280,7 @@ if (false) {
 }
 
 /***/ }),
-/* 104 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43456,7 +44368,7 @@ if (false) {
 }
 
 /***/ }),
-/* 105 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43471,13 +44383,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "to": "/dashboard/projects"
     }
   }, [_vm._v("Dashboard")])], 1), _vm._v(" "), (_vm.DASHBOARD_AUTH == 'admin') ? _c('li', {
-    staticClass: "{ 'active': $route.path.substring(0,6) == '/users' }"
+    class: {
+      'active': _vm.$route.path.substring(0, 6) == '/users'
+    }
   }, [_c('router-link', {
     attrs: {
       "to": "/users/search"
     }
   }, [_vm._v("Users")])], 1) : _vm._e(), _vm._v(" "), (_vm.DASHBOARD_AUTH == 'admin') ? _c('li', {
-    staticClass: "{ 'active': $route.path.substring(0,11) == '/timesheets' }"
+    class: {
+      'active': _vm.$route.path.substring(0, 11) == '/timesheets'
+    }
   }, [_c('router-link', {
     attrs: {
       "to": "/timesheets/search"
@@ -43501,7 +44417,450 @@ if (false) {
 }
 
 /***/ }),
-/* 106 */
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [(_vm.fetchingModels) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v("Find & Search Timesheets")]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\tThis is where you can find and sort all timesheets within the system. Use the filter form below to narrow down your search.\r\n\t\t")]), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm._m(2)]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded  margin-35-top"
+  }, [_c('div', {
+    staticClass: "col-md-2"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("From")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.fromDateFilter),
+      expression: "fromDateFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.fromDateFilter)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.fromDateFilter = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-2"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("To")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.toDateFilter),
+      expression: "toDateFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "date"
+    },
+    domProps: {
+      "value": (_vm.toDateFilter)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.toDateFilter = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-3"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("User")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.userIdFilter),
+      expression: "userIdFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.userIdFilter = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "",
+      "selected": ""
+    }
+  }, [_vm._v("Select user...")]), _vm._v(" "), _vm._l((_vm.users), function(user) {
+    return _c('option', {
+      domProps: {
+        "value": user.id
+      }
+    }, [_vm._v("\r\n                    \t\t" + _vm._s(user.first + ' ' + user.last) + "\r\n                    \t")])
+  })], 2)])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-2"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Project (ID)")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.projectIdFilter),
+      expression: "projectIdFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    attrs: {
+      "type": "number",
+      "min": "1"
+    },
+    domProps: {
+      "value": (_vm.projectIdFilter)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.projectIdFilter = $event.target.value
+      },
+      "blur": function($event) {
+        _vm.$forceUpdate()
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-1"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("Per Page")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.perPageFilter),
+      expression: "perPageFilter"
+    }],
+    staticClass: "form-control margin-10-top",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.perPageFilter = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "15",
+      "selected": ""
+    }
+  }, [_vm._v("15")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "20"
+    }
+  }, [_vm._v("20")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "30"
+    }
+  }, [_vm._v("30")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "40"
+    }
+  }, [_vm._v("40")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "50"
+    }
+  }, [_vm._v("50")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "10000"
+    }
+  }, [_vm._v("*All")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-2"
+  }, [_c('button', {
+    staticClass: "btn btn-default btn-block margin-35-top",
+    on: {
+      "click": _vm.filter
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-search"
+  }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" \r\n\t\t\t\t\t\tFilter\r\n\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
+    staticClass: "left-loader"
+  })]) : _vm._e()])])]), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
+    staticClass: "table table-striped table-hover margin-25-top"
+  }, [_vm._m(3), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(timesheet) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(new Date(Date.parse(timesheet.date + 'T00:00:00')).toDateString()))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(timesheet.project_id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(timesheet.user.first + ' ' + timesheet.user.last))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(_vm.tallyATimesheetsTotal(timesheet)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.countATimesheetsHours(timesheet)))]), _vm._v(" "), _c('td', [_c('button', {
+      staticClass: "btn btn-sm btn-success",
+      on: {
+        "click": function($event) {}
+      }
+    }, [_c('span', {
+      staticClass: "glyphicon glyphicon-screenshot"
+    }), _vm._v(" More\r\n\t\t\t    \t")])])])
+  }))]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', {
+    staticClass: "row text-center margin-45-top"
+  }, [_c('ul', {
+    staticClass: "pagination"
+  }, [_c('li', {
+    class: {
+      'disabled': _vm.searchResults.modelsCurrentPage == 1
+    }
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        _vm.getSpecificProjectsPage(_vm.searchResults.modelsPrevPageUrl)
+      }
+    }
+  }, [_vm._v("«")])]), _vm._v(" "), _vm._l((_vm.searchResults.modelsPageLinks), function(page, key) {
+    return _c('li', {
+      class: {
+        'active': _vm.searchResults.modelsCurrentPage == key
+      }
+    }, [_c('a', {
+      on: {
+        "click": function($event) {
+          _vm.getSpecificProjectsPage(page)
+        }
+      }
+    }, [_vm._v("\r\n\t\t\t\t\t" + _vm._s(key) + "\r\n\t\t\t\t")])])
+  }), _vm._v(" "), _c('li', {
+    class: {
+      'disabled': _vm.searchResults.modelsCurrentPage == _vm.searchResults.modelsPageTotal
+    }
+  }, [_c('a', {
+    on: {
+      ":click": function($event) {
+        _vm.getSpecificUsersPage(_vm.searchResults.modelsNextPageUrl)
+      }
+    }
+  }, [_vm._v("»")])])], 2)]) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "large-center-loader"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\tYou can also view timesheets for a specific user in their user profile page.\r\n\t\t")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\tYou can filter the timesheets using the form below. You can leave fields blank.\r\n\t\t")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', [_c('tr', {
+    staticClass: "info"
+  }, [_c('th', [_vm._v("Date")]), _vm._v(" "), _c('th', [_vm._v("Project")]), _vm._v(" "), _c('th', [_vm._v("User")]), _vm._v(" "), _c('th', [_vm._v("Invoice Total")]), _vm._v(" "), _c('th', [_vm._v("Work Hours")]), _vm._v(" "), _c('th', [_vm._v("Actions")])])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2dcc4456", module.exports)
+  }
+}
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [(_vm.fetchingModels) ? _c('div', {
+    staticClass: "row margin-85-top margin-85-bottom"
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [_c('div', {
+    staticClass: "row row-padded margin-15-bottom"
+  }, [_c('button', {
+    staticClass: "pull-left btn btn-info",
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-arrow-left"
+  }), _vm._v(" Go back\r\n\t\t\t")])]), _vm._v(" "), (!_vm.user) ? _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v("Project Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.project_id) + ")")])]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\tNow showing all of your timesheets for this project.\r\n\t\t\t")]), _vm._v(" "), _vm._m(1)]) : _vm._e(), _vm._v(" "), (_vm.user) ? _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('h2', [_vm._v(_vm._s(_vm.user.first) + "'s' Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.project_id) + ")")])]), _vm._v(" "), _c('p', {
+    staticClass: "margin-25-top"
+  }, [_vm._v("\r\n\t\t\t\tBelow are all of " + _vm._s(_vm.user.first) + "'s timesheets for this project.\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded margin-15-top"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_vm._m(2), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v(_vm._s(_vm.totalTravelDistance) + " km")]), _vm._v("\r\n\t\t\t\t\t\t  Total Distance\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v(_vm._s(_vm.totalTravelHours) + " hrs")]), _vm._v("\r\n\t\t\t\t\t\t  Total Time\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_vm._m(3), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v(_vm._s(_vm.totalWorkHours) + " hrs")]), _vm._v("\r\n\t\t\t\t\t\t  Total Hours\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalWorkPay))]), _vm._v("\r\n\t\t\t\t\t\t  Net Pay\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalPerDiem))]), _vm._v("\r\n\t\t\t\t\t\t  Total Per Diem\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_vm._m(4), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalEquipmentRentalCost))]), _vm._v("\r\n\t\t\t\t\t\t  Equipment Cost Total\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v("$" + _vm._s(_vm.totalOtherCosts))]), _vm._v("\r\n\t\t\t\t\t\t  Total Other Costs\r\n\t\t\t\t\t\t")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row row-padded"
+  }, [_c('div', {
+    staticClass: "col-md-12 text-center"
+  }, [_c('div', {
+    staticClass: "bs-component"
+  }, [_c('ul', {
+    staticClass: "list-group"
+  }, [_c('li', {
+    staticClass: "list-group-item"
+  }, [_vm._m(5), _vm._v(" "), _c('p', {
+    staticClass: "margin-10-top"
+  }, [_c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v("$" + _vm._s(parseFloat(_vm.totalWorkPay) + parseFloat(_vm.totalEquipmentRentalCost) + parseFloat(_vm.totalOtherCosts) + parseFloat(_vm.totalPerDiem)))])])])])])])]), _vm._v(" "), (!_vm.user) ? _c('div', {
+    staticClass: "row row-padded margin-25-top"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    on: {
+      "click": _vm.timesheetFormModal
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-list-alt"
+  }), _vm._v(" Add Timesheet\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.searchResults.models.length > 0) ? _c('div', [_c('div', {
+    staticClass: "row row-padded margin-35-top"
+  }, _vm._l((_vm.searchResults.models), function(timesheet) {
+    return _c('timesheet-pill', {
+      attrs: {
+        "timesheet": timesheet,
+        "user": _vm.user
+      }
+    })
+  }))]) : _c('div', [_c('div', {
+    staticClass: "row row-padded margin-35-top"
+  }, [_c('div', {
+    staticClass: "alert alert-warning text-center"
+  }, [_c('big', [_c('strong', [_vm._v("Heads up!")]), _vm._v(" You havn't added any timesheets to this project yet")])], 1)])]), _vm._v(" "), (!_vm.user) ? _c('modal', {
+    attrs: {
+      "modalActive": _vm.modalActive
+    },
+    on: {
+      "modal-close": function($event) {
+        _vm.modalActive = false
+      }
+    }
+  }, [_c('p', {
+    slot: "body"
+  }, [(_vm.currentModal == 'Timesheet') ? _c('timesheet-form', {
+    attrs: {
+      "project_id": _vm.$route.params.project_id
+    }
+  }) : _vm._e()], 1), _vm._v(" "), _c('div', {
+    slot: "footer"
+  }, [_c('button', {
+    staticClass: "btn btn-primary margin-45-top",
+    on: {
+      "click": function($event) {
+        _vm.modalActive = false
+      }
+    }
+  }, [_vm._v("Cancel")])])]) : _vm._e()], 1) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "large-center-loader"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top text-info"
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-question-sign"
+  }), _vm._v("\r\n\t\t\t\tOnce you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.\r\n\t\t\t")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('strong', [_vm._v("Travel Totals")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('strong', [_vm._v("Hour Totals")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', {
+    staticClass: "list-group-item"
+  }, [_c('strong', [_vm._v("Other Totals")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', {
+    staticClass: "margin-25-top"
+  }, [_c('strong', [_vm._v("Invoice Total")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-347e0067", module.exports)
+  }
+}
+
+/***/ }),
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43794,7 +45153,7 @@ if (false) {
 }
 
 /***/ }),
-/* 107 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43853,7 +45212,7 @@ if (false) {
 }
 
 /***/ }),
-/* 108 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -44064,7 +45423,7 @@ if (false) {
 }
 
 /***/ }),
-/* 109 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -44101,7 +45460,7 @@ if (false) {
 }
 
 /***/ }),
-/* 110 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -44799,7 +46158,7 @@ if (false) {
 }
 
 /***/ }),
-/* 111 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -44867,7 +46226,7 @@ if (false) {
 }
 
 /***/ }),
-/* 112 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -46690,7 +48049,7 @@ if (false) {
 }
 
 /***/ }),
-/* 113 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -46889,7 +48248,7 @@ if (false) {
 }
 
 /***/ }),
-/* 114 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -46958,7 +48317,7 @@ if (false) {
 }
 
 /***/ }),
-/* 115 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -47260,7 +48619,7 @@ if (false) {
 }
 
 /***/ }),
-/* 116 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -47335,7 +48694,7 @@ if (false) {
 }
 
 /***/ }),
-/* 117 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -47394,7 +48753,7 @@ if (false) {
 }
 
 /***/ }),
-/* 118 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -47559,7 +48918,7 @@ if (false) {
 }
 
 /***/ }),
-/* 119 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -47758,7 +49117,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-search"
-  }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" \r\n\t\t\t\t\t\tFilter Projects\r\n\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
+  }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" \r\n\t\t\t\t\t\tFilter\r\n\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
     staticClass: "left-loader"
   })]) : _vm._e()])])]) : _vm._e()]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
     staticClass: "table table-striped table-hover margin-25-top"
@@ -47871,7 +49230,7 @@ if (false) {
 }
 
 /***/ }),
-/* 120 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -48037,7 +49396,7 @@ if (false) {
 }
 
 /***/ }),
-/* 121 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -48080,7 +49439,7 @@ if (false) {
 }
 
 /***/ }),
-/* 122 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -48127,7 +49486,7 @@ if (false) {
 }
 
 /***/ }),
-/* 123 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -48186,7 +49545,7 @@ if (false) {
 }
 
 /***/ }),
-/* 124 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -48291,7 +49650,7 @@ if (false) {
 }
 
 /***/ }),
-/* 125 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -48342,7 +49701,7 @@ if (false) {
 }
 
 /***/ }),
-/* 126 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -48376,7 +49735,7 @@ if (false) {
 }
 
 /***/ }),
-/* 127 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -48541,7 +49900,7 @@ if (false) {
 }
 
 /***/ }),
-/* 128 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -49964,7 +51323,7 @@ if (false) {
 }
 
 /***/ }),
-/* 129 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -50488,13 +51847,13 @@ if (false) {
 }
 
 /***/ }),
-/* 130 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(71);
+var content = __webpack_require__(73);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -50514,13 +51873,13 @@ if(false) {
 }
 
 /***/ }),
-/* 131 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(72);
+var content = __webpack_require__(74);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -50540,7 +51899,7 @@ if(false) {
 }
 
 /***/ }),
-/* 132 */
+/* 138 */
 /***/ (function(module, exports) {
 
 /**
@@ -50573,7 +51932,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 133 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60271,7 +61630,7 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(19)))
 
 /***/ }),
-/* 134 */
+/* 140 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -60299,1291 +61658,12 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 135 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(20);
 module.exports = __webpack_require__(21);
 
-
-/***/ }),
-/* 136 */,
-/* 137 */,
-/* 138 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var api_access = __webpack_require__(1);
-var modal = __webpack_require__(3);
-var timesheet_pill = __webpack_require__(91);
-var timesheet_form = __webpack_require__(15);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		'modal': modal,
-		'timesheet-pill': timesheet_pill,
-		'timesheet-form': timesheet_form
-	},
-
-	props: ['project_id', 'user'],
-
-	mixins: [api_access],
-
-	data: function data() {
-		return {
-			adminState: false,
-			currentModal: '',
-			// For the form modal
-			modalActive: false,
-			// Used by API access
-			urlToFetch: '',
-			// Used by API access
-			fetchingModels: false,
-			// Results from Laravel pagination json. Used by API access.
-			searchResults: {
-				models: []
-			}
-		};
-	},
-
-
-	computed: {
-		totalTimesheets: function totalTimesheets() {
-			return this.searchResults.models.length;
-		},
-		totalPerDiem: function totalPerDiem() {
-			return this.stepAndDisectTimesheets('', 'per_diem');
-		},
-		totalWorkHours: function totalWorkHours() {
-			return this.stepAndDisectTimesheets('work_jobs', 'hours_worked');
-		},
-		totalWorkPay: function totalWorkPay() {
-			if (this.user) {
-				var pay = this.totalWorkHours * this.user.hourly_rate_one;
-			} else {
-				var pay = this.totalWorkHours * DASHBOARD_USER_HOURLY;
-			}
-
-			return parseFloat(pay);
-		},
-		totalTravelHours: function totalTravelHours() {
-			return this.stepAndDisectTimesheets('travel_jobs', 'travel_time');
-		},
-		totalTravelDistance: function totalTravelDistance() {
-			return this.stepAndDisectTimesheets('travel_jobs', 'travel_distance');
-		},
-		totalEquipmentRentalCost: function totalEquipmentRentalCost() {
-			return this.stepAndDisectTimesheets('equipment_rentals', 'rental_fee');
-		},
-		totalOtherCosts: function totalOtherCosts() {
-			return this.stepAndDisectTimesheets('other_costs', 'cost');
-		}
-	},
-
-	methods: {
-		timesheetFormModal: function timesheetFormModal() {
-			this.currentModal = 'Timesheet';
-			this.modalActive = true;
-		},
-
-
-		/* Iterates through each of the users timesheets. On each timesheet, an array of foreign relationship assets is
-   * iterated through and the supplied field is sumed up. The final total is returned
-   * @param assetToIterate - the foreign relationship field
-   * @param fieldToAddUp - the field on the foreign relationship to add up 
-  */
-		stepAndDisectTimesheets: function stepAndDisectTimesheets(assetToIterate, fieldToAddUp) {
-			var total = parseInt(0);
-			// Iterate through each timesheet
-			this.searchResults.models.forEach(function (timesheet) {
-				// If the asset field is an array
-				if (assetToIterate != '') {
-					if (timesheet[assetToIterate].length > 0) {
-						// Iterate through each travel job in timesheet
-						timesheet[assetToIterate].forEach(function (current) {
-							// Update total
-							total += parseFloat(current[fieldToAddUp]);
-						});
-					}
-				} else {
-					// If the asset field is not an array then just do a tally
-					total += parseFloat(timesheet[fieldToAddUp]);
-				}
-			});
-
-			return total.toFixed(2);
-		}
-	},
-
-	created: function created() {
-		var _this = this;
-
-		if (this.project_id) {
-
-			if (!this.user) {
-				this.urlToFetch = '/api/dashboard/project-timesheets/' + this.project_id;
-			} else {
-				this.urlToFetch = '/api/users/' + this.user.id + '/projects/' + this.project_id + '/timesheets';
-			}
-
-			// Retrieve model through API access
-			this.getAndSetModels();
-		}
-
-		// When the form component alerts this parent of a successful create
-		this.$router.app.$on('timesheet-created', function (model) {
-			model.work_jobs = [];
-			model.travel_jobs = [];
-			model.equipment_rentals = [];
-			model.other_costs = [];
-			_this.searchResults.models.unshift(model);
-			_this.modalActive = false;
-		});
-
-		this.$router.app.$on('timesheet-deleted', function (model) {
-			// Cache context
-			var context = _this;
-			console.log(model);
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.id) {
-					var index = context.searchResults.models.indexOf(timesheet);
-					context.searchResults.models.splice(index, 1);
-
-					context.currentModal = '';
-					context.modalActive = false;
-				}
-			});
-		});
-
-		this.$router.app.$on('work-job-created', function (model) {
-			// Cache context
-			var context = _this;
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the workjob has been added to cache
-					var updated = false;
-					// Iterate through work jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.work_jobs.forEach(function (workjob) {
-						// Replace existing updated work job
-						if (workjob.id == model.id) {
-							// Update workjob fields
-							workjob.job_type = model.job_type;
-							workjob.hours_worked = model.hours_worked;
-							workjob.comment = model.comment;
-							// Update flag
-							updated = true;
-						}
-					});
-					// Add a new work job
-					if (!updated) {
-						timesheet.work_jobs.push(model);
-					}
-				}
-			});
-		});
-
-		this.$router.app.$on('travel-job-created', function (model) {
-			// Cache context
-			var context = _this;
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the travel job has been added to cache
-					var updated = false;
-					// Iterate through travel jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.travel_jobs.forEach(function (travelJob) {
-						// Replace existing updated travel job
-						if (travelJob.id == model.id) {
-							// Update travel job fields
-							travelJob.travel_distance = model.travel_distance;
-							travelJob.travel_time = model.travel_time;
-							travelJob.comment = model.comment;
-							// Update flag
-							updated = true;
-						}
-					});
-					// Add a new travel job
-					if (!updated) {
-						timesheet.travel_jobs.push(model);
-					}
-				}
-			});
-		});
-
-		this.$router.app.$on('equipment-rental-created', function (model) {
-			// Cache context
-			var context = _this;
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the equipment rental has been added to cache
-					var updated = false;
-					// Iterate through equipment rentals to determine if a rental should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.equipment_rentals.forEach(function (equipmentRental) {
-						// Replace existing updated equipment rental
-						if (equipmentRental.id == model.id) {
-							// Update equipment rental fields
-							equipmentRental.equipment_type = model.equipment_type;
-							equipmentRental.rental_fee = model.rental_fee;
-							equipmentRental.comment = model.comment;
-							// Update flag
-							updated = true;
-						}
-					});
-					// Add a new equipment rental
-					if (!updated) {
-						timesheet.equipment_rentals.push(model);
-					}
-				}
-			});
-		});
-
-		this.$router.app.$on('other-cost-created', function (model) {
-			// Cache context
-			var context = _this;
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the other cost has been added to cache
-					var updated = false;
-					// Iterate through other costs to determine if a cost should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.other_costs.forEach(function (otherCost) {
-						// Replace existing updated other cost
-						if (otherCost.id == model.id) {
-							// Update other cost fields
-							otherCost.cost_name = model.cost_name;
-							otherCost.cost = model.cost;
-							otherCost.comment = model.comment;
-							// Update flag
-							updated = true;
-						}
-					});
-					// Add a new other cost
-					if (!updated) {
-						timesheet.other_costs.push(model);
-					}
-				}
-			});
-		});
-
-		// When the form component alerts this parent of a successful create
-		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-		this.$router.app.$on('work-job-deleted', function (model) {
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the workjob has been added to cache
-					var updated = false;
-					// Iterate through work jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.work_jobs.forEach(function (workjob) {
-						// Replace existing updated work job
-						if (workjob.id == model.id) {
-							var index = timesheet.work_jobs.indexOf(workjob);
-							timesheet.work_jobs.splice(index, 1);
-						}
-					});
-				}
-			});
-		});
-
-		// When the form component alerts this parent of a successful create
-		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-		this.$router.app.$on('travel-job-deleted', function (model) {
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the workjob has been added to cache
-					var updated = false;
-					// Iterate through work jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.travel_jobs.forEach(function (travelJob) {
-						// Replace existing updated travel job
-						if (travelJob.id == model.id) {
-							var index = timesheet.travel_jobs.indexOf(travelJob);
-							timesheet.travel_jobs.splice(index, 1);
-						}
-					});
-				}
-			});
-		});
-
-		// When the form component alerts this parent of a successful create
-		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-		this.$router.app.$on('equipment-rental-deleted', function (model) {
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the workjob has been added to cache
-					var updated = false;
-					// Iterate through work jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.equipment_rentals.forEach(function (equipmentRental) {
-						// Replace existing updated equipment rental
-						if (equipmentRental.id == model.id) {
-							var index = timesheet.equipment_rentals.indexOf(equipmentRental);
-							timesheet.equipment_rentals.splice(index, 1);
-						}
-					});
-				}
-			});
-		});
-
-		// When the form component alerts this parent of a successful create
-		// Updates work jobs, travel jobs, equipment rentals, and other costs from a specific timesheet
-		this.$router.app.$on('other-cost-deleted', function (model) {
-			// Iterate through all cached timesheets and execute 
-			_this.searchResults.models.forEach(function (timesheet) {
-				// When the timesheet id matches the models id
-				if (timesheet.id == model.timesheet_id) {
-					// Flag which indicates whether the workjob has been added to cache
-					var updated = false;
-					// Iterate through work jobs to determine if a job should be updated or a new 
-					// job should be pushed to the collection
-					timesheet.other_costs.forEach(function (otherCost) {
-						// Replace existing updated other cost
-						if (otherCost.id == model.id) {
-							var index = timesheet.other_costs.indexOf(otherCost);
-							timesheet.other_costs.splice(index, 1);
-						}
-					});
-				}
-			});
-		});
-	}
-});
-
-/***/ }),
-/* 139 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(138),
-  /* template */
-  __webpack_require__(140),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Project-timesheets.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Project-timesheets.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-347e0067", Component.options)
-  } else {
-    hotAPI.reload("data-v-347e0067", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 140 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [(_vm.fetchingModels) ? _c('div', {
-    staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', [_c('div', {
-    staticClass: "row row-padded margin-15-bottom"
-  }, [_c('button', {
-    staticClass: "pull-left btn btn-info",
-    on: {
-      "click": function($event) {
-        _vm.$router.go(-1)
-      }
-    }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-arrow-left"
-  }), _vm._v(" Go back\r\n\t\t\t")])]), _vm._v(" "), (!_vm.user) ? _c('div', {
-    staticClass: "row row-padded"
-  }, [_c('h2', [_vm._v("Project Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.project_id) + ")")])]), _vm._v(" "), _c('p', {
-    staticClass: "margin-25-top"
-  }, [_vm._v("\r\n\t\t\t\tNow showing all of your timesheets for this project.\r\n\t\t\t")]), _vm._v(" "), _vm._m(1)]) : _vm._e(), _vm._v(" "), (_vm.user) ? _c('div', {
-    staticClass: "row row-padded"
-  }, [_c('h2', [_vm._v(_vm._s(_vm.user.first) + "'s' Timesheets "), _c('small', [_vm._v("(Project " + _vm._s(this.project_id) + ")")])]), _vm._v(" "), _c('p', {
-    staticClass: "margin-25-top"
-  }, [_vm._v("\r\n\t\t\t\tBelow are all of " + _vm._s(_vm.user.first) + "'s timesheets for this project.\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded margin-15-top"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "bs-component"
-  }, [_c('ul', {
-    staticClass: "list-group"
-  }, [_vm._m(2), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v(_vm._s(_vm.totalTravelDistance) + " km")]), _vm._v("\r\n\t\t\t\t\t\t  Total Distance\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v(_vm._s(_vm.totalTravelHours) + " hrs")]), _vm._v("\r\n\t\t\t\t\t\t  Total Time\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "bs-component"
-  }, [_c('ul', {
-    staticClass: "list-group"
-  }, [_vm._m(3), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v(_vm._s(_vm.totalWorkHours) + " hrs")]), _vm._v("\r\n\t\t\t\t\t\t  Total Hours\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v("$" + _vm._s(_vm.totalWorkPay))]), _vm._v("\r\n\t\t\t\t\t\t  Net Pay\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v("$" + _vm._s(_vm.totalPerDiem))]), _vm._v("\r\n\t\t\t\t\t\t  Total Per Diem\r\n\t\t\t\t\t\t")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "bs-component"
-  }, [_c('ul', {
-    staticClass: "list-group"
-  }, [_vm._m(4), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v("$" + _vm._s(_vm.totalEquipmentRentalCost))]), _vm._v("\r\n\t\t\t\t\t\t  Equipment Cost Total\r\n\t\t\t\t\t\t")]), _vm._v(" "), _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('span', {
-    staticClass: "badge"
-  }, [_vm._v("$" + _vm._s(_vm.totalOtherCosts))]), _vm._v("\r\n\t\t\t\t\t\t  Total Other Costs\r\n\t\t\t\t\t\t")])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded"
-  }, [_c('div', {
-    staticClass: "col-md-12 text-center"
-  }, [_c('div', {
-    staticClass: "bs-component"
-  }, [_c('ul', {
-    staticClass: "list-group"
-  }, [_c('li', {
-    staticClass: "list-group-item"
-  }, [_vm._m(5), _vm._v(" "), _c('p', {
-    staticClass: "margin-10-top"
-  }, [_c('span', {
-    staticClass: "label label-success"
-  }, [_vm._v("$" + _vm._s(parseFloat(_vm.totalWorkPay) + parseFloat(_vm.totalEquipmentRentalCost) + parseFloat(_vm.totalOtherCosts) + parseFloat(_vm.totalPerDiem)))])])])])])])]), _vm._v(" "), (!_vm.user) ? _c('div', {
-    staticClass: "row row-padded margin-25-top"
-  }, [_c('button', {
-    staticClass: "btn btn-default",
-    on: {
-      "click": _vm.timesheetFormModal
-    }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-list-alt"
-  }), _vm._v(" Add Timesheet\r\n\t\t\t")])]) : _vm._e(), _vm._v(" "), (_vm.searchResults.models.length > 0) ? _c('div', [_c('div', {
-    staticClass: "row row-padded margin-35-top"
-  }, _vm._l((_vm.searchResults.models), function(timesheet) {
-    return _c('timesheet-pill', {
-      attrs: {
-        "timesheet": timesheet,
-        "user": _vm.user
-      }
-    })
-  }))]) : _c('div', [_c('div', {
-    staticClass: "row row-padded margin-35-top"
-  }, [_c('div', {
-    staticClass: "alert alert-warning text-center"
-  }, [_c('big', [_c('strong', [_vm._v("Heads up!")]), _vm._v(" You havn't added any timesheets to this project yet")])], 1)])]), _vm._v(" "), (!_vm.user) ? _c('modal', {
-    attrs: {
-      "modalActive": _vm.modalActive
-    },
-    on: {
-      "modal-close": function($event) {
-        _vm.modalActive = false
-      }
-    }
-  }, [_c('p', {
-    slot: "body"
-  }, [(_vm.currentModal == 'Timesheet') ? _c('timesheet-form', {
-    attrs: {
-      "project_id": _vm.$route.params.project_id
-    }
-  }) : _vm._e()], 1), _vm._v(" "), _c('div', {
-    slot: "footer"
-  }, [_c('button', {
-    staticClass: "btn btn-primary margin-45-top",
-    on: {
-      "click": function($event) {
-        _vm.modalActive = false
-      }
-    }
-  }, [_vm._v("Cancel")])])]) : _vm._e()], 1) : _vm._e()])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "col-md-12"
-  }, [_c('div', {
-    staticClass: "large-center-loader"
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('p', {
-    staticClass: "margin-25-top text-info"
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-question-sign"
-  }), _vm._v("\r\n\t\t\t\tOnce you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.\r\n\t\t\t")])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('strong', [_vm._v("Travel Totals")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('strong', [_vm._v("Hour Totals")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', {
-    staticClass: "list-group-item"
-  }, [_c('strong', [_vm._v("Other Totals")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('p', {
-    staticClass: "margin-25-top"
-  }, [_c('strong', [_vm._v("Invoice Total")])])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-347e0067", module.exports)
-  }
-}
-
-/***/ }),
-/* 141 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-var api_access = __webpack_require__(1);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-
-	mixins: [api_access],
-
-	data: function data() {
-		return {
-			urlToFetch: '/api/timesheets/all',
-			fetchingModels: false,
-			searchResults: {
-				models: [],
-				modelsPageTotal: 0,
-				modelsCurrentPage: 0,
-				modelsPageLinks: {},
-				modelsNextPageUrl: '',
-				modelsPrevPageUrl: ''
-			},
-			fromDateFilter: '',
-			toDateFilter: '',
-			projectIdFilter: '',
-			perPageFilter: 15
-		};
-	},
-
-
-	methods: {
-		// Refreshes the models cache from server
-		filter: function filter() {
-			this.filterAndSetModels('/api/timesheets/filter', {
-				to_date: this.toDateFilter,
-				from_date: this.fromDateFilter,
-				project_id: this.projectIdFilter,
-				per_page: this.perPageFilter
-			});
-		},
-
-
-		// Used by the pagination buttons
-		getSpecificUsersPage: function getSpecificUsersPage(link) {
-			this.getAndSetModels(link);
-		},
-		tallyATimesheetsTotal: function tallyATimesheetsTotal(timesheet) {
-			var hours = this.countATimesheetsHours(timesheet),
-			    equipmentCost = this.countATimesheetsEquipment(timesheet),
-			    otherCosts = this.countATimesheetsOtherCosts(timesheet),
-			    hourPay = parseFloat(hours) * parseFloat(DASHBOARD_USER_HOURLY),
-
-			// Total
-			timesheetTotal = equipmentCost + otherCosts + hourPay;
-
-			return parseFloat(timesheetTotal);
-		},
-		countATimesheetsHours: function countATimesheetsHours(timesheet) {
-			var hours = 0;
-			timesheet.work_jobs.forEach(function (workJob) {
-				hours += parseFloat(workJob.hours_worked);
-			});
-			return hours;
-		},
-		countATimesheetsEquipment: function countATimesheetsEquipment(timesheet) {
-			var total = 0;
-			timesheet.equipment_rentals.forEach(function (rental) {
-				total += parseFloat(rental.rental_fee);
-			});
-			return total;
-		},
-		countATimesheetsOtherCosts: function countATimesheetsOtherCosts(timesheet) {
-			var total = 0;
-			timesheet.other_costs.forEach(function (cost) {
-				total += parseFloat(cost.cost);
-			});
-			return total;
-		}
-	},
-
-	// Retrieves models from server
-	created: function created() {
-		console.log('Timesheet search created');
-		// Start loader
-		this.fetchingModels = true;
-		// Find projects
-		this.getAndSetModels();
-	}
-});
-
-/***/ }),
-/* 142 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(141),
-  /* template */
-  __webpack_require__(143),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowarch\\resources\\assets\\js\\components\\app\\timesheet\\Timesheet-search.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Timesheet-search.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2dcc4456", Component.options)
-  } else {
-    hotAPI.reload("data-v-2dcc4456", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 143 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [(_vm.fetchingModels) ? _c('div', {
-    staticClass: "row margin-85-top margin-85-bottom"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', {
-    staticClass: "row row-padded"
-  }, [_c('h2', [_vm._v("Find & Search Timesheets")]), _vm._v(" "), _c('p', {
-    staticClass: "margin-25-top"
-  }, [_vm._v("\r\n\t\t\tThis is where you can find and sort all timesheets within the system. Use the filter form below to narrow down your search.\r\n\t\t")]), _vm._v(" "), _vm._m(1)]) : _vm._e(), _vm._v(" "), _c('div', {
-    staticClass: "row row-padded  margin-35-top"
-  }, [_c('div', {
-    staticClass: "col-md-2"
-  }, [_c('div', {
-    staticClass: "form-group"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("From")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.fromDateFilter),
-      expression: "fromDateFilter"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.fromDateFilter)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.fromDateFilter = $event.target.value
-      }
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-2"
-  }, [_c('div', {
-    staticClass: "form-group"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("To")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.toDateFilter),
-      expression: "toDateFilter"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "date"
-    },
-    domProps: {
-      "value": (_vm.toDateFilter)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.toDateFilter = $event.target.value
-      }
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-2"
-  }, [_c('div', {
-    staticClass: "form-group"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Project Identifier")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.projectIdFilter),
-      expression: "projectIdFilter"
-    }],
-    staticClass: "form-control margin-10-top",
-    attrs: {
-      "type": "number",
-      "min": "1"
-    },
-    domProps: {
-      "value": (_vm.projectIdFilter)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.projectIdFilter = $event.target.value
-      },
-      "blur": function($event) {
-        _vm.$forceUpdate()
-      }
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-1"
-  }, [_c('div', {
-    staticClass: "form-group"
-  }, [_c('label', {
-    staticClass: "control-label"
-  }, [_vm._v("Per Page")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.perPageFilter),
-      expression: "perPageFilter"
-    }],
-    staticClass: "form-control margin-10-top",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.perPageFilter = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "15",
-      "selected": ""
-    }
-  }, [_vm._v("15")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "20"
-    }
-  }, [_vm._v("20")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "30"
-    }
-  }, [_vm._v("30")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "40"
-    }
-  }, [_vm._v("40")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "50"
-    }
-  }, [_vm._v("50")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "10000"
-    }
-  }, [_vm._v("*All")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-2"
-  }, [_c('button', {
-    staticClass: "btn btn-default btn-block margin-35-top",
-    on: {
-      "click": _vm.filter
-    }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-search"
-  }), _vm._v(" "), (!_vm.fetchingModels) ? _c('span', [_vm._v(" \r\n\t\t\t\t\t\tFilter Projects\r\n\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), (_vm.fetchingModels) ? _c('span', [_c('div', {
-    staticClass: "left-loader"
-  })]) : _vm._e()])])]), _vm._v(" "), (!_vm.fetchingModels) ? _c('table', {
-    staticClass: "table table-striped table-hover margin-25-top"
-  }, [_vm._m(2), _vm._v(" "), _c('tbody', _vm._l((_vm.searchResults.models), function(timesheet) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(new Date(Date.parse(timesheet.date + 'T00:00:00')).toDateString()))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(timesheet.project_id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(timesheet.user.first + ' ' + timesheet.user.last))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(_vm.tallyATimesheetsTotal(timesheet)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.countATimesheetsHours(timesheet)))]), _vm._v(" "), _c('td', [_c('button', {
-      staticClass: "btn btn-sm btn-success",
-      on: {
-        "click": function($event) {}
-      }
-    }, [_c('span', {
-      staticClass: "glyphicon glyphicon-screenshot"
-    }), _vm._v(" More\r\n\t\t\t    \t")])])])
-  }))]) : _vm._e(), _vm._v(" "), (!_vm.fetchingModels) ? _c('div', {
-    staticClass: "row text-center margin-45-top"
-  }, [_c('ul', {
-    staticClass: "pagination"
-  }, [_c('li', {
-    class: {
-      'disabled': _vm.searchResults.modelsCurrentPage == 1
-    }
-  }, [_c('a', {
-    on: {
-      "click": function($event) {
-        _vm.getSpecificProjectsPage(_vm.searchResults.modelsPrevPageUrl)
-      }
-    }
-  }, [_vm._v("«")])]), _vm._v(" "), _vm._l((_vm.searchResults.modelsPageLinks), function(page, key) {
-    return _c('li', {
-      class: {
-        'active': _vm.searchResults.modelsCurrentPage == key
-      }
-    }, [_c('a', {
-      on: {
-        "click": function($event) {
-          _vm.getSpecificProjectsPage(page)
-        }
-      }
-    }, [_vm._v("\r\n\t\t\t\t\t" + _vm._s(key) + "\r\n\t\t\t\t")])])
-  }), _vm._v(" "), _c('li', {
-    class: {
-      'disabled': _vm.searchResults.modelsCurrentPage == _vm.searchResults.modelsPageTotal
-    }
-  }, [_c('a', {
-    on: {
-      ":click": function($event) {
-        _vm.getSpecificUsersPage(_vm.searchResults.modelsNextPageUrl)
-      }
-    }
-  }, [_vm._v("»")])])], 2)]) : _vm._e()])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "col-md-12"
-  }, [_c('div', {
-    staticClass: "large-center-loader"
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('p', {
-    staticClass: "margin-25-top text-info"
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-question-sign"
-  }), _vm._v("\r\n\t\t\tYou can also view timesheets for a specific user in their user profile page.\r\n\t\t")])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', {
-    staticClass: "info"
-  }, [_c('th', [_vm._v("Date")]), _vm._v(" "), _c('th', [_vm._v("Project")]), _vm._v(" "), _c('th', [_vm._v("User")]), _vm._v(" "), _c('th', [_vm._v("Invoice Total")]), _vm._v(" "), _c('th', [_vm._v("Work Hours")]), _vm._v(" "), _c('th', [_vm._v("Actions")])])])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-2dcc4456", module.exports)
-  }
-}
 
 /***/ })
 /******/ ]);

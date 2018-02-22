@@ -119,7 +119,7 @@
 				<button @click="filter" class="btn btn-default btn-block margin-35-top">
 					<span class="glyphicon glyphicon-search"></span>
 					<span v-if="!fetchingModels"> 
-						Filter Projects
+						Filter
 					</span>
 					<span v-if="fetchingModels">
 						<div class="left-loader"></div>

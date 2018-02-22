@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 
+use Faker\Generator;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -11,59 +13,61 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $faker = Faker\Factory::create();
+
         DB::table('users')->insert([
-	        'first' => "Rand",
-	        'last' => "al'Thor",
-	        'permissions' => 'admin',
-	        'email' => 'rand@admin.ca',
-	        'company_name' => "Asha'man",
-	        'hourly_rate_one' => 100.00,
-	        'gst_number' => 'A458EHE5',
+            'first' => "Matt",
+            'last' => "Shanks",
+            'permissions' => 'admin',
+            'email' => 'matt@admin.ca',
+            'company_name' => "Asha'man",
+            'hourly_rate_one' => 50.00,
+            'gst_number' => 'A458EHE5',
             'password' => bcrypt(env('ADMIN_CREDENTIALS', false))
         ]);
 
-        DB::table('users')->insert([
-            'first' => "Timmy",
-            'last' => "Tucan",
-            'permissions' => 'user',
-            'email' => 'timmyt@gmail.com',
-            'company_name' => "Tucan Inc.",
-            'hourly_rate_one' => 45.00,
-            'gst_number' => 'A458EHE5',
-            'password' => bcrypt('password')
-        ]);   
+        // Insert some fake users
+        for($i = 0; $i <= 7; $i++){
+            // Name
+            $first = $faker->firstName;
+            $last = $faker->lastName;
 
-        DB::table('users')->insert([
-            'first' => "Penny",
-            'last' => "Pink",
-            'permissions' => 'user',
-            'email' => 'pennyp@hotmail.com',
-            'company_name' => "Penny Ltd.",
-            'hourly_rate_one' => 40.00,
-            'gst_number' => 'UOUE458E',
-            'password' => bcrypt('password1')
-        ]);
+            // Data
+            DB::table('users')->insert([
+                'first' => $first,
+                'last' => $last,
+                'permissions' => 'user',
+                'email' => $first . $last . '@gmail.com',
+                'company_name' => $faker->company,
+                'hourly_rate_one' => $faker->numberBetween(35, 100),
+                'gst_number' => $faker->randomNumber(8),
+                'password' => bcrypt('password')
+            ]);
+        }
+        
+        // Make eight random companies and store in an array
+        $companies = [];
+        for($i = 0; $i <= 8; $i++){
+            array_push($companies, $faker->company);
+        }
 
-        DB::table('users')->insert([
-            'first' => "Cam",
-            'last' => "Kool",
-            'permissions' => 'user',
-            'email' => 'koolcam@gmail.com',
-            'company_name' => "Kool Co.",
-            'hourly_rate_one' => 45.00,
-            'gst_number' => 'UOTE448TE',
-            'password' => bcrypt('password2')
-        ]);   
+        // Provinices stored in an array
+        $provinces = ['Alberta', 'Saskatchewan', 'British Colombia'];
 
-        DB::table('projects')->insert([
-            'province' => "Alberta",
-            'location' => "Near the stones on the hill",
-            'details' => 'This is a project',
-            'client_company_name' => 'Big Jims Oil Co.',
-            'client_contact_name' => 'Jimbo',
-            'client_contact_phone' => '458-568-8962',
-            'first_contact_by' => "Jimbo",
-            'first_contact_date' => '2017-06-26'
-        ]);                               
+        // Insert some fake companies
+        for($i = 0; $i <= 40; $i++){
+            // Data
+            DB::table('projects')->insert([
+                'province' => $provinces[rand(0, sizeof($provinces) -1)],
+                'location' => $faker->city . ' ' . $faker->streetName . ' ' . $faker->latitude . ' ' . $faker->longitude,
+                'details' => $faker->text(200),
+                'client_company_name' => $companies[rand(0, sizeof($companies) -1)],
+                'client_contact_name' => $faker->name,
+                'client_contact_phone' => $faker->tollFreePhoneNumber,
+                'first_contact_by' => $faker->name,
+                'first_contact_date' => '2016-' . $faker->month . '-' . $faker->dayOfMonth
+            ]);             
+        }
+                              
     }
 }

@@ -57,7 +57,8 @@ class TimesheetsController extends Controller
         $this->validate($request, [
             'from_date' => 'date|nullable',
             'to_date' => 'date|nullable',
-            'project_id' => 'numeric|nullable'
+            'project_id' => 'numeric|nullable',
+            'user_id' => 'numeric|nullable'
         ]);
 
         // Construct where array for query
@@ -74,6 +75,12 @@ class TimesheetsController extends Controller
         if($request->from_date != ''){
             // Push array clause
             array_push($queryArray, ['date', '=', $request->from_date]);
+        }
+
+        // Add single day (from date) field or not
+        if($request->user_id != ''){
+            // Push array clause
+            array_push($queryArray, ['user_id', '=', $request->user_id]);
         }
 
         // Add where queries

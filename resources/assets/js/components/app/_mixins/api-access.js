@@ -157,7 +157,7 @@ module.exports =  {
 					}
 					// Cache and create the direct page links
 					for(var i = 1; i <= totalPages; i++){
-						context.searchResults.modelsPageurls[i] = baseUrl + i;
+						context.searchResults.modelsPageLinks[i] = baseUrl + i;
 					}								
 				}
 				// Cache the pagination in the calling component
